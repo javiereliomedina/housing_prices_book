@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Exploratory Data Analysis | Housing prices Copenhagen</title>
+  <meta name="description" content="Housing prices BBR data" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Exploratory Data Analysis | Housing prices Copenhagen" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Housing prices BBR data" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Exploratory Data Analysis | Housing prices Copenhagen" />
+  
+  <meta name="twitter:description" content="Housing prices BBR data" />
+  
+
+<meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
+
+
+<meta name="date" content="2021-04-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="load-data.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Housing prices in Copenhagen region</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#create-data-and-results-folders"><i class="fa fa-check"></i>Create data and results folders</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#ggplot-themes"><i class="fa fa-check"></i>Ggplot themes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#download-data-from-kortforsyningen"><i class="fa fa-check"></i>Download data from kortforsyningen</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#hedonic-price-model"><i class="fa fa-check"></i><b>1.1</b> Hedonic price model</a></li>
+<li class="chapter" data-level="1.2" data-path="introduction.html"><a href="introduction.html#house-characteristics"><i class="fa fa-check"></i><b>1.2</b> House characteristics</a></li>
+<li class="chapter" data-level="1.3" data-path="introduction.html"><a href="introduction.html#location-characteristics"><i class="fa fa-check"></i><b>1.3</b> Location characteristics</a></li>
+<li class="chapter" data-level="1.4" data-path="introduction.html"><a href="introduction.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.4</b> Neighbourhood characteristics</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="load-data.html"><a href="load-data.html"><i class="fa fa-check"></i><b>2</b> Load data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="load-data.html"><a href="load-data.html#administrative-units"><i class="fa fa-check"></i><b>2.1</b> Administrative units</a></li>
+<li class="chapter" data-level="2.2" data-path="load-data.html"><a href="load-data.html#bbr-data"><i class="fa fa-check"></i><b>2.2</b> BBR data</a></li>
+<li class="chapter" data-level="2.3" data-path="load-data.html"><a href="load-data.html#population-data"><i class="fa fa-check"></i><b>2.3</b> Population data</a></li>
+<li class="chapter" data-level="2.4" data-path="load-data.html"><a href="load-data.html#corine-land-use"><i class="fa fa-check"></i><b>2.4</b> CORINE land use</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#residential-units"><i class="fa fa-check"></i><b>3.1</b> Residential units</a></li>
+<li class="chapter" data-level="3.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#spatial-distribution-of-residential-units"><i class="fa fa-check"></i><b>3.2</b> Spatial distribution of residential units</a></li>
+<li class="chapter" data-level="3.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#population-density"><i class="fa fa-check"></i><b>3.3</b> Population density</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>3.3.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="3.3.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#disaggregating-population-data"><i class="fa fa-check"></i><b>3.3.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="3.3.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#population-density-worldpop"><i class="fa fa-check"></i><b>3.3.3</b> Population density WorldPop</a></li>
+<li class="chapter" data-level="3.3.4" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#land-use-and-residential-units-corine"><i class="fa fa-check"></i><b>3.3.4</b> Land use and residential units (CORINE)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Housing prices Copenhagen</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="exploratory-data-analysis" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Exploratory Data Analysis</h1>
+<div id="residential-units" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Residential units</h2>
+<ul>
+<li>column names</li>
+<li>VEJ_NAVN = Street name</li>
+<li>HUS_NR = Street Building Identifier</li>
+<li>Etagebetegn = Floor Physical Identifier</li>
+<li>SIDE_DOERNR = Suite Identifier</li>
+<li>PostNr = Post code<br />
+</li>
+<li>ENH_ANVEND_KODE = UnitUseCode</li>
+<li>BOLIGTYPE_KODE = Dwelling Type Code</li>
+<li>ENH_ARL_SAML = Total Building Unit Area Measure</li>
+<li>BEBO_ARL = Dwelling Area Measure</li>
+<li>ENH_ERHV_ARL = Business Premises Area Measure</li>
+<li>VAERELSE_ANT = Room Quantity</li>
+<li>ENERGI_KODE = Energy Supply Code</li>
+<li>VARMEINSTAL_KODE = Heating Installation Code</li>
+<li>OPVARMNING_KODE = Heating Source Code</li>
+<li>VARME_SUPPL_KODE = Supplementary Heating Code</li>
+<li>VAER_ERHV_ANT = Business Room Quantity</li>
+</ul>
+<p>Estimate the number of residential units in the study area.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="exploratory-data-analysis.html#cb25-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="exploratory-data-analysis.html#cb25-2" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to tibble</span></span>
+<span id="cb25-3"><a href="exploratory-data-analysis.html#cb25-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="exploratory-data-analysis.html#cb25-4" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Summarize by type or residency and year</span></span>
+<span id="cb25-5"><a href="exploratory-data-analysis.html#cb25-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-6"><a href="exploratory-data-analysis.html#cb25-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-7"><a href="exploratory-data-analysis.html#cb25-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb25-8"><a href="exploratory-data-analysis.html#cb25-8" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Arrange and add row with totals</span></span>
+<span id="cb25-9"><a href="exploratory-data-analysis.html#cb25-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">arrange</span>(BBR_year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-10"><a href="exploratory-data-analysis.html#cb25-10" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Pivot</span></span>
+<span id="cb25-11"><a href="exploratory-data-analysis.html#cb25-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> BBR_year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-12"><a href="exploratory-data-analysis.html#cb25-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb25-13"><a href="exploratory-data-analysis.html#cb25-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">kbl</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb25-14"><a href="exploratory-data-analysis.html#cb25-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">kable_paper</span>(<span class="st">&quot;hover&quot;</span>, <span class="at">full_width =</span> F)</span></code></pre></div>
+<table class=" lightable-paper lightable-hover" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+type
+</th>
+<th style="text-align:right;">
+2006
+</th>
+<th style="text-align:right;">
+2010
+</th>
+<th style="text-align:right;">
+2011
+</th>
+<th style="text-align:right;">
+2012
+</th>
+<th style="text-align:right;">
+2013
+</th>
+<th style="text-align:right;">
+2014
+</th>
+<th style="text-align:right;">
+2015
+</th>
+<th style="text-align:right;">
+2016
+</th>
+<th style="text-align:right;">
+2017
+</th>
+<th style="text-align:right;">
+2018
+</th>
+<th style="text-align:right;">
+2019
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Multi-storey residential building
+</td>
+<td style="text-align:right;">
+342039
+</td>
+<td style="text-align:right;">
+346921
+</td>
+<td style="text-align:right;">
+337604
+</td>
+<td style="text-align:right;">
+348503
+</td>
+<td style="text-align:right;">
+366397
+</td>
+<td style="text-align:right;">
+346650
+</td>
+<td style="text-align:right;">
+345710
+</td>
+<td style="text-align:right;">
+345296
+</td>
+<td style="text-align:right;">
+342844
+</td>
+<td style="text-align:right;">
+347799
+</td>
+<td style="text-align:right;">
+353472
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Single-family house
+</td>
+<td style="text-align:right;">
+15403
+</td>
+<td style="text-align:right;">
+15646
+</td>
+<td style="text-align:right;">
+15771
+</td>
+<td style="text-align:right;">
+15989
+</td>
+<td style="text-align:right;">
+16064
+</td>
+<td style="text-align:right;">
+15943
+</td>
+<td style="text-align:right;">
+15842
+</td>
+<td style="text-align:right;">
+15897
+</td>
+<td style="text-align:right;">
+15914
+</td>
+<td style="text-align:right;">
+15978
+</td>
+<td style="text-align:right;">
+16042
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Row, chain, or semi-detached house
+</td>
+<td style="text-align:right;">
+8625
+</td>
+<td style="text-align:right;">
+8418
+</td>
+<td style="text-align:right;">
+8959
+</td>
+<td style="text-align:right;">
+8811
+</td>
+<td style="text-align:right;">
+9771
+</td>
+<td style="text-align:right;">
+9433
+</td>
+<td style="text-align:right;">
+9649
+</td>
+<td style="text-align:right;">
+10495
+</td>
+<td style="text-align:right;">
+10531
+</td>
+<td style="text-align:right;">
+10996
+</td>
+<td style="text-align:right;">
+10440
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Second building for year-round living
+</td>
+<td style="text-align:right;">
+334
+</td>
+<td style="text-align:right;">
+382
+</td>
+<td style="text-align:right;">
+342
+</td>
+<td style="text-align:right;">
+409
+</td>
+<td style="text-align:right;">
+339
+</td>
+<td style="text-align:right;">
+335
+</td>
+<td style="text-align:right;">
+340
+</td>
+<td style="text-align:right;">
+333
+</td>
+<td style="text-align:right;">
+329
+</td>
+<td style="text-align:right;">
+329
+</td>
+<td style="text-align:right;">
+326
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:right;">
+366401
+</td>
+<td style="text-align:right;">
+371367
+</td>
+<td style="text-align:right;">
+362676
+</td>
+<td style="text-align:right;">
+373712
+</td>
+<td style="text-align:right;">
+392571
+</td>
+<td style="text-align:right;">
+372361
+</td>
+<td style="text-align:right;">
+371541
+</td>
+<td style="text-align:right;">
+372021
+</td>
+<td style="text-align:right;">
+369618
+</td>
+<td style="text-align:right;">
+375102
+</td>
+<td style="text-align:right;">
+380280
+</td>
+</tr>
+</tbody>
+</table>
+<p>Residential units by floor level</p>
+<ul>
+<li>KL - basement</li>
+<li>ST - groundfloor</li>
+<li>1 - 1st floor</li>
+<li>2 - 2nd floor</li>
+<li>3 - 3rd floor</li>
+<li>4 - 4th floor</li>
+<li>5 or more = etc.</li>
+</ul>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="exploratory-data-analysis.html#cb26-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="exploratory-data-analysis.html#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="exploratory-data-analysis.html#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="exploratory-data-analysis.html#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="exploratory-data-analysis.html#cb26-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-6"><a href="exploratory-data-analysis.html#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
+<span id="cb26-7"><a href="exploratory-data-analysis.html#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-8"><a href="exploratory-data-analysis.html#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
+<span id="cb26-9"><a href="exploratory-data-analysis.html#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type,</span>
+<span id="cb26-10"><a href="exploratory-data-analysis.html#cb26-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb26-11"><a href="exploratory-data-analysis.html#cb26-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Row, chain, or semi-detached house&quot;</span>,</span>
+<span id="cb26-12"><a href="exploratory-data-analysis.html#cb26-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Second building for year-round living&quot;</span>,</span>
+<span id="cb26-13"><a href="exploratory-data-analysis.html#cb26-13" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Multi-storey residential building&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb26-14"><a href="exploratory-data-analysis.html#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb26-15"><a href="exploratory-data-analysis.html#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-16"><a href="exploratory-data-analysis.html#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Residential units distribution by floor level&quot;</span>,</span>
+<span id="cb26-17"><a href="exploratory-data-analysis.html#cb26-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb26-18"><a href="exploratory-data-analysis.html#cb26-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-19"><a href="exploratory-data-analysis.html#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb26-20"><a href="exploratory-data-analysis.html#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb26-21"><a href="exploratory-data-analysis.html#cb26-21" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb26-22"><a href="exploratory-data-analysis.html#cb26-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb26-23"><a href="exploratory-data-analysis.html#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb26-24"><a href="exploratory-data-analysis.html#cb26-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#009E73&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#000000&quot;</span>, <span class="st">&quot;#56B4E9&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="exploratory-data-analysis.html#cb27-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/floor_levels_res_units.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="exploratory-data-analysis.html#cb28-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/floor_levels_res_units.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-floor-level"></span>
+<img src="results/floor_levels_res_units.png" alt="Residential units by floor levels" width="100%" />
+<p class="caption">
+Figure 3.1: Residential units by floor levels
+</p>
+</div>
+<p>Dwelling type codes</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>Egentlig beboelse = Actual residence</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>Blandet erhverv og beboelse = Mixed occupations and housing</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>Enkeltværelse = Single room</li>
+</ol></li>
+<li>E. Andet (bl.a. institutioner og erhverv) = Other (including institutions and professions)</li>
+</ul>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="exploratory-data-analysis.html#cb29-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="exploratory-data-analysis.html#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="exploratory-data-analysis.html#cb29-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(BOLIGTYPE_KODE, type) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="exploratory-data-analysis.html#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code></pre></div>
+<pre><code>#&gt; # A tibble: 16 x 3
+#&gt; # Groups:   BOLIGTYPE_KODE [5]
+#&gt;    BOLIGTYPE_KODE type                                        n
+#&gt;    &lt;chr&gt;          &lt;fct&gt;                                   &lt;int&gt;
+#&gt;  1 &quot;&quot;             Multi-storey residential building           2
+#&gt;  2 &quot;1&quot;            Single-family house                    169762
+#&gt;  3 &quot;1&quot;            Multi-storey residential building     3748984
+#&gt;  4 &quot;1&quot;            Row, chain, or semi-detached house     104739
+#&gt;  5 &quot;1&quot;            Second building for year-round living    2150
+#&gt;  6 &quot;2&quot;            Single-family house                      3993
+#&gt;  7 &quot;2&quot;            Multi-storey residential building       12291
+#&gt;  8 &quot;2&quot;            Row, chain, or semi-detached house       1127
+#&gt;  9 &quot;2&quot;            Second building for year-round living      59
+#&gt; 10 &quot;3&quot;            Single-family house                       532
+#&gt; 11 &quot;3&quot;            Multi-storey residential building       60323
+#&gt; 12 &quot;3&quot;            Row, chain, or semi-detached house         37
+#&gt; 13 &quot;3&quot;            Second building for year-round living    1589
+#&gt; 14 &quot;E&quot;            Single-family house                       202
+#&gt; 15 &quot;E&quot;            Multi-storey residential building        1635
+#&gt; 16 &quot;E&quot;            Row, chain, or semi-detached house        225</code></pre>
+<p>Unit area</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="exploratory-data-analysis.html#cb31-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="exploratory-data-analysis.html#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="exploratory-data-analysis.html#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>#&gt; # A tibble: 111 x 42
+#&gt;    VEJ_NAVN   HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode MatrNr
+#&gt;    &lt;chr&gt;      &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt; &lt;chr&gt; 
+#&gt;  1 Haregade   1      st          &quot;&quot;            1320     101     8983          2000166             16 0     
+#&gt;  2 Ã…lekiste~ 221    st          &quot;&quot;            2720     101   686264          2000177             27 2114  
+#&gt;  3 Ã˜ster Vo~ 12     3           &quot;&quot;            1350     101   671909          2000166             16 664   
+#&gt;  4 Humlehaven 64     st          &quot;&quot;            2500     101   243540          2000180             30 2160  
+#&gt;  5 SÃ¦byholm~ 23     st          &quot;&quot;            2500     101   553027          2000180             30 1642  
+#&gt;  6 SolvÃ¦nget 10     st          &quot;&quot;            2100     101   514862          2000173             23 5552  
+#&gt;  7 Otto Buss~ 12     st          &quot;&quot;            2450     101   952940          2000174             24 0     
+#&gt;  8 Otto Buss~ 10     st          &quot;&quot;            2450     101   952940          2000174             24 0     
+#&gt;  9 Ã…gerupvej 58     st          &quot;&quot;            2700     101   678644          2000159              9 2336  
+#&gt; 10 Herlufsho~ 3      st          &quot;&quot;            2720     101   221202          2000177             27 10o   
+#&gt; # ... with 101 more rows, and 32 more variables: BYG_ANVEND_KODE &lt;int&gt;, OPFOERELSE_AAR &lt;int&gt;,
+#&gt; #   OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;int&gt;, TAG_KODE &lt;int&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;,
+#&gt; #   ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;dbl&gt;,
+#&gt; #   BOLIGTYPE_KODE &lt;chr&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;,
+#&gt; #   ENERGI_KODE &lt;int&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;int&gt;, OPVARMNING_KODE &lt;dbl&gt;,
+#&gt; #   VARME_SUPPL_KODE &lt;int&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+#&gt; #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;int&gt;, SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;,
+#&gt; #   floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="exploratory-data-analysis.html#cb33-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="exploratory-data-analysis.html#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="exploratory-data-analysis.html#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>#&gt; # A tibble: 163 x 42
+#&gt;    VEJ_NAVN   HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode MatrNr
+#&gt;    &lt;chr&gt;      &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt; &lt;chr&gt; 
+#&gt;  1 Olufsvej   6B     1           &quot;th&quot;          2100     101   420132          2000173             23 592   
+#&gt;  2 George Ma~ 13     st          &quot;&quot;            2450     101    19878          2000174             24 1493b 
+#&gt;  3 H.C. Ande~ 13     3           &quot;tv&quot;          1553     101    24474          2000179             29 254   
+#&gt;  4 Falkoner ~ 114A   st          &quot;th&quot;          2000     147    31076            10051              1 58a   
+#&gt;  5 Harrestru~ 3      st          &quot;&quot;            2500     101   210324          2000180             30 484   
+#&gt;  6 DybbÃ¸lsg~ 49     2           &quot;&quot;            1721     101   414337          2000174             24 526   
+#&gt;  7 Sankt Han~ 19     1           &quot;tv&quot;          2200     101   485404          2000173             23 4036  
+#&gt;  8 SakskÃ¸bi~ 8      st          &quot;&quot;            2500     101   481905          2000180             30 2681  
+#&gt;  9 SvanemÃ¸l~ 62     st          &quot;&quot;            2900     101   546918          2000173             23 4185  
+#&gt; 10 Borthigsg~ 17     st          &quot;&quot;            2100     101    62597          2000173             23 4904  
+#&gt; # ... with 153 more rows, and 32 more variables: BYG_ANVEND_KODE &lt;int&gt;, OPFOERELSE_AAR &lt;int&gt;,
+#&gt; #   OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;int&gt;, TAG_KODE &lt;int&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;,
+#&gt; #   ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;dbl&gt;,
+#&gt; #   BOLIGTYPE_KODE &lt;chr&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;,
+#&gt; #   ENERGI_KODE &lt;int&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;int&gt;, OPVARMNING_KODE &lt;dbl&gt;,
+#&gt; #   VARME_SUPPL_KODE &lt;int&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+#&gt; #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;int&gt;, SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;,
+#&gt; #   floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="exploratory-data-analysis.html#cb35-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="exploratory-data-analysis.html#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="exploratory-data-analysis.html#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&gt;</span> <span class="dv">1000</span>) </span></code></pre></div>
+<pre><code>#&gt; # A tibble: 79 x 42
+#&gt;    VEJ_NAVN   HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode MatrNr
+#&gt;    &lt;chr&gt;      &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt; &lt;chr&gt; 
+#&gt;  1 Amalienbo~ 7      st          &quot;&quot;            1257     101    23028          2000167             17 148   
+#&gt;  2 Ottiliavej 3      1           &quot;&quot;            2500     101   173666          2000176             26 2093  
+#&gt;  3 Ottiliavej 1      1           &quot;&quot;            2500     101   173666          2000176             26 2093  
+#&gt;  4 Ã˜ster Fa~ 5A     st          &quot;&quot;            1353     101   669408          2000164             14 33    
+#&gt;  5 Amalienbo~ 8      st          &quot;&quot;            1257     101    23052          2000167             17 125   
+#&gt;  6 Frederici~ 2      st          &quot;&quot;            1310     101   151670          2000167             17 387   
+#&gt;  7 Gamle Car~ 13     st          &quot;7&quot;           1799     101   346480          2000176             26 2156  
+#&gt;  8 Amalienbo~ 2      st          &quot;&quot;            1257     101    23036          2000167             17 124   
+#&gt;  9 Amalienbo~ 7      st          &quot;&quot;            1257     101    23028          2000167             17 148   
+#&gt; 10 Ottiliavej 3      1           &quot;&quot;            2500     101   173666          2000176             26 2093  
+#&gt; # ... with 69 more rows, and 32 more variables: BYG_ANVEND_KODE &lt;int&gt;, OPFOERELSE_AAR &lt;int&gt;,
+#&gt; #   OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;int&gt;, TAG_KODE &lt;int&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;,
+#&gt; #   ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;dbl&gt;,
+#&gt; #   BOLIGTYPE_KODE &lt;chr&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;,
+#&gt; #   ENERGI_KODE &lt;int&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;int&gt;, OPVARMNING_KODE &lt;dbl&gt;,
+#&gt; #   VARME_SUPPL_KODE &lt;int&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+#&gt; #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;int&gt;, SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;,
+#&gt; #   floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
+</div>
+<div id="spatial-distribution-of-residential-units" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Spatial distribution of residential units</h2>
+<p>Create a function for ploting 2D kernel density maps:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="exploratory-data-analysis.html#cb37-1" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(.data) {</span>
+<span id="cb37-2"><a href="exploratory-data-analysis.html#cb37-2" aria-hidden="true" tabindex="-1"></a>    .data <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="exploratory-data-analysis.html#cb37-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="exploratory-data-analysis.html#cb37-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="exploratory-data-analysis.html#cb37-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb37-6"><a href="exploratory-data-analysis.html#cb37-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb37-7"><a href="exploratory-data-analysis.html#cb37-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="fu">aes</span>(X, Y), <span class="at">size =</span> <span class="fl">0.02</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb37-8"><a href="exploratory-data-analysis.html#cb37-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stat_density_2d</span>(<span class="fu">aes</span>(X, Y, <span class="at">fill =</span> ..level..),</span>
+<span id="cb37-9"><a href="exploratory-data-analysis.html#cb37-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb37-10"><a href="exploratory-data-analysis.html#cb37-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">h =</span> <span class="dv">700</span>,</span>
+<span id="cb37-11"><a href="exploratory-data-analysis.html#cb37-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">geom =</span> <span class="st">&quot;polygon&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-12"><a href="exploratory-data-analysis.html#cb37-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;Spectral&quot;</span>)  <span class="sc">+</span></span>
+<span id="cb37-13"><a href="exploratory-data-analysis.html#cb37-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
+<span id="cb37-14"><a href="exploratory-data-analysis.html#cb37-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-15"><a href="exploratory-data-analysis.html#cb37-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> .data<span class="sc">$</span>type,</span>
+<span id="cb37-16"><a href="exploratory-data-analysis.html#cb37-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb37-17"><a href="exploratory-data-analysis.html#cb37-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="st">&quot;&quot;</span>) </span>
+<span id="cb37-18"><a href="exploratory-data-analysis.html#cb37-18" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>Plot of spatial distribution of residential units by type of use in 2019:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="exploratory-data-analysis.html#cb38-1" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="exploratory-data-analysis.html#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BBR_year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb38-3"><a href="exploratory-data-analysis.html#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_split</span>(type) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a href="exploratory-data-analysis.html#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>( <span class="sc">~</span> <span class="fu">f</span>(.))</span>
+<span id="cb38-5"><a href="exploratory-data-analysis.html#cb38-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb38-6"><a href="exploratory-data-analysis.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrap_plots</span>(p) <span class="sc">+</span></span>
+<span id="cb38-7"><a href="exploratory-data-analysis.html#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb38-8"><a href="exploratory-data-analysis.html#cb38-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb38-9"><a href="exploratory-data-analysis.html#cb38-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.00</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb38-10"><a href="exploratory-data-analysis.html#cb38-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb38-11"><a href="exploratory-data-analysis.html#cb38-11" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb38-12"><a href="exploratory-data-analysis.html#cb38-12" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb38-13"><a href="exploratory-data-analysis.html#cb38-13" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb38-14"><a href="exploratory-data-analysis.html#cb38-14" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb38-15"><a href="exploratory-data-analysis.html#cb38-15" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb38-16"><a href="exploratory-data-analysis.html#cb38-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">&quot;Residential units in 2019&quot;</span>,</span>
+<span id="cb38-17"><a href="exploratory-data-analysis.html#cb38-17" aria-hidden="true" tabindex="-1"></a>                    <span class="at">theme =</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>,</span>
+<span id="cb38-18"><a href="exploratory-data-analysis.html#cb38-18" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>,</span>
+<span id="cb38-19"><a href="exploratory-data-analysis.html#cb38-19" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb38-20"><a href="exploratory-data-analysis.html#cb38-20" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>,</span>
+<span id="cb38-21"><a href="exploratory-data-analysis.html#cb38-21" aria-hidden="true" tabindex="-1"></a>                                                              <span class="at">colour =</span> <span class="st">&quot;grey25&quot;</span>)</span>
+<span id="cb38-22"><a href="exploratory-data-analysis.html#cb38-22" aria-hidden="true" tabindex="-1"></a>                    )</span>
+<span id="cb38-23"><a href="exploratory-data-analysis.html#cb38-23" aria-hidden="true" tabindex="-1"></a>    ) </span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="exploratory-data-analysis.html#cb39-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/Kernel_maps_builds_type_2021.png&quot;</span>,</span>
+<span id="cb39-2"><a href="exploratory-data-analysis.html#cb39-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
+<span id="cb39-3"><a href="exploratory-data-analysis.html#cb39-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb39-4"><a href="exploratory-data-analysis.html#cb39-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="exploratory-data-analysis.html#cb40-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/Kernel_maps_builds_type_2021.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-sp-res-builds"></span>
+<img src="results/Kernel_maps_builds_type_2021.png" alt="2D kernel density map" width="100%" />
+<p class="caption">
+Figure 3.2: 2D kernel density map
+</p>
+</div>
+</div>
+<div id="population-density" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Population density</h2>
+<p>BBR data represent the situation at the begining of the given year. Therefore, when we link the BBR data with the population data, which also represent the situation at the first day of the year, we use the population of the same year (e.g. BBR data from 2019 and population data from 2019).</p>
+<div id="choropleth-by-ancestry" class="section level3" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Choropleth by ancestry</h3>
+<p>Plot population density at the last day of 2019 (first of 2010) by parish and ancestry.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="exploratory-data-analysis.html#cb41-1" aria-hidden="true" tabindex="-1"></a>  col <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlGnBu&quot;</span>)</span>
+<span id="cb41-2"><a href="exploratory-data-analysis.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(col)</span>
+<span id="cb41-3"><a href="exploratory-data-analysis.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  my_pallette <span class="ot">&lt;-</span> <span class="fu">pal</span>(<span class="dv">10</span>)</span>
+<span id="cb41-4"><a href="exploratory-data-analysis.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-5"><a href="exploratory-data-analysis.html#cb41-5" aria-hidden="true" tabindex="-1"></a>  pop_dens_choropleth <span class="ot">&lt;-</span>  prsh_pop_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb41-6"><a href="exploratory-data-analysis.html#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(prsh_id, prsh_name, prsh_area_km2, date, </span>
+<span id="cb41-7"><a href="exploratory-data-analysis.html#cb41-7" aria-hidden="true" tabindex="-1"></a>           pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-8"><a href="exploratory-data-analysis.html#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb41-9"><a href="exploratory-data-analysis.html#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calulate population density (pop/area)</span></span>
+<span id="cb41-10"><a href="exploratory-data-analysis.html#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> prsh_area_km2))) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-11"><a href="exploratory-data-analysis.html#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-12"><a href="exploratory-data-analysis.html#cb41-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb41-13"><a href="exploratory-data-analysis.html#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb41-14"><a href="exploratory-data-analysis.html#cb41-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb41-15"><a href="exploratory-data-analysis.html#cb41-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, </span>
+<span id="cb41-16"><a href="exploratory-data-analysis.html#cb41-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;pop_total_km2&quot;</span>, </span>
+<span id="cb41-17"><a href="exploratory-data-analysis.html#cb41-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_dan_km2&quot;</span>,</span>
+<span id="cb41-18"><a href="exploratory-data-analysis.html#cb41-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_wst_km2&quot;</span>,</span>
+<span id="cb41-19"><a href="exploratory-data-analysis.html#cb41-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_nwst_km2&quot;</span>),</span>
+<span id="cb41-20"><a href="exploratory-data-analysis.html#cb41-20" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Total&quot;</span>,</span>
+<span id="cb41-21"><a href="exploratory-data-analysis.html#cb41-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Danish origin&quot;</span>,</span>
+<span id="cb41-22"><a href="exploratory-data-analysis.html#cb41-22" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from western countries&quot;</span>,</span>
+<span id="cb41-23"><a href="exploratory-data-analysis.html#cb41-23" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from non-western countries&quot;</span>)))</span>
+<span id="cb41-24"><a href="exploratory-data-analysis.html#cb41-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-25"><a href="exploratory-data-analysis.html#cb41-25" aria-hidden="true" tabindex="-1"></a>  brks_c <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_dens_choropleth<span class="sc">$</span>value),</span>
+<span id="cb41-26"><a href="exploratory-data-analysis.html#cb41-26" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
+<span id="cb41-27"><a href="exploratory-data-analysis.html#cb41-27" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_dens_choropleth<span class="sc">$</span>value)))</span>
+<span id="cb41-28"><a href="exploratory-data-analysis.html#cb41-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb41-29"><a href="exploratory-data-analysis.html#cb41-29" aria-hidden="true" tabindex="-1"></a>  pop_dens_choropleth  <span class="sc">%&gt;%</span> </span>
+<span id="cb41-30"><a href="exploratory-data-analysis.html#cb41-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb41-31"><a href="exploratory-data-analysis.html#cb41-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(value, <span class="at">breaks =</span> brks_c, <span class="at">include.lowest =</span> T)),</span>
+<span id="cb41-32"><a href="exploratory-data-analysis.html#cb41-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb41-33"><a href="exploratory-data-analysis.html#cb41-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb41-34"><a href="exploratory-data-analysis.html#cb41-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb41-35"><a href="exploratory-data-analysis.html#cb41-35" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
+<span id="cb41-36"><a href="exploratory-data-analysis.html#cb41-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb41-37"><a href="exploratory-data-analysis.html#cb41-37" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>))  <span class="sc">+</span></span>
+<span id="cb41-38"><a href="exploratory-data-analysis.html#cb41-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span> </span>
+<span id="cb41-39"><a href="exploratory-data-analysis.html#cb41-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb41-40"><a href="exploratory-data-analysis.html#cb41-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb41-41"><a href="exploratory-data-analysis.html#cb41-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Population density at the first dat of 2019&quot;</span>,</span>
+<span id="cb41-42"><a href="exploratory-data-analysis.html#cb41-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb41-43"><a href="exploratory-data-analysis.html#cb41-43" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb41-44"><a href="exploratory-data-analysis.html#cb41-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> name)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="exploratory-data-analysis.html#cb42-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_density_2019_choropleth.png&quot;</span>,</span>
+<span id="cb42-2"><a href="exploratory-data-analysis.html#cb42-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
+<span id="cb42-3"><a href="exploratory-data-analysis.html#cb42-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb42-4"><a href="exploratory-data-analysis.html#cb42-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="exploratory-data-analysis.html#cb43-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_density_2019_choropleth.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-pop-map-chor"></span>
+<img src="results/pop_density_2019_choropleth.png" alt="Population density by parish (choropleth)" width="100%" />
+<p class="caption">
+Figure 3.3: Population density by parish (choropleth)
+</p>
+</div>
+</div>
+<div id="disaggregating-population-data" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Disaggregating population data</h3>
+<p>We disaggregate the population data at Parish level to grid cells of 100m x 100m using residential buildings as ancillary data. The procedure is as follow:</p>
+<ol style="list-style-type: decimal">
+<li><p>We calculate the occupancy rate (<em>OR</em>) for the residential units of each parish (<em>j</em>): <span class="math display">\[OR_{j} = \frac{pop_{j}}{N_{j}}\]</span></p></li>
+<li><p>We make grid cells of 100m x 100m over the study area</p></li>
+<li><p>We select only the grids with residential units</p></li>
+<li><p>Detect to what parish (<em>j</em>) belong each grid (<em>i</em>). (Note that one grids may be in more that one parish)</p></li>
+<li><p>Calculate the number of dwellings per grid and parish (<span class="math inline">\(N_{ij}\)</span>)</p></li>
+<li><p>Estimate the population in each grid (<em>i</em>) base the occupancy rate by parish (<em>j</em>): <span class="math display">\[pop_{gi} = \sum_{j = 1}^{n}(OR_{j} \cdot N_{ij})\]</span></p></li>
+<li><p>Population density: <span class="math display">\[PD_{i} = \frac{pop_{i}}{A_{i}}\]</span></p></li>
+</ol>
+<p>Therefore we create the following function:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="exploratory-data-analysis.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate the population density in the grids created by f_grids </span></span>
+<span id="cb44-2"><a href="exploratory-data-analysis.html#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .pop        POLYGONS with the population data (i.e. prsh_pop_sf)</span></span>
+<span id="cb44-3"><a href="exploratory-data-analysis.html#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .parish     POLYGONS where the number of units will be calculated </span></span>
+<span id="cb44-4"><a href="exploratory-data-analysis.html#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .res_points POINTS with the residential units (e.g. res_units) </span></span>
+<span id="cb44-5"><a href="exploratory-data-analysis.html#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .grids      Grid cells generated by f_grids</span></span>
+<span id="cb44-6"><a href="exploratory-data-analysis.html#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .year       Year of the analysis</span></span>
+<span id="cb44-7"><a href="exploratory-data-analysis.html#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="exploratory-data-analysis.html#cb44-8" aria-hidden="true" tabindex="-1"></a>  f_pd_grids <span class="ot">&lt;-</span> <span class="cf">function</span>(.pop, .parish, .res_points, .grids, .year) {</span>
+<span id="cb44-9"><a href="exploratory-data-analysis.html#cb44-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-10"><a href="exploratory-data-analysis.html#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population at the last day of the year (.year)</span></span>
+<span id="cb44-11"><a href="exploratory-data-analysis.html#cb44-11" aria-hidden="true" tabindex="-1"></a>    pop_year <span class="ot">&lt;-</span> .pop <span class="sc">%&gt;%</span></span>
+<span id="cb44-12"><a href="exploratory-data-analysis.html#cb44-12" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Select population data at the first day of the quarter </span></span>
+<span id="cb44-13"><a href="exploratory-data-analysis.html#cb44-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(prsh_id, prsh_name, prsh_area_km2, date, </span>
+<span id="cb44-14"><a href="exploratory-data-analysis.html#cb44-14" aria-hidden="true" tabindex="-1"></a>             pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-15"><a href="exploratory-data-analysis.html#cb44-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># select the data at the end of the year (first dat of the next year) </span></span>
+<span id="cb44-16"><a href="exploratory-data-analysis.html#cb44-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(date <span class="sc">==</span> (.year))</span>
+<span id="cb44-17"><a href="exploratory-data-analysis.html#cb44-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-18"><a href="exploratory-data-analysis.html#cb44-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># BBR of the selected year (represent the last day of the year)</span></span>
+<span id="cb44-19"><a href="exploratory-data-analysis.html#cb44-19" aria-hidden="true" tabindex="-1"></a>    BBR_year <span class="ot">&lt;-</span> <span class="fu">filter</span>(.res_points, BBR_year <span class="sc">==</span> .year) </span>
+<span id="cb44-20"><a href="exploratory-data-analysis.html#cb44-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-21"><a href="exploratory-data-analysis.html#cb44-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate occupancy rate (&quot;OR&quot;) of the residential units in each parish in a year</span></span>
+<span id="cb44-22"><a href="exploratory-data-analysis.html#cb44-22" aria-hidden="true" tabindex="-1"></a>    OR <span class="ot">&lt;-</span> pop_year <span class="sc">%&gt;%</span>  </span>
+<span id="cb44-23"><a href="exploratory-data-analysis.html#cb44-23" aria-hidden="true" tabindex="-1"></a>      <span class="co"># number of units per parish</span></span>
+<span id="cb44-24"><a href="exploratory-data-analysis.html#cb44-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year, <span class="at">dist =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-25"><a href="exploratory-data-analysis.html#cb44-25" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-26"><a href="exploratory-data-analysis.html#cb44-26" aria-hidden="true" tabindex="-1"></a>               <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-27"><a href="exploratory-data-analysis.html#cb44-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># mean population per unit in each parish</span></span>
+<span id="cb44-28"><a href="exploratory-data-analysis.html#cb44-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-29"><a href="exploratory-data-analysis.html#cb44-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;or&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-30"><a href="exploratory-data-analysis.html#cb44-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># output as table </span></span>
+<span id="cb44-31"><a href="exploratory-data-analysis.html#cb44-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb44-32"><a href="exploratory-data-analysis.html#cb44-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>n_units, <span class="sc">-</span>geometry)</span>
+<span id="cb44-33"><a href="exploratory-data-analysis.html#cb44-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb44-34"><a href="exploratory-data-analysis.html#cb44-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get only the grids with residential units on them</span></span>
+<span id="cb44-35"><a href="exploratory-data-analysis.html#cb44-35" aria-hidden="true" tabindex="-1"></a>    gru <span class="ot">&lt;-</span> .grids <span class="sc">%&gt;%</span> </span>
+<span id="cb44-36"><a href="exploratory-data-analysis.html#cb44-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Number of residential units per grid</span></span>
+<span id="cb44-37"><a href="exploratory-data-analysis.html#cb44-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year , <span class="at">dist =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-38"><a href="exploratory-data-analysis.html#cb44-38" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-39"><a href="exploratory-data-analysis.html#cb44-39" aria-hidden="true" tabindex="-1"></a>               <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-40"><a href="exploratory-data-analysis.html#cb44-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get grids with residential buildings</span></span>
+<span id="cb44-41"><a href="exploratory-data-analysis.html#cb44-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n_units <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-42"><a href="exploratory-data-analysis.html#cb44-42" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Detect to what parish belong the grid</span></span>
+<span id="cb44-43"><a href="exploratory-data-analysis.html#cb44-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_intersection</span>(., .parish ) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-44"><a href="exploratory-data-analysis.html#cb44-44" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove parish area</span></span>
+<span id="cb44-45"><a href="exploratory-data-analysis.html#cb44-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>prsh_area_km2, <span class="sc">-</span>SOGNENAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-46"><a href="exploratory-data-analysis.html#cb44-46" aria-hidden="true" tabindex="-1"></a>      <span class="co"># convert to table</span></span>
+<span id="cb44-47"><a href="exploratory-data-analysis.html#cb44-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>()</span>
+<span id="cb44-48"><a href="exploratory-data-analysis.html#cb44-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb44-49"><a href="exploratory-data-analysis.html#cb44-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population density by grids</span></span>
+<span id="cb44-50"><a href="exploratory-data-analysis.html#cb44-50" aria-hidden="true" tabindex="-1"></a>    gru <span class="sc">%&gt;%</span> </span>
+<span id="cb44-51"><a href="exploratory-data-analysis.html#cb44-51" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Merge OR per parish  </span></span>
+<span id="cb44-52"><a href="exploratory-data-analysis.html#cb44-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(OR, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;SOGNEKODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;prsh_id&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-53"><a href="exploratory-data-analysis.html#cb44-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb44-54"><a href="exploratory-data-analysis.html#cb44-54" aria-hidden="true" tabindex="-1"></a>      <span class="co"># recalculate population by grid </span></span>
+<span id="cb44-55"><a href="exploratory-data-analysis.html#cb44-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">*</span> n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-56"><a href="exploratory-data-analysis.html#cb44-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">gsub</span>(<span class="st">&quot;_or&quot;</span>, <span class="st">&quot;&quot;</span>, .), <span class="at">.col =</span> <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-57"><a href="exploratory-data-analysis.html#cb44-57" aria-hidden="true" tabindex="-1"></a>      <span class="co"># sum population of each parish of the grid</span></span>
+<span id="cb44-58"><a href="exploratory-data-analysis.html#cb44-58" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(grid_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-59"><a href="exploratory-data-analysis.html#cb44-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">pop_total =</span> <span class="fu">sum</span>(pop_total),</span>
+<span id="cb44-60"><a href="exploratory-data-analysis.html#cb44-60" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_dan =</span> <span class="fu">sum</span>(pop_dan),</span>
+<span id="cb44-61"><a href="exploratory-data-analysis.html#cb44-61" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_frgn_wst =</span> <span class="fu">sum</span>(pop_frgn_wst),</span>
+<span id="cb44-62"><a href="exploratory-data-analysis.html#cb44-62" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_frgn_nwst =</span> <span class="fu">sum</span>(pop_frgn_nwst),</span>
+<span id="cb44-63"><a href="exploratory-data-analysis.html#cb44-63" aria-hidden="true" tabindex="-1"></a>                <span class="at">n_units =</span> <span class="fu">sum</span>(n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-64"><a href="exploratory-data-analysis.html#cb44-64" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb44-65"><a href="exploratory-data-analysis.html#cb44-65" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Area of the grid</span></span>
+<span id="cb44-66"><a href="exploratory-data-analysis.html#cb44-66" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-67"><a href="exploratory-data-analysis.html#cb44-67" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Population density (pop/area)</span></span>
+<span id="cb44-68"><a href="exploratory-data-analysis.html#cb44-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> area_km2))) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-69"><a href="exploratory-data-analysis.html#cb44-69" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-70"><a href="exploratory-data-analysis.html#cb44-70" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Pivot longer</span></span>
+<span id="cb44-71"><a href="exploratory-data-analysis.html#cb44-71" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb44-72"><a href="exploratory-data-analysis.html#cb44-72" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-73"><a href="exploratory-data-analysis.html#cb44-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb44-74"><a href="exploratory-data-analysis.html#cb44-74" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove polygons with 0 population</span></span>
+<span id="cb44-75"><a href="exploratory-data-analysis.html#cb44-75" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb44-76"><a href="exploratory-data-analysis.html#cb44-76" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m and ancestry.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="exploratory-data-analysis.html#cb45-1" aria-hidden="true" tabindex="-1"></a>  pop_2019_g100m <span class="ot">&lt;-</span>  <span class="fu">f_pd_grids</span>(<span class="at">.pop =</span> prsh_pop_sf,</span>
+<span id="cb45-2"><a href="exploratory-data-analysis.html#cb45-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.parish =</span> cph_parish,</span>
+<span id="cb45-3"><a href="exploratory-data-analysis.html#cb45-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.res_points =</span> res_units,</span>
+<span id="cb45-4"><a href="exploratory-data-analysis.html#cb45-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.grids =</span> grids100m,</span>
+<span id="cb45-5"><a href="exploratory-data-analysis.html#cb45-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.year =</span> <span class="dv">2019</span>)</span>
+<span id="cb45-6"><a href="exploratory-data-analysis.html#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="exploratory-data-analysis.html#cb45-7" aria-hidden="true" tabindex="-1"></a>  brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_2019_g100m<span class="sc">$</span>value),</span>
+<span id="cb45-8"><a href="exploratory-data-analysis.html#cb45-8" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
+<span id="cb45-9"><a href="exploratory-data-analysis.html#cb45-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_2019_g100m<span class="sc">$</span>value)))</span>
+<span id="cb45-10"><a href="exploratory-data-analysis.html#cb45-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb45-11"><a href="exploratory-data-analysis.html#cb45-11" aria-hidden="true" tabindex="-1"></a>  pop_2019_g100m <span class="sc">%&gt;%</span></span>
+<span id="cb45-12"><a href="exploratory-data-analysis.html#cb45-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, </span>
+<span id="cb45-13"><a href="exploratory-data-analysis.html#cb45-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;pop_total_km2&quot;</span>, </span>
+<span id="cb45-14"><a href="exploratory-data-analysis.html#cb45-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_dan_km2&quot;</span>,</span>
+<span id="cb45-15"><a href="exploratory-data-analysis.html#cb45-15" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_wst_km2&quot;</span>,</span>
+<span id="cb45-16"><a href="exploratory-data-analysis.html#cb45-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_nwst_km2&quot;</span>),</span>
+<span id="cb45-17"><a href="exploratory-data-analysis.html#cb45-17" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Total&quot;</span>,</span>
+<span id="cb45-18"><a href="exploratory-data-analysis.html#cb45-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Danish origin&quot;</span>,</span>
+<span id="cb45-19"><a href="exploratory-data-analysis.html#cb45-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from western countries&quot;</span>,</span>
+<span id="cb45-20"><a href="exploratory-data-analysis.html#cb45-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from non-western countries&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-21"><a href="exploratory-data-analysis.html#cb45-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb45-22"><a href="exploratory-data-analysis.html#cb45-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb45-23"><a href="exploratory-data-analysis.html#cb45-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(value,</span>
+<span id="cb45-24"><a href="exploratory-data-analysis.html#cb45-24" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks =</span> brks,</span>
+<span id="cb45-25"><a href="exploratory-data-analysis.html#cb45-25" aria-hidden="true" tabindex="-1"></a>                           <span class="at">include.lowest =</span> T)),</span>
+<span id="cb45-26"><a href="exploratory-data-analysis.html#cb45-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb45-27"><a href="exploratory-data-analysis.html#cb45-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb45-28"><a href="exploratory-data-analysis.html#cb45-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
+<span id="cb45-29"><a href="exploratory-data-analysis.html#cb45-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb45-30"><a href="exploratory-data-analysis.html#cb45-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))  <span class="sc">+</span></span>
+<span id="cb45-31"><a href="exploratory-data-analysis.html#cb45-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span> </span>
+<span id="cb45-32"><a href="exploratory-data-analysis.html#cb45-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb45-33"><a href="exploratory-data-analysis.html#cb45-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb45-34"><a href="exploratory-data-analysis.html#cb45-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Population density at the first day of 2019&quot;</span>,</span>
+<span id="cb45-35"><a href="exploratory-data-analysis.html#cb45-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb45-36"><a href="exploratory-data-analysis.html#cb45-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb45-37"><a href="exploratory-data-analysis.html#cb45-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> name)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="exploratory-data-analysis.html#cb46-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_dens_2019_grids_100m.png&quot;</span>,</span>
+<span id="cb46-2"><a href="exploratory-data-analysis.html#cb46-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
+<span id="cb46-3"><a href="exploratory-data-analysis.html#cb46-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb46-4"><a href="exploratory-data-analysis.html#cb46-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="exploratory-data-analysis.html#cb47-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_dens_2019_grids_100m.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-pop-map-grid"></span>
+<img src="results/pop_dens_2019_grids_100m.png" alt="Population density by grid cells of 100m x 100m" width="100%" />
+<p class="caption">
+Figure 3.4: Population density by grid cells of 100m x 100m
+</p>
+</div>
+</div>
+<div id="population-density-worldpop" class="section level3" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Population density WorldPop</h3>
+<p>We can compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m):</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="exploratory-data-analysis.html#cb48-1" aria-hidden="true" tabindex="-1"></a>  dnk_ppp_2019_link <span class="ot">&lt;-</span> <span class="st">&quot;https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif&quot;</span></span>
+<span id="cb48-2"><a href="exploratory-data-analysis.html#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb48-3"><a href="exploratory-data-analysis.html#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(dnk_ppp_2019_link, <span class="st">&quot;data/dnk_ppp_2019.tif&quot;</span>, <span class="at">method =</span> <span class="st">&quot;curl&quot;</span>)</span>
+<span id="cb48-4"><a href="exploratory-data-analysis.html#cb48-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb48-5"><a href="exploratory-data-analysis.html#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stars)</span>
+<span id="cb48-6"><a href="exploratory-data-analysis.html#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb48-7"><a href="exploratory-data-analysis.html#cb48-7" aria-hidden="true" tabindex="-1"></a>  dnk_ppp_2019 <span class="ot">&lt;-</span> <span class="fu">read_stars</span>(<span class="at">.x =</span> <span class="st">&quot;data/dnk_ppp_2019.tif&quot;</span>,  <span class="at">proxy =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb48-8"><a href="exploratory-data-analysis.html#cb48-8" aria-hidden="true" tabindex="-1"></a>  bbox <span class="ot">&lt;-</span>  study_area <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(dnk_ppp_2019))</span>
+<span id="cb48-9"><a href="exploratory-data-analysis.html#cb48-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb48-10"><a href="exploratory-data-analysis.html#cb48-10" aria-hidden="true" tabindex="-1"></a>  cph_ppp_2019 <span class="ot">&lt;-</span> <span class="fu">st_crop</span>(dnk_ppp_2019, bbox) <span class="sc">%&gt;%</span></span>
+<span id="cb48-11"><a href="exploratory-data-analysis.html#cb48-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb48-12"><a href="exploratory-data-analysis.html#cb48-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb48-13"><a href="exploratory-data-analysis.html#cb48-13" aria-hidden="true" tabindex="-1"></a>  col <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlGnBu&quot;</span>)</span>
+<span id="cb48-14"><a href="exploratory-data-analysis.html#cb48-14" aria-hidden="true" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(col)</span>
+<span id="cb48-15"><a href="exploratory-data-analysis.html#cb48-15" aria-hidden="true" tabindex="-1"></a>  my_pallette <span class="ot">&lt;-</span> <span class="fu">pal</span>(<span class="dv">10</span>)</span>
+<span id="cb48-16"><a href="exploratory-data-analysis.html#cb48-16" aria-hidden="true" tabindex="-1"></a>  brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(cph_ppp_2019<span class="sc">$</span>dnk_ppp_2019.tif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb48-17"><a href="exploratory-data-analysis.html#cb48-17" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
+<span id="cb48-18"><a href="exploratory-data-analysis.html#cb48-18" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(cph_ppp_2019<span class="sc">$</span>dnk_ppp_2019.tif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb48-19"><a href="exploratory-data-analysis.html#cb48-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb48-20"><a href="exploratory-data-analysis.html#cb48-20" aria-hidden="true" tabindex="-1"></a>  cph_ppp_2019 <span class="ot">&lt;-</span> cph_ppp_2019 <span class="sc">%&gt;%</span> </span>
+<span id="cb48-21"><a href="exploratory-data-analysis.html#cb48-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>( <span class="at">pop_cuts =</span> <span class="fu">cut</span>(dnk_ppp_2019.tif, <span class="at">breaks =</span> brks, <span class="at">include.lowest =</span> T))  </span>
+<span id="cb48-22"><a href="exploratory-data-analysis.html#cb48-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb48-23"><a href="exploratory-data-analysis.html#cb48-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb48-24"><a href="exploratory-data-analysis.html#cb48-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb48-25"><a href="exploratory-data-analysis.html#cb48-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_stars</span>(<span class="at">data =</span> cph_ppp_2019, <span class="fu">aes</span>(<span class="at">fill =</span> pop_cuts)) <span class="sc">+</span></span>
+<span id="cb48-26"><a href="exploratory-data-analysis.html#cb48-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb48-27"><a href="exploratory-data-analysis.html#cb48-27" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
+<span id="cb48-28"><a href="exploratory-data-analysis.html#cb48-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb48-29"><a href="exploratory-data-analysis.html#cb48-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb48-30"><a href="exploratory-data-analysis.html#cb48-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Estimated total number of people per grid-cell of 3 arc&quot;</span>,</span>
+<span id="cb48-31"><a href="exploratory-data-analysis.html#cb48-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">&quot;Source: WorlpPop (https://data.worldpop.org)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb48-32"><a href="exploratory-data-analysis.html#cb48-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="exploratory-data-analysis.html#cb49-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_dens_2019_worldpop_100m.png&quot;</span>,</span>
+<span id="cb49-2"><a href="exploratory-data-analysis.html#cb49-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">20</span>,</span>
+<span id="cb49-3"><a href="exploratory-data-analysis.html#cb49-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">15</span>,</span>
+<span id="cb49-4"><a href="exploratory-data-analysis.html#cb49-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="exploratory-data-analysis.html#cb50-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_dens_2019_worldpop_100m.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-pop-map-worldpop"></span>
+<img src="results/pop_dens_2019_worldpop_100m.png" alt="worldpop total population density estimations in 2019" width="100%" />
+<p class="caption">
+Figure 3.5: worldpop total population density estimations in 2019
+</p>
+</div>
+</div>
+<div id="land-use-and-residential-units-corine" class="section level3" number="3.3.4">
+<h3><span class="header-section-number">3.3.4</span> Land use and residential units (CORINE)</h3>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="exploratory-data-analysis.html#cb51-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb51-2"><a href="exploratory-data-analysis.html#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_corine,</span>
+<span id="cb51-3"><a href="exploratory-data-analysis.html#cb51-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> label3),</span>
+<span id="cb51-4"><a href="exploratory-data-analysis.html#cb51-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb51-5"><a href="exploratory-data-analysis.html#cb51-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb51-6"><a href="exploratory-data-analysis.html#cb51-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> res_units, <span class="at">size =</span> <span class="fl">0.02</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="exploratory-data-analysis.html#cb51-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Land use&quot;</span>,</span>
+<span id="cb51-8"><a href="exploratory-data-analysis.html#cb51-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> <span class="fu">levels</span>(cph_corine<span class="sc">$</span>hex_col),</span>
+<span id="cb51-9"><a href="exploratory-data-analysis.html#cb51-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb51-10"><a href="exploratory-data-analysis.html#cb51-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb51-11"><a href="exploratory-data-analysis.html#cb51-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Residential units and land use&quot;</span>,</span>
+<span id="cb51-12"><a href="exploratory-data-analysis.html#cb51-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb51-13"><a href="exploratory-data-analysis.html#cb51-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-14"><a href="exploratory-data-analysis.html#cb51-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb51-15"><a href="exploratory-data-analysis.html#cb51-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb51-16"><a href="exploratory-data-analysis.html#cb51-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.80</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb51-17"><a href="exploratory-data-analysis.html#cb51-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb51-18"><a href="exploratory-data-analysis.html#cb51-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb51-19"><a href="exploratory-data-analysis.html#cb51-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb51-20"><a href="exploratory-data-analysis.html#cb51-20" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb51-21"><a href="exploratory-data-analysis.html#cb51-21" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb51-22"><a href="exploratory-data-analysis.html#cb51-22" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="exploratory-data-analysis.html#cb52-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/land_use_corine.png&quot;</span>,</span>
+<span id="cb52-2"><a href="exploratory-data-analysis.html#cb52-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
+<span id="cb52-3"><a href="exploratory-data-analysis.html#cb52-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">15</span>,</span>
+<span id="cb52-4"><a href="exploratory-data-analysis.html#cb52-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="exploratory-data-analysis.html#cb53-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/land_use_corine.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-land-use"></span>
+<img src="results/land_use_corine.png" alt="CORINE land use and residential units" width="100%" />
+<p class="caption">
+Figure 3.6: CORINE land use and residential units
+</p>
+</div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="load-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/03-EDA.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/javiereliomedina/housing_prices_book/blob/master/03-EDA.Rmd",
+"text": null
+},
+"download": ["Housing_prices_book.pdf", "Housing_prices_book.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
