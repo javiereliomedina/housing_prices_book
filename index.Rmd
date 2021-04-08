@@ -1,0 +1,169 @@
+---
+title: "Housing prices Copenhagen"
+author: "Javier Elío, Henning S. Hansen, Carsten Keßler"
+date: "`r Sys.Date()`"
+site: 
+output: bookdown::gitbook
+documentclass: book
+bibliography: [library.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: 
+description: "Housing prices BBR data"
+---
+
+```{r setup, include=FALSE}
+
+# Chunk options 
+  knitr::opts_chunk$set(include = TRUE,
+                        echo = TRUE,
+                        fig.pos = "H",
+                        fig.align = "center",
+                        warning = FALSE,
+                        message = FALSE,
+                        comment = "#>")
+  options(knitr.kable.NA = "-")
+
+```
+
+# Prerequisites {.unnumbered}
+
+The data have been analysed with **R** (version `r paste(R.Version()$major, R.Version()$minor, sep = ".")`) and **Rstudio** (versio `r rstudioapi::versionInfo()$version`), and the book has been created with **bookdown** package. The required packages are automatically checked and installed if needed from CRAN.
+
+```{r, results='hide'}
+
+# Create an auxiliary function for checking if a package is installed,
+# install it if it is not, and load the package
+# (based on https://gist.github.com/stevenworthington/3178163) 
+
+ ipak <- function(pkg){
+    new_pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+    if (length(new_pkg)) 
+      install.packages(new_pkg,
+                       dependencies = TRUE,
+                       repos = "http://cran.us.r-project.org")
+    sapply(pkg, require, character.only = TRUE)
+  }
+
+# List of packages 
+  pkg <- c( "bit64", "bookdown",
+            "data.table", "danstat",
+            "forcats", "furrr",
+            "ggspatial", "giscoR",
+            "janitor",
+            "kableExtra", "knitr",
+            "latex2exp",
+            "osmdata", "patchwork", "potential",
+            "rmarkdown", "remotes", "RColorBrewer",
+            "sf", "stringr", "SnowballC",
+            "units",
+            "tidyverse", "tidytext", "tm", "tools")
+
+# Check and install
+  ipak(pkg)
+
+```
+
+```{r, include=FALSE}
+
+# automatically create a bib database for R packages
+knitr::write_bib(x = c(.packages()), file = 'packages.bib')
+
+```
+
+## Create data and results folders {.unnumbered}
+
+Save important data and results in their respective folders
+
+```{r}
+
+dir.create("data")
+dir.create("results")
+
+```
+
+## Ggplot themes {.unnumbered}
+
+Create our own theme for plotting maps in ggplot2.
+
+```{r}
+
+  my_theme_map <- function() {
+    theme_void() +
+      theme(
+        # Title and captions
+        plot.title = element_text(size = 14, colour = "darkblue", face = "bold"),
+        plot.caption = element_text(size = 10, colour = "grey25"),
+        # Legend
+        legend.title = element_text(size = 10, face = "bold"),
+        legend.text = element_text(size = 10),
+        # Facets
+        strip.text = element_text(size = 12, color = "black", face = "italic")
+      )
+  }
+
+```
+
+## Download data from kortforsyningen {.unnumbered}
+
+We have create our own package for downloading the data to a local repository (i.e. [dangeo](https://github.com/javiereliomedina/dangeo.git). Although the data are free, we need to create a *username* and a *password* for getting access to kortforsyningen. By default **dangeo** looks for credentials on .Renviron (*kortforsyningen_id = "username"* and *kortforsyningen_pwd = "password"*). We also need to define the local directory where the data are downloaded (i.e. `dangeo_set_param()`). The first time we download a file it may be time consuming; however, a file will not be downloaded if it is already in the local directory.
+
+```{r}
+
+# Install package from GitHub
+  if (!require("dangeo"))  remotes::install_github("javiereliomedina/dangeo")
+  library(dangeo)
+
+# Set username and password 
+# usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = "username") and password (kortforsyningen_pwd = "password")
+
+# Set local repository
+  dangeo_set_param()
+  # loc_dir  # Check path to local repository
+    
+```
+
+- CORINE
+
+```{r}
+
+dangeo_get_data(ftp_folder = "CORINE",
+                zip_name   = "DK_CORINE_SHP_UTM32-WGS84.zip")
+
+```
+
+- DAGI (scale 1:10000) 
+
+```{r}
+
+dangeo_get_data(ftp_folder = "landinddelinger/dagi/SHAPE",
+                zip_name   = "DAGIREF_SHAPE_UTM32-EUREF89.zip")
+
+```
+
+- Inspire_railway-transport-network 
+
+```{r}
+
+dangeo_get_data(
+  ftp_folder = "grundlaeggende_landkortdata/inspire_railway-transport-network",
+  zip_name   = "DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip")
+
+```
+
+- GeoDanmark 
+
+```{r}
+
+dangeo_get_data(ftp_folder = "grundlaeggende_landkortdata/fot/SHAPE",
+                zip_name   = "DK_SHAPE_UTM32-EUREF89.zip")
+
+```
+
+## R session {-}
+
+```{r R-session, echo = FALSE}
+
+sessionInfo()
+
+```
