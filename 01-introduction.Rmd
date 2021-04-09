@@ -12,23 +12,7 @@ Where $f$ represents the functional function in the hedonic model, *P* is the pr
 
 ### House characteristics
 
-We get the housing prices and the house properties from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)). There dataset contains information about the building (e.g. building are and renovation year) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling. However, some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. Furthermore, we focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. *BYG_ANVEND_KODE*):
-
--   120 - Fritliggende enfamiliehus *(Detached single-family house)*;
--   121 - Sammenbygget enfamiliehus *(Combined single-family house)*;
--   122 - Fritliggende enfamiliehus i tæt-lav bebyggelse (*Detached single-family house in dense-low-rise buildings*);
--   130 - (UDFASES) Række-, kæde-, eller dobbelthus (lodret adskillelse mellem enhederne) *((PHASE OUT) Row, chain, or semi-detached house (vertical separation between the units))*;
--   131 - Række-, kæde- og klyngehus *(Row, chain and cluster housing)*;
--   132 - Dobbelthus *(Semi-detached house)*;
--   140 - Etagebolig-bygning, flerfamiliehus eller to-familiehus *(Multi-storey residential building, multi-family house or two-family house)*;
--   190 - Anden bygning til helårsbeboelse *(Second building for year-round living)*.
-
-These building types were then aggregated in four categories:
-
--   Single-family house: 120, 121, and 122;
--   Row, chain, or semi-detached house: 130, 131, and 132;
--   Multi-storey residential building: 140;
--   Second building for year-round living: 190.
+We get the housing prices and the house properties from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)). The dataset contains information about the building (e.g. building area, renovation year, etc.) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling, while some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. There are data from 2006 to 2019. 
 
 ### Location characteristics
 

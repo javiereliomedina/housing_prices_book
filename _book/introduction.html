@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="load-data.html"/>
+<link rel="next" href="data.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,8 +51,76 @@
 
 
 
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -86,12 +154,12 @@
 <li class="chapter" data-level="1.1.3" data-path="introduction.html"><a href="introduction.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.1.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="load-data.html"><a href="load-data.html"><i class="fa fa-check"></i><b>2</b> Load data</a>
+<li class="chapter" data-level="2" data-path="data.html"><a href="data.html"><i class="fa fa-check"></i><b>2</b> Data</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="load-data.html"><a href="load-data.html#administrative-units"><i class="fa fa-check"></i><b>2.1</b> Administrative units</a></li>
-<li class="chapter" data-level="2.2" data-path="load-data.html"><a href="load-data.html#bbr-data"><i class="fa fa-check"></i><b>2.2</b> BBR data</a></li>
-<li class="chapter" data-level="2.3" data-path="load-data.html"><a href="load-data.html#population-data"><i class="fa fa-check"></i><b>2.3</b> Population data</a></li>
-<li class="chapter" data-level="2.4" data-path="load-data.html"><a href="load-data.html#corine-land-use"><i class="fa fa-check"></i><b>2.4</b> CORINE land use</a></li>
+<li class="chapter" data-level="2.1" data-path="data.html"><a href="data.html#administrative-units"><i class="fa fa-check"></i><b>2.1</b> Administrative units</a></li>
+<li class="chapter" data-level="2.2" data-path="data.html"><a href="data.html#bbr-data"><i class="fa fa-check"></i><b>2.2</b> BBR data</a></li>
+<li class="chapter" data-level="2.3" data-path="data.html"><a href="data.html#population-data"><i class="fa fa-check"></i><b>2.3</b> Population data</a></li>
+<li class="chapter" data-level="2.4" data-path="data.html"><a href="data.html#corine-land-use"><i class="fa fa-check"></i><b>2.4</b> CORINE land use</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>3</b> Exploratory Data Analysis</a>
 <ul>
@@ -136,24 +204,7 @@
 <p>Where <span class="math inline">\(f\)</span> represents the functional function in the hedonic model, <em>P</em> is the price of the house <em>i</em>, and <span class="math inline">\(H_i\)</span>, <span class="math inline">\(L_i\)</span> and <span class="math inline">\(N_i\)</span> are the vector of the structural characteristics, the location variables, and the neighbourhood characteristics of the house <em>i</em>, respectively. Finally, <span class="math inline">\(\epsilon\)</span> is the error term.</p>
 <div id="house-characteristics" class="section level3" number="1.1.1">
 <h3><span class="header-section-number">1.1.1</span> House characteristics</h3>
-<p>We get the housing prices and the house properties from the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>). There dataset contains information about the building (e.g. building are and renovation year) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling. However, some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. Furthermore, we focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. <em>BYG_ANVEND_KODE</em>):</p>
-<ul>
-<li>120 - Fritliggende enfamiliehus <em>(Detached single-family house)</em>;</li>
-<li>121 - Sammenbygget enfamiliehus <em>(Combined single-family house)</em>;</li>
-<li>122 - Fritliggende enfamiliehus i tæt-lav bebyggelse (<em>Detached single-family house in dense-low-rise buildings</em>);</li>
-<li>130 - (UDFASES) Række-, kæde-, eller dobbelthus (lodret adskillelse mellem enhederne) <em>((PHASE OUT) Row, chain, or semi-detached house (vertical separation between the units))</em>;</li>
-<li>131 - Række-, kæde- og klyngehus <em>(Row, chain and cluster housing)</em>;</li>
-<li>132 - Dobbelthus <em>(Semi-detached house)</em>;</li>
-<li>140 - Etagebolig-bygning, flerfamiliehus eller to-familiehus <em>(Multi-storey residential building, multi-family house or two-family house)</em>;</li>
-<li>190 - Anden bygning til helårsbeboelse <em>(Second building for year-round living)</em>.</li>
-</ul>
-<p>These building types were then aggregated in four categories:</p>
-<ul>
-<li>Single-family house: 120, 121, and 122;</li>
-<li>Row, chain, or semi-detached house: 130, 131, and 132;</li>
-<li>Multi-storey residential building: 140;</li>
-<li>Second building for year-round living: 190.</li>
-</ul>
+<p>We get the housing prices and the house properties from the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>). The dataset contains information about the building (e.g. building area, renovation year, etc.) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling, while some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. There are data from 2006 to 2019.</p>
 </div>
 <div id="location-characteristics" class="section level3" number="1.1.2">
 <h3><span class="header-section-number">1.1.2</span> Location characteristics</h3>
@@ -182,7 +233,7 @@
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="load-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

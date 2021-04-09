@@ -2,62 +2,49 @@
 
 ## Administrative units
 
-We has performed the analysis in Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes. For adding new communes we would only need to add the code in the following chunk and the analysis will be automatically updated when running again the analysis. 
-```{r commune-codes, cache=TRUE}
+The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/)) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.    
 
-  study_area_codes <- c("0101", "0147")
+```{r adm-units, cache=TRUE}
 
-```
+## Codes of the comunes under study (KOMKODE)
+study_area_codes <- c("0101", "0147")
 
-Load shapefile with the communes polygons of Denmark, and select those in the study area:
-```{r shp-commune, cache = TRUE, dependson = "commune-codes"}
+## Communes polygons of Denmark, and select those in the study area
+commune_link <- paste(loc_dir, "DAGIREF_SHAPE_UTM32-EUREF89/ADM", "KOMMUNE.shp", sep = "/")
+dk_commune  <- read_sf(commune_link) %>%
+  st_zm() %>% 
+  st_transform(crs = "EPSG:25832")
 
-  commune_link <- paste(loc_dir,
-                        "DAGIREF_SHAPE_UTM32-EUREF89/ADM",
-                        "KOMMUNE.shp",
-                        sep = "/")
-  dk_commune  <- read_sf(commune_link) %>%
-    st_zm() %>% 
-    st_transform(crs = "EPSG:25832")
-  
-  cph_commune <- filter(dk_commune, KOMKODE %in% study_area_codes)
+cph_commune <- filter(dk_commune, KOMKODE %in% study_area_codes)
 
-```
-
-Load shapefile with the parishes polygons of Denmark, and select those in the study area: 
-```{r shp-parish, cache = TRUE, dependson = "commune-codes"}
-
-  parish_link <- paste(loc_dir, "DAGIREF_SHAPE_UTM32-EUREF89/ADM", "SOGN.shp", sep = "/")
-  dk_parish  <- read_sf(parish_link) %>%
-    st_zm() %>% 
-    st_transform(crs = "EPSG:25832")
+## Parishes polygons of Denmark, and select those in the study area 
+parish_link <- paste(loc_dir, "DAGIREF_SHAPE_UTM32-EUREF89/ADM", "SOGN.shp", sep = "/")
+dk_parish  <- read_sf(parish_link) %>%
+  st_zm() %>% 
+  st_transform(crs = "EPSG:25832")
 
 # Select those where the centroid is in the study area
-  dk_parish_cent <- st_centroid(dk_parish)
-  cph_parish_cent <- st_intersection(dk_parish_cent, cph_commune)
-  
-  cph_parish <- filter(dk_parish, SOGNEKODE %in% cph_parish_cent$SOGNEKODE) %>% 
-    # Combine several parish features geometries into one polygon
-    group_by(SOGNEKODE, SOGNENAVN) %>% 
-    summarise(geometry = st_union(geometry)) %>% 
-    ungroup() %>% 
-    # add area of the parish (in km2)
-    mutate(prsh_area_km2 = as.numeric(units::set_units(st_area(.), km^2)))
+dk_parish_cent <- st_centroid(dk_parish)
+cph_parish_cent <- st_intersection(dk_parish_cent, cph_commune)
+
+cph_parish <- filter(dk_parish, SOGNEKODE %in% cph_parish_cent$SOGNEKODE) %>% 
+  # Combine several parish features geometries into one polygon
+  group_by(SOGNEKODE, SOGNENAVN) %>% 
+  summarise(geometry = st_union(geometry)) %>% 
+  ungroup() %>% 
+  # add area of the parish (in km2)
+  mutate(prsh_area_km2 = as.numeric(units::set_units(st_area(.), km^2)))
+
+## Contour of the study area (merge the parishes in one polygon):
+study_area <- cph_parish %>%
+  st_union() %>%
+  st_sf() %>% 
+  st_transform(crs = "EPSG:25832")
 
 ```
 
-Contour of the study area (merge the parishes in one polygon):
-```{r study-area, cache = TRUE, dependson = "commune-codes"}
-
-  study_area <- cph_parish %>%
-    st_union() %>%
-    st_sf() %>% 
-    st_transform(crs = "EPSG:25832")
-
-```
-
-Make grids cells of 100 m x 100 m over the study area:
-```{r make-grids, cache = TRUE, dependson = "commune-codes"}
+Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:
+```{r grids-100m, cache = TRUE, dependson = "adm-units"}
 
   grids100m <- study_area %>% 
     # Make regular grids (100m x 100m)
@@ -70,41 +57,39 @@ Make grids cells of 100 m x 100 m over the study area:
 
 ## BBR data    
 
-Residential units codes (BYG_ANV - Buildings for year-round living):
+From the BBR dataset, we load all buildings for year-round living (*BYG_ANVEND_KODE*):
 
+- 110           = Farmhouse for agricultural property.  
 - 120, 121, 122 = Detached single-family house (detached house). 
 - 130, 131, 132 = Townhouse, chain, or semi-detached house (vertical separation between the units).
 - 140           = Multi-storey residential building (multi-family house, including two-family house (horizontal separation between the units).
+- 150           = College.
+- 160           = Residential building for residential institution.
 - 190           = Second building for year-round living (NOT USED - VERY LOW NUMBER)
 
-```{r res-codes}
+```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime('C:/Users/FU53VP/OneDrive - Aalborg Universitet/BBR_2021/csv/')}
 
-# Residential houss codes
+## Buildings for year round living
   res_codes <- tribble (~BYG_ANVEND_KODE, ~type,
+                        110, "Farmhouse",
                         120, "Single-family house",
                         121, "Single-family house",
                         122, "Single-family house",
-                        130, "Row, chain, or semi-detached house",
-                        131, "Row, chain, or semi-detached house",
-                        132, "Row, chain, or semi-detached house",
-                        140, "Multi-storey residential building",
-                        190, "Second building for year-round living") %>%
+                        130, "Semi-detached house",
+                        131, "Semi-detached house",
+                        132, "Semi-detached house",
+                        140, "Multi-storey",
+                        150, "College", 
+                        160, "Residential institution",
+                        190, "Second building") %>%
     # Convert type to factor
-    mutate(type = factor(type,
-                         levels = c("Single-family house",
-                                    "Multi-storey residential building",
-                                    "Row, chain, or semi-detached house",
-                                    "Second building for year-round living")))
+    mutate(type = factor(type))
 
-```
-
-Function for reading residential units from a csv file:
-```{r aux-funct-BBR}
-
-#' Read residential units from BBR data 
-#' Get read residential units in an area
-#' @param file Link to OneDrive with the data (.csv format)
-#' @param area Area where we would get the data (default = study_area)
+## Function for reading residential units from a csv file:
+# Read residential units from BBR data 
+# Get read residential units in an area
+# @param file Link to OneDrive with the data (.csv format)
+# @param area Area where we would get the data (default = study_area)
 
   f_res_units  <- function(.file, .area = study_area) { 
     fread(.file) %>% 
@@ -133,11 +118,7 @@ Function for reading residential units from a csv file:
       mutate(BBR_year = parse_number(stringr::str_extract(.file, "_[0-9]+_")))
   }
 
-```
-
-Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: 
-```{r load-BBR, cache=TRUE, dependson = "commune-codes", cache.extra = file.mtime('C:/Users/FU53VP/OneDrive - Aalborg Universitet/BBR_2021/csv/')}
-
+## Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: 
 # Load residential units 
 # NOTE: you may need to change the path to OneDrive - Aalborg Universitet 
 # Read all the data together 
@@ -150,15 +131,16 @@ Load all csv files (one file for each year) in the same tibble with a column ind
 
 ## Population data 
 
-Population by parish, with ancestry (Danish origin and immigrants from western and non-western countries). Two tables from DTS:
+Population data at parish level have been retrieved from [Statistics Denmark](https://www.dst.dk/en) using the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html). We have uploaded the following tables:
 
-- KMSTA001: Population 1. January by parish, ancestry and National Church
-- KMSTA003: Summary vital statistics by parish and movements
+- [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree)
+- [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree)
 
-We firs create auxiliary functions for reading the data with the package *danstat*:
+We have created two auxiliary function for reading the data. `steps` loops by year for getting small pieces of information from the DST API and then putting all together in a data frame. In this sense, we overcome the limitation of the number of rows we can retrieve from the API (i.e. if we call a large dataset we get the error: *Error: API did not return text/csv*). Then, `rm_words` is used in the cleaning process for simplifying the description of some variables we would like to use as columns names. 
+
 ```{r aux-funct-DST}
 
-# Loop by year for getting DST data) 
+# Loop by year for getting DST data 
   steps <- function(year){
     var_values <- list(id_region, id_ancestry, year)
     var_input <- purrr::map2(.x = var_codes,
@@ -179,8 +161,10 @@ We firs create auxiliary functions for reading the data with the package *dansta
 
 ```
 
-Read and clean the first table (KMSTA001):
-```{r load-KMSTA001, cache = TRUE, dependson = "shp-parish"}
+The code needed for loading the tables are therefore: 
+
+  - KMSTA001:
+```{r load-KMSTA001, cache = TRUE, dependson = "adm-units"}
 
   id_table <- "KMSTA001"
   var_pop <- get_table_metadata(table_id = id_table, variables_only = TRUE)
@@ -242,8 +226,8 @@ Read and clean the first table (KMSTA001):
   
 ```
 
-Read and clean second table (KMSTA003):
-```{r load-KMSTA003, cache = TRUE, dependson = "shp-parish"}
+ - KMSTA003:
+```{r load-KMSTA003, cache = TRUE, dependson = "adm-units"}
 
   id_table <- "KMSTA003"
   var_pop <- get_table_metadata(table_id = id_table, variables_only = TRUE)
@@ -294,19 +278,16 @@ Read and clean second table (KMSTA003):
   
 ```
 
-Merge both tables in one:
-```{r merge-DST, cache = TRUE, dependson = "shp-parish"}
+One we have the data we merge both dataset and add the spatial information (note that there are only summary statistics from 2015): 
+```{r merge-DST, cache = TRUE, dependson = "adm-units"}
 
+## Merge both tables in one:
   prsh_pop <- prsh_ances %>%  
     full_join(prsh_stats) %>% 
     # remove rows with no summary data (summary data only from 2015 to 2020)
     filter(date >= 2015, date <= 2020)
 
-```
-
-Add the spatial information:
-```{r spatial-DST,  cache = TRUE, dependson = "shp-parish"}
-  
+## Add the spatial information:
   prsh_pop_sf <- cph_parish %>%
     rename(prsh_id = SOGNEKODE) %>% 
     select(prsh_id, prsh_area_km2) %>% 
@@ -316,41 +297,36 @@ Add the spatial information:
 
 ##  CORINE land use 
 
-Create a table with the CORINE land use codes from the EEA
-```{r CORINE-link}
- 
-  corine_code_link <- "https://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2000-clc2000-250-m-version-9-2007/corine-land-cover-2000-classes-and-rgb-color-codes/clc2000legend.csv/at_download/file"
+Land use have been obtained from CORINE. We downloaded the data from kortforsyningen and used the data from 2010 (*CLC12_DK.shp*).
 
-  corine_code <- read_csv(corine_code_link) %>% 
-    mutate_if(is.numeric, as.character)
+```{r load-CORINE, cache=TRUE, dependson="adm-units"}
+
+## Create a table with the CORINE land use codes from the EEA
+corine_code_link <- "https://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2000-clc2000-250-m-version-9-2007/corine-land-cover-2000-classes-and-rgb-color-codes/clc2000legend.csv/at_download/file"
+
+corine_code <- read_csv(corine_code_link) %>% 
+  mutate_if(is.numeric, as.character)
   
-```
+## Load shape fine
+dangeo_set_param() # Get local directory
+corine_link <- paste(loc_dir, "DK_CORINE_SHP_UTM32-WGS84", "CLC12_DK.shp", sep = "/")
+dk_corine  <- read_sf(corine_link) %>%
+  # Drop z dimension
+  st_zm() %>% 
+  # Transform coordinates
+  st_transform(crs = "EPSG:25832") %>% 
+  # Add code description
+  left_join(corine_code, by = c("CODE_12" = "CLC_CODE")) 
 
-Load the shapefile downloaded from kortforsyningen into the local directory.
-```{r shp-CORINE, cache=TRUE, dependson="commune-codes"}
-
-# Local directory
-  dangeo_set_param()
-
-# Load shape fine
-  corine_link <- paste(loc_dir, "DK_CORINE_SHP_UTM32-WGS84", "CLC12_DK.shp", sep = "/")
-  dk_corine  <- read_sf(corine_link) %>%
-    # Drop z dimension
-    st_zm() %>% 
-    # Transform coordinates
-    st_transform(crs = "EPSG:25832") %>% 
-    # Add code description
-    left_join(corine_code, by = c("CODE_12" = "CLC_CODE")) 
-  
-# Select study area
-  cph_corine <- st_intersection(dk_corine, study_area) %>% 
-    select(CODE_12, LABEL1, LABEL2, LABEL3 , RGB) %>% 
-    janitor::clean_names() %>% 
-    separate(rgb, c("red", "green", "blue"), sep = "-") %>% 
-    mutate(code_12 = as.numeric(code_12),
-           hex_col = grDevices::rgb(red, green, blue, max = 255),
-           hex_col = fct_reorder(hex_col, code_12),
-           label3 = fct_reorder(label3, code_12)) %>% 
-    st_sf()
+## Select study area
+cph_corine <- st_intersection(dk_corine, study_area) %>% 
+  select(CODE_12, LABEL1, LABEL2, LABEL3 , RGB) %>% 
+  janitor::clean_names() %>% 
+  separate(rgb, c("red", "green", "blue"), sep = "-") %>% 
+  mutate(code_12 = as.numeric(code_12),
+         hex_col = grDevices::rgb(red, green, blue, max = 255),
+         hex_col = fct_reorder(hex_col, code_12),
+         label3 = fct_reorder(label3, code_12)) %>% 
+  st_sf()
   
 ```

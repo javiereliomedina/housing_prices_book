@@ -1,23 +1,17 @@
 # Exploratory Data Analysis
 
 ## Residential units 
-- column names
-- VEJ_NAVN         = Street name
-- HUS_NR           = Street Building Identifier
-- Etagebetegn      = Floor Physical Identifier
-- SIDE_DOERNR      = Suite Identifier
-- PostNr           = Post code    
-- ENH_ANVEND_KODE  = UnitUseCode
-- BOLIGTYPE_KODE   = Dwelling Type Code
-- ENH_ARL_SAML     = Total Building Unit Area Measure
-- BEBO_ARL         = Dwelling Area Measure
-- ENH_ERHV_ARL     = Business Premises Area Measure
-- VAERELSE_ANT     = Room Quantity
-- ENERGI_KODE      = Energy Supply Code
-- VARMEINSTAL_KODE = Heating Installation Code
-- OPVARMNING_KODE  = Heating Source Code
-- VARME_SUPPL_KODE = Supplementary Heating Code
-- VAER_ERHV_ANT    = Business Room Quantity
+
+We focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. *BYG_ANVEND_KODE*):
+
+-   120 - Fritliggende enfamiliehus *(Detached single-family house)*;
+-   121 - Sammenbygget enfamiliehus *(Combined single-family house)*;
+-   122 - Fritliggende enfamiliehus i tæt-lav bebyggelse (*Detached single-family house in dense-low-rise buildings*);
+-   130 - (UDFASES) Række-, kæde-, eller dobbelthus (lodret adskillelse mellem enhederne) *((PHASE OUT) Row, chain, or semi-detached house (vertical separation between the units))*;
+-   131 - Række-, kæde- og klyngehus *(Row, chain and cluster housing)*;
+-   132 - Dobbelthus *(Semi-detached house)*;
+-   140 - Etagebolig-bygning, flerfamiliehus eller to-familiehus *(Multi-storey residential building, multi-family house or two-family house)*;
+-   190 - Anden bygning til helårsbeboelse *(Second building for year-round living)*.
 
 Estimate the number of residential units in the study area.
 ```{r runits-numb}
@@ -59,11 +53,7 @@ Residential units by floor level
     # in percentage [%]   
     mutate(perc = 100 * n / sum(n)) %>% 
     # Reorder type levels for plotting multi-storey first
-    mutate(type = factor(type,
-                         levels = c("Single-family house",
-                                    "Row, chain, or semi-detached house",
-                                    "Second building for year-round living",
-                                    "Multi-storey residential building"))) %>%
+    mutate(type = factor(type)) %>%
     ggplot() +
     geom_bar(aes(y = floor_level, x = perc, fill = type), stat = "identity") +
     labs(title = "Residential units distribution by floor level",
@@ -74,7 +64,7 @@ Residential units by floor level
           legend.title = element_blank()) +
     guides(fill = guide_legend(ncol = 2)) +
     scale_x_continuous(labels = scales::comma) +
-    scale_fill_manual(values = c("#009E73", "#D55E00", "#000000", "#56B4E9"))
+    scale_fill_manual(values = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
   
   ggsave(filename = "results/floor_levels_res_units.png")
 
@@ -127,7 +117,6 @@ Unit area
     filter(BEBO_ARL > 1000) 
 
 ```
-
 
 ## Spatial distribution of residential units
 
@@ -363,7 +352,7 @@ Therefore we create the following function:
 ```
 
 Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m and ancestry.
-```{r pop-den-grids, fig.show='hide', cache = TRUE, dependson = "shp-parish"}
+```{r pop-den-grids, fig.show='hide', cache = TRUE, dependson = "adm-units"}
 
   pop_2019_g100m <-  f_pd_grids(.pop = prsh_pop_sf,
                                 .parish = cph_parish,
@@ -419,7 +408,7 @@ knitr::include_graphics("results/pop_dens_2019_grids_100m.png")
 ### Population density WorldPop    
 
 We can compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m):
-```{r pop-den-worldpop, fig.show='hide', cache=TRUE, cache.extra=file.mtime('data/dnk_ppp_2019.tif')}
+```{r pop-den-worldpop, fig.show='hide', cache=TRUE, dependson = "adm-units"}
 
   dnk_ppp_2019_link <- "https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif"
   dir.create("data")
@@ -469,7 +458,7 @@ knitr::include_graphics("results/pop_dens_2019_worldpop_100m.png")
 
 ### Land use and residential units (CORINE) 
  
-```{r plot-CORINE, fig.show='hide', cache=TRUE, dependson="shp-CORINE"}
+```{r plot-CORINE, fig.show='hide', cache=TRUE, dependson="load-CORINE"}
   
   ggplot() +
     geom_sf(data = cph_corine,
