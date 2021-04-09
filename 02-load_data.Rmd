@@ -1,4 +1,4 @@
-# Load data
+# Data
 
 ## Administrative units
 

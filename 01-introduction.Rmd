@@ -10,7 +10,7 @@ $$P_i = f(H_i, L_i, N_i) + \epsilon $$
 
 Where $f$ represents the functional function in the hedonic model, *P* is the price of the house *i*, and $H_i$, $L_i$ and $N_i$ are the vector of the structural characteristics, the location variables, and the neighbourhood characteristics of the house *i*, respectively. Finally, $\epsilon$ is the error term.
 
-## House characteristics
+### House characteristics
 
 We get the housing prices and the house properties from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)). There dataset contains information about the building (e.g. building are and renovation year) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling. However, some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. Furthermore, we focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. *BYG_ANVEND_KODE*):
 
@@ -30,7 +30,7 @@ These building types were then aggregated in four categories:
 -   Multi-storey residential building: 140;
 -   Second building for year-round living: 190.
 
-## Location characteristics
+### Location characteristics
 
 [OpenStreetMaps](https://cran.r-project.org/web/packages/osmdata/vignettes/osmdata.html) and [kortforsyningen](https://kortforsyningen.dk/) were used for getting the data about the urban services (e.g. public transport network, parks, ...). Then, the interaction between those services and the house was modelled by potential models (@Weber2000, @Gultekin2006), where the intensity of the interaction between the elements and the house is inversely proportional to the distance between them (@Giraud2020).
 
@@ -38,7 +38,7 @@ $$ p_i = \sum_{j = i}^{n} M_i \cdot f(d_{ij}) $$
 
 Where $p_i$ is the potential of the housing unit, $M_j$ the mass of the service, and $f(d_{ij})$ the negative function of the distance between the dwelling *i* and the service *j*.
 
-## Neighbourhood characteristics
+### Neighbourhood characteristics
 
 We have used the smallest administrative area of Denmark (i.e. parish) for evaluating the influence of the neighbourhoog characteristics on housing prices \color{red}(Use also potential model here -\> e.g. locate the stock of migrant population on the centroid of each parish and get the interaction intensity in each house??)\color{black}. The following tables from the [Denmark Statistics](https://www.dst.dk/da) were used:
 
