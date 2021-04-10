@@ -125,7 +125,9 @@ From the BBR dataset, we load all buildings for year-round living (*BYG_ANVEND_K
   OneDrive_link <- "C:/Users/FU53VP/OneDrive - Aalborg Universitet/BBR_2021/csv/"
   csv_files_link <- list.files(path = OneDrive_link, pattern = "*.csv", full.names = TRUE)
   
+  plan(multisession, workers = 3)
   res_units <- future_map_dfr(.x = csv_files_link, .f = f_res_units)
+  plan("default")
 
 ```
 

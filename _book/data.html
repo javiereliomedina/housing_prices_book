@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-09" />
+<meta name="date" content="2021-04-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,8 +53,6 @@
 
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 
 
 <style type="text/css">
@@ -310,7 +308,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb12-54"><a href="data.html#cb12-54" aria-hidden="true" tabindex="-1"></a>  OneDrive_link <span class="ot">&lt;-</span> <span class="st">&quot;C:/Users/FU53VP/OneDrive - Aalborg Universitet/BBR_2021/csv/&quot;</span></span>
 <span id="cb12-55"><a href="data.html#cb12-55" aria-hidden="true" tabindex="-1"></a>  csv_files_link <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> OneDrive_link, <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb12-56"><a href="data.html#cb12-56" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-57"><a href="data.html#cb12-57" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_link, <span class="at">.f =</span> f_res_units)</span></code></pre></div>
+<span id="cb12-57"><a href="data.html#cb12-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">3</span>)</span>
+<span id="cb12-58"><a href="data.html#cb12-58" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_link, <span class="at">.f =</span> f_res_units)</span>
+<span id="cb12-59"><a href="data.html#cb12-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
 </div>
 <div id="population-data" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Population data</h2>
