@@ -12,20 +12,6 @@ github-repo:
 description: "Housing prices BBR data"
 ---
 
-```{r setup, include=FALSE}
-
-# Chunk options 
-  knitr::opts_chunk$set(include = TRUE,
-                        echo = TRUE,
-                        fig.pos = "H",
-                        fig.align = "center",
-                        warning = FALSE,
-                        message = FALSE,
-                        comment = "#>")
-  options(knitr.kable.NA = "-")
-
-```
-
 # Prerequisites {.unnumbered}
 
 The data have been analysed with **R** (version `r paste(R.Version()$major, R.Version()$minor, sep = ".")`) and **Rstudio** (versio `r rstudioapi::versionInfo()$version`), and the book has been created with **bookdown** package. The required packages are automatically checked and installed if needed from CRAN.

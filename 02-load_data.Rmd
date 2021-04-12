@@ -57,7 +57,9 @@ Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population d
 
 ## BBR data    
 
-From the BBR dataset, we load all buildings for year-round living (*BYG_ANVEND_KODE*):
+BBR data are saved on a local repository on *OneDrive*. I have save the link on *.Renviron* as OneDrive_BBR_link. You would need therefore to change it in your environment with `usethis::edit_r_environ()`.      
+
+We load all buildings for year-round living (*BYG_ANVEND_KODE*):
 
 - 110           = Farmhouse for agricultural property.  
 - 120, 121, 122 = Detached single-family house (detached house). 
@@ -67,7 +69,7 @@ From the BBR dataset, we load all buildings for year-round living (*BYG_ANVEND_K
 - 160           = Residential building for residential institution.
 - 190           = Second building for year-round living (NOT USED - VERY LOW NUMBER)
 
-```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime('C:/Users/FU53VP/OneDrive - Aalborg Universitet/BBR_2021/csv/')}
+```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_link"))}
 
 ## Buildings for year round living
   res_codes <- tribble (~BYG_ANVEND_KODE, ~type,
@@ -122,8 +124,10 @@ From the BBR dataset, we load all buildings for year-round living (*BYG_ANVEND_K
 # Load residential units 
 # NOTE: you may need to change the path to OneDrive - Aalborg Universitet 
 # Read all the data together 
-  OneDrive_link <- "C:/Users/FU53VP/OneDrive - Aalborg Universitet/BBR_2021/csv/"
-  csv_files_link <- list.files(path = OneDrive_link, pattern = "*.csv", full.names = TRUE)
+  
+  csv_files_link <- list.files(path = Sys.getenv("OneDrive_BBR_link"),
+                               pattern = "*.csv",
+                               full.names = TRUE)
   
   plan(multisession, workers = 3)
   res_units <- future_map_dfr(.x = csv_files_link, .f = f_res_units)
