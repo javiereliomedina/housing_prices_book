@@ -59,34 +59,11 @@ knitr::write_bib(x = c(.packages()), file = 'packages.bib')
 
 ## Create data and results folders {.unnumbered}
 
-Save important data and results in their respective folders
+Save important data in their respective folder.
 
 ```{r}
 
 dir.create("data")
-dir.create("results")
-
-```
-
-## Ggplot themes {.unnumbered}
-
-Create our own theme for plotting maps in ggplot2.
-
-```{r}
-
-  my_theme_map <- function() {
-    theme_void() +
-      theme(
-        # Title and captions
-        plot.title = element_text(size = 14, colour = "darkblue", face = "bold"),
-        plot.caption = element_text(size = 10, colour = "grey25"),
-        # Legend
-        legend.title = element_text(size = 10, face = "bold"),
-        legend.text = element_text(size = 10),
-        # Facets
-        strip.text = element_text(size = 12, color = "black", face = "italic")
-      )
-  }
 
 ```
 
