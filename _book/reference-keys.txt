@@ -1,10 +1,10 @@
 fig:fig-sp-res-builds
 tab:tbl-runits-oft
 fig:fig-land-use
-fig:fig-pop-map-chor
+fig:fig-pop-chor
 fig:fig-pop-map-grid
-fig:fig-pop-map-worldpop
-fig:fig-floor-level
+fig:fig-pop-den-worldpop
+fig:fig-runits-floor
 hedonic-price-model
 house-characteristics
 location-characteristics

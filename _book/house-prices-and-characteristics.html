@@ -1054,7 +1054,7 @@ Figure 3.1: 2D kernel density map
 <p>Then, we selected from the main residential buildings those that are on the ordinary free trade (Table <a href="house-prices-and-characteristics.html#tab:tbl-runits-oft">3.1</a>). Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="house-prices-and-characteristics.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select residential units for the study</span></span>
 <span id="cb14-2"><a href="house-prices-and-characteristics.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  selected_res_units <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Multi-storey&quot;</span>, <span class="st">&quot;Single-family house&quot;</span>, <span class="st">&quot;Semi-detached house&quot;</span>) </span>
-<span id="cb14-3"><a href="house-prices-and-characteristics.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  res_unit_oft <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="house-prices-and-characteristics.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span></span>
 <span id="cb14-4"><a href="house-prices-and-characteristics.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to tibble</span></span>
 <span id="cb14-5"><a href="house-prices-and-characteristics.html#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb14-6"><a href="house-prices-and-characteristics.html#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select main residential units in the area</span></span>
@@ -1063,7 +1063,7 @@ Figure 3.1: 2D kernel density map
 <span id="cb14-9"><a href="house-prices-and-characteristics.html#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(OVERDRAGELSES_KODE <span class="sc">==</span> <span class="st">&quot;1&quot;</span>)</span>
 <span id="cb14-10"><a href="house-prices-and-characteristics.html#cb14-10" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb14-11"><a href="house-prices-and-characteristics.html#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with Number of residential units</span></span>
-<span id="cb14-12"><a href="house-prices-and-characteristics.html#cb14-12" aria-hidden="true" tabindex="-1"></a>  res_unit_oft <span class="sc">%&gt;%</span></span>
+<span id="cb14-12"><a href="house-prices-and-characteristics.html#cb14-12" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span></span>
 <span id="cb14-13"><a href="house-prices-and-characteristics.html#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Summarize by type or residency and year</span></span>
 <span id="cb14-14"><a href="house-prices-and-characteristics.html#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-15"><a href="house-prices-and-characteristics.html#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
