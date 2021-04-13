@@ -1,196 +1,8 @@
-# (PART) Data analysis {-}
-
-# Exploratory Data Analysis
-
-## Residential units 
-
-We focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. *BYG_ANVEND_KODE*):
-
--   120 - Fritliggende enfamiliehus *(Detached single-family house)*;
--   121 - Sammenbygget enfamiliehus *(Combined single-family house)*;
--   122 - Fritliggende enfamiliehus i tæt-lav bebyggelse (*Detached single-family house in dense-low-rise buildings*);
--   130 - (UDFASES) Række-, kæde-, eller dobbelthus (lodret adskillelse mellem enhederne) *((PHASE OUT) Row, chain, or semi-detached house (vertical separation between the units))*;
--   131 - Række-, kæde- og klyngehus *(Row, chain and cluster housing)*;
--   132 - Dobbelthus *(Semi-detached house)*;
--   140 - Etagebolig-bygning, flerfamiliehus eller to-familiehus *(Multi-storey residential building, multi-family house or two-family house)*;
--   190 - Anden bygning til helårsbeboelse *(Second building for year-round living)*.
-
-Estimate the number of residential units in the study area.
-```{r runits-numb}
-
-  res_units %>%
-      # Convert to tibble
-      as_tibble() %>%
-      # Summarize by type or residency and year
-      group_by(type, BBR_year) %>% 
-      summarise(n = n()) %>% 
-      ungroup() %>%
-      # Arrange and add row with totals
-      arrange(BBR_year, desc(n)) %>%
-      # Pivot
-      pivot_wider(names_from = BBR_year, values_from = n) %>% 
-      adorn_totals("row") %>%
-      kbl() %>% 
-      kable_paper("hover", full_width = F)
-
-```
-
-Residential units by floor level
-
-- KL - basement
-- ST - groundfloor
-- 1  - 1st floor
-- 2  - 2nd floor
-- 3  - 3rd floor
-- 4  - 4th floor
-- 5 or more = etc.
-
-```{r runits-floor-level, fig.show='hide'}
-
-  res_units %>% 
-    as_tibble() %>%
-    group_by(floor_level, type) %>% 
-    summarise(n = n()) %>%
-    ungroup() %>% 
-    # in percentage [%]   
-    mutate(perc = 100 * n / sum(n)) %>% 
-    # Reorder type levels for plotting multi-storey first
-    mutate(type = factor(type)) %>%
-    ggplot() +
-    geom_bar(aes(y = floor_level, x = perc, fill = type), stat = "identity") +
-    labs(title = "Residential units distribution by floor level",
-         y = "", 
-         x = "Percentage [%]") +
-    theme_bw() +
-    theme(legend.position = "bottom",
-          legend.title = element_blank()) +
-    guides(fill = guide_legend(ncol = 2)) +
-    scale_x_continuous(labels = scales::comma) +
-    scale_fill_manual(values = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
-  
-  ggsave(filename = "results/floor_levels_res_units.png")
-
-```
-
-```{r fig-floor-level, out.width = '100%', fig.align = "center", fig.cap = "Residential units by floor levels"}
-
-knitr::include_graphics("results/floor_levels_res_units.png")
-
-```
-
-Dwelling type codes
-
-- 1. Egentlig beboelse                       = Actual residence
-- 2. Blandet erhverv og beboelse             = Mixed occupations and housing
-- 3. Enkeltværelse                           = Single room
-- E. Andet (bl.a. institutioner og erhverv)  = Other (including institutions and professions)
-
-```{r runits-use}
-
-  res_units %>%
-    as_tibble() %>%
-    group_by(BOLIGTYPE_KODE, type) %>%
-    summarise(n = n())
-
-```
-
-Unit area
-
-```{r runits-area-neg}
-
-  res_units %>%
-    as_tibble() %>%
-    filter(BEBO_ARL < 0)
-
-```
-
-```{r runits-no-area}
-
-  res_units %>%
-    as_tibble() %>%
-    filter(BEBO_ARL == 0)
-
-```
-
-```{r runits-big-area}
-
-  res_units %>%
-    as_tibble() %>%
-    filter(BEBO_ARL > 1000) 
-
-```
-
-## Spatial distribution of residential units
-
-Create a function for ploting 2D kernel density maps:
-```{r aux-funct-2d-runits}
-  
-  f <- function(.data) {
-    .data %>% 
-      st_coordinates() %>%
-      as_tibble() %>%
-      ggplot() +
-      geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
-      geom_point(aes(X, Y), size = 0.02, shape = 16) +
-      stat_density_2d(aes(X, Y, fill = ..level..),
-                      alpha = 0.5,
-                      h = 700,
-                      geom = "polygon") +
-      scale_fill_distiller(palette = "Spectral")  +
-      theme_void() + 
-      theme(legend.position = "none") +
-      labs(title = .data$type,
-           x = "",
-           y = "") 
-  }
-
-```
-
-Plot of spatial distribution of residential units by type of use in 2019:
-```{r runits-spat-dist, fig.show='hide', cache = TRUE, dependson = "load-BBR"}
-
-  p <- res_units %>% 
-    filter(BBR_year == 2019) %>%  
-    group_split(type) %>%
-    map( ~ f(.))
-  
-  wrap_plots(p) +
-    annotation_scale(location = "br", text_cex = 1) +
-    annotation_north_arrow(location = "br",
-                           pad_x = unit(1.00, "cm"),
-                           pad_y = unit(0.65, "cm"),
-                           which_north = "true",
-                           height = unit(0.5, "cm"),
-                           width = unit(0.5, "cm"),
-                           style = north_arrow_orienteering(text_col = "white",
-                                                            text_size = 1)) +
-    plot_annotation(title = "Residential units in 2019",
-                    theme = theme(plot.title = element_text(size = 14,
-                                                            colour = "darkblue",
-                                                            face = "bold"),
-                                  plot.caption = element_text(size = 9,
-                                                              colour = "grey25")
-                    )
-    ) 
-  
-  ggsave(filename = "results/Kernel_maps_builds_type_2021.png",
-         width = 25,
-         height = 20,
-         units = "cm")
-                    
-```
- 
-```{r fig-sp-res-builds, out.width = '100%', fig.align = "center", fig.cap = "2D kernel density map"}
-
-knitr::include_graphics("results/Kernel_maps_builds_type_2021.png")
-
-```
-
-## Population density 
+# Population density 
 
 BBR data represent the situation at the begining of the given year. Therefore, when we link the BBR data with the population data, which also represent the situation at the first day of the year, we use the population of the same year (e.g. BBR data from 2019 and population data from 2019).
 
-### Choropleth by ancestry
+## Choropleth by ancestry
 
 Plot population density at the last day of 2019 (first of 2010) by parish and ancestry.
 ```{r pop-chor, fig.show='hide'}
@@ -253,7 +65,7 @@ knitr::include_graphics("results/pop_density_2019_choropleth.png")
 
 ```
 
-### Disaggregating population data
+## Disaggregating population data
 
 We disaggregate the population data at Parish level to grid cells of 100m x 100m using residential buildings as ancillary data. The procedure is as follow: 
 
@@ -407,7 +219,7 @@ knitr::include_graphics("results/pop_dens_2019_grids_100m.png")
 
 ```
 
-### Population density WorldPop    
+## Population density WorldPop    
 
 We can compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m):
 ```{r pop-den-worldpop, fig.show='hide', cache=TRUE, dependson = "adm-units"}
@@ -458,7 +270,7 @@ knitr::include_graphics("results/pop_dens_2019_worldpop_100m.png")
 
 ```
 
-### Land use and residential units (CORINE) 
+## Land use and residential units (CORINE) 
  
 ```{r plot-CORINE, fig.show='hide', cache=TRUE, dependson="load-CORINE"}
   
