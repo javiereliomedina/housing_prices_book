@@ -4,6 +4,5 @@ language:
   ui:
     chapter_name: "Chapter "
 new_session: no
-output_dir: "docs"
 
 before_chapter_script: "_common.R"

@@ -1,6 +1,6 @@
-# Data
+# (PART) Load data {-}
 
-## Administrative units
+# Administrative units
 
 The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/)) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.    
 
@@ -55,9 +55,7 @@ Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population d
 
 ```
 
-## BBR data    
-
-BBR data are saved on a local repository on *OneDrive*. I have save the link on *.Renviron* as OneDrive_BBR_link. You would need therefore to change it in your environment with `usethis::edit_r_environ()`.      
+# House characteristics (BBR data)    
 
 We load all buildings for year-round living (*BYG_ANVEND_KODE*):
 
@@ -135,7 +133,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*):
 
 ```
 
-## Population data 
+# Population data 
 
 Population data at parish level have been retrieved from [Statistics Denmark](https://www.dst.dk/en) using the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html). We have uploaded the following tables:
 
@@ -301,7 +299,7 @@ One we have the data we merge both dataset and add the spatial information (note
 
 ```
 
-##  CORINE land use 
+#  CORINE land use 
 
 Land use have been obtained from CORINE. We downloaded the data from kortforsyningen and used the data from 2010 (*CLC12_DK.shp*).
 

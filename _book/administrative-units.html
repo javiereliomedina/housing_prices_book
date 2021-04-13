@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Administrative units | Housing prices Copenhagen</title>
+  <meta name="description" content="Housing prices BBR data" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Administrative units | Housing prices Copenhagen" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Housing prices BBR data" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Administrative units | Housing prices Copenhagen" />
+  
+  <meta name="twitter:description" content="Housing prices BBR data" />
+  
+
+<meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
+
+
+<meta name="date" content="2021-04-13" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="hedonic-price-model.html"/>
+<link rel="next" href="house-characteristics-bbr-data.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Housing prices in Copenhagen region</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#create-data-and-results-folders"><i class="fa fa-check"></i>Create data and results folders</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#ggplot-themes"><i class="fa fa-check"></i>Ggplot themes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#download-data-from-kortforsyningen"><i class="fa fa-check"></i>Download data from kortforsyningen</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
+</ul></li>
+<li class="part"><span><b>I Introduction</b></span></li>
+<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
+<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
+</ul></li>
+<li class="part"><span><b>II Load data</b></span></li>
+<li class="chapter" data-level="2" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
+<li class="chapter" data-level="3" data-path="house-characteristics-bbr-data.html"><a href="house-characteristics-bbr-data.html"><i class="fa fa-check"></i><b>3</b> House characteristics (BBR data)</a></li>
+<li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
+<li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
+<li class="part"><span><b>III Data analysis</b></span></li>
+<li class="chapter" data-level="6" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html"><i class="fa fa-check"></i><b>6</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#residential-units"><i class="fa fa-check"></i><b>6.1</b> Residential units</a></li>
+<li class="chapter" data-level="6.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#spatial-distribution-of-residential-units"><i class="fa fa-check"></i><b>6.2</b> Spatial distribution of residential units</a></li>
+<li class="chapter" data-level="6.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#population-density"><i class="fa fa-check"></i><b>6.3</b> Population density</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>6.3.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="6.3.2" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#disaggregating-population-data"><i class="fa fa-check"></i><b>6.3.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="6.3.3" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#population-density-worldpop"><i class="fa fa-check"></i><b>6.3.3</b> Population density WorldPop</a></li>
+<li class="chapter" data-level="6.3.4" data-path="exploratory-data-analysis.html"><a href="exploratory-data-analysis.html#land-use-and-residential-units-corine"><i class="fa fa-check"></i><b>6.3.4</b> Land use and residential units (CORINE)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Housing prices Copenhagen</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="administrative-units" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Administrative units</h1>
+<p>The Denmark’s Administrative Geographical Division (<a href="https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/">DAGI</a>) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (<em>KOMKODE = 0101</em>) and Frederiksberg (<em>KOMKODE = 0147</em>) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="administrative-units.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Codes of the comunes under study (KOMKODE)</span></span>
+<span id="cb10-2"><a href="administrative-units.html#cb10-2" aria-hidden="true" tabindex="-1"></a>study_area_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0101&quot;</span>, <span class="st">&quot;0147&quot;</span>)</span>
+<span id="cb10-3"><a href="administrative-units.html#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="administrative-units.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Communes polygons of Denmark, and select those in the study area</span></span>
+<span id="cb10-5"><a href="administrative-units.html#cb10-5" aria-hidden="true" tabindex="-1"></a>commune_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;KOMMUNE.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb10-6"><a href="administrative-units.html#cb10-6" aria-hidden="true" tabindex="-1"></a>dk_commune  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(commune_link) <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="administrative-units.html#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="administrative-units.html#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb10-9"><a href="administrative-units.html#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="administrative-units.html#cb10-10" aria-hidden="true" tabindex="-1"></a>cph_commune <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_commune, KOMKODE <span class="sc">%in%</span> study_area_codes)</span>
+<span id="cb10-11"><a href="administrative-units.html#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="administrative-units.html#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Parishes polygons of Denmark, and select those in the study area </span></span>
+<span id="cb10-13"><a href="administrative-units.html#cb10-13" aria-hidden="true" tabindex="-1"></a>parish_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;SOGN.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb10-14"><a href="administrative-units.html#cb10-14" aria-hidden="true" tabindex="-1"></a>dk_parish  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(parish_link) <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="administrative-units.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-16"><a href="administrative-units.html#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb10-17"><a href="administrative-units.html#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="administrative-units.html#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the study area</span></span>
+<span id="cb10-19"><a href="administrative-units.html#cb10-19" aria-hidden="true" tabindex="-1"></a>dk_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_parish)</span>
+<span id="cb10-20"><a href="administrative-units.html#cb10-20" aria-hidden="true" tabindex="-1"></a>cph_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_parish_cent, cph_commune)</span>
+<span id="cb10-21"><a href="administrative-units.html#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="administrative-units.html#cb10-22" aria-hidden="true" tabindex="-1"></a>cph_parish <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_parish, SOGNEKODE <span class="sc">%in%</span> cph_parish_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-23"><a href="administrative-units.html#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine several parish features geometries into one polygon</span></span>
+<span id="cb10-24"><a href="administrative-units.html#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-25"><a href="administrative-units.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-26"><a href="administrative-units.html#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-27"><a href="administrative-units.html#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add area of the parish (in km2)</span></span>
+<span id="cb10-28"><a href="administrative-units.html#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb10-29"><a href="administrative-units.html#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-30"><a href="administrative-units.html#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Contour of the study area (merge the parishes in one polygon):</span></span>
+<span id="cb10-31"><a href="administrative-units.html#cb10-31" aria-hidden="true" tabindex="-1"></a>study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
+<span id="cb10-32"><a href="administrative-units.html#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-33"><a href="administrative-units.html#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-34"><a href="administrative-units.html#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
+<p>Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="administrative-units.html#cb11-1" aria-hidden="true" tabindex="-1"></a>  grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="administrative-units.html#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make regular grids (100m x 100m)</span></span>
+<span id="cb11-3"><a href="administrative-units.html#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="administrative-units.html#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb11-5"><a href="administrative-units.html#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
+<span id="cb11-6"><a href="administrative-units.html#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>, stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span></code></pre></div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="hedonic-price-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="house-characteristics-bbr-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/02-load_data.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/javiereliomedina/housing_prices_book/blob/master/02-load_data.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

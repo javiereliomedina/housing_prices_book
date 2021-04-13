@@ -4,14 +4,12 @@ fig:fig-pop-map-chor
 fig:fig-pop-map-grid
 fig:fig-pop-map-worldpop
 fig:fig-land-use
-introduction
 hedonic-price-model
 house-characteristics
 location-characteristics
 neighbourhood-characteristics
-data
 administrative-units
-bbr-data
+house-characteristics-bbr-data
 population-data
 corine-land-use
 exploratory-data-analysis
