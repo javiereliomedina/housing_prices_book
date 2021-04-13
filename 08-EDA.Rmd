@@ -23,7 +23,7 @@ Residential units by floor level
 - 4  - 4th floor
 - 5 or more = etc.
 
-```{r runits-floor-level, fig.show='hide'}
+```{r fig-runits-floor, fig.cap = "Residential units distribution by floor level"}
 
   res_units %>% 
     as_tibble() %>%
@@ -36,8 +36,7 @@ Residential units by floor level
     mutate(type = factor(type)) %>%
     ggplot() +
     geom_bar(aes(y = floor_level, x = perc, fill = type), stat = "identity") +
-    labs(title = "Residential units distribution by floor level",
-         y = "", 
+    labs(y = "", 
          x = "Percentage [%]") +
     theme_bw() +
     theme(legend.position = "bottom",
@@ -46,14 +45,6 @@ Residential units by floor level
     scale_x_continuous(labels = scales::comma) +
     scale_fill_manual(values = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
   
-  ggsave(filename = "results/floor_levels_res_units.png")
-
-```
-
-```{r fig-floor-level, out.width = '100%', fig.align = "center", fig.cap = "Residential units by floor levels"}
-
-knitr::include_graphics("results/floor_levels_res_units.png")
-
 ```
 
 Dwelling type codes

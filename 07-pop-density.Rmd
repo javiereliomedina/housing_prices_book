@@ -7,7 +7,7 @@ BBR data represent the situation at the begining of the given year. Therefore, w
 ## Choropleth by ancestry
 
 Plot population density at the last day of 2019 (first of 2010) by parish and ancestry.
-```{r pop-chor, fig.show='hide'}
+```{r fig-pop-chor, fig.width = 9, fig.height = 7, fig.cap = "Population density at the first day of 2019 by parishes (choropleth)"}
 
   col <- brewer.pal(9, "YlGnBu")
   pal <- colorRampPalette(col)
@@ -49,21 +49,9 @@ Plot population density at the last day of 2019 (first of 2010) by parish and an
     my_theme_map() + 
     theme(plot.title = element_text(size = 12, colour = "darkblue", face = "bold"),
           strip.text = element_text(size = 9, color = "black", face = "italic")) +
-    labs(title = "Population density at the first dat of 2019",
-         x = "",
+    labs(x = "",
          y = "") +
     facet_wrap( ~ name)
-  
-  ggsave(filename = "results/pop_density_2019_choropleth.png",
-         width = 25,
-         height = 20,
-         units = "cm")
-  
-```
-
-```{r fig-pop-map-chor, out.width = '100%', fig.align = "center", fig.cap = "Population density by parish (choropleth)"}
-
-knitr::include_graphics("results/pop_density_2019_choropleth.png")
 
 ```
 
@@ -168,7 +156,7 @@ Therefore we create the following function:
 ```
 
 Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m and ancestry.
-```{r pop-den-grids, fig.show='hide', cache = TRUE, dependson = "adm-units"}
+```{r fig-pop-map-grid, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "adm-units", fig.cap = "Population density at the first day of 2019 by grid cells of 100m x 100m"}
 
   pop_2019_g100m <-  f_pd_grids(.pop = prsh_pop_sf,
                                 .parish = cph_parish,
@@ -203,28 +191,16 @@ Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m a
     my_theme_map() + 
     theme(plot.title = element_text(size = 12, colour = "darkblue", face = "bold"),
           strip.text = element_text(size = 9, color = "black", face = "italic")) +
-    labs(title = "Population density at the first day of 2019",
-         x = "",
+    labs(x = "",
          y = "") +
     facet_wrap( ~ name)
   
-  ggsave(filename = "results/pop_dens_2019_grids_100m.png",
-         width = 25,
-         height = 20,
-         units = "cm")
-   
-```
-
-```{r fig-pop-map-grid, out.width = '100%', fig.align = "center", fig.cap = "Population density by grid cells of 100m x 100m"}
-
-knitr::include_graphics("results/pop_dens_2019_grids_100m.png")
-
 ```
 
 ## Population density WorldPop    
 
 We can compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m):
-```{r pop-den-worldpop, fig.show='hide', cache=TRUE, dependson = "adm-units"}
+```{r fig-pop-den-worldpop, fig.width = 9, fig.height = 7, cache=TRUE, dependson = "adm-units", fig.cap = "WorldPop total population density estimations in 2019"}
 
   dnk_ppp_2019_link <- "https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif"
   dir.create("data")
@@ -259,15 +235,4 @@ We can compare our results with the WorldPop total population estimation per gri
          caption = "Source: WorlpPop (https://data.worldpop.org)") +
     my_theme_map()
   
-  ggsave(filename = "results/pop_dens_2019_worldpop_100m.png",
-         width = 20,
-         height = 15,
-         units = "cm")
-  
-```
-
-```{r fig-pop-map-worldpop, out.width = '100%', fig.align = "center", fig.cap = "worldpop total population density estimations in 2019"}
-
-knitr::include_graphics("results/pop_dens_2019_worldpop_100m.png")
-
 ```
