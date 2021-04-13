@@ -1,4 +1,6 @@
 bookdown::gitbook:
+  includes:
+      in_header: hide_code.html # inspired by: https://github.com/edzer/sdsr.git
   css: style.css
   config:
     toc:
@@ -6,8 +8,12 @@ bookdown::gitbook:
         <li><a href="./">Housing prices in Copenhagen region</a></li>
       after: |
         <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    view: https://github.com/javiereliomedina/housing_prices_book/blob/master/%s
     edit: https://github.com/javiereliomedina/housing_prices_book/edit/master/%s
+    sharing:
+      github: yes
+      twitter: yes
+      facebook: no
+      all: no
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex

@@ -2,13 +2,13 @@
 title: "Housing prices Copenhagen"
 author: "Javier Elío, Henning S. Hansen, Carsten Keßler"
 date: "`r Sys.Date()`"
-site: 
+site: bookdown::bookdown_site
+github-repo: javiereliomedina/housing_prices_book
 output: bookdown::gitbook
 documentclass: book
 bibliography: [library.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: 
 description: "Housing prices BBR data"
 ---
 
