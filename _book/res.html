@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Administrative units | Housing prices Copenhagen</title>
+  <title>Chapter 8 Residential units saled as free scale | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 Administrative units | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 8 Residential units saled as free scale | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Administrative units | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 8 Residential units saled as free scale | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="hedonic-price-model.html"/>
-<link rel="next" href="house-characteristics-1.html"/>
+<link rel="prev" href="Population.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -923,50 +923,641 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="administrative-units" class="section level1" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Administrative units</h1>
-<p>The Denmark’s Administrative Geographical Division (<a href="https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/">DAGI</a>) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (<em>KOMKODE = 0101</em>) and Frederiksberg (<em>KOMKODE = 0147</em>) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="administrative-units.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Codes of the comunes under study (KOMKODE)</span></span>
-<span id="cb10-2"><a href="administrative-units.html#cb10-2" aria-hidden="true" tabindex="-1"></a>study_area_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0101&quot;</span>, <span class="st">&quot;0147&quot;</span>)</span>
-<span id="cb10-3"><a href="administrative-units.html#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="administrative-units.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Communes polygons of Denmark, and select those in the study area</span></span>
-<span id="cb10-5"><a href="administrative-units.html#cb10-5" aria-hidden="true" tabindex="-1"></a>commune_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;KOMMUNE.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb10-6"><a href="administrative-units.html#cb10-6" aria-hidden="true" tabindex="-1"></a>dk_commune  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(commune_link) <span class="sc">%&gt;%</span></span>
-<span id="cb10-7"><a href="administrative-units.html#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-8"><a href="administrative-units.html#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb10-9"><a href="administrative-units.html#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="administrative-units.html#cb10-10" aria-hidden="true" tabindex="-1"></a>cph_commune <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_commune, KOMKODE <span class="sc">%in%</span> study_area_codes)</span>
-<span id="cb10-11"><a href="administrative-units.html#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-12"><a href="administrative-units.html#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Parishes polygons of Denmark, and select those in the study area </span></span>
-<span id="cb10-13"><a href="administrative-units.html#cb10-13" aria-hidden="true" tabindex="-1"></a>parish_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;SOGN.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb10-14"><a href="administrative-units.html#cb10-14" aria-hidden="true" tabindex="-1"></a>dk_parish  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(parish_link) <span class="sc">%&gt;%</span></span>
-<span id="cb10-15"><a href="administrative-units.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-16"><a href="administrative-units.html#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb10-17"><a href="administrative-units.html#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-18"><a href="administrative-units.html#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the study area</span></span>
-<span id="cb10-19"><a href="administrative-units.html#cb10-19" aria-hidden="true" tabindex="-1"></a>dk_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_parish)</span>
-<span id="cb10-20"><a href="administrative-units.html#cb10-20" aria-hidden="true" tabindex="-1"></a>cph_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_parish_cent, cph_commune)</span>
-<span id="cb10-21"><a href="administrative-units.html#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-22"><a href="administrative-units.html#cb10-22" aria-hidden="true" tabindex="-1"></a>cph_parish <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_parish, SOGNEKODE <span class="sc">%in%</span> cph_parish_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-23"><a href="administrative-units.html#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine several parish features geometries into one polygon</span></span>
-<span id="cb10-24"><a href="administrative-units.html#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-25"><a href="administrative-units.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-26"><a href="administrative-units.html#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-27"><a href="administrative-units.html#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add area of the parish (in km2)</span></span>
-<span id="cb10-28"><a href="administrative-units.html#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
-<span id="cb10-29"><a href="administrative-units.html#cb10-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-30"><a href="administrative-units.html#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Contour of the study area (merge the parishes in one polygon):</span></span>
-<span id="cb10-31"><a href="administrative-units.html#cb10-31" aria-hidden="true" tabindex="-1"></a>study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
-<span id="cb10-32"><a href="administrative-units.html#cb10-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb10-33"><a href="administrative-units.html#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-34"><a href="administrative-units.html#cb10-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
-<p>Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="administrative-units.html#cb11-1" aria-hidden="true" tabindex="-1"></a>  grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
-<span id="cb11-2"><a href="administrative-units.html#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make regular grids (100m x 100m)</span></span>
-<span id="cb11-3"><a href="administrative-units.html#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-4"><a href="administrative-units.html#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb11-5"><a href="administrative-units.html#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
-<span id="cb11-6"><a href="administrative-units.html#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>, stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span></code></pre></div>
+<div id="res" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Residential units saled as free scale</h1>
+<p>We focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. <em>BYG_ANVEND_KODE</em>):</p>
+<ul>
+<li>120 - Fritliggende enfamiliehus <em>(Detached single-family house)</em>;</li>
+<li>121 - Sammenbygget enfamiliehus <em>(Combined single-family house)</em>;</li>
+<li>122 - Fritliggende enfamiliehus i tæt-lav bebyggelse (<em>Detached single-family house in dense-low-rise buildings</em>);</li>
+<li>130 - (UDFASES) Række-, kæde-, eller dobbelthus (lodret adskillelse mellem enhederne) <em>((PHASE OUT) Row, chain, or semi-detached house (vertical separation between the units))</em>;</li>
+<li>131 - Række-, kæde- og klyngehus <em>(Row, chain and cluster housing)</em>;</li>
+<li>132 - Dobbelthus <em>(Semi-detached house)</em>;</li>
+<li>140 - Etagebolig-bygning, flerfamiliehus eller to-familiehus <em>(Multi-storey residential building, multi-family house or two-family house)</em>;</li>
+<li>190 - Anden bygning til helårsbeboelse <em>(Second building for year-round living)</em>.</li>
+</ul>
+<p>Estimate the number of residential units in the study area.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="res.html#cb32-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="res.html#cb32-2" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to tibble</span></span>
+<span id="cb32-3"><a href="res.html#cb32-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-4"><a href="res.html#cb32-4" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Summarize by type or residency and year</span></span>
+<span id="cb32-5"><a href="res.html#cb32-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-6"><a href="res.html#cb32-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-7"><a href="res.html#cb32-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb32-8"><a href="res.html#cb32-8" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Arrange and add row with totals</span></span>
+<span id="cb32-9"><a href="res.html#cb32-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">arrange</span>(BBR_year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-10"><a href="res.html#cb32-10" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Pivot</span></span>
+<span id="cb32-11"><a href="res.html#cb32-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> BBR_year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-12"><a href="res.html#cb32-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-13"><a href="res.html#cb32-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">kbl</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb32-14"><a href="res.html#cb32-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">kable_paper</span>(<span class="st">&quot;hover&quot;</span>, <span class="at">full_width =</span> F)</span></code></pre></div>
+<table class=" lightable-paper lightable-hover" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+type
+</th>
+<th style="text-align:right;">
+2004
+</th>
+<th style="text-align:right;">
+2005
+</th>
+<th style="text-align:right;">
+2006
+</th>
+<th style="text-align:right;">
+2007
+</th>
+<th style="text-align:right;">
+2008
+</th>
+<th style="text-align:right;">
+2009
+</th>
+<th style="text-align:right;">
+2010
+</th>
+<th style="text-align:right;">
+2011
+</th>
+<th style="text-align:right;">
+2012
+</th>
+<th style="text-align:right;">
+2013
+</th>
+<th style="text-align:right;">
+2014
+</th>
+<th style="text-align:right;">
+2015
+</th>
+<th style="text-align:right;">
+2016
+</th>
+<th style="text-align:right;">
+2017
+</th>
+<th style="text-align:right;">
+2018
+</th>
+<th style="text-align:right;">
+2019
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Multi-storey
+</td>
+<td style="text-align:right;">
+330678
+</td>
+<td style="text-align:right;">
+321176
+</td>
+<td style="text-align:right;">
+342039
+</td>
+<td style="text-align:right;">
+331504
+</td>
+<td style="text-align:right;">
+339414
+</td>
+<td style="text-align:right;">
+339026
+</td>
+<td style="text-align:right;">
+346921
+</td>
+<td style="text-align:right;">
+337604
+</td>
+<td style="text-align:right;">
+348503
+</td>
+<td style="text-align:right;">
+366397
+</td>
+<td style="text-align:right;">
+346650
+</td>
+<td style="text-align:right;">
+345710
+</td>
+<td style="text-align:right;">
+345296
+</td>
+<td style="text-align:right;">
+342844
+</td>
+<td style="text-align:right;">
+347799
+</td>
+<td style="text-align:right;">
+353472
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Single-family house
+</td>
+<td style="text-align:right;">
+15343
+</td>
+<td style="text-align:right;">
+15328
+</td>
+<td style="text-align:right;">
+15403
+</td>
+<td style="text-align:right;">
+15627
+</td>
+<td style="text-align:right;">
+15469
+</td>
+<td style="text-align:right;">
+15480
+</td>
+<td style="text-align:right;">
+15646
+</td>
+<td style="text-align:right;">
+15771
+</td>
+<td style="text-align:right;">
+15989
+</td>
+<td style="text-align:right;">
+16064
+</td>
+<td style="text-align:right;">
+15943
+</td>
+<td style="text-align:right;">
+15842
+</td>
+<td style="text-align:right;">
+15897
+</td>
+<td style="text-align:right;">
+15914
+</td>
+<td style="text-align:right;">
+15978
+</td>
+<td style="text-align:right;">
+16042
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+College
+</td>
+<td style="text-align:right;">
+10002
+</td>
+<td style="text-align:right;">
+9858
+</td>
+<td style="text-align:right;">
+12026
+</td>
+<td style="text-align:right;">
+10607
+</td>
+<td style="text-align:right;">
+11388
+</td>
+<td style="text-align:right;">
+11383
+</td>
+<td style="text-align:right;">
+11306
+</td>
+<td style="text-align:right;">
+11360
+</td>
+<td style="text-align:right;">
+12977
+</td>
+<td style="text-align:right;">
+12038
+</td>
+<td style="text-align:right;">
+11921
+</td>
+<td style="text-align:right;">
+11152
+</td>
+<td style="text-align:right;">
+11175
+</td>
+<td style="text-align:right;">
+11443
+</td>
+<td style="text-align:right;">
+11446
+</td>
+<td style="text-align:right;">
+11918
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Semi-detached house
+</td>
+<td style="text-align:right;">
+8647
+</td>
+<td style="text-align:right;">
+7907
+</td>
+<td style="text-align:right;">
+8625
+</td>
+<td style="text-align:right;">
+8346
+</td>
+<td style="text-align:right;">
+8782
+</td>
+<td style="text-align:right;">
+8612
+</td>
+<td style="text-align:right;">
+8418
+</td>
+<td style="text-align:right;">
+8959
+</td>
+<td style="text-align:right;">
+8811
+</td>
+<td style="text-align:right;">
+9771
+</td>
+<td style="text-align:right;">
+9433
+</td>
+<td style="text-align:right;">
+9649
+</td>
+<td style="text-align:right;">
+10495
+</td>
+<td style="text-align:right;">
+10531
+</td>
+<td style="text-align:right;">
+10996
+</td>
+<td style="text-align:right;">
+10440
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Residential institution
+</td>
+<td style="text-align:right;">
+401
+</td>
+<td style="text-align:right;">
+397
+</td>
+<td style="text-align:right;">
+404
+</td>
+<td style="text-align:right;">
+397
+</td>
+<td style="text-align:right;">
+517
+</td>
+<td style="text-align:right;">
+405
+</td>
+<td style="text-align:right;">
+397
+</td>
+<td style="text-align:right;">
+551
+</td>
+<td style="text-align:right;">
+451
+</td>
+<td style="text-align:right;">
+455
+</td>
+<td style="text-align:right;">
+482
+</td>
+<td style="text-align:right;">
+453
+</td>
+<td style="text-align:right;">
+479
+</td>
+<td style="text-align:right;">
+415
+</td>
+<td style="text-align:right;">
+435
+</td>
+<td style="text-align:right;">
+458
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Second building
+</td>
+<td style="text-align:right;">
+352
+</td>
+<td style="text-align:right;">
+326
+</td>
+<td style="text-align:right;">
+334
+</td>
+<td style="text-align:right;">
+329
+</td>
+<td style="text-align:right;">
+376
+</td>
+<td style="text-align:right;">
+337
+</td>
+<td style="text-align:right;">
+382
+</td>
+<td style="text-align:right;">
+342
+</td>
+<td style="text-align:right;">
+409
+</td>
+<td style="text-align:right;">
+339
+</td>
+<td style="text-align:right;">
+335
+</td>
+<td style="text-align:right;">
+340
+</td>
+<td style="text-align:right;">
+333
+</td>
+<td style="text-align:right;">
+329
+</td>
+<td style="text-align:right;">
+329
+</td>
+<td style="text-align:right;">
+326
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Farmhouse
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Total
+</td>
+<td style="text-align:right;">
+365424
+</td>
+<td style="text-align:right;">
+354993
+</td>
+<td style="text-align:right;">
+378832
+</td>
+<td style="text-align:right;">
+366811
+</td>
+<td style="text-align:right;">
+375947
+</td>
+<td style="text-align:right;">
+375244
+</td>
+<td style="text-align:right;">
+383071
+</td>
+<td style="text-align:right;">
+374588
+</td>
+<td style="text-align:right;">
+387141
+</td>
+<td style="text-align:right;">
+405065
+</td>
+<td style="text-align:right;">
+384765
+</td>
+<td style="text-align:right;">
+383147
+</td>
+<td style="text-align:right;">
+383676
+</td>
+<td style="text-align:right;">
+381477
+</td>
+<td style="text-align:right;">
+386984
+</td>
+<td style="text-align:right;">
+392657
+</td>
+</tr>
+</tbody>
+</table>
+<p>Residential units by floor level</p>
+<ul>
+<li>KL - basement</li>
+<li>ST - groundfloor</li>
+<li>1 - 1st floor</li>
+<li>2 - 2nd floor</li>
+<li>3 - 3rd floor</li>
+<li>4 - 4th floor</li>
+<li>5 or more = etc.</li>
+</ul>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="res.html#cb33-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span> </span>
+<span id="cb33-2"><a href="res.html#cb33-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="res.html#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-4"><a href="res.html#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="res.html#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb33-6"><a href="res.html#cb33-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
+<span id="cb33-7"><a href="res.html#cb33-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-8"><a href="res.html#cb33-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
+<span id="cb33-9"><a href="res.html#cb33-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb33-10"><a href="res.html#cb33-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb33-11"><a href="res.html#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb33-12"><a href="res.html#cb33-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Residential units distribution by floor level&quot;</span>,</span>
+<span id="cb33-13"><a href="res.html#cb33-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb33-14"><a href="res.html#cb33-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb33-15"><a href="res.html#cb33-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb33-16"><a href="res.html#cb33-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb33-17"><a href="res.html#cb33-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb33-18"><a href="res.html#cb33-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb33-19"><a href="res.html#cb33-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb33-20"><a href="res.html#cb33-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#E69F00&quot;</span>, <span class="st">&quot;#56B4E9&quot;</span>, <span class="st">&quot;#009E73&quot;</span>, <span class="st">&quot;#F0E442&quot;</span>, <span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="res.html#cb34-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/floor_levels_res_units.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="res.html#cb35-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/floor_levels_res_units.png&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-floor-level"></span>
+<img src="results/floor_levels_res_units.png" alt="Residential units by floor levels" width="100%" />
+<p class="caption">
+Figure 8.1: Residential units by floor levels
+</p>
+</div>
+<p>Dwelling type codes</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>Egentlig beboelse = Actual residence</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>Blandet erhverv og beboelse = Mixed occupations and housing</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>Enkeltværelse = Single room</li>
+</ol></li>
+<li>E. Andet (bl.a. institutioner og erhverv) = Other (including institutions and professions)</li>
+</ul>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="res.html#cb36-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="res.html#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="res.html#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(BOLIGTYPE_KODE, type) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="res.html#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code></pre></div>
+<pre><code># # A tibble: 24 x 3
+# # Groups:   BOLIGTYPE_KODE [6]
+#   BOLIGTYPE_KODE type                          n
+#   &lt;chr&gt;          &lt;fct&gt;                     &lt;int&gt;
+# 1 &quot;&quot;             Multi-storey                  7
+# 2 &quot;1&quot;            College                   80371
+# 3 &quot;1&quot;            Farmhouse                    16
+# 4 &quot;1&quot;            Multi-storey            5372380
+# 5 &quot;1&quot;            Residential institution      58
+# 6 &quot;1&quot;            Second building            3102
+# # ... with 18 more rows</code></pre>
+<p>Unit area</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="res.html#cb38-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="res.html#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="res.html#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code># # A tibble: 161 x 42
+#   VEJ_NAVN  HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode MatrNr BYG_ANVEND_KODE
+#   &lt;chr&gt;     &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;int&gt;
+# 1 Haregade  1      st          &quot;&quot;            1320     101     8983          2000166             16 0                    0
+# 2 Ã…lekist~ 221    st          &quot;&quot;            2720     101   686264          2000177             27 2114               320
+# 3 Ã˜ster V~ 12     3           &quot;&quot;            1350     101   671909          2000166             16 664                320
+# 4 Humlehav~ 64     st          &quot;&quot;            2500     101   243540          2000180             30 2160               140
+# 5 SÃ¦byhol~ 23     st          &quot;&quot;            2500     101   553027          2000180             30 1642               120
+# 6 SolvÃ¦ng~ 10     st          &quot;&quot;            2100     101   514862          2000173             23 5552               120
+# # ... with 155 more rows, and 31 more variables: OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;int&gt;,
+# #   TAG_KODE &lt;int&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;,
+# #   ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;dbl&gt;, BOLIGTYPE_KODE &lt;chr&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;,
+# #   ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;int&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;int&gt;,
+# #   OPVARMNING_KODE &lt;dbl&gt;, VARME_SUPPL_KODE &lt;int&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;int&gt;, SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;,
+# #   type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="res.html#cb40-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="res.html#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="res.html#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code># # A tibble: 285 x 42
+#   VEJ_NAVN  HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode MatrNr BYG_ANVEND_KODE
+#   &lt;chr&gt;     &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;int&gt;
+# 1 Olufsvej  6B     1           &quot;th&quot;          2100     101   420132          2000173             23 592                220
+# 2 Betty Na~ 53     6           &quot;613&quot;         2000     147   241801            10051              1 49f                160
+# 3 Betty Na~ 53     7           &quot;713&quot;         2000     147   241801            10051              1 49f                160
+# 4 George M~ 13     st          &quot;&quot;            2450     101    19878          2000174             24 1493b              140
+# 5 H.C. And~ 13     3           &quot;tv&quot;          1553     101    24474          2000179             29 254                320
+# 6 Falkoner~ 114A   st          &quot;th&quot;          2000     147    31076            10051              1 58a                140
+# # ... with 279 more rows, and 31 more variables: OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;int&gt;,
+# #   TAG_KODE &lt;int&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;,
+# #   ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;dbl&gt;, BOLIGTYPE_KODE &lt;chr&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;,
+# #   ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;int&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;int&gt;,
+# #   OPVARMNING_KODE &lt;dbl&gt;, VARME_SUPPL_KODE &lt;int&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;int&gt;, SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;,
+# #   type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="res.html#cb42-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="res.html#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb42-3"><a href="res.html#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&gt;</span> <span class="dv">1000</span>) </span></code></pre></div>
+<pre><code># # A tibble: 402 x 42
+#   VEJ_NAVN  HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode MatrNr BYG_ANVEND_KODE
+#   &lt;chr&gt;     &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt; &lt;chr&gt;            &lt;int&gt;
+# 1 Amalienb~ 7      st          &quot;&quot;            1257     101    23028          2000167             17 148                140
+# 2 Amalienb~ 7      st          &quot;&quot;            1257     101    23028          2000167             17 148                140
+# 3 Ottiliav~ 3      1           &quot;&quot;            2500     101   173666          2000176             26 2093               320
+# 4 Rymarksv~ 1      st          &quot;&quot;            2900     101   474402          2000173             23 5929               420
+# 5 Ottiliav~ 1      1           &quot;&quot;            2500     101   173666          2000176             26 2093               320
+# 6 HillerÃ¸~ 64     st          &quot;&quot;            2200     101   390594          2000175             25 1348               160
+# # ... with 396 more rows, and 31 more variables: OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;int&gt;,
+# #   TAG_KODE &lt;int&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;,
+# #   ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;dbl&gt;, BOLIGTYPE_KODE &lt;chr&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;,
+# #   ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;int&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;int&gt;,
+# #   OPVARMNING_KODE &lt;dbl&gt;, VARME_SUPPL_KODE &lt;int&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;int&gt;, SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;,
+# #   type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
 
 </div>
             </section>
@@ -974,8 +1565,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="hedonic-price-model.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="house-characteristics-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="Population.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1006,7 +1597,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/02-load_adm_units.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/08-EDA.Rmd",
 "text": "Edit"
 },
 "history": {

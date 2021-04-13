@@ -1,0 +1,165 @@
+# Population data 
+
+Population data at parish level have been retrieved from [Statistics Denmark](https://www.dst.dk/en) using the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html). We have uploaded the following tables:
+
+- [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree)
+- [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree)
+
+We have created two auxiliary function for reading the data. `steps` loops by year for getting small pieces of information from the DST API and then putting all together in a data frame. In this sense, we overcome the limitation of the number of rows we can retrieve from the API (i.e. if we call a large dataset we get the error: *Error: API did not return text/csv*). Then, `rm_words` is used in the cleaning process for simplifying the description of some variables we would like to use as columns names. 
+
+```{r aux-funct-DST}
+
+# Loop by year for getting DST data 
+  steps <- function(year){
+    var_values <- list(id_region, id_ancestry, year)
+    var_input <- purrr::map2(.x = var_codes,
+                             .y = var_values,
+                             .f = ~list(code = .x, values = .y))
+    get_data(id_table, variables = var_input)
+  }
+
+# Remove punctuation, lowercase, stem, stopwords, and collapse strings
+  rm_words <- function(x, stopwords) { x %>% 
+      strsplit(" ", fixed = TRUE) %>% 
+      lapply(tm::removePunctuation) %>% 
+      lapply(tolower) %>% 
+      lapply(SnowballC::wordStem) %>% 
+      lapply(function(x) x[!x %in% stopwords]) %>% 
+      vapply(function(x) paste(x , collapse = "_"), character(1))
+  }
+
+```
+
+The code needed for loading the tables are therefore: 
+
+  - KMSTA001:
+```{r load-KMSTA001, cache = TRUE, dependson = "adm-units"}
+
+  id_table <- "KMSTA001"
+  var_pop <- get_table_metadata(table_id = id_table, variables_only = TRUE)
+
+# Codes for var_input
+  var_codes <- c("SOGN", "HERKOMST", "Tid")
+
+# Values for var_input
+  # Region: parishes of the study area (i.e. cph_parish)
+  id_region <- cph_parish$SOGNEKODE
+  # Ancestry
+  id_ancestry <- NA
+  # Quarters
+  id_year <- var_pop$values[[4]]$id   # Select all years
+  
+# Read data
+  prsh_ances_dst <- id_year %>%
+    future_map(steps) %>% 
+    bind_rows()
+  plan("default")
+
+# Clean data 
+  prsh_ances <- prsh_ances_dst %>% 
+    # Translate column names into English
+    rename(parish = SOGN,
+           ancestry = HERKOMST,
+           date = TID, 
+           value = INDHOLD) %>% 
+    # Get parish codes (first number of the string)
+    mutate(prsh_id = stringr::str_extract(parish, "[[:alnum:]]*")) %>% 
+    # Remove the code from the string (prsh)
+    mutate(parish = sub("[[:alnum:]]* ", "", parish)) %>% 
+    # Get municipality (info inside the parenthesis)
+    mutate(prsh_muni = stringr::str_extract(parish, "(?<=\\().*(?=\\))"),
+           prsh_muni = gsub(" Municipality", "", prsh_muni),
+           # removes white space from start and end of string
+           prsh_muni = stringr::str_trim(prsh_muni)) %>% 
+    # Get parish name (outside parenthesis) 
+    mutate(prsh_name = stringr::str_extract(parish, "(.*(?=\\())"),
+           prsh_name = stringr::str_trim(prsh_name)) %>% 
+    # Remove duplicate info and order columns 
+    select(prsh_id, prsh_name, prsh_muni, date, ancestry, value) %>% 
+    # Make shorter names in ancestry
+    mutate(ancestry = case_when(
+      ancestry == "Persons of Danish origin" ~ "pop_dan",
+      ancestry == "Immigrants from western countries" ~ "pop_mi_wst",
+      ancestry == "Immigrants from non-western countries" ~ "pop_mi_nwst",
+      ancestry == "Descendants from western countries" ~ "pop_de_wst",
+      ancestry == "Descendants from non-western countries" ~ "pop_de_nwst"), 
+      ancestry = factor(ancestry)) %>% 
+    # Pivot (one row for peach parish and year)
+    pivot_wider(names_from = ancestry, values_from = value) %>% 
+    # Merge immigrants and their descendants (i.e. foreigners) 
+    mutate(pop_frgn_wst = pop_mi_wst + pop_de_wst, 
+           pop_frgn_nwst = pop_mi_nwst + pop_de_nwst) %>% 
+    select(-c(pop_mi_wst, pop_de_wst, pop_mi_nwst, pop_de_nwst)) %>% 
+    # Add column with total population
+    mutate(pop_total = select(., starts_with("pop_")) %>% rowSums())
+  
+```
+
+ - KMSTA003:
+```{r load-KMSTA003, cache = TRUE, dependson = "adm-units"}
+
+  id_table <- "KMSTA003"
+  var_pop <- get_table_metadata(table_id = id_table, variables_only = TRUE)
+
+# Codes for var_input
+  var_codes <- c("SOGN", "KIRKEBEV", "Tid")
+
+# Values for var_input
+  # Region: all parish
+  id_region <- cph_parish$SOGNEKODE
+  # Ancestry
+  id_movements <- NA
+  # Quarters
+  id_year <- var_pop$values[[3]]$id   # Select all years
+
+# Read data
+  plan(multisession)  
+  prsh_stats_dst <- id_year %>%
+    future_map(steps) %>% 
+    bind_rows()
+  plan("default")
+
+# Clean data 
+  prsh_stats <- prsh_stats_dst %>%
+    # Translate column names into English
+    rename(parish = SOGN,
+           movements = KIRKEBEV,
+           date = TID, 
+           value = INDHOLD) %>% 
+    # Get parish codes (first number of the string)
+    mutate(prsh_id = stringr::str_extract(parish, "[[:alnum:]]*")) %>% 
+    # Remove the code from the string (prsh)
+    mutate(parish = sub("[[:alnum:]]* ", "", parish)) %>% 
+    # Get municipality (info inside the parenthesis)
+    mutate(prsh_muni = stringr::str_extract(parish, "(?<=\\().*(?=\\))"),
+           prsh_muni = gsub(" Municipality", "", prsh_muni),
+           # removes white space from start and end of string
+           prsh_muni = stringr::str_trim(prsh_muni)) %>% 
+    # Get parish name (outside parenthesis) 
+    mutate(prsh_name = stringr::str_extract(parish, "(.*(?=\\())"),
+           prsh_name = stringr::str_trim(prsh_name)) %>% 
+    # remove duplicate info and order columns 
+    select(prsh_id, prsh_name, prsh_muni, date, movements, value) %>% 
+    # Clean arguments in movements (remove punctuation, stop-words, stem, and collapse)
+    mutate(movements = rm_words(movements, c("in", "the", "of"))) %>%
+    # Pivot (one row for each parish and year) 
+    pivot_wider(names_from = movements, values_from = value)
+  
+```
+
+One we have the data we merge both dataset and add the spatial information (note that there are only summary statistics from 2015): 
+```{r merge-DST, cache = TRUE, dependson = "adm-units"}
+
+## Merge both tables in one:
+  prsh_pop <- prsh_ances %>%  
+    full_join(prsh_stats) %>% 
+    # remove rows with no summary data (summary data only from 2015 to 2020)
+    filter(date >= 2015, date <= 2020)
+
+## Add the spatial information:
+  prsh_pop_sf <- cph_parish %>%
+    rename(prsh_id = SOGNEKODE) %>% 
+    select(prsh_id, prsh_area_km2) %>% 
+    left_join(prsh_pop, by = c("prsh_id")) 
+
+```

@@ -9,13 +9,13 @@ house-characteristics
 location-characteristics
 neighbourhood-characteristics
 administrative-units
-house-characteristics-bbr-data
+house-characteristics-1
 population-data
 corine-land-use
 spatial-distribution-of-residential-units
-population-density
+Population
 choropleth-by-ancestry
 disaggregating-population-data
 population-density-worldpop
 land-use-and-residential-units-corine
-residential-units-saled-as-free-scale
+res

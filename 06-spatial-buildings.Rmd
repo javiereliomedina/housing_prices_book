@@ -2,9 +2,11 @@
 
 # Spatial distribution of residential units
 
-Create a function for ploting 2D kernel density maps:
-```{r aux-funct-2d-runits}
-  
+We focus our analysis to the main buildings type in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses. Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the ordinary free trade.         
+
+```{r fig-sp-res-builds, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "load-BBR", fig.cap = "2D kernel density map"}
+
+# Aux. function for plotting 2D kernel density maps:
   f <- function(.data) {
     .data %>% 
       st_coordinates() %>%
@@ -24,20 +26,19 @@ Create a function for ploting 2D kernel density maps:
            y = "") 
   }
 
-```
-
-Plot of spatial distribution of residential units by type of use in 2019:
-```{r runits-spat-dist, fig.show='hide', cache = TRUE, dependson = "load-BBR"}
-
+# Plots  
   p <- res_units %>% 
     filter(BBR_year == 2019) %>%  
+    # Reorder type factors by the frequency they appear 
+    mutate(type = fct_infreq(type)) %>% 
+    # Split by house type
     group_split(type) %>%
     map( ~ f(.))
   
   wrap_plots(p) +
     annotation_scale(location = "br", text_cex = 1) +
     annotation_north_arrow(location = "br",
-                           pad_x = unit(1.00, "cm"),
+                           pad_x = unit(0.70, "cm"),
                            pad_y = unit(0.65, "cm"),
                            which_north = "true",
                            height = unit(0.5, "cm"),
@@ -53,15 +54,4 @@ Plot of spatial distribution of residential units by type of use in 2019:
                     )
     ) 
   
-  ggsave(filename = "results/Kernel_maps_builds_type_2021.png",
-         width = 25,
-         height = 20,
-         units = "cm")
-                    
-```
- 
-```{r fig-sp-res-builds, out.width = '100%', fig.align = "center", fig.cap = "2D kernel density map"}
-
-knitr::include_graphics("results/Kernel_maps_builds_type_2021.png")
-
 ```

@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="house-characteristics-bbr-data.html"/>
+<link rel="prev" href="house-characteristics-1.html"/>
 <link rel="next" href="corine-land-use.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -889,19 +889,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>II Load data</b></span></li>
 <li class="chapter" data-level="2" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
-<li class="chapter" data-level="3" data-path="house-characteristics-bbr-data.html"><a href="house-characteristics-bbr-data.html"><i class="fa fa-check"></i><b>3</b> House characteristics (BBR data)</a></li>
+<li class="chapter" data-level="3" data-path="house-characteristics-1.html"><a href="house-characteristics-1.html"><i class="fa fa-check"></i><b>3</b> House characteristics</a></li>
 <li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
 <li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
 <li class="chapter" data-level="6" data-path="spatial-distribution-of-residential-units.html"><a href="spatial-distribution-of-residential-units.html"><i class="fa fa-check"></i><b>6</b> Spatial distribution of residential units</a></li>
-<li class="chapter" data-level="7" data-path="population-density.html"><a href="population-density.html"><i class="fa fa-check"></i><b>7</b> Population density</a>
+<li class="chapter" data-level="7" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>7</b> Population density</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="population-density.html"><a href="population-density.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>7.1</b> Choropleth by ancestry</a></li>
-<li class="chapter" data-level="7.2" data-path="population-density.html"><a href="population-density.html#disaggregating-population-data"><i class="fa fa-check"></i><b>7.2</b> Disaggregating population data</a></li>
-<li class="chapter" data-level="7.3" data-path="population-density.html"><a href="population-density.html#population-density-worldpop"><i class="fa fa-check"></i><b>7.3</b> Population density WorldPop</a></li>
-<li class="chapter" data-level="7.4" data-path="population-density.html"><a href="population-density.html#land-use-and-residential-units-corine"><i class="fa fa-check"></i><b>7.4</b> Land use and residential units (CORINE)</a></li>
+<li class="chapter" data-level="7.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>7.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="7.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>7.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="7.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>7.3</b> Population density WorldPop</a></li>
+<li class="chapter" data-level="7.4" data-path="Population.html"><a href="Population.html#land-use-and-residential-units-corine"><i class="fa fa-check"></i><b>7.4</b> Land use and residential units (CORINE)</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a></li>
+<li class="chapter" data-level="8" data-path="res.html"><a href="res.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -1071,13 +1071,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-9"><a href="population-data.html#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">prsh_id =</span> SOGNEKODE) <span class="sc">%&gt;%</span> </span>
 <span id="cb16-10"><a href="population-data.html#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(prsh_id, prsh_area_km2) <span class="sc">%&gt;%</span> </span>
 <span id="cb16-11"><a href="population-data.html#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(prsh_pop, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;prsh_id&quot;</span>)) </span></code></pre></div>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="house-characteristics-bbr-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="house-characteristics-1.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="corine-land-use.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -1109,7 +1110,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/02-load_data.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/04-load_pop_DST.Rmd",
 "text": "Edit"
 },
 "history": {

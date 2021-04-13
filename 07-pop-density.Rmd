@@ -1,4 +1,4 @@
-# Population density 
+# Population density {#Population}
 
 BBR data represent the situation at the begining of the given year. Therefore, when we link the BBR data with the population data, which also represent the situation at the first day of the year, we use the population of the same year (e.g. BBR data from 2019 and population data from 2019).
 
