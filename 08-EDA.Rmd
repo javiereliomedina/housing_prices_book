@@ -1,4 +1,4 @@
-# Residential units saled as free scale {#res}
+# Residential units saled as free scale
 
 We focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. *BYG_ANVEND_KODE*):
 
