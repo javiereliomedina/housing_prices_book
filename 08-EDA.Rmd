@@ -25,8 +25,7 @@ Residential units by floor level
 
 ```{r fig-runits-floor, fig.cap = "Residential units distribution by floor level"}
 
-  res_units %>% 
-    as_tibble() %>%
+  res_units_oft %>% 
     group_by(floor_level, type) %>% 
     summarise(n = n()) %>%
     ungroup() %>% 
@@ -43,7 +42,7 @@ Residential units by floor level
           legend.title = element_blank()) +
     guides(fill = guide_legend(ncol = 2)) +
     scale_x_continuous(labels = scales::comma) +
-    scale_fill_manual(values = c("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"))
+    scale_fill_manual(values = c("#0072B2", "#D55E00", "#CC79A7"))
   
 ```
 

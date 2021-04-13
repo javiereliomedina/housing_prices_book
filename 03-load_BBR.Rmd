@@ -138,7 +138,7 @@ Then, we selected from the main residential buildings those that are on the ordi
 
 # Select residential units for the study
   selected_res_units <- c("Multi-storey", "Single-family house", "Semi-detached house") 
-  res_unit_oft <- res_units %>%
+  res_units_oft <- res_units %>%
     # Convert to tibble
     as_tibble() %>% 
     # Select main residential units in the area
@@ -147,7 +147,7 @@ Then, we selected from the main residential buildings those that are on the ordi
     filter(OVERDRAGELSES_KODE == "1")
  
 # Table with Number of residential units
-  res_unit_oft %>%
+  res_units_oft %>%
     # Summarize by type or residency and year
     group_by(type, BBR_year) %>% 
     summarise(n = n()) %>% 
