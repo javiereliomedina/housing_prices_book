@@ -1,6 +1,6 @@
-# House characteristics     
+# House prices and characteristics    
 
-We load all buildings for year-round living (*BYG_ANVEND_KODE*):
+We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside):
 
 - 110           = Farmhouse for agricultural property.  
 - 120, 121, 122 = Detached single-family house (detached house). 
@@ -12,7 +12,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*):
 
 ```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_link"))}
 
-## Buildings for year round living
+# Buildings for year round living
   res_codes <- tribble (~BYG_ANVEND_KODE, ~type,
                         110, "Farmhouse",
                         120, "Single-family house",
@@ -28,7 +28,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*):
     # Convert type to factor
     mutate(type = factor(type))
 
-## Function for reading residential units from a csv file:
+# Function for reading residential units from a csv file:
 # Read residential units from BBR data 
 # Get read residential units in an area
 # @param file Link to OneDrive with the data (.csv format)
@@ -63,7 +63,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*):
       mutate(across(.cols = ends_with("_KODE"), .fns = as_factor))
   }
 
-## Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: 
+# Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: 
 # Load residential units 
 # NOTE: you may need to change the path to OneDrive - Aalborg Universitet 
 # Read all the data together 
@@ -75,5 +75,91 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*):
   plan(multisession, workers = 3)
   res_units <- future_map_dfr(.x = csv_files_link, .f = f_res_units)
   plan("default")
+
+```
+
+We focus our analysis to the main buildings type in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure \@ref(fig:fig-sp-res-builds)).
+
+```{r, fig-sp-res-builds, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "load-BBR", fig.cap = "2D kernel density map"}
+
+# Aux. function for plotting 2D kernel density maps:
+  f <- function(.data) {
+    .data %>% 
+      st_coordinates() %>%
+      as_tibble() %>%
+      ggplot() +
+      geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
+      geom_point(aes(X, Y), size = 0.02, shape = 16) +
+      stat_density_2d(aes(X, Y, fill = ..level..),
+                      alpha = 0.5,
+                      h = 700,
+                      geom = "polygon") +
+      scale_fill_distiller(palette = "Spectral")  +
+      theme_void() + 
+      theme(legend.position = "none") +
+      labs(title = .data$type,
+           x = "",
+           y = "") 
+  }
+
+# Plots  
+  p <- res_units %>% 
+    filter(BBR_year == 2019) %>%  
+    # Reorder type factors by the frequency they appear 
+    mutate(type = fct_infreq(type)) %>% 
+    # Split by house type
+    group_split(type) %>%
+    map( ~ f(.))
+  
+  wrap_plots(p) +
+    annotation_scale(location = "br", text_cex = 1) +
+    annotation_north_arrow(location = "br",
+                           pad_x = unit(0.70, "cm"),
+                           pad_y = unit(0.65, "cm"),
+                           which_north = "true",
+                           height = unit(0.5, "cm"),
+                           width = unit(0.5, "cm"),
+                           style = north_arrow_orienteering(text_col = "white",
+                                                            text_size = 1)) +
+    plot_annotation(title = "Residential units in 2019",
+                    theme = theme(plot.title = element_text(size = 14,
+                                                            colour = "darkblue",
+                                                            face = "bold"),
+                                  plot.caption = element_text(size = 9,
+                                                              colour = "grey25")
+                    )
+    ) 
+  
+```
+
+Then, we selected from the main residential buildings those that are on the ordinary free trade (Table \@ref(tab:tbl-runits-oft)). Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.
+
+```{r tbl-runits-oft, cache = TRUE, dependson = "load-BBR"}
+
+# Select residential units for the study
+  selected_res_units <- c("Multi-storey", "Single-family house", "Semi-detached house") 
+  res_unit_oft <- res_units %>%
+    # Convert to tibble
+    as_tibble() %>% 
+    # Select main residential units in the area
+    filter(type %in% selected_res_units) %>% 
+    # ordinary free trade
+    filter(OVERDRAGELSES_KODE == "1")
+ 
+# Table with Number of residential units
+  res_unit_oft %>%
+    # Summarize by type or residency and year
+    group_by(type, BBR_year) %>% 
+    summarise(n = n()) %>% 
+    ungroup() %>%
+    # Arrange and add row with totals
+    arrange(BBR_year, desc(n)) %>%
+    # Pivot
+    pivot_wider(names_from = BBR_year, values_from = n) %>% 
+    adorn_totals("row") %>%
+    kbl(caption = "Number of residential units in the free trade by year") %>% 
+    kable_paper() %>% 
+    row_spec(4, bold = TRUE) %>% 
+    scroll_box(width = "100%")
 
 ```

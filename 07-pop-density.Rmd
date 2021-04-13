@@ -1,3 +1,5 @@
+# (PART) Data analysis {-}
+
 # Population density {#Population}
 
 BBR data represent the situation at the begining of the given year. Therefore, when we link the BBR data with the population data, which also represent the situation at the first day of the year, we use the population of the same year (e.g. BBR data from 2019 and population data from 2019).
@@ -267,45 +269,5 @@ We can compare our results with the WorldPop total population estimation per gri
 ```{r fig-pop-map-worldpop, out.width = '100%', fig.align = "center", fig.cap = "worldpop total population density estimations in 2019"}
 
 knitr::include_graphics("results/pop_dens_2019_worldpop_100m.png")
-
-```
-
-## Land use and residential units (CORINE) 
- 
-```{r plot-CORINE, fig.show='hide', cache=TRUE, dependson="load-CORINE"}
-  
-  ggplot() +
-    geom_sf(data = cph_corine,
-            aes(fill = label3),
-            color = "grey50",
-            size = 0.05) +
-    geom_sf(data = res_units, size = 0.02, shape = 16) +
-    scale_fill_manual(name = "Land use",
-                      values = levels(cph_corine$hex_col),
-                      drop = TRUE) +
-    my_theme_map() +
-    labs(title = "Residential units and land use",
-         x = "",
-         y = "") +
-    annotation_scale(location = "br", text_cex = 1) +
-    annotation_north_arrow(location = "br",
-                           pad_x = unit(1.80, "cm"),
-                           pad_y = unit(0.65, "cm"),
-                           which_north = "true",
-                           height = unit(0.5, "cm"),
-                           width = unit(0.5, "cm"),
-                           style = north_arrow_orienteering(text_col = "white",
-                                                            text_size = 1))
-
-  ggsave(filename = "results/land_use_corine.png",
-         width = 25,
-         height = 15,
-         units = "cm")
-
-```
-  
-```{r fig-land-use, out.width = '100%', fig.align = "center", fig.cap = "CORINE land use and residential units"}
-
-knitr::include_graphics("results/land_use_corine.png")
 
 ```

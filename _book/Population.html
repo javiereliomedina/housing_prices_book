@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Population density | Housing prices Copenhagen</title>
+  <title>Chapter 6 Population density | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Population density | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 6 Population density | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Population density | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 6 Population density | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,7 +31,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="spatial-distribution-of-residential-units.html"/>
+<link rel="prev" href="corine-land-use.html"/>
 <link rel="next" href="res.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -889,19 +889,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>II Load data</b></span></li>
 <li class="chapter" data-level="2" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
-<li class="chapter" data-level="3" data-path="house-characteristics-1.html"><a href="house-characteristics-1.html"><i class="fa fa-check"></i><b>3</b> House characteristics</a></li>
+<li class="chapter" data-level="3" data-path="house-prices-and-characteristics.html"><a href="house-prices-and-characteristics.html"><i class="fa fa-check"></i><b>3</b> House prices and characteristics</a></li>
 <li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
 <li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
-<li class="chapter" data-level="6" data-path="spatial-distribution-of-residential-units.html"><a href="spatial-distribution-of-residential-units.html"><i class="fa fa-check"></i><b>6</b> Spatial distribution of residential units</a></li>
-<li class="chapter" data-level="7" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>7</b> Population density</a>
+<li class="chapter" data-level="6" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>6</b> Population density</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>7.1</b> Choropleth by ancestry</a></li>
-<li class="chapter" data-level="7.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>7.2</b> Disaggregating population data</a></li>
-<li class="chapter" data-level="7.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>7.3</b> Population density WorldPop</a></li>
-<li class="chapter" data-level="7.4" data-path="Population.html"><a href="Population.html#land-use-and-residential-units-corine"><i class="fa fa-check"></i><b>7.4</b> Land use and residential units (CORINE)</a></li>
+<li class="chapter" data-level="6.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>6.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="6.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>6.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="6.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>6.3</b> Population density WorldPop</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="res.html"><a href="res.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a></li>
+<li class="chapter" data-level="7" data-path="res.html"><a href="res.html"><i class="fa fa-check"></i><b>7</b> Residential units saled as free scale</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -923,70 +921,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="Population" class="section level1" number="7">
-<h1><span class="header-section-number">Chapter 7</span> Population density</h1>
+<div id="Population" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Population density</h1>
 <p>BBR data represent the situation at the begining of the given year. Therefore, when we link the BBR data with the population data, which also represent the situation at the first day of the year, we use the population of the same year (e.g. BBR data from 2019 and population data from 2019).</p>
-<div id="choropleth-by-ancestry" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> Choropleth by ancestry</h2>
+<div id="choropleth-by-ancestry" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Choropleth by ancestry</h2>
 <p>Plot population density at the last day of 2019 (first of 2010) by parish and ancestry.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="Population.html#cb19-1" aria-hidden="true" tabindex="-1"></a>  col <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlGnBu&quot;</span>)</span>
-<span id="cb19-2"><a href="Population.html#cb19-2" aria-hidden="true" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(col)</span>
-<span id="cb19-3"><a href="Population.html#cb19-3" aria-hidden="true" tabindex="-1"></a>  my_pallette <span class="ot">&lt;-</span> <span class="fu">pal</span>(<span class="dv">10</span>)</span>
-<span id="cb19-4"><a href="Population.html#cb19-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-5"><a href="Population.html#cb19-5" aria-hidden="true" tabindex="-1"></a>  pop_dens_choropleth <span class="ot">&lt;-</span>  prsh_pop_sf <span class="sc">%&gt;%</span> </span>
-<span id="cb19-6"><a href="Population.html#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(prsh_id, prsh_name, prsh_area_km2, date, </span>
-<span id="cb19-7"><a href="Population.html#cb19-7" aria-hidden="true" tabindex="-1"></a>           pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-8"><a href="Population.html#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb19-9"><a href="Population.html#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calulate population density (pop/area)</span></span>
-<span id="cb19-10"><a href="Population.html#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> prsh_area_km2))) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-11"><a href="Population.html#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-12"><a href="Population.html#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb19-13"><a href="Population.html#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb19-14"><a href="Population.html#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb19-15"><a href="Population.html#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, </span>
-<span id="cb19-16"><a href="Population.html#cb19-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;pop_total_km2&quot;</span>, </span>
-<span id="cb19-17"><a href="Population.html#cb19-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_dan_km2&quot;</span>,</span>
-<span id="cb19-18"><a href="Population.html#cb19-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_wst_km2&quot;</span>,</span>
-<span id="cb19-19"><a href="Population.html#cb19-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_nwst_km2&quot;</span>),</span>
-<span id="cb19-20"><a href="Population.html#cb19-20" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Total&quot;</span>,</span>
-<span id="cb19-21"><a href="Population.html#cb19-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Danish origin&quot;</span>,</span>
-<span id="cb19-22"><a href="Population.html#cb19-22" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from western countries&quot;</span>,</span>
-<span id="cb19-23"><a href="Population.html#cb19-23" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from non-western countries&quot;</span>)))</span>
-<span id="cb19-24"><a href="Population.html#cb19-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-25"><a href="Population.html#cb19-25" aria-hidden="true" tabindex="-1"></a>  brks_c <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_dens_choropleth<span class="sc">$</span>value),</span>
-<span id="cb19-26"><a href="Population.html#cb19-26" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
-<span id="cb19-27"><a href="Population.html#cb19-27" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_dens_choropleth<span class="sc">$</span>value)))</span>
-<span id="cb19-28"><a href="Population.html#cb19-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb19-29"><a href="Population.html#cb19-29" aria-hidden="true" tabindex="-1"></a>  pop_dens_choropleth  <span class="sc">%&gt;%</span> </span>
-<span id="cb19-30"><a href="Population.html#cb19-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb19-31"><a href="Population.html#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(value, <span class="at">breaks =</span> brks_c, <span class="at">include.lowest =</span> T)),</span>
-<span id="cb19-32"><a href="Population.html#cb19-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
-<span id="cb19-33"><a href="Population.html#cb19-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb19-34"><a href="Population.html#cb19-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
-<span id="cb19-35"><a href="Population.html#cb19-35" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
-<span id="cb19-36"><a href="Population.html#cb19-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb19-37"><a href="Population.html#cb19-37" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>))  <span class="sc">+</span></span>
-<span id="cb19-38"><a href="Population.html#cb19-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span> </span>
-<span id="cb19-39"><a href="Population.html#cb19-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb19-40"><a href="Population.html#cb19-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb19-41"><a href="Population.html#cb19-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Population density at the first dat of 2019&quot;</span>,</span>
-<span id="cb19-42"><a href="Population.html#cb19-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb19-43"><a href="Population.html#cb19-43" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb19-44"><a href="Population.html#cb19-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> name)</span></code></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Population.html#cb20-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_density_2019_choropleth.png&quot;</span>,</span>
-<span id="cb20-2"><a href="Population.html#cb20-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
-<span id="cb20-3"><a href="Population.html#cb20-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
-<span id="cb20-4"><a href="Population.html#cb20-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Population.html#cb21-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_density_2019_choropleth.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Population.html#cb20-1" aria-hidden="true" tabindex="-1"></a>  col <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlGnBu&quot;</span>)</span>
+<span id="cb20-2"><a href="Population.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(col)</span>
+<span id="cb20-3"><a href="Population.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  my_pallette <span class="ot">&lt;-</span> <span class="fu">pal</span>(<span class="dv">10</span>)</span>
+<span id="cb20-4"><a href="Population.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-5"><a href="Population.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  pop_dens_choropleth <span class="ot">&lt;-</span>  prsh_pop_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="Population.html#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(prsh_id, prsh_name, prsh_area_km2, date, </span>
+<span id="cb20-7"><a href="Population.html#cb20-7" aria-hidden="true" tabindex="-1"></a>           pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-8"><a href="Population.html#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="Population.html#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calulate population density (pop/area)</span></span>
+<span id="cb20-10"><a href="Population.html#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> prsh_area_km2))) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-11"><a href="Population.html#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-12"><a href="Population.html#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb20-13"><a href="Population.html#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-14"><a href="Population.html#cb20-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb20-15"><a href="Population.html#cb20-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, </span>
+<span id="cb20-16"><a href="Population.html#cb20-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;pop_total_km2&quot;</span>, </span>
+<span id="cb20-17"><a href="Population.html#cb20-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_dan_km2&quot;</span>,</span>
+<span id="cb20-18"><a href="Population.html#cb20-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_wst_km2&quot;</span>,</span>
+<span id="cb20-19"><a href="Population.html#cb20-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_nwst_km2&quot;</span>),</span>
+<span id="cb20-20"><a href="Population.html#cb20-20" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Total&quot;</span>,</span>
+<span id="cb20-21"><a href="Population.html#cb20-21" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Danish origin&quot;</span>,</span>
+<span id="cb20-22"><a href="Population.html#cb20-22" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from western countries&quot;</span>,</span>
+<span id="cb20-23"><a href="Population.html#cb20-23" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from non-western countries&quot;</span>)))</span>
+<span id="cb20-24"><a href="Population.html#cb20-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-25"><a href="Population.html#cb20-25" aria-hidden="true" tabindex="-1"></a>  brks_c <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_dens_choropleth<span class="sc">$</span>value),</span>
+<span id="cb20-26"><a href="Population.html#cb20-26" aria-hidden="true" tabindex="-1"></a>              <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
+<span id="cb20-27"><a href="Population.html#cb20-27" aria-hidden="true" tabindex="-1"></a>              <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_dens_choropleth<span class="sc">$</span>value)))</span>
+<span id="cb20-28"><a href="Population.html#cb20-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb20-29"><a href="Population.html#cb20-29" aria-hidden="true" tabindex="-1"></a>  pop_dens_choropleth  <span class="sc">%&gt;%</span> </span>
+<span id="cb20-30"><a href="Population.html#cb20-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-31"><a href="Population.html#cb20-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(value, <span class="at">breaks =</span> brks_c, <span class="at">include.lowest =</span> T)),</span>
+<span id="cb20-32"><a href="Population.html#cb20-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb20-33"><a href="Population.html#cb20-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb20-34"><a href="Population.html#cb20-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb20-35"><a href="Population.html#cb20-35" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
+<span id="cb20-36"><a href="Population.html#cb20-36" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb20-37"><a href="Population.html#cb20-37" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>))  <span class="sc">+</span></span>
+<span id="cb20-38"><a href="Population.html#cb20-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span> </span>
+<span id="cb20-39"><a href="Population.html#cb20-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb20-40"><a href="Population.html#cb20-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb20-41"><a href="Population.html#cb20-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Population density at the first dat of 2019&quot;</span>,</span>
+<span id="cb20-42"><a href="Population.html#cb20-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb20-43"><a href="Population.html#cb20-43" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb20-44"><a href="Population.html#cb20-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> name)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Population.html#cb21-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_density_2019_choropleth.png&quot;</span>,</span>
+<span id="cb21-2"><a href="Population.html#cb21-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
+<span id="cb21-3"><a href="Population.html#cb21-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb21-4"><a href="Population.html#cb21-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="Population.html#cb22-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_density_2019_choropleth.png&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-pop-map-chor"></span>
 <img src="results/pop_density_2019_choropleth.png" alt="Population density by parish (choropleth)" width="100%" />
 <p class="caption">
-Figure 7.1: Population density by parish (choropleth)
+Figure 6.1: Population density by parish (choropleth)
 </p>
 </div>
 </div>
-<div id="disaggregating-population-data" class="section level2" number="7.2">
-<h2><span class="header-section-number">7.2</span> Disaggregating population data</h2>
+<div id="disaggregating-population-data" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Disaggregating population data</h2>
 <p>We disaggregate the population data at Parish level to grid cells of 100m x 100m using residential buildings as ancillary data. The procedure is as follow:</p>
 <ol style="list-style-type: decimal">
 <li><p>We calculate the occupancy rate (<em>OR</em>) for the residential units of each parish (<em>j</em>): <span class="math display">\[OR_{j} = \frac{pop_{j}}{N_{j}}\]</span></p></li>
@@ -998,212 +996,176 @@ Figure 7.1: Population density by parish (choropleth)
 <li><p>Population density: <span class="math display">\[PD_{i} = \frac{pop_{i}}{A_{i}}\]</span></p></li>
 </ol>
 <p>Therefore we create the following function:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="Population.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate the population density in the grids created by f_grids </span></span>
-<span id="cb22-2"><a href="Population.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .pop        POLYGONS with the population data (i.e. prsh_pop_sf)</span></span>
-<span id="cb22-3"><a href="Population.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .parish     POLYGONS where the number of units will be calculated </span></span>
-<span id="cb22-4"><a href="Population.html#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .res_points POINTS with the residential units (e.g. res_units) </span></span>
-<span id="cb22-5"><a href="Population.html#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .grids      Grid cells generated by f_grids</span></span>
-<span id="cb22-6"><a href="Population.html#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .year       Year of the analysis</span></span>
-<span id="cb22-7"><a href="Population.html#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="Population.html#cb22-8" aria-hidden="true" tabindex="-1"></a>  f_pd_grids <span class="ot">&lt;-</span> <span class="cf">function</span>(.pop, .parish, .res_points, .grids, .year) {</span>
-<span id="cb22-9"><a href="Population.html#cb22-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-10"><a href="Population.html#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population at the last day of the year (.year)</span></span>
-<span id="cb22-11"><a href="Population.html#cb22-11" aria-hidden="true" tabindex="-1"></a>    pop_year <span class="ot">&lt;-</span> .pop <span class="sc">%&gt;%</span></span>
-<span id="cb22-12"><a href="Population.html#cb22-12" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Select population data at the first day of the quarter </span></span>
-<span id="cb22-13"><a href="Population.html#cb22-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(prsh_id, prsh_name, prsh_area_km2, date, </span>
-<span id="cb22-14"><a href="Population.html#cb22-14" aria-hidden="true" tabindex="-1"></a>             pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-15"><a href="Population.html#cb22-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># select the data at the end of the year (first dat of the next year) </span></span>
-<span id="cb22-16"><a href="Population.html#cb22-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(date <span class="sc">==</span> (.year))</span>
-<span id="cb22-17"><a href="Population.html#cb22-17" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-18"><a href="Population.html#cb22-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># BBR of the selected year (represent the last day of the year)</span></span>
-<span id="cb22-19"><a href="Population.html#cb22-19" aria-hidden="true" tabindex="-1"></a>    BBR_year <span class="ot">&lt;-</span> <span class="fu">filter</span>(.res_points, BBR_year <span class="sc">==</span> .year) </span>
-<span id="cb22-20"><a href="Population.html#cb22-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-21"><a href="Population.html#cb22-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate occupancy rate (&quot;OR&quot;) of the residential units in each parish in a year</span></span>
-<span id="cb22-22"><a href="Population.html#cb22-22" aria-hidden="true" tabindex="-1"></a>    OR <span class="ot">&lt;-</span> pop_year <span class="sc">%&gt;%</span>  </span>
-<span id="cb22-23"><a href="Population.html#cb22-23" aria-hidden="true" tabindex="-1"></a>      <span class="co"># number of units per parish</span></span>
-<span id="cb22-24"><a href="Population.html#cb22-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year, <span class="at">dist =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-25"><a href="Population.html#cb22-25" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-26"><a href="Population.html#cb22-26" aria-hidden="true" tabindex="-1"></a>               <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-27"><a href="Population.html#cb22-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># mean population per unit in each parish</span></span>
-<span id="cb22-28"><a href="Population.html#cb22-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> n_units)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-29"><a href="Population.html#cb22-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;or&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-30"><a href="Population.html#cb22-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># output as table </span></span>
-<span id="cb22-31"><a href="Population.html#cb22-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb22-32"><a href="Population.html#cb22-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>n_units, <span class="sc">-</span>geometry)</span>
-<span id="cb22-33"><a href="Population.html#cb22-33" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb22-34"><a href="Population.html#cb22-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get only the grids with residential units on them</span></span>
-<span id="cb22-35"><a href="Population.html#cb22-35" aria-hidden="true" tabindex="-1"></a>    gru <span class="ot">&lt;-</span> .grids <span class="sc">%&gt;%</span> </span>
-<span id="cb22-36"><a href="Population.html#cb22-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Number of residential units per grid</span></span>
-<span id="cb22-37"><a href="Population.html#cb22-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year , <span class="at">dist =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-38"><a href="Population.html#cb22-38" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-39"><a href="Population.html#cb22-39" aria-hidden="true" tabindex="-1"></a>               <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-40"><a href="Population.html#cb22-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get grids with residential buildings</span></span>
-<span id="cb22-41"><a href="Population.html#cb22-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n_units <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-42"><a href="Population.html#cb22-42" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Detect to what parish belong the grid</span></span>
-<span id="cb22-43"><a href="Population.html#cb22-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_intersection</span>(., .parish ) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-44"><a href="Population.html#cb22-44" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove parish area</span></span>
-<span id="cb22-45"><a href="Population.html#cb22-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>prsh_area_km2, <span class="sc">-</span>SOGNENAVN) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-46"><a href="Population.html#cb22-46" aria-hidden="true" tabindex="-1"></a>      <span class="co"># convert to table</span></span>
-<span id="cb22-47"><a href="Population.html#cb22-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>()</span>
-<span id="cb22-48"><a href="Population.html#cb22-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb22-49"><a href="Population.html#cb22-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population density by grids</span></span>
-<span id="cb22-50"><a href="Population.html#cb22-50" aria-hidden="true" tabindex="-1"></a>    gru <span class="sc">%&gt;%</span> </span>
-<span id="cb22-51"><a href="Population.html#cb22-51" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Merge OR per parish  </span></span>
-<span id="cb22-52"><a href="Population.html#cb22-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(OR, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;SOGNEKODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;prsh_id&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-53"><a href="Population.html#cb22-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb22-54"><a href="Population.html#cb22-54" aria-hidden="true" tabindex="-1"></a>      <span class="co"># recalculate population by grid </span></span>
-<span id="cb22-55"><a href="Population.html#cb22-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">*</span> n_units)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-56"><a href="Population.html#cb22-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">gsub</span>(<span class="st">&quot;_or&quot;</span>, <span class="st">&quot;&quot;</span>, .), <span class="at">.col =</span> <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-57"><a href="Population.html#cb22-57" aria-hidden="true" tabindex="-1"></a>      <span class="co"># sum population of each parish of the grid</span></span>
-<span id="cb22-58"><a href="Population.html#cb22-58" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(grid_ID) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-59"><a href="Population.html#cb22-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">pop_total =</span> <span class="fu">sum</span>(pop_total),</span>
-<span id="cb22-60"><a href="Population.html#cb22-60" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_dan =</span> <span class="fu">sum</span>(pop_dan),</span>
-<span id="cb22-61"><a href="Population.html#cb22-61" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_frgn_wst =</span> <span class="fu">sum</span>(pop_frgn_wst),</span>
-<span id="cb22-62"><a href="Population.html#cb22-62" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_frgn_nwst =</span> <span class="fu">sum</span>(pop_frgn_nwst),</span>
-<span id="cb22-63"><a href="Population.html#cb22-63" aria-hidden="true" tabindex="-1"></a>                <span class="at">n_units =</span> <span class="fu">sum</span>(n_units)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-64"><a href="Population.html#cb22-64" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb22-65"><a href="Population.html#cb22-65" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Area of the grid</span></span>
-<span id="cb22-66"><a href="Population.html#cb22-66" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-67"><a href="Population.html#cb22-67" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Population density (pop/area)</span></span>
-<span id="cb22-68"><a href="Population.html#cb22-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> area_km2))) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-69"><a href="Population.html#cb22-69" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-70"><a href="Population.html#cb22-70" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Pivot longer</span></span>
-<span id="cb22-71"><a href="Population.html#cb22-71" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb22-72"><a href="Population.html#cb22-72" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb22-73"><a href="Population.html#cb22-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb22-74"><a href="Population.html#cb22-74" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove polygons with 0 population</span></span>
-<span id="cb22-75"><a href="Population.html#cb22-75" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb22-76"><a href="Population.html#cb22-76" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Population.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Calculate the population density in the grids created by f_grids </span></span>
+<span id="cb23-2"><a href="Population.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .pop        POLYGONS with the population data (i.e. prsh_pop_sf)</span></span>
+<span id="cb23-3"><a href="Population.html#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .parish     POLYGONS where the number of units will be calculated </span></span>
+<span id="cb23-4"><a href="Population.html#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .res_points POINTS with the residential units (e.g. res_units) </span></span>
+<span id="cb23-5"><a href="Population.html#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .grids      Grid cells generated by f_grids</span></span>
+<span id="cb23-6"><a href="Population.html#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .year       Year of the analysis</span></span>
+<span id="cb23-7"><a href="Population.html#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="Population.html#cb23-8" aria-hidden="true" tabindex="-1"></a>  f_pd_grids <span class="ot">&lt;-</span> <span class="cf">function</span>(.pop, .parish, .res_points, .grids, .year) {</span>
+<span id="cb23-9"><a href="Population.html#cb23-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-10"><a href="Population.html#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population at the last day of the year (.year)</span></span>
+<span id="cb23-11"><a href="Population.html#cb23-11" aria-hidden="true" tabindex="-1"></a>    pop_year <span class="ot">&lt;-</span> .pop <span class="sc">%&gt;%</span></span>
+<span id="cb23-12"><a href="Population.html#cb23-12" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Select population data at the first day of the quarter </span></span>
+<span id="cb23-13"><a href="Population.html#cb23-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(prsh_id, prsh_name, prsh_area_km2, date, </span>
+<span id="cb23-14"><a href="Population.html#cb23-14" aria-hidden="true" tabindex="-1"></a>             pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-15"><a href="Population.html#cb23-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># select the data at the end of the year (first dat of the next year) </span></span>
+<span id="cb23-16"><a href="Population.html#cb23-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(date <span class="sc">==</span> (.year))</span>
+<span id="cb23-17"><a href="Population.html#cb23-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-18"><a href="Population.html#cb23-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># BBR of the selected year (represent the last day of the year)</span></span>
+<span id="cb23-19"><a href="Population.html#cb23-19" aria-hidden="true" tabindex="-1"></a>    BBR_year <span class="ot">&lt;-</span> <span class="fu">filter</span>(.res_points, BBR_year <span class="sc">==</span> .year) </span>
+<span id="cb23-20"><a href="Population.html#cb23-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-21"><a href="Population.html#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate occupancy rate (&quot;OR&quot;) of the residential units in each parish in a year</span></span>
+<span id="cb23-22"><a href="Population.html#cb23-22" aria-hidden="true" tabindex="-1"></a>    OR <span class="ot">&lt;-</span> pop_year <span class="sc">%&gt;%</span>  </span>
+<span id="cb23-23"><a href="Population.html#cb23-23" aria-hidden="true" tabindex="-1"></a>      <span class="co"># number of units per parish</span></span>
+<span id="cb23-24"><a href="Population.html#cb23-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year, <span class="at">dist =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-25"><a href="Population.html#cb23-25" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-26"><a href="Population.html#cb23-26" aria-hidden="true" tabindex="-1"></a>               <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-27"><a href="Population.html#cb23-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># mean population per unit in each parish</span></span>
+<span id="cb23-28"><a href="Population.html#cb23-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-29"><a href="Population.html#cb23-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;or&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-30"><a href="Population.html#cb23-30" aria-hidden="true" tabindex="-1"></a>      <span class="co"># output as table </span></span>
+<span id="cb23-31"><a href="Population.html#cb23-31" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-32"><a href="Population.html#cb23-32" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>n_units, <span class="sc">-</span>geometry)</span>
+<span id="cb23-33"><a href="Population.html#cb23-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-34"><a href="Population.html#cb23-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get only the grids with residential units on them</span></span>
+<span id="cb23-35"><a href="Population.html#cb23-35" aria-hidden="true" tabindex="-1"></a>    gru <span class="ot">&lt;-</span> .grids <span class="sc">%&gt;%</span> </span>
+<span id="cb23-36"><a href="Population.html#cb23-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Number of residential units per grid</span></span>
+<span id="cb23-37"><a href="Population.html#cb23-37" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year , <span class="at">dist =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-38"><a href="Population.html#cb23-38" aria-hidden="true" tabindex="-1"></a>               <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-39"><a href="Population.html#cb23-39" aria-hidden="true" tabindex="-1"></a>               <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-40"><a href="Population.html#cb23-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get grids with residential buildings</span></span>
+<span id="cb23-41"><a href="Population.html#cb23-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(n_units <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-42"><a href="Population.html#cb23-42" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Detect to what parish belong the grid</span></span>
+<span id="cb23-43"><a href="Population.html#cb23-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_intersection</span>(., .parish ) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-44"><a href="Population.html#cb23-44" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove parish area</span></span>
+<span id="cb23-45"><a href="Population.html#cb23-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(<span class="sc">-</span>prsh_area_km2, <span class="sc">-</span>SOGNENAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-46"><a href="Population.html#cb23-46" aria-hidden="true" tabindex="-1"></a>      <span class="co"># convert to table</span></span>
+<span id="cb23-47"><a href="Population.html#cb23-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>()</span>
+<span id="cb23-48"><a href="Population.html#cb23-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-49"><a href="Population.html#cb23-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population density by grids</span></span>
+<span id="cb23-50"><a href="Population.html#cb23-50" aria-hidden="true" tabindex="-1"></a>    gru <span class="sc">%&gt;%</span> </span>
+<span id="cb23-51"><a href="Population.html#cb23-51" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Merge OR per parish  </span></span>
+<span id="cb23-52"><a href="Population.html#cb23-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(OR, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;SOGNEKODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;prsh_id&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-53"><a href="Population.html#cb23-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-54"><a href="Population.html#cb23-54" aria-hidden="true" tabindex="-1"></a>      <span class="co"># recalculate population by grid </span></span>
+<span id="cb23-55"><a href="Population.html#cb23-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">*</span> n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-56"><a href="Population.html#cb23-56" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">gsub</span>(<span class="st">&quot;_or&quot;</span>, <span class="st">&quot;&quot;</span>, .), <span class="at">.col =</span> <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-57"><a href="Population.html#cb23-57" aria-hidden="true" tabindex="-1"></a>      <span class="co"># sum population of each parish of the grid</span></span>
+<span id="cb23-58"><a href="Population.html#cb23-58" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(grid_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-59"><a href="Population.html#cb23-59" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">pop_total =</span> <span class="fu">sum</span>(pop_total),</span>
+<span id="cb23-60"><a href="Population.html#cb23-60" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_dan =</span> <span class="fu">sum</span>(pop_dan),</span>
+<span id="cb23-61"><a href="Population.html#cb23-61" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_frgn_wst =</span> <span class="fu">sum</span>(pop_frgn_wst),</span>
+<span id="cb23-62"><a href="Population.html#cb23-62" aria-hidden="true" tabindex="-1"></a>                <span class="at">pop_frgn_nwst =</span> <span class="fu">sum</span>(pop_frgn_nwst),</span>
+<span id="cb23-63"><a href="Population.html#cb23-63" aria-hidden="true" tabindex="-1"></a>                <span class="at">n_units =</span> <span class="fu">sum</span>(n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-64"><a href="Population.html#cb23-64" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-65"><a href="Population.html#cb23-65" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Area of the grid</span></span>
+<span id="cb23-66"><a href="Population.html#cb23-66" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-67"><a href="Population.html#cb23-67" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Population density (pop/area)</span></span>
+<span id="cb23-68"><a href="Population.html#cb23-68" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> area_km2))) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-69"><a href="Population.html#cb23-69" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-70"><a href="Population.html#cb23-70" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Pivot longer</span></span>
+<span id="cb23-71"><a href="Population.html#cb23-71" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-72"><a href="Population.html#cb23-72" aria-hidden="true" tabindex="-1"></a>      <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-73"><a href="Population.html#cb23-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-74"><a href="Population.html#cb23-74" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Remove polygons with 0 population</span></span>
+<span id="cb23-75"><a href="Population.html#cb23-75" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(value <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb23-76"><a href="Population.html#cb23-76" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
 <p>Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m and ancestry.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Population.html#cb23-1" aria-hidden="true" tabindex="-1"></a>  pop_2019_g100m <span class="ot">&lt;-</span>  <span class="fu">f_pd_grids</span>(<span class="at">.pop =</span> prsh_pop_sf,</span>
-<span id="cb23-2"><a href="Population.html#cb23-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.parish =</span> cph_parish,</span>
-<span id="cb23-3"><a href="Population.html#cb23-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.res_points =</span> res_units,</span>
-<span id="cb23-4"><a href="Population.html#cb23-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.grids =</span> grids100m,</span>
-<span id="cb23-5"><a href="Population.html#cb23-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.year =</span> <span class="dv">2019</span>)</span>
-<span id="cb23-6"><a href="Population.html#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-7"><a href="Population.html#cb23-7" aria-hidden="true" tabindex="-1"></a>  brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_2019_g100m<span class="sc">$</span>value),</span>
-<span id="cb23-8"><a href="Population.html#cb23-8" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
-<span id="cb23-9"><a href="Population.html#cb23-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_2019_g100m<span class="sc">$</span>value)))</span>
-<span id="cb23-10"><a href="Population.html#cb23-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb23-11"><a href="Population.html#cb23-11" aria-hidden="true" tabindex="-1"></a>  pop_2019_g100m <span class="sc">%&gt;%</span></span>
-<span id="cb23-12"><a href="Population.html#cb23-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, </span>
-<span id="cb23-13"><a href="Population.html#cb23-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;pop_total_km2&quot;</span>, </span>
-<span id="cb23-14"><a href="Population.html#cb23-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_dan_km2&quot;</span>,</span>
-<span id="cb23-15"><a href="Population.html#cb23-15" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_wst_km2&quot;</span>,</span>
-<span id="cb23-16"><a href="Population.html#cb23-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_nwst_km2&quot;</span>),</span>
-<span id="cb23-17"><a href="Population.html#cb23-17" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Total&quot;</span>,</span>
-<span id="cb23-18"><a href="Population.html#cb23-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Danish origin&quot;</span>,</span>
-<span id="cb23-19"><a href="Population.html#cb23-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from western countries&quot;</span>,</span>
-<span id="cb23-20"><a href="Population.html#cb23-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from non-western countries&quot;</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb23-21"><a href="Population.html#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb23-22"><a href="Population.html#cb23-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb23-23"><a href="Population.html#cb23-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(value,</span>
-<span id="cb23-24"><a href="Population.html#cb23-24" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks =</span> brks,</span>
-<span id="cb23-25"><a href="Population.html#cb23-25" aria-hidden="true" tabindex="-1"></a>                           <span class="at">include.lowest =</span> T)),</span>
-<span id="cb23-26"><a href="Population.html#cb23-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb23-27"><a href="Population.html#cb23-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
-<span id="cb23-28"><a href="Population.html#cb23-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
-<span id="cb23-29"><a href="Population.html#cb23-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb23-30"><a href="Population.html#cb23-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))  <span class="sc">+</span></span>
-<span id="cb23-31"><a href="Population.html#cb23-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span> </span>
-<span id="cb23-32"><a href="Population.html#cb23-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb23-33"><a href="Population.html#cb23-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb23-34"><a href="Population.html#cb23-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Population density at the first day of 2019&quot;</span>,</span>
-<span id="cb23-35"><a href="Population.html#cb23-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb23-36"><a href="Population.html#cb23-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb23-37"><a href="Population.html#cb23-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> name)</span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="Population.html#cb24-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_dens_2019_grids_100m.png&quot;</span>,</span>
-<span id="cb24-2"><a href="Population.html#cb24-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
-<span id="cb24-3"><a href="Population.html#cb24-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
-<span id="cb24-4"><a href="Population.html#cb24-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="Population.html#cb25-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_dens_2019_grids_100m.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="Population.html#cb24-1" aria-hidden="true" tabindex="-1"></a>  pop_2019_g100m <span class="ot">&lt;-</span>  <span class="fu">f_pd_grids</span>(<span class="at">.pop =</span> prsh_pop_sf,</span>
+<span id="cb24-2"><a href="Population.html#cb24-2" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.parish =</span> cph_parish,</span>
+<span id="cb24-3"><a href="Population.html#cb24-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.res_points =</span> res_units,</span>
+<span id="cb24-4"><a href="Population.html#cb24-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.grids =</span> grids100m,</span>
+<span id="cb24-5"><a href="Population.html#cb24-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">.year =</span> <span class="dv">2019</span>)</span>
+<span id="cb24-6"><a href="Population.html#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="Population.html#cb24-7" aria-hidden="true" tabindex="-1"></a>  brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_2019_g100m<span class="sc">$</span>value),</span>
+<span id="cb24-8"><a href="Population.html#cb24-8" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
+<span id="cb24-9"><a href="Population.html#cb24-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_2019_g100m<span class="sc">$</span>value)))</span>
+<span id="cb24-10"><a href="Population.html#cb24-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb24-11"><a href="Population.html#cb24-11" aria-hidden="true" tabindex="-1"></a>  pop_2019_g100m <span class="sc">%&gt;%</span></span>
+<span id="cb24-12"><a href="Population.html#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">factor</span>(name, </span>
+<span id="cb24-13"><a href="Population.html#cb24-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;pop_total_km2&quot;</span>, </span>
+<span id="cb24-14"><a href="Population.html#cb24-14" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_dan_km2&quot;</span>,</span>
+<span id="cb24-15"><a href="Population.html#cb24-15" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_wst_km2&quot;</span>,</span>
+<span id="cb24-16"><a href="Population.html#cb24-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;pop_frgn_nwst_km2&quot;</span>),</span>
+<span id="cb24-17"><a href="Population.html#cb24-17" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Total&quot;</span>,</span>
+<span id="cb24-18"><a href="Population.html#cb24-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Danish origin&quot;</span>,</span>
+<span id="cb24-19"><a href="Population.html#cb24-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from western countries&quot;</span>,</span>
+<span id="cb24-20"><a href="Population.html#cb24-20" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Immigrants and their descendants from non-western countries&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-21"><a href="Population.html#cb24-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb24-22"><a href="Population.html#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb24-23"><a href="Population.html#cb24-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(value,</span>
+<span id="cb24-24"><a href="Population.html#cb24-24" aria-hidden="true" tabindex="-1"></a>                           <span class="at">breaks =</span> brks,</span>
+<span id="cb24-25"><a href="Population.html#cb24-25" aria-hidden="true" tabindex="-1"></a>                           <span class="at">include.lowest =</span> T)),</span>
+<span id="cb24-26"><a href="Population.html#cb24-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb24-27"><a href="Population.html#cb24-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb24-28"><a href="Population.html#cb24-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
+<span id="cb24-29"><a href="Population.html#cb24-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb24-30"><a href="Population.html#cb24-30" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))  <span class="sc">+</span></span>
+<span id="cb24-31"><a href="Population.html#cb24-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span> </span>
+<span id="cb24-32"><a href="Population.html#cb24-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb24-33"><a href="Population.html#cb24-33" aria-hidden="true" tabindex="-1"></a>          <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb24-34"><a href="Population.html#cb24-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Population density at the first day of 2019&quot;</span>,</span>
+<span id="cb24-35"><a href="Population.html#cb24-35" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb24-36"><a href="Population.html#cb24-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-37"><a href="Population.html#cb24-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> name)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="Population.html#cb25-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_dens_2019_grids_100m.png&quot;</span>,</span>
+<span id="cb25-2"><a href="Population.html#cb25-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
+<span id="cb25-3"><a href="Population.html#cb25-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">20</span>,</span>
+<span id="cb25-4"><a href="Population.html#cb25-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Population.html#cb26-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_dens_2019_grids_100m.png&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-pop-map-grid"></span>
 <img src="results/pop_dens_2019_grids_100m.png" alt="Population density by grid cells of 100m x 100m" width="100%" />
 <p class="caption">
-Figure 7.2: Population density by grid cells of 100m x 100m
+Figure 6.2: Population density by grid cells of 100m x 100m
 </p>
 </div>
 </div>
-<div id="population-density-worldpop" class="section level2" number="7.3">
-<h2><span class="header-section-number">7.3</span> Population density WorldPop</h2>
+<div id="population-density-worldpop" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Population density WorldPop</h2>
 <p>We can compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m):</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="Population.html#cb26-1" aria-hidden="true" tabindex="-1"></a>  dnk_ppp_2019_link <span class="ot">&lt;-</span> <span class="st">&quot;https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif&quot;</span></span>
-<span id="cb26-2"><a href="Population.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb26-3"><a href="Population.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(dnk_ppp_2019_link, <span class="st">&quot;data/dnk_ppp_2019.tif&quot;</span>, <span class="at">method =</span> <span class="st">&quot;curl&quot;</span>)</span>
-<span id="cb26-4"><a href="Population.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-5"><a href="Population.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stars)</span>
-<span id="cb26-6"><a href="Population.html#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
-<span id="cb26-7"><a href="Population.html#cb26-7" aria-hidden="true" tabindex="-1"></a>  dnk_ppp_2019 <span class="ot">&lt;-</span> <span class="fu">read_stars</span>(<span class="at">.x =</span> <span class="st">&quot;data/dnk_ppp_2019.tif&quot;</span>,  <span class="at">proxy =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb26-8"><a href="Population.html#cb26-8" aria-hidden="true" tabindex="-1"></a>  bbox <span class="ot">&lt;-</span>  study_area <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(dnk_ppp_2019))</span>
-<span id="cb26-9"><a href="Population.html#cb26-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-10"><a href="Population.html#cb26-10" aria-hidden="true" tabindex="-1"></a>  cph_ppp_2019 <span class="ot">&lt;-</span> <span class="fu">st_crop</span>(dnk_ppp_2019, bbox) <span class="sc">%&gt;%</span></span>
-<span id="cb26-11"><a href="Population.html#cb26-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb26-12"><a href="Population.html#cb26-12" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-13"><a href="Population.html#cb26-13" aria-hidden="true" tabindex="-1"></a>  col <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlGnBu&quot;</span>)</span>
-<span id="cb26-14"><a href="Population.html#cb26-14" aria-hidden="true" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(col)</span>
-<span id="cb26-15"><a href="Population.html#cb26-15" aria-hidden="true" tabindex="-1"></a>  my_pallette <span class="ot">&lt;-</span> <span class="fu">pal</span>(<span class="dv">10</span>)</span>
-<span id="cb26-16"><a href="Population.html#cb26-16" aria-hidden="true" tabindex="-1"></a>  brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(cph_ppp_2019<span class="sc">$</span>dnk_ppp_2019.tif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb26-17"><a href="Population.html#cb26-17" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
-<span id="cb26-18"><a href="Population.html#cb26-18" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(cph_ppp_2019<span class="sc">$</span>dnk_ppp_2019.tif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb26-19"><a href="Population.html#cb26-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-20"><a href="Population.html#cb26-20" aria-hidden="true" tabindex="-1"></a>  cph_ppp_2019 <span class="ot">&lt;-</span> cph_ppp_2019 <span class="sc">%&gt;%</span> </span>
-<span id="cb26-21"><a href="Population.html#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>( <span class="at">pop_cuts =</span> <span class="fu">cut</span>(dnk_ppp_2019.tif, <span class="at">breaks =</span> brks, <span class="at">include.lowest =</span> T))  </span>
-<span id="cb26-22"><a href="Population.html#cb26-22" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-23"><a href="Population.html#cb26-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb26-24"><a href="Population.html#cb26-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb26-25"><a href="Population.html#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_stars</span>(<span class="at">data =</span> cph_ppp_2019, <span class="fu">aes</span>(<span class="at">fill =</span> pop_cuts)) <span class="sc">+</span></span>
-<span id="cb26-26"><a href="Population.html#cb26-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
-<span id="cb26-27"><a href="Population.html#cb26-27" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
-<span id="cb26-28"><a href="Population.html#cb26-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb26-29"><a href="Population.html#cb26-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>)) <span class="sc">+</span></span>
-<span id="cb26-30"><a href="Population.html#cb26-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Estimated total number of people per grid-cell of 3 arc&quot;</span>,</span>
-<span id="cb26-31"><a href="Population.html#cb26-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">&quot;Source: WorlpPop (https://data.worldpop.org)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb26-32"><a href="Population.html#cb26-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="Population.html#cb27-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_dens_2019_worldpop_100m.png&quot;</span>,</span>
-<span id="cb27-2"><a href="Population.html#cb27-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">20</span>,</span>
-<span id="cb27-3"><a href="Population.html#cb27-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">15</span>,</span>
-<span id="cb27-4"><a href="Population.html#cb27-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="Population.html#cb28-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_dens_2019_worldpop_100m.png&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="Population.html#cb27-1" aria-hidden="true" tabindex="-1"></a>  dnk_ppp_2019_link <span class="ot">&lt;-</span> <span class="st">&quot;https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif&quot;</span></span>
+<span id="cb27-2"><a href="Population.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
+<span id="cb27-3"><a href="Population.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">download.file</span>(dnk_ppp_2019_link, <span class="st">&quot;data/dnk_ppp_2019.tif&quot;</span>, <span class="at">method =</span> <span class="st">&quot;curl&quot;</span>)</span>
+<span id="cb27-4"><a href="Population.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-5"><a href="Population.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stars)</span>
+<span id="cb27-6"><a href="Population.html#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb27-7"><a href="Population.html#cb27-7" aria-hidden="true" tabindex="-1"></a>  dnk_ppp_2019 <span class="ot">&lt;-</span> <span class="fu">read_stars</span>(<span class="at">.x =</span> <span class="st">&quot;data/dnk_ppp_2019.tif&quot;</span>,  <span class="at">proxy =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb27-8"><a href="Population.html#cb27-8" aria-hidden="true" tabindex="-1"></a>  bbox <span class="ot">&lt;-</span>  study_area <span class="sc">%&gt;%</span> <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(dnk_ppp_2019))</span>
+<span id="cb27-9"><a href="Population.html#cb27-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-10"><a href="Population.html#cb27-10" aria-hidden="true" tabindex="-1"></a>  cph_ppp_2019 <span class="ot">&lt;-</span> <span class="fu">st_crop</span>(dnk_ppp_2019, bbox) <span class="sc">%&gt;%</span></span>
+<span id="cb27-11"><a href="Population.html#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb27-12"><a href="Population.html#cb27-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-13"><a href="Population.html#cb27-13" aria-hidden="true" tabindex="-1"></a>  col <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>, <span class="st">&quot;YlGnBu&quot;</span>)</span>
+<span id="cb27-14"><a href="Population.html#cb27-14" aria-hidden="true" tabindex="-1"></a>  pal <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(col)</span>
+<span id="cb27-15"><a href="Population.html#cb27-15" aria-hidden="true" tabindex="-1"></a>  my_pallette <span class="ot">&lt;-</span> <span class="fu">pal</span>(<span class="dv">10</span>)</span>
+<span id="cb27-16"><a href="Population.html#cb27-16" aria-hidden="true" tabindex="-1"></a>  brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(cph_ppp_2019<span class="sc">$</span>dnk_ppp_2019.tif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb27-17"><a href="Population.html#cb27-17" aria-hidden="true" tabindex="-1"></a>            <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">12</span>, <span class="dv">16</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">30</span>,</span>
+<span id="cb27-18"><a href="Population.html#cb27-18" aria-hidden="true" tabindex="-1"></a>            <span class="fu">max</span>(cph_ppp_2019<span class="sc">$</span>dnk_ppp_2019.tif, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb27-19"><a href="Population.html#cb27-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-20"><a href="Population.html#cb27-20" aria-hidden="true" tabindex="-1"></a>  cph_ppp_2019 <span class="ot">&lt;-</span> cph_ppp_2019 <span class="sc">%&gt;%</span> </span>
+<span id="cb27-21"><a href="Population.html#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>( <span class="at">pop_cuts =</span> <span class="fu">cut</span>(dnk_ppp_2019.tif, <span class="at">breaks =</span> brks, <span class="at">include.lowest =</span> T))  </span>
+<span id="cb27-22"><a href="Population.html#cb27-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-23"><a href="Population.html#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb27-24"><a href="Population.html#cb27-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb27-25"><a href="Population.html#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_stars</span>(<span class="at">data =</span> cph_ppp_2019, <span class="fu">aes</span>(<span class="at">fill =</span> pop_cuts)) <span class="sc">+</span></span>
+<span id="cb27-26"><a href="Population.html#cb27-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb27-27"><a href="Population.html#cb27-27" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> my_pallette,</span>
+<span id="cb27-28"><a href="Population.html#cb27-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb27-29"><a href="Population.html#cb27-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">guide =</span> <span class="fu">guide_legend</span>(<span class="at">reverse=</span><span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb27-30"><a href="Population.html#cb27-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Estimated total number of people per grid-cell of 3 arc&quot;</span>,</span>
+<span id="cb27-31"><a href="Population.html#cb27-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">&quot;Source: WorlpPop (https://data.worldpop.org)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-32"><a href="Population.html#cb27-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="Population.html#cb28-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/pop_dens_2019_worldpop_100m.png&quot;</span>,</span>
+<span id="cb28-2"><a href="Population.html#cb28-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">20</span>,</span>
+<span id="cb28-3"><a href="Population.html#cb28-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">15</span>,</span>
+<span id="cb28-4"><a href="Population.html#cb28-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="Population.html#cb29-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/pop_dens_2019_worldpop_100m.png&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-pop-map-worldpop"></span>
 <img src="results/pop_dens_2019_worldpop_100m.png" alt="worldpop total population density estimations in 2019" width="100%" />
 <p class="caption">
-Figure 7.3: worldpop total population density estimations in 2019
-</p>
-</div>
-</div>
-<div id="land-use-and-residential-units-corine" class="section level2" number="7.4">
-<h2><span class="header-section-number">7.4</span> Land use and residential units (CORINE)</h2>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="Population.html#cb29-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb29-2"><a href="Population.html#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_corine,</span>
-<span id="cb29-3"><a href="Population.html#cb29-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> label3),</span>
-<span id="cb29-4"><a href="Population.html#cb29-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
-<span id="cb29-5"><a href="Population.html#cb29-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb29-6"><a href="Population.html#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> res_units, <span class="at">size =</span> <span class="fl">0.02</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb29-7"><a href="Population.html#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Land use&quot;</span>,</span>
-<span id="cb29-8"><a href="Population.html#cb29-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> <span class="fu">levels</span>(cph_corine<span class="sc">$</span>hex_col),</span>
-<span id="cb29-9"><a href="Population.html#cb29-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb29-10"><a href="Population.html#cb29-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb29-11"><a href="Population.html#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Residential units and land use&quot;</span>,</span>
-<span id="cb29-12"><a href="Population.html#cb29-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb29-13"><a href="Population.html#cb29-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb29-14"><a href="Population.html#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb29-15"><a href="Population.html#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
-<span id="cb29-16"><a href="Population.html#cb29-16" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.80</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-17"><a href="Population.html#cb29-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-18"><a href="Population.html#cb29-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
-<span id="cb29-19"><a href="Population.html#cb29-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-20"><a href="Population.html#cb29-20" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-21"><a href="Population.html#cb29-21" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb29-22"><a href="Population.html#cb29-22" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="Population.html#cb30-1" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">&quot;results/land_use_corine.png&quot;</span>,</span>
-<span id="cb30-2"><a href="Population.html#cb30-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">width =</span> <span class="dv">25</span>,</span>
-<span id="cb30-3"><a href="Population.html#cb30-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">height =</span> <span class="dv">15</span>,</span>
-<span id="cb30-4"><a href="Population.html#cb30-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="Population.html#cb31-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;results/land_use_corine.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-land-use"></span>
-<img src="results/land_use_corine.png" alt="CORINE land use and residential units" width="100%" />
-<p class="caption">
-Figure 7.4: CORINE land use and residential units
+Figure 6.3: worldpop total population density estimations in 2019
 </p>
 </div>
 
@@ -1214,7 +1176,7 @@ Figure 7.4: CORINE land use and residential units
           </div>
         </div>
       </div>
-<a href="spatial-distribution-of-residential-units.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="corine-land-use.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="res.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

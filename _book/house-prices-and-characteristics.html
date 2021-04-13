@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 House characteristics | Housing prices Copenhagen</title>
+  <title>Chapter 2 House prices and characteristics | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 2 House characteristics | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 2 House prices and characteristics | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 House characteristics | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 2 House prices and characteristics | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -888,7 +888,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>I Load data</b></span></li>
 <li class="chapter" data-level="1" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>1</b> Administrative units</a></li>
-<li class="chapter" data-level="2" data-path="house-characteristics-1.html"><a href="house-characteristics-1.html"><i class="fa fa-check"></i><b>2</b> House characteristics</a></li>
+<li class="chapter" data-level="2" data-path="house-prices-and-characteristics.html"><a href="house-prices-and-characteristics.html"><i class="fa fa-check"></i><b>2</b> House prices and characteristics</a></li>
 <li class="chapter" data-level="3" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>3</b> Population data</a></li>
 <li class="chapter" data-level="4" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>4</b> CORINE land use</a></li>
 <li class="part"><span><b>II Data analysis</b></span></li>
@@ -897,7 +897,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>5.1</b> Choropleth by ancestry</a></li>
 <li class="chapter" data-level="5.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>5.2</b> Disaggregating population data</a></li>
 <li class="chapter" data-level="5.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>5.3</b> Population density WorldPop</a></li>
-<li class="chapter" data-level="5.4" data-path="Population.html"><a href="Population.html#land-use-and-residential-units-corine"><i class="fa fa-check"></i><b>5.4</b> Land use and residential units (CORINE)</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="res.html"><a href="res.html"><i class="fa fa-check"></i><b>6</b> Residential units saled as free scale</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -921,9 +920,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="house-characteristics-1" class="section level1" number="2">
-<h1><span class="header-section-number">Chapter 2</span> House characteristics</h1>
-<p>We load all buildings for year-round living (<em>BYG_ANVEND_KODE</em>) from the the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>):</p>
+<div id="house-prices-and-characteristics" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> House prices and characteristics</h1>
+<p>We load all buildings for year-round living (<em>BYG_ANVEND_KODE</em>) from the the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>:</p>
 <ul>
 <li>110 = Farmhouse for agricultural property.<br />
 </li>
@@ -934,203 +933,205 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>160 = Residential building for residential institution.</li>
 <li>190 = Second building for year-round living (NOT USED - VERY LOW NUMBER)</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="house-characteristics-1.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Buildings for year round living</span></span>
-<span id="cb1-2"><a href="house-characteristics-1.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  res_codes <span class="ot">&lt;-</span> <span class="fu">tribble</span> (<span class="sc">~</span>BYG_ANVEND_KODE, <span class="sc">~</span>type,</span>
-<span id="cb1-3"><a href="house-characteristics-1.html#cb1-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">110</span>, <span class="st">&quot;Farmhouse&quot;</span>,</span>
-<span id="cb1-4"><a href="house-characteristics-1.html#cb1-4" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">120</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
-<span id="cb1-5"><a href="house-characteristics-1.html#cb1-5" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">121</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
-<span id="cb1-6"><a href="house-characteristics-1.html#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">122</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
-<span id="cb1-7"><a href="house-characteristics-1.html#cb1-7" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">130</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
-<span id="cb1-8"><a href="house-characteristics-1.html#cb1-8" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">131</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
-<span id="cb1-9"><a href="house-characteristics-1.html#cb1-9" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">132</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
-<span id="cb1-10"><a href="house-characteristics-1.html#cb1-10" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">140</span>, <span class="st">&quot;Multi-storey&quot;</span>,</span>
-<span id="cb1-11"><a href="house-characteristics-1.html#cb1-11" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">150</span>, <span class="st">&quot;College&quot;</span>, </span>
-<span id="cb1-12"><a href="house-characteristics-1.html#cb1-12" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">160</span>, <span class="st">&quot;Residential institution&quot;</span>,</span>
-<span id="cb1-13"><a href="house-characteristics-1.html#cb1-13" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">190</span>, <span class="st">&quot;Second building&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-14"><a href="house-characteristics-1.html#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert type to factor</span></span>
-<span id="cb1-15"><a href="house-characteristics-1.html#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type))</span>
-<span id="cb1-16"><a href="house-characteristics-1.html#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="house-characteristics-1.html#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Function for reading residential units from a csv file:</span></span>
-<span id="cb1-18"><a href="house-characteristics-1.html#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Read residential units from BBR data </span></span>
-<span id="cb1-19"><a href="house-characteristics-1.html#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Get read residential units in an area</span></span>
-<span id="cb1-20"><a href="house-characteristics-1.html#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># @param file Link to OneDrive with the data (.csv format)</span></span>
-<span id="cb1-21"><a href="house-characteristics-1.html#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># @param area Area where we would get the data (default = study_area)</span></span>
-<span id="cb1-22"><a href="house-characteristics-1.html#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="house-characteristics-1.html#cb1-23" aria-hidden="true" tabindex="-1"></a>  f_res_units  <span class="ot">&lt;-</span> <span class="cf">function</span>(.file, <span class="at">.area =</span> study_area) { </span>
-<span id="cb1-24"><a href="house-characteristics-1.html#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fread</span>(.file) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-25"><a href="house-characteristics-1.html#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to tibble</span></span>
-<span id="cb1-26"><a href="house-characteristics-1.html#cb1-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb1-27"><a href="house-characteristics-1.html#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Select only Residential houses - Buildings for year-round living </span></span>
-<span id="cb1-28"><a href="house-characteristics-1.html#cb1-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(ENH_ANVEND_KODE <span class="sc">%in%</span> res_codes<span class="sc">$</span>BYG_ANVEND_KODE) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-29"><a href="house-characteristics-1.html#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
-<span id="cb1-30"><a href="house-characteristics-1.html#cb1-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Etagebetegn =</span> <span class="fu">ifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn),</span>
-<span id="cb1-31"><a href="house-characteristics-1.html#cb1-31" aria-hidden="true" tabindex="-1"></a>             <span class="co"># Etagebetegn as ordened factor</span></span>
-<span id="cb1-32"><a href="house-characteristics-1.html#cb1-32" aria-hidden="true" tabindex="-1"></a>             <span class="at">Etagebetegn =</span> <span class="fu">factor</span>(Etagebetegn, <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)),</span>
-<span id="cb1-33"><a href="house-characteristics-1.html#cb1-33" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb1-34"><a href="house-characteristics-1.html#cb1-34" aria-hidden="true" tabindex="-1"></a>             <span class="co"># Group floor levels with 5 or more</span></span>
-<span id="cb1-35"><a href="house-characteristics-1.html#cb1-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">floor_level =</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
-<span id="cb1-36"><a href="house-characteristics-1.html#cb1-36" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
-<span id="cb1-37"><a href="house-characteristics-1.html#cb1-37" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb1-38"><a href="house-characteristics-1.html#cb1-38" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add residential description (type) into the dataset</span></span>
-<span id="cb1-39"><a href="house-characteristics-1.html#cb1-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(res_codes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;ENH_ANVEND_KODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;BYG_ANVEND_KODE&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-40"><a href="house-characteristics-1.html#cb1-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to sf objects</span></span>
-<span id="cb1-41"><a href="house-characteristics-1.html#cb1-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>, <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
-<span id="cb1-42"><a href="house-characteristics-1.html#cb1-42" aria-hidden="true" tabindex="-1"></a>               <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-43"><a href="house-characteristics-1.html#cb1-43" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get only points in the study area</span></span>
-<span id="cb1-44"><a href="house-characteristics-1.html#cb1-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., .area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-45"><a href="house-characteristics-1.html#cb1-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-46"><a href="house-characteristics-1.html#cb1-46" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add year of the BBR dataset  </span></span>
-<span id="cb1-47"><a href="house-characteristics-1.html#cb1-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">BBR_year =</span> <span class="fu">parse_number</span>(stringr<span class="sc">::</span><span class="fu">str_extract</span>(.file, <span class="st">&quot;_[0-9]+_&quot;</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb1-48"><a href="house-characteristics-1.html#cb1-48" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert columns with codes (*_KODE) to factors</span></span>
-<span id="cb1-49"><a href="house-characteristics-1.html#cb1-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">ends_with</span>(<span class="st">&quot;_KODE&quot;</span>), <span class="at">.fns =</span> as_factor))</span>
-<span id="cb1-50"><a href="house-characteristics-1.html#cb1-50" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-51"><a href="house-characteristics-1.html#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-52"><a href="house-characteristics-1.html#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="do">## Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: </span></span>
-<span id="cb1-53"><a href="house-characteristics-1.html#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Load residential units </span></span>
-<span id="cb1-54"><a href="house-characteristics-1.html#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: you may need to change the path to OneDrive - Aalborg Universitet </span></span>
-<span id="cb1-55"><a href="house-characteristics-1.html#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Read all the data together </span></span>
-<span id="cb1-56"><a href="house-characteristics-1.html#cb1-56" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-57"><a href="house-characteristics-1.html#cb1-57" aria-hidden="true" tabindex="-1"></a>  csv_files_link <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OneDrive_BBR_link&quot;</span>),</span>
-<span id="cb1-58"><a href="house-characteristics-1.html#cb1-58" aria-hidden="true" tabindex="-1"></a>                               <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>,</span>
-<span id="cb1-59"><a href="house-characteristics-1.html#cb1-59" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-60"><a href="house-characteristics-1.html#cb1-60" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-61"><a href="house-characteristics-1.html#cb1-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">3</span>)</span>
-<span id="cb1-62"><a href="house-characteristics-1.html#cb1-62" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_link, <span class="at">.f =</span> f_res_units)</span>
-<span id="cb1-63"><a href="house-characteristics-1.html#cb1-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
-<p>We focus our analysis to the main buildings type in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure <a href="house-characteristics-1.html#fig:fig-sp-res-builds">2.1</a>).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="house-characteristics-1.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for plotting 2D kernel density maps:</span></span>
-<span id="cb2-2"><a href="house-characteristics-1.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(.data) {</span>
-<span id="cb2-3"><a href="house-characteristics-1.html#cb2-3" aria-hidden="true" tabindex="-1"></a>    .data <span class="sc">%&gt;%</span> </span>
-<span id="cb2-4"><a href="house-characteristics-1.html#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-5"><a href="house-characteristics-1.html#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="house-characteristics-1.html#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb2-7"><a href="house-characteristics-1.html#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb2-8"><a href="house-characteristics-1.html#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="fu">aes</span>(X, Y), <span class="at">size =</span> <span class="fl">0.02</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
-<span id="cb2-9"><a href="house-characteristics-1.html#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stat_density_2d</span>(<span class="fu">aes</span>(X, Y, <span class="at">fill =</span> ..level..),</span>
-<span id="cb2-10"><a href="house-characteristics-1.html#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
-<span id="cb2-11"><a href="house-characteristics-1.html#cb2-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">h =</span> <span class="dv">700</span>,</span>
-<span id="cb2-12"><a href="house-characteristics-1.html#cb2-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">geom =</span> <span class="st">&quot;polygon&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2-13"><a href="house-characteristics-1.html#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;Spectral&quot;</span>)  <span class="sc">+</span></span>
-<span id="cb2-14"><a href="house-characteristics-1.html#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
-<span id="cb2-15"><a href="house-characteristics-1.html#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb2-16"><a href="house-characteristics-1.html#cb2-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> .data<span class="sc">$</span>type,</span>
-<span id="cb2-17"><a href="house-characteristics-1.html#cb2-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb2-18"><a href="house-characteristics-1.html#cb2-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="st">&quot;&quot;</span>) </span>
-<span id="cb2-19"><a href="house-characteristics-1.html#cb2-19" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-20"><a href="house-characteristics-1.html#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="house-characteristics-1.html#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots  </span></span>
-<span id="cb2-22"><a href="house-characteristics-1.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span> </span>
-<span id="cb2-23"><a href="house-characteristics-1.html#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BBR_year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb2-24"><a href="house-characteristics-1.html#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type factors by the frequency they appear </span></span>
-<span id="cb2-25"><a href="house-characteristics-1.html#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">fct_infreq</span>(type)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-26"><a href="house-characteristics-1.html#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split by house type</span></span>
-<span id="cb2-27"><a href="house-characteristics-1.html#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_split</span>(type) <span class="sc">%&gt;%</span></span>
-<span id="cb2-28"><a href="house-characteristics-1.html#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>( <span class="sc">~</span> <span class="fu">f</span>(.))</span>
-<span id="cb2-29"><a href="house-characteristics-1.html#cb2-29" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-30"><a href="house-characteristics-1.html#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrap_plots</span>(p) <span class="sc">+</span></span>
-<span id="cb2-31"><a href="house-characteristics-1.html#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb2-32"><a href="house-characteristics-1.html#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
-<span id="cb2-33"><a href="house-characteristics-1.html#cb2-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">0.70</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb2-34"><a href="house-characteristics-1.html#cb2-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb2-35"><a href="house-characteristics-1.html#cb2-35" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
-<span id="cb2-36"><a href="house-characteristics-1.html#cb2-36" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb2-37"><a href="house-characteristics-1.html#cb2-37" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb2-38"><a href="house-characteristics-1.html#cb2-38" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb2-39"><a href="house-characteristics-1.html#cb2-39" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb2-40"><a href="house-characteristics-1.html#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">&quot;Residential units in 2019&quot;</span>,</span>
-<span id="cb2-41"><a href="house-characteristics-1.html#cb2-41" aria-hidden="true" tabindex="-1"></a>                    <span class="at">theme =</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>,</span>
-<span id="cb2-42"><a href="house-characteristics-1.html#cb2-42" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>,</span>
-<span id="cb2-43"><a href="house-characteristics-1.html#cb2-43" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb2-44"><a href="house-characteristics-1.html#cb2-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>,</span>
-<span id="cb2-45"><a href="house-characteristics-1.html#cb2-45" aria-hidden="true" tabindex="-1"></a>                                                              <span class="at">colour =</span> <span class="st">&quot;grey25&quot;</span>)</span>
-<span id="cb2-46"><a href="house-characteristics-1.html#cb2-46" aria-hidden="true" tabindex="-1"></a>                    )</span>
-<span id="cb2-47"><a href="house-characteristics-1.html#cb2-47" aria-hidden="true" tabindex="-1"></a>    ) </span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="house-prices-and-characteristics.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Buildings for year round living</span></span>
+<span id="cb1-2"><a href="house-prices-and-characteristics.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  res_codes <span class="ot">&lt;-</span> <span class="fu">tribble</span> (<span class="sc">~</span>BYG_ANVEND_KODE, <span class="sc">~</span>type,</span>
+<span id="cb1-3"><a href="house-prices-and-characteristics.html#cb1-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">110</span>, <span class="st">&quot;Farmhouse&quot;</span>,</span>
+<span id="cb1-4"><a href="house-prices-and-characteristics.html#cb1-4" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">120</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb1-5"><a href="house-prices-and-characteristics.html#cb1-5" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">121</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb1-6"><a href="house-prices-and-characteristics.html#cb1-6" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">122</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb1-7"><a href="house-prices-and-characteristics.html#cb1-7" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">130</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
+<span id="cb1-8"><a href="house-prices-and-characteristics.html#cb1-8" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">131</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
+<span id="cb1-9"><a href="house-prices-and-characteristics.html#cb1-9" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">132</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
+<span id="cb1-10"><a href="house-prices-and-characteristics.html#cb1-10" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">140</span>, <span class="st">&quot;Multi-storey&quot;</span>,</span>
+<span id="cb1-11"><a href="house-prices-and-characteristics.html#cb1-11" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">150</span>, <span class="st">&quot;College&quot;</span>, </span>
+<span id="cb1-12"><a href="house-prices-and-characteristics.html#cb1-12" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">160</span>, <span class="st">&quot;Residential institution&quot;</span>,</span>
+<span id="cb1-13"><a href="house-prices-and-characteristics.html#cb1-13" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">190</span>, <span class="st">&quot;Second building&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-14"><a href="house-prices-and-characteristics.html#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert type to factor</span></span>
+<span id="cb1-15"><a href="house-prices-and-characteristics.html#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type))</span>
+<span id="cb1-16"><a href="house-prices-and-characteristics.html#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="house-prices-and-characteristics.html#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for reading residential units from a csv file:</span></span>
+<span id="cb1-18"><a href="house-prices-and-characteristics.html#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Read residential units from BBR data </span></span>
+<span id="cb1-19"><a href="house-prices-and-characteristics.html#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Get read residential units in an area</span></span>
+<span id="cb1-20"><a href="house-prices-and-characteristics.html#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co"># @param file Link to OneDrive with the data (.csv format)</span></span>
+<span id="cb1-21"><a href="house-prices-and-characteristics.html#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># @param area Area where we would get the data (default = study_area)</span></span>
+<span id="cb1-22"><a href="house-prices-and-characteristics.html#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="house-prices-and-characteristics.html#cb1-23" aria-hidden="true" tabindex="-1"></a>  f_res_units  <span class="ot">&lt;-</span> <span class="cf">function</span>(.file, <span class="at">.area =</span> study_area) { </span>
+<span id="cb1-24"><a href="house-prices-and-characteristics.html#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fread</span>(.file) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-25"><a href="house-prices-and-characteristics.html#cb1-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to tibble</span></span>
+<span id="cb1-26"><a href="house-prices-and-characteristics.html#cb1-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb1-27"><a href="house-prices-and-characteristics.html#cb1-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Select only Residential houses - Buildings for year-round living </span></span>
+<span id="cb1-28"><a href="house-prices-and-characteristics.html#cb1-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(ENH_ANVEND_KODE <span class="sc">%in%</span> res_codes<span class="sc">$</span>BYG_ANVEND_KODE) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-29"><a href="house-prices-and-characteristics.html#cb1-29" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
+<span id="cb1-30"><a href="house-prices-and-characteristics.html#cb1-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Etagebetegn =</span> <span class="fu">ifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn),</span>
+<span id="cb1-31"><a href="house-prices-and-characteristics.html#cb1-31" aria-hidden="true" tabindex="-1"></a>             <span class="co"># Etagebetegn as ordened factor</span></span>
+<span id="cb1-32"><a href="house-prices-and-characteristics.html#cb1-32" aria-hidden="true" tabindex="-1"></a>             <span class="at">Etagebetegn =</span> <span class="fu">factor</span>(Etagebetegn, <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)),</span>
+<span id="cb1-33"><a href="house-prices-and-characteristics.html#cb1-33" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-34"><a href="house-prices-and-characteristics.html#cb1-34" aria-hidden="true" tabindex="-1"></a>             <span class="co"># Group floor levels with 5 or more</span></span>
+<span id="cb1-35"><a href="house-prices-and-characteristics.html#cb1-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">floor_level =</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
+<span id="cb1-36"><a href="house-prices-and-characteristics.html#cb1-36" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
+<span id="cb1-37"><a href="house-prices-and-characteristics.html#cb1-37" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-38"><a href="house-prices-and-characteristics.html#cb1-38" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add residential description (type) into the dataset</span></span>
+<span id="cb1-39"><a href="house-prices-and-characteristics.html#cb1-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(res_codes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;ENH_ANVEND_KODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;BYG_ANVEND_KODE&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-40"><a href="house-prices-and-characteristics.html#cb1-40" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to sf objects</span></span>
+<span id="cb1-41"><a href="house-prices-and-characteristics.html#cb1-41" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>, <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
+<span id="cb1-42"><a href="house-prices-and-characteristics.html#cb1-42" aria-hidden="true" tabindex="-1"></a>               <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-43"><a href="house-prices-and-characteristics.html#cb1-43" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get only points in the study area</span></span>
+<span id="cb1-44"><a href="house-prices-and-characteristics.html#cb1-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., .area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-45"><a href="house-prices-and-characteristics.html#cb1-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-46"><a href="house-prices-and-characteristics.html#cb1-46" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add year of the BBR dataset  </span></span>
+<span id="cb1-47"><a href="house-prices-and-characteristics.html#cb1-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">BBR_year =</span> <span class="fu">parse_number</span>(stringr<span class="sc">::</span><span class="fu">str_extract</span>(.file, <span class="st">&quot;_[0-9]+_&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-48"><a href="house-prices-and-characteristics.html#cb1-48" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert columns with codes (*_KODE) to factors</span></span>
+<span id="cb1-49"><a href="house-prices-and-characteristics.html#cb1-49" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">ends_with</span>(<span class="st">&quot;_KODE&quot;</span>), <span class="at">.fns =</span> as_factor))</span>
+<span id="cb1-50"><a href="house-prices-and-characteristics.html#cb1-50" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-51"><a href="house-prices-and-characteristics.html#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-52"><a href="house-prices-and-characteristics.html#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: </span></span>
+<span id="cb1-53"><a href="house-prices-and-characteristics.html#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Load residential units </span></span>
+<span id="cb1-54"><a href="house-prices-and-characteristics.html#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: you may need to change the path to OneDrive - Aalborg Universitet </span></span>
+<span id="cb1-55"><a href="house-prices-and-characteristics.html#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Read all the data together </span></span>
+<span id="cb1-56"><a href="house-prices-and-characteristics.html#cb1-56" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-57"><a href="house-prices-and-characteristics.html#cb1-57" aria-hidden="true" tabindex="-1"></a>  csv_files_link <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OneDrive_BBR_link&quot;</span>),</span>
+<span id="cb1-58"><a href="house-prices-and-characteristics.html#cb1-58" aria-hidden="true" tabindex="-1"></a>                               <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>,</span>
+<span id="cb1-59"><a href="house-prices-and-characteristics.html#cb1-59" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-60"><a href="house-prices-and-characteristics.html#cb1-60" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-61"><a href="house-prices-and-characteristics.html#cb1-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">3</span>)</span>
+<span id="cb1-62"><a href="house-prices-and-characteristics.html#cb1-62" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_link, <span class="at">.f =</span> f_res_units)</span>
+<span id="cb1-63"><a href="house-prices-and-characteristics.html#cb1-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
+<p>We focus our analysis to the main buildings type in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure <a href="house-prices-and-characteristics.html#fig:fig-sp-res-builds">2.1</a>).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="house-prices-and-characteristics.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for plotting 2D kernel density maps:</span></span>
+<span id="cb2-2"><a href="house-prices-and-characteristics.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(.data) {</span>
+<span id="cb2-3"><a href="house-prices-and-characteristics.html#cb2-3" aria-hidden="true" tabindex="-1"></a>    .data <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="house-prices-and-characteristics.html#cb2-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="house-prices-and-characteristics.html#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="house-prices-and-characteristics.html#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb2-7"><a href="house-prices-and-characteristics.html#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="house-prices-and-characteristics.html#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(<span class="fu">aes</span>(X, Y), <span class="at">size =</span> <span class="fl">0.02</span>, <span class="at">shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="house-prices-and-characteristics.html#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stat_density_2d</span>(<span class="fu">aes</span>(X, Y, <span class="at">fill =</span> ..level..),</span>
+<span id="cb2-10"><a href="house-prices-and-characteristics.html#cb2-10" aria-hidden="true" tabindex="-1"></a>                      <span class="at">alpha =</span> <span class="fl">0.5</span>,</span>
+<span id="cb2-11"><a href="house-prices-and-characteristics.html#cb2-11" aria-hidden="true" tabindex="-1"></a>                      <span class="at">h =</span> <span class="dv">700</span>,</span>
+<span id="cb2-12"><a href="house-prices-and-characteristics.html#cb2-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">geom =</span> <span class="st">&quot;polygon&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-13"><a href="house-prices-and-characteristics.html#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;Spectral&quot;</span>)  <span class="sc">+</span></span>
+<span id="cb2-14"><a href="house-prices-and-characteristics.html#cb2-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
+<span id="cb2-15"><a href="house-prices-and-characteristics.html#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="house-prices-and-characteristics.html#cb2-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> .data<span class="sc">$</span>type,</span>
+<span id="cb2-17"><a href="house-prices-and-characteristics.html#cb2-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb2-18"><a href="house-prices-and-characteristics.html#cb2-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="st">&quot;&quot;</span>) </span>
+<span id="cb2-19"><a href="house-prices-and-characteristics.html#cb2-19" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-20"><a href="house-prices-and-characteristics.html#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="house-prices-and-characteristics.html#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots  </span></span>
+<span id="cb2-22"><a href="house-prices-and-characteristics.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span> </span>
+<span id="cb2-23"><a href="house-prices-and-characteristics.html#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BBR_year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb2-24"><a href="house-prices-and-characteristics.html#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type factors by the frequency they appear </span></span>
+<span id="cb2-25"><a href="house-prices-and-characteristics.html#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">fct_infreq</span>(type)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-26"><a href="house-prices-and-characteristics.html#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split by house type</span></span>
+<span id="cb2-27"><a href="house-prices-and-characteristics.html#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_split</span>(type) <span class="sc">%&gt;%</span></span>
+<span id="cb2-28"><a href="house-prices-and-characteristics.html#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">map</span>( <span class="sc">~</span> <span class="fu">f</span>(.))</span>
+<span id="cb2-29"><a href="house-prices-and-characteristics.html#cb2-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-30"><a href="house-prices-and-characteristics.html#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wrap_plots</span>(p) <span class="sc">+</span></span>
+<span id="cb2-31"><a href="house-prices-and-characteristics.html#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2-32"><a href="house-prices-and-characteristics.html#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb2-33"><a href="house-prices-and-characteristics.html#cb2-33" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">0.70</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-34"><a href="house-prices-and-characteristics.html#cb2-34" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-35"><a href="house-prices-and-characteristics.html#cb2-35" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb2-36"><a href="house-prices-and-characteristics.html#cb2-36" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-37"><a href="house-prices-and-characteristics.html#cb2-37" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-38"><a href="house-prices-and-characteristics.html#cb2-38" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb2-39"><a href="house-prices-and-characteristics.html#cb2-39" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb2-40"><a href="house-prices-and-characteristics.html#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">&quot;Residential units in 2019&quot;</span>,</span>
+<span id="cb2-41"><a href="house-prices-and-characteristics.html#cb2-41" aria-hidden="true" tabindex="-1"></a>                    <span class="at">theme =</span> <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>,</span>
+<span id="cb2-42"><a href="house-prices-and-characteristics.html#cb2-42" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>,</span>
+<span id="cb2-43"><a href="house-prices-and-characteristics.html#cb2-43" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb2-44"><a href="house-prices-and-characteristics.html#cb2-44" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>,</span>
+<span id="cb2-45"><a href="house-prices-and-characteristics.html#cb2-45" aria-hidden="true" tabindex="-1"></a>                                                              <span class="at">colour =</span> <span class="st">&quot;grey25&quot;</span>)</span>
+<span id="cb2-46"><a href="house-prices-and-characteristics.html#cb2-46" aria-hidden="true" tabindex="-1"></a>                    )</span>
+<span id="cb2-47"><a href="house-prices-and-characteristics.html#cb2-47" aria-hidden="true" tabindex="-1"></a>    ) </span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-sp-res-builds"></span>
 <img src="Housing_prices_book_files/figure-html/fig-sp-res-builds-1.png" alt="2D kernel density map" width="864" />
 <p class="caption">
 Figure 2.1: 2D kernel density map
 </p>
 </div>
-<p>Then, we selected from the main residential buildings those that are on the ordinary free trade. Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="house-characteristics-1.html#cb3-1" aria-hidden="true" tabindex="-1"></a>selected_res_units <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Multi-storey&quot;</span>, <span class="st">&quot;Single-family house&quot;</span>, <span class="st">&quot;Semi-detached house&quot;</span>) </span>
-<span id="cb3-2"><a href="house-characteristics-1.html#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="house-characteristics-1.html#cb3-3" aria-hidden="true" tabindex="-1"></a>res_unit_oft <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="house-characteristics-1.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to tibble</span></span>
-<span id="cb3-5"><a href="house-characteristics-1.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb3-6"><a href="house-characteristics-1.html#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select main residential units in the area</span></span>
-<span id="cb3-7"><a href="house-characteristics-1.html#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">%in%</span> selected_res_units) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-8"><a href="house-characteristics-1.html#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ordinary free trade</span></span>
-<span id="cb3-9"><a href="house-characteristics-1.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(OVERDRAGELSES_KODE <span class="sc">==</span> <span class="st">&quot;1&quot;</span>)</span>
-<span id="cb3-10"><a href="house-characteristics-1.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-11"><a href="house-characteristics-1.html#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="house-characteristics-1.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of residential units</span></span>
-<span id="cb3-13"><a href="house-characteristics-1.html#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="house-characteristics-1.html#cb3-14" aria-hidden="true" tabindex="-1"></a>res_unit_oft <span class="sc">%&gt;%</span></span>
-<span id="cb3-15"><a href="house-characteristics-1.html#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Summarize by type or residency and year</span></span>
-<span id="cb3-16"><a href="house-characteristics-1.html#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-17"><a href="house-characteristics-1.html#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-18"><a href="house-characteristics-1.html#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-19"><a href="house-characteristics-1.html#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Arrange and add row with totals</span></span>
-<span id="cb3-20"><a href="house-characteristics-1.html#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(BBR_year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-21"><a href="house-characteristics-1.html#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Pivot</span></span>
-<span id="cb3-22"><a href="house-characteristics-1.html#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> BBR_year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-23"><a href="house-characteristics-1.html#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-24"><a href="house-characteristics-1.html#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb3-25"><a href="house-characteristics-1.html#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb3-26"><a href="house-characteristics-1.html#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>, <span class="at">height =</span> <span class="st">&quot;200px&quot;</span>)</span></code></pre></div>
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:100%; ">
+<p>Then, we selected from the main residential buildings those that are on the ordinary free trade (Table <a href="house-prices-and-characteristics.html#tab:tbl-runits-oft">2.1</a>). Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="house-prices-and-characteristics.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Select residential units for the study</span></span>
+<span id="cb3-2"><a href="house-prices-and-characteristics.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  selected_res_units <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Multi-storey&quot;</span>, <span class="st">&quot;Single-family house&quot;</span>, <span class="st">&quot;Semi-detached house&quot;</span>) </span>
+<span id="cb3-3"><a href="house-prices-and-characteristics.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  res_unit_oft <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="house-prices-and-characteristics.html#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to tibble</span></span>
+<span id="cb3-5"><a href="house-prices-and-characteristics.html#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="house-prices-and-characteristics.html#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select main residential units in the area</span></span>
+<span id="cb3-7"><a href="house-prices-and-characteristics.html#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(type <span class="sc">%in%</span> selected_res_units) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-8"><a href="house-prices-and-characteristics.html#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ordinary free trade</span></span>
+<span id="cb3-9"><a href="house-prices-and-characteristics.html#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(OVERDRAGELSES_KODE <span class="sc">==</span> <span class="st">&quot;1&quot;</span>)</span>
+<span id="cb3-10"><a href="house-prices-and-characteristics.html#cb3-10" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-11"><a href="house-prices-and-characteristics.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with Number of residential units</span></span>
+<span id="cb3-12"><a href="house-prices-and-characteristics.html#cb3-12" aria-hidden="true" tabindex="-1"></a>  res_unit_oft <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="house-prices-and-characteristics.html#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Summarize by type or residency and year</span></span>
+<span id="cb3-14"><a href="house-prices-and-characteristics.html#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-15"><a href="house-prices-and-characteristics.html#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-16"><a href="house-prices-and-characteristics.html#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-17"><a href="house-prices-and-characteristics.html#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Arrange and add row with totals</span></span>
+<span id="cb3-18"><a href="house-prices-and-characteristics.html#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(BBR_year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-19"><a href="house-prices-and-characteristics.html#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pivot</span></span>
+<span id="cb3-20"><a href="house-prices-and-characteristics.html#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> BBR_year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-21"><a href="house-prices-and-characteristics.html#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-22"><a href="house-prices-and-characteristics.html#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Number of residential units in the free trade by year&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-23"><a href="house-prices-and-characteristics.html#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-24"><a href="house-prices-and-characteristics.html#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">4</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-25"><a href="house-prices-and-characteristics.html#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tbl-runits-oft">Table 2.1: </span>Number of residential units in the free trade by year
+</caption>
 <thead>
 <tr>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:left;">
 type
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2004
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2005
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2006
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2007
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2008
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2009
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2010
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2011
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2012
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2013
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2014
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2015
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2016
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2017
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2018
 </th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+<th style="text-align:right;">
 2019
 </th>
 </tr>
@@ -1296,55 +1297,55 @@ Semi-detached house
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:left;font-weight: bold;">
 Total
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 12980
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 15058
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 14559
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 13123
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 7795
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 5719
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 15330
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 8340
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 10782
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 10967
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 12868
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 13984
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 13772
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 13953
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 13464
 </td>
-<td style="text-align:right;">
+<td style="text-align:right;font-weight: bold;">
 13068
 </td>
 </tr>

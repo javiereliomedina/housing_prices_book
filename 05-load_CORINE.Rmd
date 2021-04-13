@@ -2,34 +2,57 @@
 
 Land use have been obtained from CORINE. We downloaded the data from kortforsyningen and used the data from 2010 (*CLC12_DK.shp*).
 
-```{r load-CORINE, cache=TRUE, dependson="adm-units"}
+```{r fig-land-use, cache=TRUE, fig.width = 9, fig.height = 7, fig.cap = "Land use (CORINE)"}
 
-## Create a table with the CORINE land use codes from the EEA
+# Create a table with the CORINE land use codes from the EEA
 corine_code_link <- "https://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2000-clc2000-250-m-version-9-2007/corine-land-cover-2000-classes-and-rgb-color-codes/clc2000legend.csv/at_download/file"
 
 corine_code <- read_csv(corine_code_link) %>% 
   mutate_if(is.numeric, as.character)
   
-## Load shape fine
-dangeo_set_param() # Get local directory
-corine_link <- paste(loc_dir, "DK_CORINE_SHP_UTM32-WGS84", "CLC12_DK.shp", sep = "/")
-dk_corine  <- read_sf(corine_link) %>%
-  # Drop z dimension
-  st_zm() %>% 
-  # Transform coordinates
-  st_transform(crs = "EPSG:25832") %>% 
-  # Add code description
-  left_join(corine_code, by = c("CODE_12" = "CLC_CODE")) 
+# Load shapefile
+  dangeo_set_param() # Get local directory
+  corine_link <- paste(loc_dir, "DK_CORINE_SHP_UTM32-WGS84", "CLC12_DK.shp", sep = "/")
+  dk_corine  <- read_sf(corine_link) %>%
+    # Drop z dimension
+    st_zm() %>% 
+    # Transform coordinates
+    st_transform(crs = "EPSG:25832") %>% 
+    # Add code description
+    left_join(corine_code, by = c("CODE_12" = "CLC_CODE")) 
 
-## Select study area
-cph_corine <- st_intersection(dk_corine, study_area) %>% 
-  select(CODE_12, LABEL1, LABEL2, LABEL3 , RGB) %>% 
-  janitor::clean_names() %>% 
-  separate(rgb, c("red", "green", "blue"), sep = "-") %>% 
-  mutate(code_12 = as.numeric(code_12),
-         hex_col = grDevices::rgb(red, green, blue, max = 255),
-         hex_col = fct_reorder(hex_col, code_12),
-         label3 = fct_reorder(label3, code_12)) %>% 
-  st_sf()
+# Select study area
+  cph_corine <- st_intersection(dk_corine, study_area) %>% 
+    select(CODE_12, LABEL1, LABEL2, LABEL3 , RGB) %>% 
+    janitor::clean_names() %>% 
+    separate(rgb, c("red", "green", "blue"), sep = "-") %>% 
+    mutate(code_12 = as.numeric(code_12),
+           hex_col = grDevices::rgb(red, green, blue, max = 255),
+           hex_col = fct_reorder(hex_col, code_12),
+           label3 = fct_reorder(label3, code_12)) %>% 
+    st_sf()
   
+# Plot
+  ggplot() +
+    geom_sf(data = cph_corine,
+            aes(fill = label3),
+            color = "grey50",
+            size = 0.05) +
+    #geom_sf(data = res_units, size = 0.02, shape = 16) +
+    scale_fill_manual(name = "Land use",
+                      values = levels(cph_corine$hex_col),
+                      drop = TRUE) +
+    my_theme_map() +
+    labs(x = "",
+         y = "") +
+    annotation_scale(location = "br", text_cex = 1) +
+    annotation_north_arrow(location = "br",
+                           pad_x = unit(1.50, "cm"),
+                           pad_y = unit(0.65, "cm"),
+                           which_north = "true",
+                           height = unit(0.5, "cm"),
+                           width = unit(0.5, "cm"),
+                           style = north_arrow_orienteering(text_col = "white",
+                                                            text_size = 1))
+
 ```

@@ -12,24 +12,6 @@ We focused our study in residential dwellings and thus we selected the following
 -   190 - Anden bygning til helårsbeboelse *(Second building for year-round living)*.
 
 Estimate the number of residential units in the study area.
-```{r runits-numb}
-
-  res_units %>%
-      # Convert to tibble
-      as_tibble() %>%
-      # Summarize by type or residency and year
-      group_by(type, BBR_year) %>% 
-      summarise(n = n()) %>% 
-      ungroup() %>%
-      # Arrange and add row with totals
-      arrange(BBR_year, desc(n)) %>%
-      # Pivot
-      pivot_wider(names_from = BBR_year, values_from = n) %>% 
-      adorn_totals("row") %>%
-      kbl() %>% 
-      kable_paper("hover", full_width = F)
-
-```
 
 Residential units by floor level
 

@@ -1,11 +1,6 @@
 # Population data 
 
-Population data at parish level have been retrieved from [Statistics Denmark](https://www.dst.dk/en) using the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html). We have uploaded the following tables:
-
-- [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree)
-- [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree)
-
-We have created two auxiliary function for reading the data. `steps` loops by year for getting small pieces of information from the DST API and then putting all together in a data frame. In this sense, we overcome the limitation of the number of rows we can retrieve from the API (i.e. if we call a large dataset we get the error: *Error: API did not return text/csv*). Then, `rm_words` is used in the cleaning process for simplifying the description of some variables we would like to use as columns names. 
+Population data at parish level have been retrieved from [Statistics Denmark](https://www.dst.dk/en) using the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html). We have created two auxiliary function for reading the data. `steps` loops by year for getting small pieces of information from the DST API and then putting all together in a data frame. In this sense, we overcome the limitation of the number of rows we can retrieve from the API (i.e. if we call a large dataset we get the error: *Error: API did not return text/csv*). Then, `rm_words` is used in the cleaning process for simplifying the description of some variables we would like to use as columns names. 
 
 ```{r aux-funct-DST}
 
@@ -30,9 +25,10 @@ We have created two auxiliary function for reading the data. `steps` loops by ye
 
 ```
 
-The code needed for loading the tables are therefore: 
+We have uploaded the following tables:
 
-  - KMSTA001:
+- [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree)
+
 ```{r load-KMSTA001, cache = TRUE, dependson = "adm-units"}
 
   id_table <- "KMSTA001"
@@ -95,7 +91,8 @@ The code needed for loading the tables are therefore:
   
 ```
 
- - KMSTA003:
+- [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree)
+
 ```{r load-KMSTA003, cache = TRUE, dependson = "adm-units"}
 
   id_table <- "KMSTA003"
@@ -150,13 +147,13 @@ The code needed for loading the tables are therefore:
 One we have the data we merge both dataset and add the spatial information (note that there are only summary statistics from 2015): 
 ```{r merge-DST, cache = TRUE, dependson = "adm-units"}
 
-## Merge both tables in one:
+# Merge both tables in one:
   prsh_pop <- prsh_ances %>%  
     full_join(prsh_stats) %>% 
     # remove rows with no summary data (summary data only from 2015 to 2020)
     filter(date >= 2015, date <= 2020)
 
-## Add the spatial information:
+# Add the spatial information:
   prsh_pop_sf <- cph_parish %>%
     rename(prsh_id = SOGNEKODE) %>% 
     select(prsh_id, prsh_area_km2) %>% 
