@@ -876,7 +876,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a>
 <ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#create-data-and-results-folders"><i class="fa fa-check"></i>Create data and results folders</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#ggplot-themes"><i class="fa fa-check"></i>Ggplot themes</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#download-data-from-kortforsyningen"><i class="fa fa-check"></i>Download data from kortforsyningen</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
@@ -960,61 +959,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-29"><a href="index.html#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
 <div id="create-data-and-results-folders" class="section level2 unnumbered">
 <h2>Create data and results folders</h2>
-<p>Save important data and results in their respective folders</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span>
-<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;results&quot;</span>)</span></code></pre></div>
-</div>
-<div id="ggplot-themes" class="section level2 unnumbered">
-<h2>Ggplot themes</h2>
-<p>Create our own theme for plotting maps in ggplot2.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a>  my_theme_map <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme</span>(</span>
-<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Title and captions</span></span>
-<span id="cb3-5"><a href="index.html#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">colour =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb3-6"><a href="index.html#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">colour =</span> <span class="st">&quot;grey25&quot;</span>),</span>
-<span id="cb3-7"><a href="index.html#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Legend</span></span>
-<span id="cb3-8"><a href="index.html#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb3-9"><a href="index.html#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb3-10"><a href="index.html#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Facets</span></span>
-<span id="cb3-11"><a href="index.html#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">face =</span> <span class="st">&quot;italic&quot;</span>)</span>
-<span id="cb3-12"><a href="index.html#cb3-12" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb3-13"><a href="index.html#cb3-13" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<p>Save important data in their respective folder.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">&quot;data&quot;</span>)</span></code></pre></div>
 </div>
 <div id="download-data-from-kortforsyningen" class="section level2 unnumbered">
 <h2>Download data from kortforsyningen</h2>
 <p>We have create our own package for downloading the data to a local repository (i.e. <a href="https://github.com/javiereliomedina/dangeo.git">dangeo</a>. Although the data are free, we need to create a <em>username</em> and a <em>password</em> for getting access to kortforsyningen. By default <strong>dangeo</strong> looks for credentials on .Renviron (<em>kortforsyningen_id = “username”</em> and <em>kortforsyningen_pwd = “password”</em>). We also need to define the local directory where the data are downloaded (i.e. <code>dangeo_set_param()</code>). The first time we download a file it may be time consuming; however, a file will not be downloaded if it is already in the local directory.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install package from GitHub</span></span>
-<span id="cb4-2"><a href="index.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
-<span id="cb4-3"><a href="index.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dangeo)</span>
-<span id="cb4-4"><a href="index.html#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="index.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set username and password </span></span>
-<span id="cb4-6"><a href="index.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = &quot;username&quot;) and password (kortforsyningen_pwd = &quot;password&quot;)</span></span>
-<span id="cb4-7"><a href="index.html#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="index.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set local repository</span></span>
-<span id="cb4-9"><a href="index.html#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_set_param</span>()</span>
-<span id="cb4-10"><a href="index.html#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loc_dir  # Check path to local repository</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install package from GitHub</span></span>
+<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
+<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dangeo)</span>
+<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="index.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set username and password </span></span>
+<span id="cb3-6"><a href="index.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = &quot;username&quot;) and password (kortforsyningen_pwd = &quot;password&quot;)</span></span>
+<span id="cb3-7"><a href="index.html#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="index.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set local repository</span></span>
+<span id="cb3-9"><a href="index.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_set_param</span>()</span>
+<span id="cb3-10"><a href="index.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loc_dir  # Check path to local repository</span></span></code></pre></div>
 <ul>
 <li>CORINE</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;CORINE&quot;</span>,</span>
-<span id="cb5-2"><a href="index.html#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">zip_name   =</span> <span class="st">&quot;DK_CORINE_SHP_UTM32-WGS84.zip&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;CORINE&quot;</span>,</span>
+<span id="cb4-2"><a href="index.html#cb4-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">zip_name   =</span> <span class="st">&quot;DK_CORINE_SHP_UTM32-WGS84.zip&quot;</span>)</span></code></pre></div>
 <ul>
 <li>DAGI (scale 1:10000)</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="index.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;landinddelinger/dagi/SHAPE&quot;</span>,</span>
-<span id="cb6-2"><a href="index.html#cb6-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">zip_name   =</span> <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;landinddelinger/dagi/SHAPE&quot;</span>,</span>
+<span id="cb5-2"><a href="index.html#cb5-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">zip_name   =</span> <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
 <ul>
 <li>Inspire_railway-transport-network</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(</span>
-<span id="cb7-2"><a href="index.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ftp_folder =</span> <span class="st">&quot;grundlaeggende_landkortdata/inspire_railway-transport-network&quot;</span>,</span>
-<span id="cb7-3"><a href="index.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_name   =</span> <span class="st">&quot;DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="index.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(</span>
+<span id="cb6-2"><a href="index.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ftp_folder =</span> <span class="st">&quot;grundlaeggende_landkortdata/inspire_railway-transport-network&quot;</span>,</span>
+<span id="cb6-3"><a href="index.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_name   =</span> <span class="st">&quot;DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
 <ul>
 <li>GeoDanmark</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="index.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;grundlaeggende_landkortdata/fot/SHAPE&quot;</span>,</span>
-<span id="cb8-2"><a href="index.html#cb8-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">zip_name   =</span> <span class="st">&quot;DK_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;grundlaeggende_landkortdata/fot/SHAPE&quot;</span>,</span>
+<span id="cb7-2"><a href="index.html#cb7-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">zip_name   =</span> <span class="st">&quot;DK_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
 </div>
 <div id="r-session" class="section level2 unnumbered">
 <h2>R session</h2>
