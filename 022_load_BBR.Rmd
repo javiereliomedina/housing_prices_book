@@ -10,7 +10,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Bui
 - 160           = Residential building for residential institution.
 - 190           = Second building for year-round living (NOT USED - VERY LOW NUMBER)
 
-```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_link"))}
+```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_path"))}
 
 # Buildings for year round living
   res_codes <- tribble (~BYG_ANVEND_KODE, ~type,
@@ -68,7 +68,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Bui
 # NOTE: you may need to change the path to OneDrive - Aalborg Universitet 
 # Read all the data together 
   
-  csv_files_link <- list.files(path = Sys.getenv("OneDrive_BBR_link"),
+  csv_files_link <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
                                pattern = "*.csv",
                                full.names = TRUE)
   
@@ -78,7 +78,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Bui
 
 ```
 
-We focus our analysis to the main buildings type in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure \@ref(fig:fig-sp-res-builds)).
+We focus our analysis to the main building types in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure \@ref(fig:fig-sp-res-builds)).
 
 ```{r, fig-sp-res-builds, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "load-BBR", fig.cap = "2D kernel density map"}
 

@@ -1,0 +1,12 @@
+# GeoDanmark 
+
+Downloaded from  kortforsyningen (i.e. grundlaeggende_landkortdata). 
+
+```{r dwn-GeoDanmark}
+
+dangeo_get_data(ftp_folder = "grundlaeggende_landkortdata/fot/SHAPE",
+                zip_name   = "DK_SHAPE_UTM32-EUREF89.zip")
+
+```
+
+

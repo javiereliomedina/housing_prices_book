@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Hedonic price model | Housing prices Copenhagen</title>
+  <title>Download data from kortforsyningen | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Hedonic price model | Housing prices Copenhagen" />
+  <meta property="og:title" content="Download data from kortforsyningen | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Hedonic price model | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Download data from kortforsyningen | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="administrative-units.html"/>
+<link rel="next" href="r-session.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,10 +51,6 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -873,32 +869,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Housing prices in Copenhagen region</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisite</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a></li>
+<li class="chapter" data-level="" data-path="download-data-from-kortforsyningen.html"><a href="download-data-from-kortforsyningen.html"><i class="fa fa-check"></i>Download data from kortforsyningen</a></li>
+<li class="chapter" data-level="" data-path="r-session.html"><a href="r-session.html"><i class="fa fa-check"></i>R session</a></li>
+<li class="chapter" data-level="" data-path=""><a href="#part-introduction"><i class="fa fa-check"></i>(PART) Introduction</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
+<li class="chapter" data-level="0.1" data-path="r-session.html"><a href="r-session.html#house-characteristics"><i class="fa fa-check"></i><b>0.1</b> House characteristics</a></li>
+<li class="chapter" data-level="0.2" data-path="r-session.html"><a href="r-session.html#location-characteristics"><i class="fa fa-check"></i><b>0.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="0.3" data-path="r-session.html"><a href="r-session.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>0.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>I Introduction</b></span></li>
-<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
+<li class="part"><span><b>I Load data</b></span></li>
+<li class="chapter" data-level="1" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>1</b> Administrative units</a></li>
+<li class="chapter" data-level="2" data-path="house-prices-and-characteristics.html"><a href="house-prices-and-characteristics.html"><i class="fa fa-check"></i><b>2</b> House prices and characteristics</a></li>
+<li class="chapter" data-level="3" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>3</b> Population data</a></li>
+<li class="chapter" data-level="4" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>4</b> CORINE land use</a></li>
+<li class="chapter" data-level="5" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>5</b> Railway transport network</a></li>
+<li class="chapter" data-level="6" data-path="geodanmark.html"><a href="geodanmark.html"><i class="fa fa-check"></i><b>6</b> GeoDanmark</a></li>
+<li class="part"><span><b>II Data analysis</b></span></li>
+<li class="chapter" data-level="7" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>7</b> Population density</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
-<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="7.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>7.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="7.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>7.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="7.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>7.3</b> Population density WorldPop</a></li>
 </ul></li>
-<li class="part"><span><b>II Load data</b></span></li>
-<li class="chapter" data-level="2" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
-<li class="chapter" data-level="3" data-path="house-prices-and-characteristics.html"><a href="house-prices-and-characteristics.html"><i class="fa fa-check"></i><b>3</b> House prices and characteristics</a></li>
-<li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
-<li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
-<li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
-<li class="chapter" data-level="7" data-path="geodanmark.html"><a href="geodanmark.html"><i class="fa fa-check"></i><b>7</b> GeoDanmark</a></li>
-<li class="part"><span><b>III Data analysis</b></span></li>
-<li class="chapter" data-level="8" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>8</b> Population density</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>8.1</b> Choropleth by ancestry</a></li>
-<li class="chapter" data-level="8.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>8.2</b> Disaggregating population data</a></li>
-<li class="chapter" data-level="8.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>8.3</b> Population density WorldPop</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a></li>
+<li class="chapter" data-level="8" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -920,45 +914,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hedonic-price-model" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Hedonic price model</h1>
-<p>House prices can be modelled based on the structural characteristics of the house (e.g. age, size, building materials, floor level, etc.), their location (e.g. proximity to urban services, distance to Central Business District - CBD, accessibility, etc.), and the surrounding environment (e.g. neighbourhood services and socio-economic aspects of its inhabitants, leisure facilities, noise levels, etc.) (<span class="citation"><a href="references.html#ref-Chen2008" role="doc-biblioref">Chen and Hao</a> (<a href="references.html#ref-Chen2008" role="doc-biblioref">2008</a>)</span>, <span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>). We will focus our study in the socio-economic aspects of the neighbourhood and, in particular, in the migration structure (e.g. migration pressure, ethnic groups, …). The house prices can be therefore defined by the following function (<span class="citation"><a href="references.html#ref-Chen2008" role="doc-biblioref">Chen and Hao</a> (<a href="references.html#ref-Chen2008" role="doc-biblioref">2008</a>)</span>, <span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>).</p>
-<p><span class="math display">\[P_i = f(H_i, L_i, N_i) + \epsilon \]</span></p>
-<p>Where <span class="math inline">\(f\)</span> represents the functional function in the hedonic model, <em>P</em> is the price of the house <em>i</em>, and <span class="math inline">\(H_i\)</span>, <span class="math inline">\(L_i\)</span> and <span class="math inline">\(N_i\)</span> are the vector of the structural characteristics, the location variables, and the neighbourhood characteristics of the house <em>i</em>, respectively. Finally, <span class="math inline">\(\epsilon\)</span> is the error term.</p>
-<div id="house-characteristics" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> House characteristics</h2>
-<p>We get the housing prices and the house properties from the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>). The dataset contains information about the building (e.g. building area, renovation year, etc.) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling, while some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. There are data from 2006 to 2019.</p>
+<div id="download-data-from-kortforsyningen" class="section level1 unnumbered">
+<h1>Download data from kortforsyningen</h1>
+<p>We have create our own package for downloading the data to a local repository (i.e. <a href="https://github.com/javiereliomedina/dangeo.git">dangeo</a>. Although the data are free, we need to create a <em>username</em> and a <em>password</em> for getting access to kortforsyningen. By default <strong>dangeo</strong> looks for credentials on .Renviron (<em>kortforsyningen_id = “username”</em> and <em>kortforsyningen_pwd = “password”</em>). We also need to define the local directory where the data are downloaded (i.e. <code>dangeo_set_param()</code>). The first time we download a file it may be time consuming; however, a file will not be downloaded if it is already in the local directory.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="download-data-from-kortforsyningen.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install package from GitHub</span></span>
+<span id="cb2-2"><a href="download-data-from-kortforsyningen.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
+<span id="cb2-3"><a href="download-data-from-kortforsyningen.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dangeo)</span>
+<span id="cb2-4"><a href="download-data-from-kortforsyningen.html#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="download-data-from-kortforsyningen.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set username and password </span></span>
+<span id="cb2-6"><a href="download-data-from-kortforsyningen.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = &quot;username&quot;) and password (kortforsyningen_pwd = &quot;password&quot;)</span></span>
+<span id="cb2-7"><a href="download-data-from-kortforsyningen.html#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="download-data-from-kortforsyningen.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Set local repository</span></span>
+<span id="cb2-9"><a href="download-data-from-kortforsyningen.html#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_set_param</span>()</span>
+<span id="cb2-10"><a href="download-data-from-kortforsyningen.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loc_dir  # Check path to local repository</span></span></code></pre></div>
 </div>
-<div id="location-characteristics" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Location characteristics</h2>
-<p><a href="https://cran.r-project.org/web/packages/osmdata/vignettes/osmdata.html">OpenStreetMaps</a> and <a href="https://kortforsyningen.dk/">kortforsyningen</a> were used for getting the data about the urban services (e.g. public transport network, parks, …). Then, the interaction between those services and the house was modelled by potential models (<span class="citation"><a href="references.html#ref-Weber2000" role="doc-biblioref">Weber and Hirsch</a> (<a href="references.html#ref-Weber2000" role="doc-biblioref">2000</a>)</span>, <span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>), where the intensity of the interaction between the elements and the house is inversely proportional to the distance between them (<span class="citation"><a href="references.html#ref-Giraud2020" role="doc-biblioref">Giraud and Commenges</a> (<a href="references.html#ref-Giraud2020" role="doc-biblioref">2020</a>)</span>).</p>
-<p><span class="math display">\[ p_i = \sum_{j = i}^{n} M_i \cdot f(d_{ij}) \]</span></p>
-<p>Where <span class="math inline">\(p_i\)</span> is the potential of the housing unit, <span class="math inline">\(M_j\)</span> the mass of the service, and <span class="math inline">\(f(d_{ij})\)</span> the negative function of the distance between the dwelling <em>i</em> and the service <em>j</em>.</p>
-</div>
-<div id="neighbourhood-characteristics" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> Neighbourhood characteristics</h2>
-<p>We have used the smallest administrative area of Denmark (i.e. parish) for evaluating the influence of the neighbourhoog characteristics on housing prices (Use also potential model here -&gt; e.g. locate the stock of migrant population on the centroid of each parish and get the interaction intensity in each house??). The following tables from the <a href="https://www.dst.dk/da">Denmark Statistics</a> were used:</p>
-<ul>
-<li><a href="https://betalingsdata.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=SOGN10B&amp;PLanguage=0&amp;PXSId=0&amp;wsid=cflist">SOGN10B: Disposable income for households by parish, price unit and income</a>.</li>
-<li><a href="https://betalingsdata.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=SOGN05&amp;PLanguage=0&amp;PXSId=0&amp;wsid=cflist">SOGN05: Population (end November) by parish, socioeconomic status and sex</a></li>
-<li><a href="https://betalingsdata.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=SOGN07&amp;PLanguage=0&amp;PXSId=0&amp;wsid=cflist">SOGN07: Households disposal of vehicles by parish and use of cars</a> (do you think it could be relevant? Do people think on parking issues when they buy a house?)</li>
-<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">KMSTA003: Summary vital statistics by parish and movements</a></li>
-<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">KMSTA001: Population 1. January by parish, ancestry and member of the National Church</a>.</li>
-<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=VAN1AAR&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">VAN1AAR: Immigration (yearly) by municipality, sex, age, country of origin and citizenship</a> Can we also have this dataset at parish level?</li>
-</ul>
-
-</div>
-</div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="administrative-units.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="r-session.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -989,7 +965,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/010_introduction.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/index.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -1008,20 +984,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

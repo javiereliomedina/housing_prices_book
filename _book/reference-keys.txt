@@ -13,6 +13,8 @@ administrative-units
 house-prices-and-characteristics
 population-data
 corine-land-use
+railway-transport-network
+geodanmark
 Population
 choropleth-by-ancestry
 disaggregating-population-data

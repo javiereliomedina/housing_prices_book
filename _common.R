@@ -28,7 +28,6 @@ if (knitr::is_latex_output())
   options(width = 66)
 #options(width = 72)
 
-
 # Create our own theme for plotting maps in ggplot2.
 my_theme_map <- function() {
   theme_void() +
@@ -44,3 +43,7 @@ my_theme_map <- function() {
     )
 }
 
+# Set local repository for downloading data (i.e. kortforsyningen)
+  dangeo::dangeo_set_param()
+
+  

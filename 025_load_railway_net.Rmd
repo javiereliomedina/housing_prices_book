@@ -1,0 +1,11 @@
+# Railway transport network
+
+Downloaded from  kortforsyningen (i.e. Inspire_railway-transport-network). 
+
+```{r dwn-rail}
+
+dangeo_get_data(
+  ftp_folder = "grundlaeggende_landkortdata/inspire_railway-transport-network",
+  zip_name   = "DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip")
+
+```

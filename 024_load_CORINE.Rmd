@@ -1,8 +1,12 @@
 #  CORINE land use 
 
-Land use have been obtained from CORINE. We downloaded the data from kortforsyningen and used the data from 2010 (*CLC12_DK.shp*).
+Land use have been obtained from CORINE. We downloaded the shapefile from kortforsyningen and used the data from 2012 (*CLC12_DK.shp*).
 
 ```{r fig-land-use, cache=TRUE, fig.width = 9, fig.height = 7, fig.cap = "Land use (CORINE)"}
+
+# Download CORINE to local repository (pks -  dangeo)
+  dangeo_get_data(ftp_folder = "CORINE",
+                  zip_name   = "DK_CORINE_SHP_UTM32-WGS84.zip")
 
 # Create a table with the CORINE land use codes from the EEA
 corine_code_link <- "https://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2000-clc2000-250-m-version-9-2007/corine-land-cover-2000-classes-and-rgb-color-codes/clc2000legend.csv/at_download/file"

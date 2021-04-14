@@ -11,7 +11,7 @@ This repository contains the source of [Housing prices analysis](https://github.
 
 Before running the R-scripts you may need to add some variables to your **.Renviron** with `usethis::edit_r_environ()`. We will use them for loading the BBR data into R and for downloading maps via the kortforsyningen FTP (with our own R package: [dangeo](https://github.com/javiereliomedina/dangeo.git)). Therefore, you would need to:
 
-1. Save the path to your *OneDrive* where the BBR data are saved(`OneDrive_BBR_link = "your/OneDrive/BBR/path"`).    
+1. Save the path to your *OneDrive* where the BBR data are saved (`OneDrive_BBR_path = "your/OneDrive/BBR/path"`).    
 
 2. Save your *kortforsyningen* user and password (`kortforsyningen_id = “your_username”` and `kortforsyningen_pwd = “your_password”`)
 

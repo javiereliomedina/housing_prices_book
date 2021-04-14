@@ -25,7 +25,7 @@ Population data at parish level have been retrieved from [Statistics Denmark](ht
 
 ```
 
-We have uploaded the following tables:
+We have loaded the following tables:
 
 - [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree)
 

@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-13" />
+<meta name="date" content="2021-04-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -873,10 +873,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Housing prices in Copenhagen region</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisites</a>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisite</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#create-data-and-results-folders"><i class="fa fa-check"></i>Create data and results folders</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#download-data-from-kortforsyningen"><i class="fa fa-check"></i>Download data from kortforsyningen</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
 <li class="part"><span><b>I Introduction</b></span></li>
@@ -891,14 +889,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="house-prices-and-characteristics.html"><a href="house-prices-and-characteristics.html"><i class="fa fa-check"></i><b>3</b> House prices and characteristics</a></li>
 <li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
 <li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
+<li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
+<li class="chapter" data-level="7" data-path="geodanmark.html"><a href="geodanmark.html"><i class="fa fa-check"></i><b>7</b> GeoDanmark</a></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
-<li class="chapter" data-level="6" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>6</b> Population density</a>
+<li class="chapter" data-level="8" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>8</b> Population density</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>6.1</b> Choropleth by ancestry</a></li>
-<li class="chapter" data-level="6.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>6.2</b> Disaggregating population data</a></li>
-<li class="chapter" data-level="6.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>6.3</b> Population density WorldPop</a></li>
+<li class="chapter" data-level="8.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>8.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="8.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>8.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="8.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>8.3</b> Population density WorldPop</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>7</b> Residential units saled as free scale</a></li>
+<li class="chapter" data-level="9" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -923,47 +923,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="administrative-units" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Administrative units</h1>
 <p>The Denmark’s Administrative Geographical Division (<a href="https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/">DAGI</a>) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (<em>KOMKODE = 0101</em>) and Frederiksberg (<em>KOMKODE = 0147</em>) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="administrative-units.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Codes of the comunes under study (KOMKODE)</span></span>
-<span id="cb9-2"><a href="administrative-units.html#cb9-2" aria-hidden="true" tabindex="-1"></a>study_area_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0101&quot;</span>, <span class="st">&quot;0147&quot;</span>)</span>
-<span id="cb9-3"><a href="administrative-units.html#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="administrative-units.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Communes polygons of Denmark, and select those in the study area</span></span>
-<span id="cb9-5"><a href="administrative-units.html#cb9-5" aria-hidden="true" tabindex="-1"></a>commune_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;KOMMUNE.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb9-6"><a href="administrative-units.html#cb9-6" aria-hidden="true" tabindex="-1"></a>dk_commune  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(commune_link) <span class="sc">%&gt;%</span></span>
-<span id="cb9-7"><a href="administrative-units.html#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-8"><a href="administrative-units.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb9-9"><a href="administrative-units.html#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="administrative-units.html#cb9-10" aria-hidden="true" tabindex="-1"></a>cph_commune <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_commune, KOMKODE <span class="sc">%in%</span> study_area_codes)</span>
-<span id="cb9-11"><a href="administrative-units.html#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="administrative-units.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Parishes polygons of Denmark, and select those in the study area </span></span>
-<span id="cb9-13"><a href="administrative-units.html#cb9-13" aria-hidden="true" tabindex="-1"></a>parish_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;SOGN.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb9-14"><a href="administrative-units.html#cb9-14" aria-hidden="true" tabindex="-1"></a>dk_parish  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(parish_link) <span class="sc">%&gt;%</span></span>
-<span id="cb9-15"><a href="administrative-units.html#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-16"><a href="administrative-units.html#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb9-17"><a href="administrative-units.html#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="administrative-units.html#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the study area</span></span>
-<span id="cb9-19"><a href="administrative-units.html#cb9-19" aria-hidden="true" tabindex="-1"></a>dk_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_parish)</span>
-<span id="cb9-20"><a href="administrative-units.html#cb9-20" aria-hidden="true" tabindex="-1"></a>cph_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_parish_cent, cph_commune)</span>
-<span id="cb9-21"><a href="administrative-units.html#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="administrative-units.html#cb9-22" aria-hidden="true" tabindex="-1"></a>cph_parish <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_parish, SOGNEKODE <span class="sc">%in%</span> cph_parish_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-23"><a href="administrative-units.html#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Combine several parish features geometries into one polygon</span></span>
-<span id="cb9-24"><a href="administrative-units.html#cb9-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-25"><a href="administrative-units.html#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-26"><a href="administrative-units.html#cb9-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-27"><a href="administrative-units.html#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add area of the parish (in km2)</span></span>
-<span id="cb9-28"><a href="administrative-units.html#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
-<span id="cb9-29"><a href="administrative-units.html#cb9-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-30"><a href="administrative-units.html#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Contour of the study area (merge the parishes in one polygon):</span></span>
-<span id="cb9-31"><a href="administrative-units.html#cb9-31" aria-hidden="true" tabindex="-1"></a>study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
-<span id="cb9-32"><a href="administrative-units.html#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-33"><a href="administrative-units.html#cb9-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-34"><a href="administrative-units.html#cb9-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="administrative-units.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download DAGI (scale 1:10000)</span></span>
+<span id="cb6-2"><a href="administrative-units.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;landinddelinger/dagi/SHAPE&quot;</span>,</span>
+<span id="cb6-3"><a href="administrative-units.html#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">zip_name   =</span> <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span>
+<span id="cb6-4"><a href="administrative-units.html#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="administrative-units.html#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Codes of the communes under study (KOMKODE)</span></span>
+<span id="cb6-6"><a href="administrative-units.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  study_area_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0101&quot;</span>, <span class="st">&quot;0147&quot;</span>)</span>
+<span id="cb6-7"><a href="administrative-units.html#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="administrative-units.html#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Communes polygons of Denmark, and select those in the study area</span></span>
+<span id="cb6-9"><a href="administrative-units.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  commune_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;KOMMUNE.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb6-10"><a href="administrative-units.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  dk_commune  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(commune_link) <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="administrative-units.html#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-12"><a href="administrative-units.html#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb6-13"><a href="administrative-units.html#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="administrative-units.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  cph_commune <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_commune, KOMKODE <span class="sc">%in%</span> study_area_codes)</span>
+<span id="cb6-15"><a href="administrative-units.html#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="administrative-units.html#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Parishes polygons of Denmark, and select those in the study area </span></span>
+<span id="cb6-17"><a href="administrative-units.html#cb6-17" aria-hidden="true" tabindex="-1"></a>  parish_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>, <span class="st">&quot;SOGN.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb6-18"><a href="administrative-units.html#cb6-18" aria-hidden="true" tabindex="-1"></a>  dk_parish  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(parish_link) <span class="sc">%&gt;%</span></span>
+<span id="cb6-19"><a href="administrative-units.html#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-20"><a href="administrative-units.html#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb6-21"><a href="administrative-units.html#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="administrative-units.html#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the study area</span></span>
+<span id="cb6-23"><a href="administrative-units.html#cb6-23" aria-hidden="true" tabindex="-1"></a>  dk_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_parish)</span>
+<span id="cb6-24"><a href="administrative-units.html#cb6-24" aria-hidden="true" tabindex="-1"></a>  cph_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_parish_cent, cph_commune)</span>
+<span id="cb6-25"><a href="administrative-units.html#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="administrative-units.html#cb6-26" aria-hidden="true" tabindex="-1"></a>  cph_parish <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_parish, SOGNEKODE <span class="sc">%in%</span> cph_parish_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-27"><a href="administrative-units.html#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combine several parish features geometries into one polygon</span></span>
+<span id="cb6-28"><a href="administrative-units.html#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-29"><a href="administrative-units.html#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-30"><a href="administrative-units.html#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-31"><a href="administrative-units.html#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add area of the parish (in km2)</span></span>
+<span id="cb6-32"><a href="administrative-units.html#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb6-33"><a href="administrative-units.html#cb6-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-34"><a href="administrative-units.html#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of the study area (merge the parishes in one polygon):</span></span>
+<span id="cb6-35"><a href="administrative-units.html#cb6-35" aria-hidden="true" tabindex="-1"></a>  study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
+<span id="cb6-36"><a href="administrative-units.html#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-37"><a href="administrative-units.html#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-38"><a href="administrative-units.html#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
 <p>Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="administrative-units.html#cb10-1" aria-hidden="true" tabindex="-1"></a>  grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="administrative-units.html#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make regular grids (100m x 100m)</span></span>
-<span id="cb10-3"><a href="administrative-units.html#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-4"><a href="administrative-units.html#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a href="administrative-units.html#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
-<span id="cb10-6"><a href="administrative-units.html#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>, stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="administrative-units.html#cb7-1" aria-hidden="true" tabindex="-1"></a>  grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="administrative-units.html#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make regular grids (100m x 100m)</span></span>
+<span id="cb7-3"><a href="administrative-units.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="administrative-units.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="administrative-units.html#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
+<span id="cb7-6"><a href="administrative-units.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>, stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span></code></pre></div>
 
 </div>
             </section>
@@ -1003,7 +1007,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/02-load_adm_units.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/021_load_adm_units.Rmd",
 "text": "Edit"
 },
 "history": {

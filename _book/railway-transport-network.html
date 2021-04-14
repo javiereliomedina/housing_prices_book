@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Hedonic price model | Housing prices Copenhagen</title>
+  <title>Chapter 6 Railway transport network | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Hedonic price model | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 6 Railway transport network | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Hedonic price model | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 6 Railway transport network | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html"/>
-<link rel="next" href="administrative-units.html"/>
+<link rel="prev" href="corine-land-use.html"/>
+<link rel="next" href="geodanmark.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -920,45 +920,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="hedonic-price-model" class="section level1" number="1">
-<h1><span class="header-section-number">Chapter 1</span> Hedonic price model</h1>
-<p>House prices can be modelled based on the structural characteristics of the house (e.g. age, size, building materials, floor level, etc.), their location (e.g. proximity to urban services, distance to Central Business District - CBD, accessibility, etc.), and the surrounding environment (e.g. neighbourhood services and socio-economic aspects of its inhabitants, leisure facilities, noise levels, etc.) (<span class="citation"><a href="references.html#ref-Chen2008" role="doc-biblioref">Chen and Hao</a> (<a href="references.html#ref-Chen2008" role="doc-biblioref">2008</a>)</span>, <span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>). We will focus our study in the socio-economic aspects of the neighbourhood and, in particular, in the migration structure (e.g. migration pressure, ethnic groups, …). The house prices can be therefore defined by the following function (<span class="citation"><a href="references.html#ref-Chen2008" role="doc-biblioref">Chen and Hao</a> (<a href="references.html#ref-Chen2008" role="doc-biblioref">2008</a>)</span>, <span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>).</p>
-<p><span class="math display">\[P_i = f(H_i, L_i, N_i) + \epsilon \]</span></p>
-<p>Where <span class="math inline">\(f\)</span> represents the functional function in the hedonic model, <em>P</em> is the price of the house <em>i</em>, and <span class="math inline">\(H_i\)</span>, <span class="math inline">\(L_i\)</span> and <span class="math inline">\(N_i\)</span> are the vector of the structural characteristics, the location variables, and the neighbourhood characteristics of the house <em>i</em>, respectively. Finally, <span class="math inline">\(\epsilon\)</span> is the error term.</p>
-<div id="house-characteristics" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> House characteristics</h2>
-<p>We get the housing prices and the house properties from the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>). The dataset contains information about the building (e.g. building area, renovation year, etc.) and the residential unit (e.g. size, number of rooms, floor level, etc.). The data from residential units are unique for each dwelling, while some building characteristics are shared by several dwellings. We therefore merge both dataset for getting a dataset in which each row represents only one dwelling. There are data from 2006 to 2019.</p>
-</div>
-<div id="location-characteristics" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Location characteristics</h2>
-<p><a href="https://cran.r-project.org/web/packages/osmdata/vignettes/osmdata.html">OpenStreetMaps</a> and <a href="https://kortforsyningen.dk/">kortforsyningen</a> were used for getting the data about the urban services (e.g. public transport network, parks, …). Then, the interaction between those services and the house was modelled by potential models (<span class="citation"><a href="references.html#ref-Weber2000" role="doc-biblioref">Weber and Hirsch</a> (<a href="references.html#ref-Weber2000" role="doc-biblioref">2000</a>)</span>, <span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>), where the intensity of the interaction between the elements and the house is inversely proportional to the distance between them (<span class="citation"><a href="references.html#ref-Giraud2020" role="doc-biblioref">Giraud and Commenges</a> (<a href="references.html#ref-Giraud2020" role="doc-biblioref">2020</a>)</span>).</p>
-<p><span class="math display">\[ p_i = \sum_{j = i}^{n} M_i \cdot f(d_{ij}) \]</span></p>
-<p>Where <span class="math inline">\(p_i\)</span> is the potential of the housing unit, <span class="math inline">\(M_j\)</span> the mass of the service, and <span class="math inline">\(f(d_{ij})\)</span> the negative function of the distance between the dwelling <em>i</em> and the service <em>j</em>.</p>
-</div>
-<div id="neighbourhood-characteristics" class="section level2" number="1.3">
-<h2><span class="header-section-number">1.3</span> Neighbourhood characteristics</h2>
-<p>We have used the smallest administrative area of Denmark (i.e. parish) for evaluating the influence of the neighbourhoog characteristics on housing prices (Use also potential model here -&gt; e.g. locate the stock of migrant population on the centroid of each parish and get the interaction intensity in each house??). The following tables from the <a href="https://www.dst.dk/da">Denmark Statistics</a> were used:</p>
-<ul>
-<li><a href="https://betalingsdata.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=SOGN10B&amp;PLanguage=0&amp;PXSId=0&amp;wsid=cflist">SOGN10B: Disposable income for households by parish, price unit and income</a>.</li>
-<li><a href="https://betalingsdata.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=SOGN05&amp;PLanguage=0&amp;PXSId=0&amp;wsid=cflist">SOGN05: Population (end November) by parish, socioeconomic status and sex</a></li>
-<li><a href="https://betalingsdata.statistikbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=SOGN07&amp;PLanguage=0&amp;PXSId=0&amp;wsid=cflist">SOGN07: Households disposal of vehicles by parish and use of cars</a> (do you think it could be relevant? Do people think on parking issues when they buy a house?)</li>
-<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">KMSTA003: Summary vital statistics by parish and movements</a></li>
-<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">KMSTA001: Population 1. January by parish, ancestry and member of the National Church</a>.</li>
-<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=VAN1AAR&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">VAN1AAR: Immigration (yearly) by municipality, sex, age, country of origin and citizenship</a> Can we also have this dataset at parish level?</li>
-</ul>
+<div id="railway-transport-network" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Railway transport network</h1>
+<p>Downloaded from kortforsyningen (i.e. Inspire_railway-transport-network).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="railway-transport-network.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(</span>
+<span id="cb16-2"><a href="railway-transport-network.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ftp_folder =</span> <span class="st">&quot;grundlaeggende_landkortdata/inspire_railway-transport-network&quot;</span>,</span>
+<span id="cb16-3"><a href="railway-transport-network.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_name   =</span> <span class="st">&quot;DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
 
 </div>
-</div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="administrative-units.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="corine-land-use.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="geodanmark.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -989,7 +965,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/010_introduction.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/025_load_railway_net.Rmd",
 "text": "Edit"
 },
 "history": {

@@ -12,11 +12,11 @@ link-citations: yes
 description: "Housing prices BBR data"
 ---
 
-# Prerequisites {.unnumbered}
+# Prerequisite {.unnumbered}
 
 The data have been analysed with **R** (version `r paste(R.Version()$major, R.Version()$minor, sep = ".")`) and **Rstudio** (version `r rstudioapi::versionInfo()$version`), and the book has been created with **bookdown** package. The required packages are automatically checked and installed if needed from CRAN.
 
-```{r, results='hide'}
+```{r pkgs, results='hide'}
 
 # Create an auxiliary function for checking if a package is installed,
 # install it if it is not, and load the package
@@ -40,7 +40,7 @@ The data have been analysed with **R** (version `r paste(R.Version()$major, R.Ve
             "kableExtra", "knitr",
             "latex2exp",
             "osmdata", "patchwork", "potential",
-            "rmarkdown", "remotes", "RColorBrewer",
+            "rmarkdown", "remotes", "RColorBrewer", "rappdirs",
             "sf", "stringr", "SnowballC",
             "units",
             "tidyverse", "tidytext", "tm", "tools")
@@ -50,78 +50,42 @@ The data have been analysed with **R** (version `r paste(R.Version()$major, R.Ve
 
 ```
 
-```{r, include=FALSE}
+```{r pkgs-bib, include=FALSE}
 
 # automatically create a bib database for R packages
 knitr::write_bib(x = c(.packages()), file = 'packages.bib')
 
 ```
 
-## Create data and results folders {.unnumbered}
+Furthermore, we have created our own package for downloading [kortforsyningen](https://kortforsyningen.dk/) data to a local repository directly from R (i.e. [dangeo](https://github.com/javiereliomedina/dangeo.git)). The package can be downloaded from GitHub: 
 
-Save important data in their respective folder.
-
-```{r}
-
-dir.create("data")
-
-```
-
-## Download data from kortforsyningen {.unnumbered}
-
-We have create our own package for downloading the data to a local repository (i.e. [dangeo](https://github.com/javiereliomedina/dangeo.git). Although the data are free, we need to create a *username* and a *password* for getting access to kortforsyningen. By default **dangeo** looks for credentials on .Renviron (*kortforsyningen_id = "username"* and *kortforsyningen_pwd = "password"*). We also need to define the local directory where the data are downloaded (i.e. `dangeo_set_param()`). The first time we download a file it may be time consuming; however, a file will not be downloaded if it is already in the local directory.
-
-```{r}
+```{r install-dangeo}
 
 # Install package from GitHub
   if (!require("dangeo"))  remotes::install_github("javiereliomedina/dangeo")
   library(dangeo)
 
+```
+
+Although the *kortforsyningen* data are free, we would need to create a *username* and a *password* for getting access to them (you can make it here: ["Opret ny bruger"](https://kortforsyningen.dk/indhold/min-side-0)). By default **dangeo** looks for credentials on `.Renviron` as: `kortforsyningen_id = "username"` and `kortforsyningen_pwd = "password"`. You would need to save them with `usethis::edit_r_environ()`: 
+
+```{r dangeo}
+
 # Set username and password 
-# usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = "username") and password (kortforsyningen_pwd = "password")
+# usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = "your_username") and password (kortforsyningen_pwd = "your_password")
 
-# Set local repository
+```
+
+You would also need to define with `dangeo_set_param()` the local directory where the data are downloaded (`loc_dir`). It is defined as `loc_dir = rappdirs::user_cache_dir()`, although it can be changed `loc_dir = “./your/local/path”`. The first time a file is downloaded with `dangeo_get_data()`, the process can be time consuming (there are some very big files). However, it will not be downloaded in subsequent calls if the files is already in the local directory (the dataset can be overwritten be setting `overwrite = TRUE` on `dangeo_get_data()`). Once we have our *username* and *password*, and we have define the local repository for the data, we can set them on our R-session:
+
+```{r}
+
+# Set local repository and password to kortforsyningen
   dangeo_set_param()
-  # loc_dir  # Check path to local repository
-    
+  
 ```
 
-- CORINE
-
-```{r}
-
-dangeo_get_data(ftp_folder = "CORINE",
-                zip_name   = "DK_CORINE_SHP_UTM32-WGS84.zip")
-
-```
-
-- DAGI (scale 1:10000) 
-
-```{r}
-
-dangeo_get_data(ftp_folder = "landinddelinger/dagi/SHAPE",
-                zip_name   = "DAGIREF_SHAPE_UTM32-EUREF89.zip")
-
-```
-
-- Inspire_railway-transport-network 
-
-```{r}
-
-dangeo_get_data(
-  ftp_folder = "grundlaeggende_landkortdata/inspire_railway-transport-network",
-  zip_name   = "DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip")
-
-```
-
-- GeoDanmark 
-
-```{r}
-
-dangeo_get_data(ftp_folder = "grundlaeggende_landkortdata/fot/SHAPE",
-                zip_name   = "DK_SHAPE_UTM32-EUREF89.zip")
-
-```
+Finally, the BBR data are storage in a *OneDrive* folder. You would need to have access to that folder, and save the path on `.Renviron` with `usethis::edit_r_environ()`. It has to be saved as `OneDrive_BBR_path = "your/OneDrive/BBR/path"`. 
 
 ## R session {-}
 
