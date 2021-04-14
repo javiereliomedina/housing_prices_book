@@ -203,17 +203,22 @@ We can compare our results with the WorldPop total population estimation per gri
 ```{r fig-pop-den-worldpop, fig.width = 9, fig.height = 7, cache=TRUE, dependson = "adm-units", fig.cap = "WorldPop total population density estimations in 2019"}
 
   dnk_ppp_2019_link <- "https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif"
-  dir.create("data")
-  download.file(dnk_ppp_2019_link, "data/dnk_ppp_2019.tif", method = "curl")
   
-  library(stars)
-  library(tidyverse)
-  dnk_ppp_2019 <- read_stars(.x = "data/dnk_ppp_2019.tif",  proxy = TRUE) 
+# Download data into the local repository (i.e. loc_dir)
+  download.file(url = dnk_ppp_2019_link,
+                destfile = paste(loc_dir, "dnk_ppp_2019.tif", sep = "/"),
+                method = "curl")
+
+# Load file 
+  dnk_ppp_2019 <- read_stars(.x = paste(loc_dir, "dnk_ppp_2019.tif", sep = "/"),
+                             proxy = TRUE) 
+  
+# Crop study area
   bbox <-  study_area %>% st_transform(crs = st_crs(dnk_ppp_2019))
-  
   cph_ppp_2019 <- st_crop(dnk_ppp_2019, bbox) %>%
     st_transform(crs = "EPSG:25832")
-  
+
+# Plot
   col <- brewer.pal(9, "YlGnBu")
   pal <- colorRampPalette(col)
   my_pallette <- pal(10)
