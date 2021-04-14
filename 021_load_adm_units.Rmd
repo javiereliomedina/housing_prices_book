@@ -2,9 +2,9 @@
 
 # Administrative units
 
-The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/)) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.    
+The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/)) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes. 
 
-```{r adm-units, cache=TRUE}
+```{r fig-adm-units, cache=TRUE, fig.cap="Parishes in the study area"}
 
 # Download DAGI (scale 1:10000)
   dangeo_get_data(ftp_folder = "landinddelinger/dagi/SHAPE",
@@ -45,18 +45,33 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
     st_sf() %>% 
     st_transform(crs = "EPSG:25832")
 
+# Plot parish 
+  ggplot() + 
+    geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
+    my_theme_map() +
+    annotation_scale(location = "br", text_cex = 1) +
+    annotation_north_arrow(location = "br",
+                           pad_x = unit(1.6, "cm"),
+                           pad_y = unit(0.65, "cm"),
+                           which_north = "true",
+                           height = unit(0.5, "cm"),
+                           width = unit(0.5, "cm"),
+                           style = north_arrow_orienteering(text_col = "white",
+                                                            text_size = 1))
 ```
 
-Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:
-```{r grids-100m, cache = TRUE, dependson = "adm-units"}
+We have also created grid cells of 100m x 100m for aggregating some data at that scale (i.e. population density).   
+
+```{r fig-grids-100m, cache = TRUE, dependson = "adm-units", fig.cap="Grid cells of 100m x 100m"}
 
 # Make grids
   grids100m <- study_area %>% 
     # Make regular grids (100m x 100m)
     st_make_grid(cellsize = 100) %>% 
     st_sf() %>% 
-    # Grids only in the study area
-    st_intersection(study_area) %>% 
+    # Select grids only in the study area
+    mutate(int = st_intersects(., study_area) %>% lengths > 0) %>% 
+    filter(int == TRUE) %>% 
     # Name grids as "g001", "g002", ...
     mutate(grid_ID = paste0("g", stringr::str_pad(seq(1, nrow(.), 1), 3, pad = "0")))
 
@@ -64,6 +79,18 @@ Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population d
   ggplot() + 
     geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
     geom_sf(data = grids100m, fill = NA, color = "red", size = 0.05) + 
-    my_theme_map()
+    my_theme_map() +
+    annotation_scale(location = "br", text_cex = 1) +
+    annotation_north_arrow(location = "br",
+                           pad_x = unit(1.6, "cm"),
+                           pad_y = unit(0.65, "cm"),
+                           which_north = "true",
+                           height = unit(0.5, "cm"),
+                           width = unit(0.5, "cm"),
+                           style = north_arrow_orienteering(text_col = "white",
+                                                            text_size = 1))
   
 ```
+
+
+There are therefore a total number of `r nrow(cph_parish)` parishes (Figure \@ref(fig:fig-adm-units) and `r nrow(grids100m)` grid cells (Figure \@ref(fig:fig-grids-100m)) in the study area. The statistics for neighbourhood characteristics at parish level since they are the smallest administrative units in Denmark. 

@@ -1,3 +1,5 @@
+fig:fig-adm-units
+fig:fig-grids-100m
 fig:fig-sp-res-builds
 tab:tbl-runits-oft
 fig:fig-land-use
@@ -20,3 +22,6 @@ choropleth-by-ancestry
 disaggregating-population-data
 population-density-worldpop
 residential-units-saled-as-free-scale
+housing-prices
+tab:price-index
+residential-units-by-floor-level

@@ -1,22 +1,62 @@
 # Residential units saled as free scale
 
-We focused our study in residential dwellings and thus we selected the following building types from the BBS dataset (i.e. *BYG_ANVEND_KODE*):
+We focused our study in residential dwellings on the ordinary free trade (Table \@ref(tab:tbl-runits-oft)). **There are large differences in the number of residential units between years, why??**
 
--   120 - Fritliggende enfamiliehus *(Detached single-family house)*;
--   121 - Sammenbygget enfamiliehus *(Combined single-family house)*;
--   122 - Fritliggende enfamiliehus i tæt-lav bebyggelse (*Detached single-family house in dense-low-rise buildings*);
--   130 - (UDFASES) Række-, kæde-, eller dobbelthus (lodret adskillelse mellem enhederne) *((PHASE OUT) Row, chain, or semi-detached house (vertical separation between the units))*;
--   131 - Række-, kæde- og klyngehus *(Row, chain and cluster housing)*;
--   132 - Dobbelthus *(Semi-detached house)*;
--   140 - Etagebolig-bygning, flerfamiliehus eller to-familiehus *(Multi-storey residential building, multi-family house or two-family house)*;
--   190 - Anden bygning til helårsbeboelse *(Second building for year-round living)*.
+**Study only one year for the moment (e.g. 2019)??**
 
-Estimate the number of residential units in the study area.
+## Housing prices 
 
-Residential units by floor level
+We adjusted the housing prices for taking into account the inflation and, therefore, be able to compared them between years (@Valtersdorf2020). The indexes have been obtained from Statistic Denmark; i.e. table [EJ66: Price index for sales property (2006=100) by region, category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&PLanguage=1&PXSId=0&wsid=cftree), and targeted for the study area (i.e. *Province Byen København*).   
+
+$$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
+
+Index:
+
+```{r price-index}
+
+# DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)
+  id_table <- "EJ66"
+  dat_meta <- get_table_metadata(table_id = id_table, variables_only = TRUE)
+  
+# Values to retrieve
+  variables <- list(
+    # Province Byen København: region = 01 
+    list(code = "OMRÅDE", values = "01"),
+    # Category of real property
+    list(code = "EJENDOMSKATE", values = c("0111", "2103")),
+    # Index
+    list(code = "TAL", values = 100),
+    # From 2004 to 2019
+    list(code = "Tid", values = seq(2004, 2019, 1))
+    )
+
+# Get index
+  price_index <- get_data("EJ66", variables) %>% 
+    # Translate into English 
+    rename(region = OMRÅDE,
+           category = EJENDOMSKATE,
+           unit = TAL,
+           date = TID, 
+           value = INDHOLD)  
+    
+# Print table 
+  price_index %>% 
+    # Wide format
+    pivot_wider(names_from = date, 
+                values_from = value) %>% 
+    select(-region, -unit) %>% 
+    kbl(caption = "Price index for sale properties in Copenhagen City") %>% 
+    kable_paper() %>% 
+    scroll_box(width = "100%")
+
+  
+```
+
+
+## Residential units by floor level
 
 - KL - basement
-- ST - groundfloor
+- ST - ground floor
 - 1  - 1st floor
 - 2  - 2nd floor
 - 3  - 3rd floor
@@ -46,7 +86,7 @@ Residential units by floor level
   
 ```
 
-Dwelling type codes
+Dwelling by type codes:
 
 - 1. Egentlig beboelse                       = Actual residence
 - 2. Blandet erhverv og beboelse             = Mixed occupations and housing
@@ -62,7 +102,7 @@ Dwelling type codes
 
 ```
 
-Unit area
+**Unit area < 0??**
 
 ```{r runits-area-neg}
 
@@ -72,6 +112,8 @@ Unit area
 
 ```
 
+**Unit area = 0??**
+
 ```{r runits-no-area}
 
   res_units %>%
@@ -80,6 +122,7 @@ Unit area
 
 ```
 
+**Big houses (area > 1000)**
 ```{r runits-big-area}
 
   res_units %>%

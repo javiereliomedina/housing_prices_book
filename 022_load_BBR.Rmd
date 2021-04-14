@@ -1,6 +1,6 @@
 # House prices and characteristics    
 
-We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside):
+We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)):
 
 - 110           = Farmhouse for agricultural property.  
 - 120, 121, 122 = Detached single-family house (detached house). 

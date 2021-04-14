@@ -898,7 +898,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>8.2</b> Disaggregating population data</a></li>
 <li class="chapter" data-level="8.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>8.3</b> Population density WorldPop</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a></li>
+<li class="chapter" data-level="9" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#housing-prices"><i class="fa fa-check"></i><b>9.1</b> Housing prices</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -922,7 +925,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="administrative-units" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Administrative units</h1>
-<p>The Denmark’s Administrative Geographical Division (<a href="https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/">DAGI</a>) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (<em>KOMKODE = 0101</em>) and Frederiksberg (<em>KOMKODE = 0147</em>) communes, and we get the statistics for neighbourhood characteristics from data at at parish level.</p>
+<p>The Denmark’s Administrative Geographical Division (<a href="https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/">DAGI</a>) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (<em>KOMKODE = 0101</em>) and Frederiksberg (<em>KOMKODE = 0147</em>) communes.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="administrative-units.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download DAGI (scale 1:10000)</span></span>
 <span id="cb6-2"><a href="administrative-units.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;landinddelinger/dagi/SHAPE&quot;</span>,</span>
 <span id="cb6-3"><a href="administrative-units.html#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">zip_name   =</span> <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span>
@@ -960,24 +963,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-35"><a href="administrative-units.html#cb6-35" aria-hidden="true" tabindex="-1"></a>  study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
 <span id="cb6-36"><a href="administrative-units.html#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb6-37"><a href="administrative-units.html#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-38"><a href="administrative-units.html#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
-<p>Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:</p>
+<span id="cb6-38"><a href="administrative-units.html#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb6-39"><a href="administrative-units.html#cb6-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-40"><a href="administrative-units.html#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot parish </span></span>
+<span id="cb6-41"><a href="administrative-units.html#cb6-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb6-42"><a href="administrative-units.html#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb6-43"><a href="administrative-units.html#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb6-44"><a href="administrative-units.html#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-45"><a href="administrative-units.html#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb6-46"><a href="administrative-units.html#cb6-46" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.6</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb6-47"><a href="administrative-units.html#cb6-47" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb6-48"><a href="administrative-units.html#cb6-48" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb6-49"><a href="administrative-units.html#cb6-49" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb6-50"><a href="administrative-units.html#cb6-50" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb6-51"><a href="administrative-units.html#cb6-51" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb6-52"><a href="administrative-units.html#cb6-52" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-adm-units"></span>
+<img src="Housing_prices_book_files/figure-html/fig-adm-units-1.png" alt="Parishes in the study area" width="672" />
+<p class="caption">
+Figure 2.1: Parishes in the study area
+</p>
+</div>
+<p>We have also created grid cells of 100m x 100m for aggregating some data at that scale (i.e. population density).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="administrative-units.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make grids</span></span>
 <span id="cb7-2"><a href="administrative-units.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
 <span id="cb7-3"><a href="administrative-units.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make regular grids (100m x 100m)</span></span>
 <span id="cb7-4"><a href="administrative-units.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb7-5"><a href="administrative-units.html#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb7-6"><a href="administrative-units.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Grids only in the study area</span></span>
-<span id="cb7-7"><a href="administrative-units.html#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersection</span>(study_area) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-8"><a href="administrative-units.html#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
-<span id="cb7-9"><a href="administrative-units.html#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>, stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span>
-<span id="cb7-10"><a href="administrative-units.html#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="administrative-units.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb7-12"><a href="administrative-units.html#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb7-13"><a href="administrative-units.html#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb7-14"><a href="administrative-units.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> grids100m, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
-<span id="cb7-15"><a href="administrative-units.html#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>()</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/grids-100m-1.png" width="672" style="display: block; margin: auto;" /></p>
+<span id="cb7-6"><a href="administrative-units.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select grids only in the study area</span></span>
+<span id="cb7-7"><a href="administrative-units.html#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., study_area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-8"><a href="administrative-units.html#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-9"><a href="administrative-units.html#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
+<span id="cb7-10"><a href="administrative-units.html#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>, stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span>
+<span id="cb7-11"><a href="administrative-units.html#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="administrative-units.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb7-13"><a href="administrative-units.html#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb7-14"><a href="administrative-units.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="administrative-units.html#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> grids100m, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
+<span id="cb7-16"><a href="administrative-units.html#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb7-17"><a href="administrative-units.html#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="administrative-units.html#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb7-19"><a href="administrative-units.html#cb7-19" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.6</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb7-20"><a href="administrative-units.html#cb7-20" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb7-21"><a href="administrative-units.html#cb7-21" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb7-22"><a href="administrative-units.html#cb7-22" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb7-23"><a href="administrative-units.html#cb7-23" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb7-24"><a href="administrative-units.html#cb7-24" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb7-25"><a href="administrative-units.html#cb7-25" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-grids-100m"></span>
+<img src="Housing_prices_book_files/figure-html/fig-grids-100m-1.png" alt="Grid cells of 100m x 100m" width="672" />
+<p class="caption">
+Figure 2.2: Grid cells of 100m x 100m
+</p>
+</div>
+<p>There are therefore a total number of 65 parishes (Figure <a href="administrative-units.html#fig:fig-adm-units">2.1</a> and 10786 grid cells (Figure <a href="administrative-units.html#fig:fig-grids-100m">2.2</a>) in the study area. The statistics for neighbourhood characteristics at parish level since they are the smallest administrative units in Denmark.</p>
 
 </div>
             </section>
