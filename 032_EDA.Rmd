@@ -6,7 +6,12 @@ We focused our study in residential dwellings on the ordinary free trade (Table 
 
 ## Housing prices 
 
-We adjusted the housing prices for taking into account the inflation and, therefore, be able to compared them between years (@Valtersdorf2020). The indexes have been obtained from Statistic Denmark; i.e. table [EJ66: Price index for sales property (2006=100) by region, category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&PLanguage=1&PXSId=0&wsid=cftree), and targeted for the study area (i.e. *Province Byen København*).   
+
+- **SKOEDE_DATO** = "The date on which the deed was signed" -> use as sale date?? Should we use this date (i.e. for the price index)? ...   
+- **KONTANT_KOEBESUM** = cash purchase price? Analyse it?? What about **KOEBESUM_BELOEB** = The purchase price agreed upon the sale of the property???
+- **KONTANT_KOEBESUM** = 0 or (< 100000 DKK)?
+
+We adjusted the housing prices to 2019 price for taking into account the inflation and, therefore, be able to compare them between years (@Valtersdorf2020). The indexes have been obtained from Statistic Denmark; i.e. table [EJ66: Price index for sales property (2006=100) by region, category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&PLanguage=1&PXSId=0&wsid=cftree), and targeted for the study area (i.e. *Province Byen København*).   
 
 $$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
 

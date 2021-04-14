@@ -6,6 +6,7 @@ fig:fig-land-use
 fig:fig-pop-chor
 fig:fig-pop-map-grid
 fig:fig-pop-den-worldpop
+tab:price-index
 fig:fig-runits-floor
 hedonic-price-model
 house-characteristics
@@ -23,5 +24,4 @@ disaggregating-population-data
 population-density-worldpop
 residential-units-saled-as-free-scale
 housing-prices
-tab:price-index
 residential-units-by-floor-level

@@ -19,9 +19,12 @@ potential
 rmarkdown
 remotes
 RColorBrewer
+rappdirs
 sf
 stringr
 SnowballC
+abind
+stars
 units
 tidyverse
 ggplot2
@@ -34,6 +37,3 @@ tidytext
 NLP
 tm
 dangeo
-abind
-stars
-rappdirs

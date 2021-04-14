@@ -929,7 +929,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Study only one year for the moment (e.g. 2019)??</strong></p>
 <div id="housing-prices" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Housing prices</h2>
-<p>We adjusted the housing prices for taking into account the inflation and, therefore, be able to compared them between years (<span class="citation"><a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">Valtersdorf Møller</a> (<a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">2020</a>)</span>). The indexes have been obtained from Statistic Denmark; i.e. table <a href="https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">EJ66: Price index for sales property (2006=100) by region, category of real property and unit</a>, and targeted for the study area (i.e. <em>Province Byen København</em>).</p>
+<ul>
+<li><strong>SKOEDE_DATO</strong> = “The date on which the deed was signed” -&gt; use as sale date?? Should we use this date (i.e. for the price index)? …<br />
+</li>
+<li><strong>KONTANT_KOEBESUM</strong> = cash purchase price? Analyse it?? What about <strong>KOEBESUM_BELOEB</strong> = The purchase price agreed upon the sale of the property???</li>
+<li><strong>KONTANT_KOEBESUM</strong> = 0 or (&lt; 100000 DKK)?</li>
+</ul>
+<p>We adjusted the housing prices to 2019 price for taking into account the inflation and, therefore, be able to compare them between years (<span class="citation"><a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">Valtersdorf Møller</a> (<a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">2020</a>)</span>). The indexes have been obtained from Statistic Denmark; i.e. table <a href="https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">EJ66: Price index for sales property (2006=100) by region, category of real property and unit</a>, and targeted for the study area (i.e. <em>Province Byen København</em>).</p>
 <p><span class="math display">\[ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}\]</span></p>
 <p>Index:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="residential-units-saled-as-free-scale.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)</span></span>
@@ -1205,67 +1211,67 @@ Figure 8.1: Residential units distribution by floor level
 <span id="cb7-2"><a href="residential-units-saled-as-free-scale.html#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="residential-units-saled-as-free-scale.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code># # A tibble: 161 x 42
-#   VEJ_NAVN     HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode
-#   &lt;chr&gt;        &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt;
-# 1 Haregade     1      st          &quot;&quot;            1320     101     8983          2000166             16
-# 2 Ã…lekistevej 221    st          &quot;&quot;            2720     101   686264          2000177             27
-# 3 Ã˜ster Vold~ 12     3           &quot;&quot;            1350     101   671909          2000166             16
-# 4 Humlehaven   64     st          &quot;&quot;            2500     101   243540          2000180             30
-# 5 SÃ¦byholmsv~ 23     st          &quot;&quot;            2500     101   553027          2000180             30
-# 6 SolvÃ¦nget   10     st          &quot;&quot;            2100     101   514862          2000173             23
-# # ... with 155 more rows, and 33 more variables: MatrNr &lt;chr&gt;, BYG_ANVEND_KODE &lt;fct&gt;,
-# #   OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;, TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;,
-# #   BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;,
-# #   ENH_ANVEND_KODE &lt;fct&gt;, BOLIGTYPE_KODE &lt;fct&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;,
-# #   ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;,
-# #   VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;, VARME_SUPPL_KODE &lt;fct&gt;, EJD_VAERDI &lt;int64&gt;,
-# #   GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;, KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;,
-# #   SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;,
-# #   BBR_year &lt;dbl&gt;</code></pre>
+#   VEJ_NAVN        HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode
+#   &lt;chr&gt;           &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;
+# 1 Haregade        1      st          &quot;&quot;            1320     101     8983          2000166
+# 2 Ã…lekistevej    221    st          &quot;&quot;            2720     101   686264          2000177
+# 3 Ã˜ster Voldgade 12     3           &quot;&quot;            1350     101   671909          2000166
+# 4 Humlehaven      64     st          &quot;&quot;            2500     101   243540          2000180
+# 5 SÃ¦byholmsvej   23     st          &quot;&quot;            2500     101   553027          2000180
+# 6 SolvÃ¦nget      10     st          &quot;&quot;            2100     101   514862          2000173
+# # ... with 155 more rows, and 34 more variables: KomEjerlavKode &lt;int&gt;, MatrNr &lt;chr&gt;,
+# #   BYG_ANVEND_KODE &lt;fct&gt;, OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;,
+# #   TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;,
+# #   BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;fct&gt;, BOLIGTYPE_KODE &lt;fct&gt;,
+# #   ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;,
+# #   ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;,
+# #   VARME_SUPPL_KODE &lt;fct&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;, SKOEDE_DATO &lt;date&gt;,
+# #   geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
 <p><strong>Unit area = 0??</strong></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="residential-units-saled-as-free-scale.html#cb9-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="residential-units-saled-as-free-scale.html#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="residential-units-saled-as-free-scale.html#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code># # A tibble: 285 x 42
-#   VEJ_NAVN     HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode
-#   &lt;chr&gt;        &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt;
-# 1 Olufsvej     6B     1           &quot;th&quot;          2100     101   420132          2000173             23
-# 2 Betty Nanse~ 53     6           &quot;613&quot;         2000     147   241801            10051              1
-# 3 Betty Nanse~ 53     7           &quot;713&quot;         2000     147   241801            10051              1
-# 4 George Mars~ 13     st          &quot;&quot;            2450     101    19878          2000174             24
-# 5 H.C. Anders~ 13     3           &quot;tv&quot;          1553     101    24474          2000179             29
-# 6 Falkoner Al~ 114A   st          &quot;th&quot;          2000     147    31076            10051              1
-# # ... with 279 more rows, and 33 more variables: MatrNr &lt;chr&gt;, BYG_ANVEND_KODE &lt;fct&gt;,
-# #   OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;, TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;,
-# #   BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;,
-# #   ENH_ANVEND_KODE &lt;fct&gt;, BOLIGTYPE_KODE &lt;fct&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;,
-# #   ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;,
-# #   VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;, VARME_SUPPL_KODE &lt;fct&gt;, EJD_VAERDI &lt;int64&gt;,
-# #   GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;, KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;,
-# #   SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;,
-# #   BBR_year &lt;dbl&gt;</code></pre>
+#   VEJ_NAVN             HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode
+#   &lt;chr&gt;                &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;
+# 1 Olufsvej             6B     1           &quot;th&quot;          2100     101   420132          2000173
+# 2 Betty Nansens Alle   53     6           &quot;613&quot;         2000     147   241801            10051
+# 3 Betty Nansens Alle   53     7           &quot;713&quot;         2000     147   241801            10051
+# 4 George Marshalls Vej 13     st          &quot;&quot;            2450     101    19878          2000174
+# 5 H.C. Andersens Boul~ 13     3           &quot;tv&quot;          1553     101    24474          2000179
+# 6 Falkoner Alle        114A   st          &quot;th&quot;          2000     147    31076            10051
+# # ... with 279 more rows, and 34 more variables: KomEjerlavKode &lt;int&gt;, MatrNr &lt;chr&gt;,
+# #   BYG_ANVEND_KODE &lt;fct&gt;, OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;,
+# #   TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;,
+# #   BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;fct&gt;, BOLIGTYPE_KODE &lt;fct&gt;,
+# #   ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;,
+# #   ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;,
+# #   VARME_SUPPL_KODE &lt;fct&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;, SKOEDE_DATO &lt;date&gt;,
+# #   geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
 <p><strong>Big houses (area &gt; 1000)</strong></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="residential-units-saled-as-free-scale.html#cb11-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="residential-units-saled-as-free-scale.html#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb11-3"><a href="residential-units-saled-as-free-scale.html#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&gt;</span> <span class="dv">1000</span>) </span></code></pre></div>
 <pre><code># # A tibble: 402 x 42
-#   VEJ_NAVN     HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode KomEjerlavKode
-#   &lt;chr&gt;        &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;          &lt;int&gt;
-# 1 Amalienborg~ 7      st          &quot;&quot;            1257     101    23028          2000167             17
-# 2 Amalienborg~ 7      st          &quot;&quot;            1257     101    23028          2000167             17
-# 3 Ottiliavej   3      1           &quot;&quot;            2500     101   173666          2000176             26
-# 4 Rymarksvej   1      st          &quot;&quot;            2900     101   474402          2000173             23
-# 5 Ottiliavej   1      1           &quot;&quot;            2500     101   173666          2000176             26
-# 6 HillerÃ¸dga~ 64     st          &quot;&quot;            2200     101   390594          2000175             25
-# # ... with 396 more rows, and 33 more variables: MatrNr &lt;chr&gt;, BYG_ANVEND_KODE &lt;fct&gt;,
-# #   OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;, TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;,
-# #   BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;, BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;,
-# #   ENH_ANVEND_KODE &lt;fct&gt;, BOLIGTYPE_KODE &lt;fct&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;,
-# #   ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;,
-# #   VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;, VARME_SUPPL_KODE &lt;fct&gt;, EJD_VAERDI &lt;int64&gt;,
-# #   GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;, KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;,
-# #   SKOEDE_DATO &lt;date&gt;, geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;,
-# #   BBR_year &lt;dbl&gt;</code></pre>
+#   VEJ_NAVN             HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode
+#   &lt;chr&gt;                &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;
+# 1 Amalienborg Slotspl~ 7      st          &quot;&quot;            1257     101    23028          2000167
+# 2 Amalienborg Slotspl~ 7      st          &quot;&quot;            1257     101    23028          2000167
+# 3 Ottiliavej           3      1           &quot;&quot;            2500     101   173666          2000176
+# 4 Rymarksvej           1      st          &quot;&quot;            2900     101   474402          2000173
+# 5 Ottiliavej           1      1           &quot;&quot;            2500     101   173666          2000176
+# 6 HillerÃ¸dgade        64     st          &quot;&quot;            2200     101   390594          2000175
+# # ... with 396 more rows, and 34 more variables: KomEjerlavKode &lt;int&gt;, MatrNr &lt;chr&gt;,
+# #   BYG_ANVEND_KODE &lt;fct&gt;, OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;,
+# #   TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;,
+# #   BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;fct&gt;, BOLIGTYPE_KODE &lt;fct&gt;,
+# #   ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;, VAERELSE_ANT &lt;int&gt;,
+# #   ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;, VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;,
+# #   VARME_SUPPL_KODE &lt;fct&gt;, EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
+# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;, SKOEDE_DATO &lt;date&gt;,
+# #   geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
 
 </div>
 </div>
