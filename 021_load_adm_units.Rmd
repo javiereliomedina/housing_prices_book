@@ -50,11 +50,20 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
 Some data have been aggregated to gird cells of 100 m x 100 m (i.e. population density), and thus we need to generate a grids over the study area:
 ```{r grids-100m, cache = TRUE, dependson = "adm-units"}
 
+# Make grids
   grids100m <- study_area %>% 
     # Make regular grids (100m x 100m)
     st_make_grid(cellsize = 100) %>% 
     st_sf() %>% 
+    # Grids only in the study area
+    st_intersection(study_area) %>% 
     # Name grids as "g001", "g002", ...
     mutate(grid_ID = paste0("g", stringr::str_pad(seq(1, nrow(.), 1), 3, pad = "0")))
 
+# Plot
+  ggplot() + 
+    geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
+    geom_sf(data = grids100m, fill = NA, color = "red", size = 0.05) + 
+    my_theme_map()
+  
 ```

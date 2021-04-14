@@ -156,7 +156,7 @@ Therefore we create the following function:
 ```
 
 Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m and ancestry.
-```{r fig-pop-map-grid, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "adm-units", fig.cap = "Population density at the first day of 2019 by grid cells of 100m x 100m"}
+```{r fig-pop-map-grid, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "grids-100m", fig.cap = "Population density at the first day of 2019 by grid cells of 100m x 100m"}
 
   pop_2019_g100m <-  f_pd_grids(.pop = prsh_pop_sf,
                                 .parish = cph_parish,
