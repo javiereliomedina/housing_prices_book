@@ -32,18 +32,18 @@ The data have been analysed with **R** (version `r paste(R.Version()$major, R.Ve
   }
 
 # List of packages 
-  pkg <- c( "bit64", "bookdown",
-            "data.table", "danstat",
-            "forcats", "furrr",
-            "ggspatial", "giscoR", "gtsummary",
-            "janitor",
-            "kableExtra", "knitr",
-            "latex2exp",
-            "osmdata", "patchwork", "potential",
-            "rmarkdown", "remotes", "RColorBrewer", "rappdirs",
-            "sf", "stringr", "SnowballC", "stars",
-            "units",
-            "table1", "tidyverse", "tidytext", "tm", "tools")
+  pkg <- c("bit64", "bookdown",
+           "data.table", "danstat",
+           "forcats", "furrr",
+           "ggspatial", "giscoR", "gtsummary",
+           "janitor",
+           "kableExtra", "knitr",
+           "latex2exp",
+           "osmdata", "patchwork", "potential",
+           "rmarkdown", "remotes", "RColorBrewer", "rappdirs",
+           "sf", "stringr", "SnowballC", "stars",
+           "units",
+           "table1", "tidyverse", "tidytext", "tm", "tools")
 
 # Check and install
   ipak(pkg)

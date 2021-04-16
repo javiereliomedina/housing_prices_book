@@ -925,7 +925,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="residential-units-saled-as-free-scale" class="section level1" number="9">
 <h1><span class="header-section-number">Chapter 9</span> Residential units saled as free scale</h1>
-<p>We focused our study in residential dwellings on the ordinary free trade (Table <a href="housing-data.html#tab:tbl-runits-oft">3.1</a>).</p>
+<p>We focused our study in residential dwellings on the ordinary free trade (Table <a href="#tab:tbl-runits-oft"><strong>??</strong></a>).</p>
 <p>NOTES:</p>
 <ul>
 <li>There are large differences in the number of residential units between years, why??</li>
@@ -938,12 +938,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>What about housing prices = 0?</li>
 <li>Dwelling Area &lt;= 0?</li>
 </ul>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="residential-units-saled-as-free-scale.html#cb26-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb26-2"><a href="residential-units-saled-as-free-scale.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
-<span id="cb26-3"><a href="residential-units-saled-as-free-scale.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb26-4"><a href="residential-units-saled-as-free-scale.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb26-5"><a href="residential-units-saled-as-free-scale.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb26-6"><a href="residential-units-saled-as-free-scale.html#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="residential-units-saled-as-free-scale.html#cb27-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="residential-units-saled-as-free-scale.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
+<span id="cb27-3"><a href="residential-units-saled-as-free-scale.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
+<span id="cb27-4"><a href="residential-units-saled-as-free-scale.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
+<span id="cb27-5"><a href="residential-units-saled-as-free-scale.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
+<span id="cb27-6"><a href="residential-units-saled-as-free-scale.html#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="residential-units-by-floor-level" class="section level2" number="9.1">
 <h2><span class="header-section-number">9.1</span> Residential units by floor level</h2>
@@ -956,143 +956,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>4 - 4th floor</li>
 <li>5 or more = etc.</li>
 </ul>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="residential-units-saled-as-free-scale.html#cb27-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb27-2"><a href="residential-units-saled-as-free-scale.html#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-3"><a href="residential-units-saled-as-free-scale.html#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb27-4"><a href="residential-units-saled-as-free-scale.html#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb27-5"><a href="residential-units-saled-as-free-scale.html#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb27-6"><a href="residential-units-saled-as-free-scale.html#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb27-7"><a href="residential-units-saled-as-free-scale.html#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb27-8"><a href="residential-units-saled-as-free-scale.html#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb27-9"><a href="residential-units-saled-as-free-scale.html#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb27-10"><a href="residential-units-saled-as-free-scale.html#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb27-11"><a href="residential-units-saled-as-free-scale.html#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb27-12"><a href="residential-units-saled-as-free-scale.html#cb27-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb27-13"><a href="residential-units-saled-as-free-scale.html#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb27-14"><a href="residential-units-saled-as-free-scale.html#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb27-15"><a href="residential-units-saled-as-free-scale.html#cb27-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb27-16"><a href="residential-units-saled-as-free-scale.html#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb27-17"><a href="residential-units-saled-as-free-scale.html#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb27-18"><a href="residential-units-saled-as-free-scale.html#cb27-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="residential-units-saled-as-free-scale.html#cb28-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="residential-units-saled-as-free-scale.html#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="residential-units-saled-as-free-scale.html#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="residential-units-saled-as-free-scale.html#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="residential-units-saled-as-free-scale.html#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
+<span id="cb28-6"><a href="residential-units-saled-as-free-scale.html#cb28-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-7"><a href="residential-units-saled-as-free-scale.html#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
+<span id="cb28-8"><a href="residential-units-saled-as-free-scale.html#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-9"><a href="residential-units-saled-as-free-scale.html#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb28-10"><a href="residential-units-saled-as-free-scale.html#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-11"><a href="residential-units-saled-as-free-scale.html#cb28-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb28-12"><a href="residential-units-saled-as-free-scale.html#cb28-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-13"><a href="residential-units-saled-as-free-scale.html#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb28-14"><a href="residential-units-saled-as-free-scale.html#cb28-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb28-15"><a href="residential-units-saled-as-free-scale.html#cb28-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb28-16"><a href="residential-units-saled-as-free-scale.html#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb28-17"><a href="residential-units-saled-as-free-scale.html#cb28-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb28-18"><a href="residential-units-saled-as-free-scale.html#cb28-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
 <img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
 <p class="caption">
 Figure 9.1: Residential units distribution by floor level
 </p>
 </div>
-<p>Dwelling by type codes:</p>
-<ul>
-<li><ol style="list-style-type: decimal">
-<li>Egentlig beboelse = Actual residence</li>
-</ol></li>
-<li><ol start="2" style="list-style-type: decimal">
-<li>Blandet erhverv og beboelse = Mixed occupations and housing</li>
-</ol></li>
-<li><ol start="3" style="list-style-type: decimal">
-<li>Enkeltværelse = Single room</li>
-</ol></li>
-<li>E. Andet (bl.a. institutioner og erhverv) = Other (including institutions and professions)</li>
-</ul>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="residential-units-saled-as-free-scale.html#cb28-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="residential-units-saled-as-free-scale.html#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="residential-units-saled-as-free-scale.html#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(BOLIGTYPE_KODE, type) <span class="sc">%&gt;%</span></span>
-<span id="cb28-4"><a href="residential-units-saled-as-free-scale.html#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>())</span></code></pre></div>
-<pre><code># # A tibble: 24 x 3
-# # Groups:   BOLIGTYPE_KODE [6]
-#    BOLIGTYPE_KODE type                          n
-#    &lt;fct&gt;          &lt;fct&gt;                     &lt;int&gt;
-#  1 1              College                   80371
-#  2 1              Farmhouse                    16
-#  3 1              Multi-storey            5372380
-#  4 1              Residential institution      58
-#  5 1              Second building            3102
-#  6 1              Semi-detached house      146334
-#  7 1              Single-family house      244570
-#  8 2              Multi-storey              18642
-#  9 2              Residential institution      14
-# 10 2              Second building              87
-# # ... with 14 more rows</code></pre>
-<p><strong>Unit area &lt; 0??</strong></p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="residential-units-saled-as-free-scale.html#cb30-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="residential-units-saled-as-free-scale.html#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="residential-units-saled-as-free-scale.html#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code></pre></div>
-<pre><code># # A tibble: 161 x 42
-#    VEJ_NAVN     HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode
-#    &lt;chr&gt;        &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;
-#  1 Haregade     1      st          &quot;&quot;            1320     101     8983          2000166
-#  2 Ã…lekistevej 221    st          &quot;&quot;            2720     101   686264          2000177
-#  3 Ã˜ster Vold~ 12     3           &quot;&quot;            1350     101   671909          2000166
-#  4 Humlehaven   64     st          &quot;&quot;            2500     101   243540          2000180
-#  5 SÃ¦byholmsv~ 23     st          &quot;&quot;            2500     101   553027          2000180
-#  6 SolvÃ¦nget   10     st          &quot;&quot;            2100     101   514862          2000173
-#  7 Otto Busses~ 12     st          &quot;&quot;            2450     101   952940          2000174
-#  8 Otto Busses~ 10     st          &quot;&quot;            2450     101   952940          2000174
-#  9 Ã…gerupvej   58     st          &quot;&quot;            2700     101   678644          2000159
-# 10 Herlufsholm~ 3      st          &quot;&quot;            2720     101   221202          2000177
-# # ... with 151 more rows, and 34 more variables: KomEjerlavKode &lt;int&gt;, MatrNr &lt;chr&gt;,
-# #   BYG_ANVEND_KODE &lt;fct&gt;, OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;,
-# #   TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;,
-# #   BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;fct&gt;,
-# #   BOLIGTYPE_KODE &lt;fct&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;,
-# #   VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;,
-# #   VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;, VARME_SUPPL_KODE &lt;fct&gt;,
-# #   EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
-# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;, SKOEDE_DATO &lt;date&gt;,
-# #   geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
-<p><strong>Unit area = 0??</strong></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="residential-units-saled-as-free-scale.html#cb32-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
-<span id="cb32-2"><a href="residential-units-saled-as-free-scale.html#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb32-3"><a href="residential-units-saled-as-free-scale.html#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">==</span> <span class="dv">0</span>)</span></code></pre></div>
-<pre><code># # A tibble: 285 x 42
-#    VEJ_NAVN     HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode
-#    &lt;chr&gt;        &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;
-#  1 Olufsvej     6B     1           &quot;th&quot;          2100     101   420132          2000173
-#  2 Betty Nanse~ 53     6           &quot;613&quot;         2000     147   241801            10051
-#  3 Betty Nanse~ 53     7           &quot;713&quot;         2000     147   241801            10051
-#  4 George Mars~ 13     st          &quot;&quot;            2450     101    19878          2000174
-#  5 H.C. Anders~ 13     3           &quot;tv&quot;          1553     101    24474          2000179
-#  6 Falkoner Al~ 114A   st          &quot;th&quot;          2000     147    31076            10051
-#  7 Harrestrup ~ 3      st          &quot;&quot;            2500     101   210324          2000180
-#  8 DybbÃ¸lsgade 49     2           &quot;&quot;            1721     101   414337          2000174
-#  9 Sankt Hans ~ 19     1           &quot;tv&quot;          2200     101   485404          2000173
-# 10 SakskÃ¸bing~ 8      st          &quot;&quot;            2500     101   481905          2000180
-# # ... with 275 more rows, and 34 more variables: KomEjerlavKode &lt;int&gt;, MatrNr &lt;chr&gt;,
-# #   BYG_ANVEND_KODE &lt;fct&gt;, OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;,
-# #   TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;,
-# #   BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;fct&gt;,
-# #   BOLIGTYPE_KODE &lt;fct&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;,
-# #   VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;,
-# #   VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;, VARME_SUPPL_KODE &lt;fct&gt;,
-# #   EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
-# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;, SKOEDE_DATO &lt;date&gt;,
-# #   geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
-<p><strong>Big houses (area &gt; 1000)</strong></p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="residential-units-saled-as-free-scale.html#cb34-1" aria-hidden="true" tabindex="-1"></a>  res_units <span class="sc">%&gt;%</span></span>
-<span id="cb34-2"><a href="residential-units-saled-as-free-scale.html#cb34-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb34-3"><a href="residential-units-saled-as-free-scale.html#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&gt;</span> <span class="dv">1000</span>) </span></code></pre></div>
-<pre><code># # A tibble: 402 x 42
-#    VEJ_NAVN     HUS_NR Etagebetegn SIDE_DOERNR PostNr KomKode ESREjdNr Landsejerlavkode
-#    &lt;chr&gt;        &lt;chr&gt;  &lt;ord&gt;       &lt;chr&gt;        &lt;int&gt;   &lt;int&gt;    &lt;int&gt;            &lt;int&gt;
-#  1 Amalienborg~ 7      st          &quot;&quot;            1257     101    23028          2000167
-#  2 Amalienborg~ 7      st          &quot;&quot;            1257     101    23028          2000167
-#  3 Ottiliavej   3      1           &quot;&quot;            2500     101   173666          2000176
-#  4 Rymarksvej   1      st          &quot;&quot;            2900     101   474402          2000173
-#  5 Ottiliavej   1      1           &quot;&quot;            2500     101   173666          2000176
-#  6 HillerÃ¸dga~ 64     st          &quot;&quot;            2200     101   390594          2000175
-#  7 Emdrupvej    138    st          &quot;&quot;            2400     101   117707          2000156
-#  8 Stockfleths~ 4      st          &quot;&quot;            2000     147   116853            10051
-#  9 Holmbladsga~ 120    st          &quot;&quot;            2300     101   403130          2000172
-# 10 Sundholmsvej 20     st          &quot;&quot;            2300     101   545334          2000155
-# # ... with 392 more rows, and 34 more variables: KomEjerlavKode &lt;int&gt;, MatrNr &lt;chr&gt;,
-# #   BYG_ANVEND_KODE &lt;fct&gt;, OPFOERELSE_AAR &lt;int&gt;, OMBYG_AAR &lt;int&gt;, YDERVAEG_KODE &lt;fct&gt;,
-# #   TAG_KODE &lt;fct&gt;, BYG_ARL_SAML &lt;int&gt;, BYG_BOLIG_ARL_SAML &lt;int&gt;, ERHV_ARL_SAML &lt;int&gt;,
-# #   BYG_BEBYG_ARL &lt;int&gt;, ETAGER_ANT &lt;int&gt;, ENH_ANVEND_KODE &lt;fct&gt;,
-# #   BOLIGTYPE_KODE &lt;fct&gt;, ENH_ARL_SAML &lt;int&gt;, BEBO_ARL &lt;int&gt;, ENH_ERHV_ARL &lt;int&gt;,
-# #   VAERELSE_ANT &lt;int&gt;, ENERGI_KODE &lt;fct&gt;, VAER_ERHV_ANT &lt;int&gt;,
-# #   VARMEINSTAL_KODE &lt;fct&gt;, OPVARMNING_KODE &lt;fct&gt;, VARME_SUPPL_KODE &lt;fct&gt;,
-# #   EJD_VAERDI &lt;int64&gt;, GRUND_VAERDI &lt;int64&gt;, STUEHUS_VAERDI &lt;int&gt;,
-# #   KONTANT_KOEBESUM &lt;int64&gt;, OVERDRAGELSES_KODE &lt;fct&gt;, SKOEDE_DATO &lt;date&gt;,
-# #   geometry &lt;POINT [m]&gt;, floor_level &lt;ord&gt;, type &lt;fct&gt;, int &lt;lgl&gt;, BBR_year &lt;dbl&gt;</code></pre>
 
 </div>
 </div>

@@ -132,12 +132,17 @@ However, for housing prices we focus our analysis to the main building types in 
   
 ```
 
-Then, we selected from the main residential buildings those that are on the ordinary free trade (Table \@ref(tab:tbl-runits-oft)). Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.
+Then, we selected from the main residential buildings those that are on the ordinary free trade (Table \@ref(tab:tbl-runits-clean)). Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked. Inconsistent values have been also removed; i.e. prices < 10 kDKK (approx. €1300) and area < 10 $m^2$. Finally, we removed from the analysis the residential units not used as residence (i.e. BOLIGTYPE_KODE = E). 
 
-```{r tbl-runits-oft, cache = TRUE, dependson = "load-BBR"}
+- 1. Egentlig beboelse                       = Actual residence
+- 2. Blandet erhverv og beboelse             = Mixed occupations and housing
+- 3. Enkeltværelse                           = Single room 
+- E. Andet (bl.a. institutioner og erhverv)  = Other (including institutions and professions)
 
-# Select residential units for the study
-  selected_res_units <- c("Multi-storey", "Single-family house", "Semi-detached house") 
+```{r runits-clean, cache = TRUE, dependson = "load-BBR"}
+
+  selected_res_units <- c("Multi-storey", "Single-family house", "Semi-detached house")
+
   res_units_oft <- res_units %>%
     # Convert to tibble
     as_tibble() %>% 
@@ -145,9 +150,18 @@ Then, we selected from the main residential buildings those that are on the ordi
     filter(type %in% selected_res_units) %>% 
     # ordinary free trade
     filter(OVERDRAGELSES_KODE == "1") %>% 
+    # Remove inconsistent values 
+    filter(KONTANT_KOEBESUM >= 10000,
+           BEBO_ARL >= 10) %>%
+    # Remove BOLIGTYPE_KODE = E form the dataset
+    filter(BOLIGTYPE_KODE != "E") %>% 
     # Drop unused factors levels
     droplevels()
- 
+    
+```
+
+```{r tbl-runits-clean, cache = TRUE, dependson = "runits-clean"}
+
 # Table with Number of residential units
   res_units_oft %>%
     # Summarize by type or residency and year
@@ -159,13 +173,12 @@ Then, we selected from the main residential buildings those that are on the ordi
     # Pivot
     pivot_wider(names_from = BBR_year, values_from = n) %>% 
     adorn_totals("row") %>%
-    kbl(caption = "Number of residential units in the free trade by year") %>% 
+    kbl(caption = "Number of residential dwellings in the free trade by year") %>% 
     kable_paper() %>% 
     row_spec(4, bold = TRUE) %>% 
     scroll_box(width = "100%")
 
 ```
-
 
 Finally, we adjusted the housing prices to 2019 prices. In this regard, we take into  account the inflation and prices from different years can be compared (@Valtersdorf2020). The adjusted price is obtained as follow:
 
@@ -232,18 +245,15 @@ res_units_oft <- res_units_oft %>%
   # Add price index in 2019 by category
   left_join(price_index_2019, by = c("category" = "category")) %>% 
   # Calculate prices 2019
-  mutate(price2019_kDKK = (KONTANT_KOEBESUM * index_2019 / index)/1000)
+  mutate(price2019_kDKK = (KONTANT_KOEBESUM * index_2019 / index) / 1000)
   
 ```
 
-Finally, we remove inconsistent values; i.e. prices $\leq$ 10 kDKK (approx. 1300 €; N = `r nrow(res_units_oft[res_units_oft$price2019_kDKK <= 10,])`), and area $\leq$ 0 $m^2$ (N = `r nrow(res_units_oft[res_units_oft$BEBO_ARL <= 10,])`), and calculate the housing price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices by the dwelling size (*BEBO_ARL*).
+The housing price per square meter ($kDDK/m^2$) is calculated by dividing the 2019 adjusted prices by the dwelling size (*BEBO_ARL*).
 
 ```{r price-per-meter}
 
 res_units_oft <- res_units_oft %>% 
-  # Remove inconsistent values  
-  filter(price2019_kDKK > 10,
-         BEBO_ARL > 0) %>% 
   # Price per m2
   mutate(price2019_kDKK_m2 = price2019_kDKK / BEBO_ARL)
 
@@ -279,6 +289,7 @@ res_units_oft %>%
   bold_labels() 
 
 ```
+
 
 
 

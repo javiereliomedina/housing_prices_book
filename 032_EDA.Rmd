@@ -58,47 +58,4 @@ res_units_oft %>%
   
 ```
 
-Dwelling by type codes:
 
-- 1. Egentlig beboelse                       = Actual residence
-- 2. Blandet erhverv og beboelse             = Mixed occupations and housing
-- 3. Enkeltværelse                           = Single room
-- E. Andet (bl.a. institutioner og erhverv)  = Other (including institutions and professions)
-
-```{r runits-use}
-
-  res_units %>%
-    as_tibble() %>%
-    group_by(BOLIGTYPE_KODE, type) %>%
-    summarise(n = n())
-
-```
-
-**Unit area < 0??**
-
-```{r runits-area-neg}
-
-  res_units %>%
-    as_tibble() %>%
-    filter(BEBO_ARL < 0)
-
-```
-
-**Unit area = 0??**
-
-```{r runits-no-area}
-
-  res_units %>%
-    as_tibble() %>%
-    filter(BEBO_ARL == 0)
-
-```
-
-**Big houses (area > 1000)**
-```{r runits-big-area}
-
-  res_units %>%
-    as_tibble() %>%
-    filter(BEBO_ARL > 1000) 
-
-```
