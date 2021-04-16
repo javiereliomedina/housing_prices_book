@@ -1,6 +1,6 @@
-# House prices and characteristics    
+# Housing data    
 
-We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)):
+We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)), we use this table for disaggregating population density from parish level to grid cells of 100m x 100m. 
 
 - 110           = Farmhouse for agricultural property.  
 - 120, 121, 122 = Detached single-family house (detached house). 
@@ -8,7 +8,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Bui
 - 140           = Multi-storey residential building (multi-family house, including two-family house (horizontal separation between the units).
 - 150           = College.
 - 160           = Residential building for residential institution.
-- 190           = Second building for year-round living (NOT USED - VERY LOW NUMBER)
+- 190           = Second building for year-round living.
 
 ```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_path"))}
 
@@ -78,7 +78,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the the Bui
 
 ```
 
-We focus our analysis to the main building types in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure \@ref(fig:fig-sp-res-builds)).
+However, for housing prices we focus our analysis to the main building types in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure \@ref(fig:fig-sp-res-builds)).
 
 ```{r, fig-sp-res-builds, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "load-BBR", fig.cap = "2D kernel density map"}
 
@@ -144,7 +144,9 @@ Then, we selected from the main residential buildings those that are on the ordi
     # Select main residential units in the area
     filter(type %in% selected_res_units) %>% 
     # ordinary free trade
-    filter(OVERDRAGELSES_KODE == "1")
+    filter(OVERDRAGELSES_KODE == "1") %>% 
+    # Drop unused factors levels
+    droplevels()
  
 # Table with Number of residential units
   res_units_oft %>%
@@ -163,3 +165,121 @@ Then, we selected from the main residential buildings those that are on the ordi
     scroll_box(width = "100%")
 
 ```
+
+
+Finally, we adjusted the housing prices to 2019 prices. In this regard, we take into  account the inflation and prices from different years can be compared (@Valtersdorf2020). The adjusted price is obtained as follow:
+
+$$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
+
+Where, $Price_{2019}$ is the adjusting housing price for 2019, $Price_{i}$ is the price of the respective year $i$, and $Index_{i}$ and $Index_{2019}$ are the price indexes for the origin year ${i}$ and $2019$, respectively. The indexes have been obtained from Statistic Denmark; i.e. table [EJ66: Price index for sales property (2006=100) by region, category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&PLanguage=1&PXSId=0&wsid=cftree), and targeted for the study area; i.e. *Province Byen København - Copenhagen City* (Table \@ref(tab:price-index)).   
+
+```{r price-index}
+
+# DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)
+  id_table <- "EJ66"
+  dat_meta <- get_table_metadata(table_id = id_table, variables_only = TRUE)
+  
+# Values to retrieve
+  variables <- list(
+    # Province Byen København: region = 01 
+    list(code = "OMRÅDE", values = "01"),
+    # Category of real property
+    list(code = "EJENDOMSKATE", values = c("0111", "2103")),
+    # Index
+    list(code = "TAL", values = NA),
+    # From 2004 to 2019
+    list(code = "Tid", values = seq(2004, 2019, 1))
+    )
+
+# Get index
+  price_index <- get_data("EJ66", variables) %>% 
+    # Get index
+    filter(TAL == "Index") %>% 
+    # Translate into English 
+    rename(region = OMRÅDE,
+           category = EJENDOMSKATE,
+           unit = TAL,
+           date = TID, 
+           index = INDHOLD) %>% 
+    # Convert index tu numeric
+    mutate(index = as.numeric(index)) %>% 
+    # Remove region and unit columns
+    select(-region, -unit) 
+    
+# Print price index table  
+  price_index %>% 
+    # Wide format
+    pivot_wider(names_from = date, 
+                values_from = index) %>% 
+    kbl(caption = "Price index for sale properties in Copenhagen City") %>% 
+    kable_paper() %>% 
+    scroll_box(width = "100%")
+```
+
+```{r adj-price}
+
+# Adjust housing prices
+price_index_2019 <- filter(price_index, date == 2019) %>% rename(index_2019 = index)
+
+res_units_oft <- res_units_oft %>% 
+  # Column with price index categories
+  mutate(category = case_when(
+    type == "Single-family house" ~ "One-family houses",
+    TRUE ~ "Owner-occupied flats, total")) %>%
+  # Add price index by year and category
+  left_join(price_index, by = c("category" = "category",
+                                "BBR_year" = "date")) %>% 
+  # Add price index in 2019 by category
+  left_join(price_index_2019, by = c("category" = "category")) %>% 
+  # Calculate prices 2019
+  mutate(price2019_kDKK = (KONTANT_KOEBESUM * index_2019 / index)/1000)
+  
+```
+
+Finally, we remove inconsistent values; i.e. prices $\leq$ 10 kDKK (approx. 1300 €; N = `r nrow(res_units_oft[res_units_oft$price2019_kDKK <= 10,])`), and area $\leq$ 0 $m^2$ (N = `r nrow(res_units_oft[res_units_oft$BEBO_ARL <= 10,])`), and calculate the housing price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices by the dwelling size (*BEBO_ARL*).
+
+```{r price-per-meter}
+
+res_units_oft <- res_units_oft %>% 
+  # Remove inconsistent values  
+  filter(price2019_kDKK > 10,
+         BEBO_ARL > 0) %>% 
+  # Price per m2
+  mutate(price2019_kDKK_m2 = price2019_kDKK / BEBO_ARL)
+
+```
+
+The summary descriptive statistics of the housing prices are:
+
+```{r tbl-summary}
+
+# Table theme
+theme_gtsummary_compact()
+
+# Create variable labels of the variables to be printed in the table
+labelled::var_label(res_units_oft$price2019_kDKK)    <- "Adjusted prices (kDKK)"
+labelled::var_label(res_units_oft$BEBO_ARL)          <- "Dwelling size (m2)"
+labelled::var_label(res_units_oft$price2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
+
+# Summary table
+res_units_oft %>% 
+  # Select variables of interest
+  select(type, price2019_kDKK,  BEBO_ARL, price2019_kDKK_m2) %>%
+  # Summary values
+  tbl_summary(by = type,
+              type = all_continuous() ~ "continuous2",
+              statistic = all_continuous() ~ c("{mean}",
+                                               "{median}",
+                                               "{p25} - {p75}", 
+                                               "{min} - {max}"),
+              missing = "no") %>% 
+  add_overall() %>% 
+  modify_spanning_header(c("stat_1", "stat_2", "stat_3") ~ "**House type**") %>% 
+  modify_footnote(update = everything() ~ NA) %>% 
+  bold_labels() 
+
+```
+
+
+
+

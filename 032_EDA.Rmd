@@ -1,60 +1,27 @@
 # Residential units saled as free scale
 
-We focused our study in residential dwellings on the ordinary free trade (Table \@ref(tab:tbl-runits-oft)). **There are large differences in the number of residential units between years, why??**
+We focused our study in residential dwellings on the ordinary free trade (Table \@ref(tab:tbl-runits-oft)). 
 
-**Study only one year for the moment (e.g. 2019)??**
+NOTES: 
 
-## Housing prices 
-
-
-- **SKOEDE_DATO** = "The date on which the deed was signed" -> use as sale date?? Should we use this date (i.e. for the price index)? ...   
+- There are large differences in the number of residential units between years, why??
+- Study only one year for the moment (e.g. 2019)??
+- Housing prices in different years -> adjust to 2019 prices (what index; Table \@ref(tab:price-index))?
 - **KONTANT_KOEBESUM** = cash purchase price? Analyse it?? What about **KOEBESUM_BELOEB** = The purchase price agreed upon the sale of the property???
-- **KONTANT_KOEBESUM** = 0 or (< 100000 DKK)?
+- **KONTANT_KOEBESUM** = 0 or (< 100000 DKK)? 
+- **SKOEDE_DATO** = "The date on which the deed was signed" -> use as sale date?? Should we use this date (i.e. for the price index)? ...   
+ - What about housing prices = 0?
+ - Dwelling Area <= 0? 
+ 
+```{r}
 
-We adjusted the housing prices to 2019 price for taking into account the inflation and, therefore, be able to compare them between years (@Valtersdorf2020). The indexes have been obtained from Statistic Denmark; i.e. table [EJ66: Price index for sales property (2006=100) by region, category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&PLanguage=1&PXSId=0&wsid=cftree), and targeted for the study area (i.e. *Province Byen København*).   
+res_units_oft %>% 
+  ggplot(aes(sample = log10(price2019_kDKK),  colour = factor(BBR_year))) +
+  geom_qq() +
+  #geom_qq_line() +
+  facet_grid(~type) +
+  theme_bw()
 
-$$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
-
-Index:
-
-```{r price-index}
-
-# DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)
-  id_table <- "EJ66"
-  dat_meta <- get_table_metadata(table_id = id_table, variables_only = TRUE)
-  
-# Values to retrieve
-  variables <- list(
-    # Province Byen København: region = 01 
-    list(code = "OMRÅDE", values = "01"),
-    # Category of real property
-    list(code = "EJENDOMSKATE", values = c("0111", "2103")),
-    # Index
-    list(code = "TAL", values = 100),
-    # From 2004 to 2019
-    list(code = "Tid", values = seq(2004, 2019, 1))
-    )
-
-# Get index
-  price_index <- get_data("EJ66", variables) %>% 
-    # Translate into English 
-    rename(region = OMRÅDE,
-           category = EJENDOMSKATE,
-           unit = TAL,
-           date = TID, 
-           value = INDHOLD)  
-    
-# Print table 
-  price_index %>% 
-    # Wide format
-    pivot_wider(names_from = date, 
-                values_from = value) %>% 
-    select(-region, -unit) %>% 
-    kbl(caption = "Price index for sale properties in Copenhagen City") %>% 
-    kable_paper() %>% 
-    scroll_box(width = "100%")
-
-  
 ```
 
 

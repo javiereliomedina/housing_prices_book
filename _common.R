@@ -1,32 +1,18 @@
 set.seed(1014)
-options(digits = 3)
 
 knitr::opts_chunk$set(
   comment = "#",
-  collapse = knitr::is_latex_output(),
-  cache = TRUE,
-  #  out.width = "70%",
+  cache = TRUE, 
+  cache.lazy = FALSE,
   warning = FALSE,
   message = FALSE,
   include = TRUE,
   echo = TRUE,
   fig.align = 'center',
-  fig.pos = "H"
-  #  fig.width = 6,
-  #  fig.asp = 0.618,  # 1 / phi
-  #  fig.show = "hold"
-)
+  fig.pos = "H")
 
-options(dplyr.print_min = 6, dplyr.print_max = 6)
-options(stars.crs = 17)
 options(knitr.kable.NA = "-")
-mapview::mapviewOptions(fgb = FALSE)
-
-# for units: (?)
-Sys.setenv(UDUNITS2_XML_PATH="")
-if (knitr::is_latex_output())
-  options(width = 66)
-#options(width = 72)
+options(digits = 3)
 
 # Create our own theme for plotting maps in ggplot2.
 my_theme_map <- function() {
@@ -44,6 +30,6 @@ my_theme_map <- function() {
 }
 
 # Set local repository for downloading data (i.e. kortforsyningen)
-  dangeo::dangeo_set_param()
+dangeo::dangeo_set_param()
 
   

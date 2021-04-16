@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-14" />
+<meta name="date" content="2021-04-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -886,7 +886,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="part"><span><b>II Load data</b></span></li>
 <li class="chapter" data-level="2" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
-<li class="chapter" data-level="3" data-path="house-prices-and-characteristics.html"><a href="house-prices-and-characteristics.html"><i class="fa fa-check"></i><b>3</b> House prices and characteristics</a></li>
+<li class="chapter" data-level="3" data-path="housing-data.html"><a href="housing-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
 <li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
 <li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
 <li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
@@ -900,8 +900,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="9" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#housing-prices"><i class="fa fa-check"></i><b>9.1</b> Housing prices</a></li>
-<li class="chapter" data-level="9.2" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.2</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="9.1" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -927,60 +926,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="corine-land-use" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> CORINE land use</h1>
 <p>Land use have been obtained from CORINE. We downloaded the shapefile from kortforsyningen and used the data from 2012 (<em>CLC12_DK.shp</em>).</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="corine-land-use.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download CORINE to local repository (pks -  dangeo)</span></span>
-<span id="cb15-2"><a href="corine-land-use.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;CORINE&quot;</span>,</span>
-<span id="cb15-3"><a href="corine-land-use.html#cb15-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">zip_name   =</span> <span class="st">&quot;DK_CORINE_SHP_UTM32-WGS84.zip&quot;</span>)</span>
-<span id="cb15-4"><a href="corine-land-use.html#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="corine-land-use.html#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a table with the CORINE land use codes from the EEA</span></span>
-<span id="cb15-6"><a href="corine-land-use.html#cb15-6" aria-hidden="true" tabindex="-1"></a>corine_code_link <span class="ot">&lt;-</span> <span class="st">&quot;https://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2000-clc2000-250-m-version-9-2007/corine-land-cover-2000-classes-and-rgb-color-codes/clc2000legend.csv/at_download/file&quot;</span></span>
-<span id="cb15-7"><a href="corine-land-use.html#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="corine-land-use.html#cb15-8" aria-hidden="true" tabindex="-1"></a>corine_code <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(corine_code_link) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-9"><a href="corine-land-use.html#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric, as.character)</span>
-<span id="cb15-10"><a href="corine-land-use.html#cb15-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-11"><a href="corine-land-use.html#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Load shapefile</span></span>
-<span id="cb15-12"><a href="corine-land-use.html#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_set_param</span>() <span class="co"># Get local directory</span></span>
-<span id="cb15-13"><a href="corine-land-use.html#cb15-13" aria-hidden="true" tabindex="-1"></a>  corine_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DK_CORINE_SHP_UTM32-WGS84&quot;</span>, <span class="st">&quot;CLC12_DK.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb15-14"><a href="corine-land-use.html#cb15-14" aria-hidden="true" tabindex="-1"></a>  dk_corine  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(corine_link) <span class="sc">%&gt;%</span></span>
-<span id="cb15-15"><a href="corine-land-use.html#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Drop z dimension</span></span>
-<span id="cb15-16"><a href="corine-land-use.html#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb15-17"><a href="corine-land-use.html#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transform coordinates</span></span>
-<span id="cb15-18"><a href="corine-land-use.html#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-19"><a href="corine-land-use.html#cb15-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add code description</span></span>
-<span id="cb15-20"><a href="corine-land-use.html#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(corine_code, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;CODE_12&quot;</span> <span class="ot">=</span> <span class="st">&quot;CLC_CODE&quot;</span>)) </span>
-<span id="cb15-21"><a href="corine-land-use.html#cb15-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-22"><a href="corine-land-use.html#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Select study area</span></span>
-<span id="cb15-23"><a href="corine-land-use.html#cb15-23" aria-hidden="true" tabindex="-1"></a>  cph_corine <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_corine, study_area) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-24"><a href="corine-land-use.html#cb15-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(CODE_12, LABEL1, LABEL2, LABEL3 , RGB) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-25"><a href="corine-land-use.html#cb15-25" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb15-26"><a href="corine-land-use.html#cb15-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate</span>(rgb, <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-27"><a href="corine-land-use.html#cb15-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">code_12 =</span> <span class="fu">as.numeric</span>(code_12),</span>
-<span id="cb15-28"><a href="corine-land-use.html#cb15-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">hex_col =</span> grDevices<span class="sc">::</span><span class="fu">rgb</span>(red, green, blue, <span class="at">max =</span> <span class="dv">255</span>),</span>
-<span id="cb15-29"><a href="corine-land-use.html#cb15-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">hex_col =</span> <span class="fu">fct_reorder</span>(hex_col, code_12),</span>
-<span id="cb15-30"><a href="corine-land-use.html#cb15-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">label3 =</span> <span class="fu">fct_reorder</span>(label3, code_12)) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-31"><a href="corine-land-use.html#cb15-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>()</span>
-<span id="cb15-32"><a href="corine-land-use.html#cb15-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-33"><a href="corine-land-use.html#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb15-34"><a href="corine-land-use.html#cb15-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb15-35"><a href="corine-land-use.html#cb15-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_corine,</span>
-<span id="cb15-36"><a href="corine-land-use.html#cb15-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> label3),</span>
-<span id="cb15-37"><a href="corine-land-use.html#cb15-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
-<span id="cb15-38"><a href="corine-land-use.html#cb15-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb15-39"><a href="corine-land-use.html#cb15-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">#geom_sf(data = res_units, size = 0.02, shape = 16) +</span></span>
-<span id="cb15-40"><a href="corine-land-use.html#cb15-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Land use&quot;</span>,</span>
-<span id="cb15-41"><a href="corine-land-use.html#cb15-41" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> <span class="fu">levels</span>(cph_corine<span class="sc">$</span>hex_col),</span>
-<span id="cb15-42"><a href="corine-land-use.html#cb15-42" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb15-43"><a href="corine-land-use.html#cb15-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb15-44"><a href="corine-land-use.html#cb15-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb15-45"><a href="corine-land-use.html#cb15-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb15-46"><a href="corine-land-use.html#cb15-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb15-47"><a href="corine-land-use.html#cb15-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
-<span id="cb15-48"><a href="corine-land-use.html#cb15-48" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.50</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb15-49"><a href="corine-land-use.html#cb15-49" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb15-50"><a href="corine-land-use.html#cb15-50" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
-<span id="cb15-51"><a href="corine-land-use.html#cb15-51" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb15-52"><a href="corine-land-use.html#cb15-52" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb15-53"><a href="corine-land-use.html#cb15-53" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb15-54"><a href="corine-land-use.html#cb15-54" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="corine-land-use.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download CORINE to local repository (pks -  dangeo)</span></span>
+<span id="cb19-2"><a href="corine-land-use.html#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;CORINE&quot;</span>,</span>
+<span id="cb19-3"><a href="corine-land-use.html#cb19-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">zip_name   =</span> <span class="st">&quot;DK_CORINE_SHP_UTM32-WGS84.zip&quot;</span>)</span>
+<span id="cb19-4"><a href="corine-land-use.html#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="corine-land-use.html#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a table with the CORINE land use codes from the EEA</span></span>
+<span id="cb19-6"><a href="corine-land-use.html#cb19-6" aria-hidden="true" tabindex="-1"></a>corine_code_link <span class="ot">&lt;-</span> <span class="st">&quot;https://www.eea.europa.eu/data-and-maps/data/corine-land-cover-2000-clc2000-250-m-version-9-2007/corine-land-cover-2000-classes-and-rgb-color-codes/clc2000legend.csv/at_download/file&quot;</span></span>
+<span id="cb19-7"><a href="corine-land-use.html#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="corine-land-use.html#cb19-8" aria-hidden="true" tabindex="-1"></a>corine_code <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(corine_code_link) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-9"><a href="corine-land-use.html#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric, as.character)</span>
+<span id="cb19-10"><a href="corine-land-use.html#cb19-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-11"><a href="corine-land-use.html#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Load shapefile</span></span>
+<span id="cb19-12"><a href="corine-land-use.html#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_set_param</span>() <span class="co"># Get local directory</span></span>
+<span id="cb19-13"><a href="corine-land-use.html#cb19-13" aria-hidden="true" tabindex="-1"></a>  corine_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir, <span class="st">&quot;DK_CORINE_SHP_UTM32-WGS84&quot;</span>, <span class="st">&quot;CLC12_DK.shp&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb19-14"><a href="corine-land-use.html#cb19-14" aria-hidden="true" tabindex="-1"></a>  dk_corine  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(corine_link) <span class="sc">%&gt;%</span></span>
+<span id="cb19-15"><a href="corine-land-use.html#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Drop z dimension</span></span>
+<span id="cb19-16"><a href="corine-land-use.html#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-17"><a href="corine-land-use.html#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transform coordinates</span></span>
+<span id="cb19-18"><a href="corine-land-use.html#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-19"><a href="corine-land-use.html#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add code description</span></span>
+<span id="cb19-20"><a href="corine-land-use.html#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(corine_code, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;CODE_12&quot;</span> <span class="ot">=</span> <span class="st">&quot;CLC_CODE&quot;</span>)) </span>
+<span id="cb19-21"><a href="corine-land-use.html#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="corine-land-use.html#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Select study area</span></span>
+<span id="cb19-23"><a href="corine-land-use.html#cb19-23" aria-hidden="true" tabindex="-1"></a>  cph_corine <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_corine, study_area) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-24"><a href="corine-land-use.html#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(CODE_12, LABEL1, LABEL2, LABEL3 , RGB) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-25"><a href="corine-land-use.html#cb19-25" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb19-26"><a href="corine-land-use.html#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate</span>(rgb, <span class="fu">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-27"><a href="corine-land-use.html#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">code_12 =</span> <span class="fu">as.numeric</span>(code_12),</span>
+<span id="cb19-28"><a href="corine-land-use.html#cb19-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">hex_col =</span> grDevices<span class="sc">::</span><span class="fu">rgb</span>(red, green, blue, <span class="at">max =</span> <span class="dv">255</span>),</span>
+<span id="cb19-29"><a href="corine-land-use.html#cb19-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">hex_col =</span> <span class="fu">fct_reorder</span>(hex_col, code_12),</span>
+<span id="cb19-30"><a href="corine-land-use.html#cb19-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">label3 =</span> <span class="fu">fct_reorder</span>(label3, code_12)) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-31"><a href="corine-land-use.html#cb19-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>()</span>
+<span id="cb19-32"><a href="corine-land-use.html#cb19-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-33"><a href="corine-land-use.html#cb19-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb19-34"><a href="corine-land-use.html#cb19-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb19-35"><a href="corine-land-use.html#cb19-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_corine,</span>
+<span id="cb19-36"><a href="corine-land-use.html#cb19-36" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> label3),</span>
+<span id="cb19-37"><a href="corine-land-use.html#cb19-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb19-38"><a href="corine-land-use.html#cb19-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb19-39"><a href="corine-land-use.html#cb19-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">#geom_sf(data = res_units, size = 0.02, shape = 16) +</span></span>
+<span id="cb19-40"><a href="corine-land-use.html#cb19-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Land use&quot;</span>,</span>
+<span id="cb19-41"><a href="corine-land-use.html#cb19-41" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> <span class="fu">levels</span>(cph_corine<span class="sc">$</span>hex_col),</span>
+<span id="cb19-42"><a href="corine-land-use.html#cb19-42" aria-hidden="true" tabindex="-1"></a>                      <span class="at">drop =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb19-43"><a href="corine-land-use.html#cb19-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb19-44"><a href="corine-land-use.html#cb19-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb19-45"><a href="corine-land-use.html#cb19-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb19-46"><a href="corine-land-use.html#cb19-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb19-47"><a href="corine-land-use.html#cb19-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb19-48"><a href="corine-land-use.html#cb19-48" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.50</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb19-49"><a href="corine-land-use.html#cb19-49" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb19-50"><a href="corine-land-use.html#cb19-50" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb19-51"><a href="corine-land-use.html#cb19-51" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb19-52"><a href="corine-land-use.html#cb19-52" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb19-53"><a href="corine-land-use.html#cb19-53" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb19-54"><a href="corine-land-use.html#cb19-54" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-land-use"></span>
 <img src="Housing_prices_book_files/figure-html/fig-land-use-1.png" alt="Land use (CORINE)" width="864" />
 <p class="caption">
