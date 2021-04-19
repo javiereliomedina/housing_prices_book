@@ -17,6 +17,3 @@ Before running the R-scripts you may need to add some variables to your **.Renvi
 
 NOTE: Render the book can be very time consuming (e.g. you would need to download large datasets or run time consuming process) and I have cached some code chunks for subsequent runs. However, it could be a good idea to clean out the cache from time to time to ensure that the analysis is carried out correctly (i.e. rebuild the book with a clean source; `bookdown::clean_book()`)     
 
-
-
-
