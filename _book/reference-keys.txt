@@ -1,8 +1,8 @@
 fig:fig-adm-units
 fig:fig-grids-100m
 fig:fig-sp-res-builds
-tab:tbl-runits-clean
 tab:price-index
+tab:tbl-runits-clean
 fig:fig-land-use
 fig:fig-pop-chor
 fig:fig-pop-map-grid

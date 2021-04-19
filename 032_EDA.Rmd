@@ -1,6 +1,6 @@
 # Residential units saled as free scale
 
-We focused our study in residential dwellings on the ordinary free trade (Table \@ref(tab:tbl-runits-oft)). 
+We focused our study in residential dwellings on the ordinary free trade (Table \@ref(tab:tbl-runits-clean)). 
 
 NOTES: 
 

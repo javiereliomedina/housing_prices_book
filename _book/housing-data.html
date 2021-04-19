@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-16" />
+<meta name="date" content="2021-04-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -1052,19 +1052,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 Figure 2.1: 2D kernel density map
 </p>
 </div>
-<p>Then, we selected from the main residential buildings those that are on the ordinary free trade (Table <a href="housing-data.html#tab:tbl-runits-clean">2.1</a>). Colleges were also removed from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked. Inconsistent values have been also removed; i.e. prices &lt; 10 kDKK (approx. €1300) and area &lt; 10 <span class="math inline">\(m^2\)</span>. Finally, we removed from the analysis the residential units not used as residence (i.e. BOLIGTYPE_KODE = E).</p>
-<ul>
-<li><ol style="list-style-type: decimal">
-<li>Egentlig beboelse = Actual residence</li>
-</ol></li>
-<li><ol start="2" style="list-style-type: decimal">
-<li>Blandet erhverv og beboelse = Mixed occupations and housing</li>
-</ol></li>
-<li><ol start="3" style="list-style-type: decimal">
-<li>Enkeltværelse = Single room</li>
-</ol></li>
-<li>E. Andet (bl.a. institutioner og erhverv) = Other (including institutions and professions)</li>
-</ul>
+<p>Then, we selected from the main residential buildings those that are on the ordinary free trade and are actually used for residential purpose (i.e. <em>BOLIGTYPE_KODE <span class="math inline">\(\neq\)</span> E - Andet (bl.a. institutioner og erhverv)</em>). Furthermore, dwelling with a size lower that 10 <span class="math inline">\(m^2\)</span> were removed from the analysis. Colleges were also excluded from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="housing-data.html#cb3-1" aria-hidden="true" tabindex="-1"></a>  selected_res_units <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Multi-storey&quot;</span>, <span class="st">&quot;Single-family house&quot;</span>, <span class="st">&quot;Semi-detached house&quot;</span>)</span>
 <span id="cb3-2"><a href="housing-data.html#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="housing-data.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span></span>
@@ -1074,350 +1062,58 @@ Figure 2.1: 2D kernel density map
 <span id="cb3-7"><a href="housing-data.html#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(type <span class="sc">%in%</span> selected_res_units) <span class="sc">%&gt;%</span> </span>
 <span id="cb3-8"><a href="housing-data.html#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ordinary free trade</span></span>
 <span id="cb3-9"><a href="housing-data.html#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(OVERDRAGELSES_KODE <span class="sc">==</span> <span class="st">&quot;1&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-10"><a href="housing-data.html#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove inconsistent values </span></span>
-<span id="cb3-11"><a href="housing-data.html#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(KONTANT_KOEBESUM <span class="sc">&gt;=</span> <span class="dv">10000</span>,</span>
-<span id="cb3-12"><a href="housing-data.html#cb3-12" aria-hidden="true" tabindex="-1"></a>           BEBO_ARL <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-13"><a href="housing-data.html#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove BOLIGTYPE_KODE = E form the dataset</span></span>
-<span id="cb3-14"><a href="housing-data.html#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BOLIGTYPE_KODE <span class="sc">!=</span> <span class="st">&quot;E&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-15"><a href="housing-data.html#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Drop unused factors levels</span></span>
-<span id="cb3-16"><a href="housing-data.html#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">droplevels</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="housing-data.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with Number of residential units</span></span>
-<span id="cb4-2"><a href="housing-data.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="housing-data.html#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Summarize by type or residency and year</span></span>
-<span id="cb4-4"><a href="housing-data.html#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-5"><a href="housing-data.html#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-6"><a href="housing-data.html#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="housing-data.html#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Arrange and add row with totals</span></span>
-<span id="cb4-8"><a href="housing-data.html#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(BBR_year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-9"><a href="housing-data.html#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pivot</span></span>
-<span id="cb4-10"><a href="housing-data.html#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> BBR_year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-11"><a href="housing-data.html#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb4-12"><a href="housing-data.html#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Number of residential dwellings in the free trade by year&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-13"><a href="housing-data.html#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb4-14"><a href="housing-data.html#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">4</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-15"><a href="housing-data.html#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
-<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
-<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
-<caption>
-<span id="tab:tbl-runits-clean">Table 2.1: </span>Number of residential dwellings in the free trade by year
-</caption>
-<thead>
-<tr>
-<th style="text-align:left;">
-type
-</th>
-<th style="text-align:right;">
-2004
-</th>
-<th style="text-align:right;">
-2005
-</th>
-<th style="text-align:right;">
-2006
-</th>
-<th style="text-align:right;">
-2007
-</th>
-<th style="text-align:right;">
-2008
-</th>
-<th style="text-align:right;">
-2009
-</th>
-<th style="text-align:right;">
-2010
-</th>
-<th style="text-align:right;">
-2011
-</th>
-<th style="text-align:right;">
-2012
-</th>
-<th style="text-align:right;">
-2013
-</th>
-<th style="text-align:right;">
-2014
-</th>
-<th style="text-align:right;">
-2015
-</th>
-<th style="text-align:right;">
-2016
-</th>
-<th style="text-align:right;">
-2017
-</th>
-<th style="text-align:right;">
-2018
-</th>
-<th style="text-align:right;">
-2019
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Multi-storey
-</td>
-<td style="text-align:right;">
-12023
-</td>
-<td style="text-align:right;">
-14080
-</td>
-<td style="text-align:right;">
-13723
-</td>
-<td style="text-align:right;">
-12195
-</td>
-<td style="text-align:right;">
-7052
-</td>
-<td style="text-align:right;">
-5056
-</td>
-<td style="text-align:right;">
-13530
-</td>
-<td style="text-align:right;">
-7128
-</td>
-<td style="text-align:right;">
-8663
-</td>
-<td style="text-align:right;">
-9589
-</td>
-<td style="text-align:right;">
-11288
-</td>
-<td style="text-align:right;">
-12733
-</td>
-<td style="text-align:right;">
-11287
-</td>
-<td style="text-align:right;">
-11910
-</td>
-<td style="text-align:right;">
-11413
-</td>
-<td style="text-align:right;">
-11759
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Single-family house
-</td>
-<td style="text-align:right;">
-663
-</td>
-<td style="text-align:right;">
-669
-</td>
-<td style="text-align:right;">
-547
-</td>
-<td style="text-align:right;">
-561
-</td>
-<td style="text-align:right;">
-462
-</td>
-<td style="text-align:right;">
-429
-</td>
-<td style="text-align:right;">
-770
-</td>
-<td style="text-align:right;">
-527
-</td>
-<td style="text-align:right;">
-885
-</td>
-<td style="text-align:right;">
-653
-</td>
-<td style="text-align:right;">
-692
-</td>
-<td style="text-align:right;">
-694
-</td>
-<td style="text-align:right;">
-711
-</td>
-<td style="text-align:right;">
-703
-</td>
-<td style="text-align:right;">
-660
-</td>
-<td style="text-align:right;">
-716
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Semi-detached house
-</td>
-<td style="text-align:right;">
-267
-</td>
-<td style="text-align:right;">
-288
-</td>
-<td style="text-align:right;">
-280
-</td>
-<td style="text-align:right;">
-355
-</td>
-<td style="text-align:right;">
-256
-</td>
-<td style="text-align:right;">
-203
-</td>
-<td style="text-align:right;">
-303
-</td>
-<td style="text-align:right;">
-471
-</td>
-<td style="text-align:right;">
-451
-</td>
-<td style="text-align:right;">
-481
-</td>
-<td style="text-align:right;">
-514
-</td>
-<td style="text-align:right;">
-525
-</td>
-<td style="text-align:right;">
-1347
-</td>
-<td style="text-align:right;">
-1254
-</td>
-<td style="text-align:right;">
-1260
-</td>
-<td style="text-align:right;">
-542
-</td>
-</tr>
-<tr>
-<td style="text-align:left;font-weight: bold;">
-Total
-</td>
-<td style="text-align:right;font-weight: bold;">
-12953
-</td>
-<td style="text-align:right;font-weight: bold;">
-15037
-</td>
-<td style="text-align:right;font-weight: bold;">
-14550
-</td>
-<td style="text-align:right;font-weight: bold;">
-13111
-</td>
-<td style="text-align:right;font-weight: bold;">
-7770
-</td>
-<td style="text-align:right;font-weight: bold;">
-5688
-</td>
-<td style="text-align:right;font-weight: bold;">
-14603
-</td>
-<td style="text-align:right;font-weight: bold;">
-8126
-</td>
-<td style="text-align:right;font-weight: bold;">
-9999
-</td>
-<td style="text-align:right;font-weight: bold;">
-10723
-</td>
-<td style="text-align:right;font-weight: bold;">
-12494
-</td>
-<td style="text-align:right;font-weight: bold;">
-13952
-</td>
-<td style="text-align:right;font-weight: bold;">
-13345
-</td>
-<td style="text-align:right;font-weight: bold;">
-13867
-</td>
-<td style="text-align:right;font-weight: bold;">
-13333
-</td>
-<td style="text-align:right;font-weight: bold;">
-13017
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Finally, we adjusted the housing prices to 2019 prices. In this regard, we take into account the inflation and prices from different years can be compared (<span class="citation"><a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">Valtersdorf Møller</a> (<a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">2020</a>)</span>). The adjusted price is obtained as follow:</p>
+<span id="cb3-10"><a href="housing-data.html#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove BOLIGTYPE_KODE = E form the dataset</span></span>
+<span id="cb3-11"><a href="housing-data.html#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BOLIGTYPE_KODE <span class="sc">!=</span> <span class="st">&quot;E&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a href="housing-data.html#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove tiny dwellings (area &lt; 10 m2)</span></span>
+<span id="cb3-13"><a href="housing-data.html#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BEBO_ARL <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="housing-data.html#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Drop unused factors levels</span></span>
+<span id="cb3-15"><a href="housing-data.html#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">droplevels</span>()</span></code></pre></div>
+<p>Finally, we adjusted the housing prices to 2019 prices. In this regard, we take into account the inflation and, therefore, prices from different years can be compared (<span class="citation"><a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">Valtersdorf Møller</a> (<a href="references.html#ref-Valtersdorf2020" role="doc-biblioref">2020</a>)</span>). The adjusted price is obtained as follow:</p>
 <p><span class="math display">\[ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}\]</span></p>
-<p>Where, <span class="math inline">\(Price_{2019}\)</span> is the adjusting housing price for 2019, <span class="math inline">\(Price_{i}\)</span> is the price of the respective year <span class="math inline">\(i\)</span>, and <span class="math inline">\(Index_{i}\)</span> and <span class="math inline">\(Index_{2019}\)</span> are the price indexes for the origin year <span class="math inline">\({i}\)</span> and <span class="math inline">\(2019\)</span>, respectively. The indexes have been obtained from Statistic Denmark; i.e. table <a href="https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">EJ66: Price index for sales property (2006=100) by region, category of real property and unit</a>, and targeted for the study area; i.e. <em>Province Byen København - Copenhagen City</em> (Table <a href="housing-data.html#tab:price-index">2.2</a>).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="housing-data.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)</span></span>
-<span id="cb5-2"><a href="housing-data.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  id_table <span class="ot">&lt;-</span> <span class="st">&quot;EJ66&quot;</span></span>
-<span id="cb5-3"><a href="housing-data.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  dat_meta <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb5-4"><a href="housing-data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb5-5"><a href="housing-data.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Values to retrieve</span></span>
-<span id="cb5-6"><a href="housing-data.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  variables <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb5-7"><a href="housing-data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Province Byen København: region = 01 </span></span>
-<span id="cb5-8"><a href="housing-data.html#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;OMRÅDE&quot;</span>, <span class="at">values =</span> <span class="st">&quot;01&quot;</span>),</span>
-<span id="cb5-9"><a href="housing-data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Category of real property</span></span>
-<span id="cb5-10"><a href="housing-data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;EJENDOMSKATE&quot;</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;0111&quot;</span>, <span class="st">&quot;2103&quot;</span>)),</span>
-<span id="cb5-11"><a href="housing-data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Index</span></span>
-<span id="cb5-12"><a href="housing-data.html#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;TAL&quot;</span>, <span class="at">values =</span> <span class="cn">NA</span>),</span>
-<span id="cb5-13"><a href="housing-data.html#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># From 2004 to 2019</span></span>
-<span id="cb5-14"><a href="housing-data.html#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;Tid&quot;</span>, <span class="at">values =</span> <span class="fu">seq</span>(<span class="dv">2004</span>, <span class="dv">2019</span>, <span class="dv">1</span>))</span>
-<span id="cb5-15"><a href="housing-data.html#cb5-15" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb5-16"><a href="housing-data.html#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-17"><a href="housing-data.html#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Get index</span></span>
-<span id="cb5-18"><a href="housing-data.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  price_index <span class="ot">&lt;-</span> <span class="fu">get_data</span>(<span class="st">&quot;EJ66&quot;</span>, variables) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-19"><a href="housing-data.html#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get index</span></span>
-<span id="cb5-20"><a href="housing-data.html#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(TAL <span class="sc">==</span> <span class="st">&quot;Index&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-21"><a href="housing-data.html#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate into English </span></span>
-<span id="cb5-22"><a href="housing-data.html#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">region =</span> OMRÅDE,</span>
-<span id="cb5-23"><a href="housing-data.html#cb5-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">category =</span> EJENDOMSKATE,</span>
-<span id="cb5-24"><a href="housing-data.html#cb5-24" aria-hidden="true" tabindex="-1"></a>           <span class="at">unit =</span> TAL,</span>
-<span id="cb5-25"><a href="housing-data.html#cb5-25" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> TID, </span>
-<span id="cb5-26"><a href="housing-data.html#cb5-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">index =</span> INDHOLD) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-27"><a href="housing-data.html#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert index tu numeric</span></span>
-<span id="cb5-28"><a href="housing-data.html#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">index =</span> <span class="fu">as.numeric</span>(index)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-29"><a href="housing-data.html#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove region and unit columns</span></span>
-<span id="cb5-30"><a href="housing-data.html#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>region, <span class="sc">-</span>unit) </span>
-<span id="cb5-31"><a href="housing-data.html#cb5-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb5-32"><a href="housing-data.html#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Print price index table  </span></span>
-<span id="cb5-33"><a href="housing-data.html#cb5-33" aria-hidden="true" tabindex="-1"></a>  price_index <span class="sc">%&gt;%</span> </span>
-<span id="cb5-34"><a href="housing-data.html#cb5-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Wide format</span></span>
-<span id="cb5-35"><a href="housing-data.html#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> date, </span>
-<span id="cb5-36"><a href="housing-data.html#cb5-36" aria-hidden="true" tabindex="-1"></a>                <span class="at">values_from =</span> index) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-37"><a href="housing-data.html#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Price index for sale properties in Copenhagen City&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-38"><a href="housing-data.html#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb5-39"><a href="housing-data.html#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<p>Where, <span class="math inline">\(Price_{2019}\)</span> is the adjusted housing price for 2019, <span class="math inline">\(Price_{i}\)</span> is the price of the respective year <span class="math inline">\(i\)</span>, and <span class="math inline">\(Index_{i}\)</span> and <span class="math inline">\(Index_{2019}\)</span> are the price indexes for the origin year <span class="math inline">\({i}\)</span> and <span class="math inline">\(2019\)</span>, respectively. The indexes have been obtained from Statistic Denmark; i.e. table <a href="https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ66&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">EJ66: Price index for sales property (2006=100) by region, category of real property and unit</a>, and targeted for the study area; i.e. <em>Province Byen København - Copenhagen City</em> (Table <a href="housing-data.html#tab:price-index">2.1</a>). Inconsistent values have been removed; i.e. 2019 adjusted prices &lt; 10 kDKK (approx. €1300).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="housing-data.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)</span></span>
+<span id="cb4-2"><a href="housing-data.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  id_table <span class="ot">&lt;-</span> <span class="st">&quot;EJ66&quot;</span></span>
+<span id="cb4-3"><a href="housing-data.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  dat_meta <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-4"><a href="housing-data.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-5"><a href="housing-data.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Values to retrieve</span></span>
+<span id="cb4-6"><a href="housing-data.html#cb4-6" aria-hidden="true" tabindex="-1"></a>  variables <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb4-7"><a href="housing-data.html#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Province Byen København: region = 01 </span></span>
+<span id="cb4-8"><a href="housing-data.html#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;OMRÅDE&quot;</span>, <span class="at">values =</span> <span class="st">&quot;01&quot;</span>),</span>
+<span id="cb4-9"><a href="housing-data.html#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Category of real property</span></span>
+<span id="cb4-10"><a href="housing-data.html#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;EJENDOMSKATE&quot;</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;0111&quot;</span>, <span class="st">&quot;2103&quot;</span>)),</span>
+<span id="cb4-11"><a href="housing-data.html#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Index</span></span>
+<span id="cb4-12"><a href="housing-data.html#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;TAL&quot;</span>, <span class="at">values =</span> <span class="cn">NA</span>),</span>
+<span id="cb4-13"><a href="housing-data.html#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># From 2004 to 2019</span></span>
+<span id="cb4-14"><a href="housing-data.html#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;Tid&quot;</span>, <span class="at">values =</span> <span class="fu">seq</span>(<span class="dv">2004</span>, <span class="dv">2019</span>, <span class="dv">1</span>))</span>
+<span id="cb4-15"><a href="housing-data.html#cb4-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-16"><a href="housing-data.html#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="housing-data.html#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Get index</span></span>
+<span id="cb4-18"><a href="housing-data.html#cb4-18" aria-hidden="true" tabindex="-1"></a>  price_index <span class="ot">&lt;-</span> <span class="fu">get_data</span>(<span class="st">&quot;EJ66&quot;</span>, variables) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-19"><a href="housing-data.html#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get index</span></span>
+<span id="cb4-20"><a href="housing-data.html#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(TAL <span class="sc">==</span> <span class="st">&quot;Index&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-21"><a href="housing-data.html#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate into English </span></span>
+<span id="cb4-22"><a href="housing-data.html#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">region =</span> OMRÅDE,</span>
+<span id="cb4-23"><a href="housing-data.html#cb4-23" aria-hidden="true" tabindex="-1"></a>           <span class="at">category =</span> EJENDOMSKATE,</span>
+<span id="cb4-24"><a href="housing-data.html#cb4-24" aria-hidden="true" tabindex="-1"></a>           <span class="at">unit =</span> TAL,</span>
+<span id="cb4-25"><a href="housing-data.html#cb4-25" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> TID, </span>
+<span id="cb4-26"><a href="housing-data.html#cb4-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">index =</span> INDHOLD) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-27"><a href="housing-data.html#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert index tu numeric</span></span>
+<span id="cb4-28"><a href="housing-data.html#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">index =</span> <span class="fu">as.numeric</span>(index)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-29"><a href="housing-data.html#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove region and unit columns</span></span>
+<span id="cb4-30"><a href="housing-data.html#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>region, <span class="sc">-</span>unit) </span>
+<span id="cb4-31"><a href="housing-data.html#cb4-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-32"><a href="housing-data.html#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Print price index table  </span></span>
+<span id="cb4-33"><a href="housing-data.html#cb4-33" aria-hidden="true" tabindex="-1"></a>  price_index <span class="sc">%&gt;%</span> </span>
+<span id="cb4-34"><a href="housing-data.html#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Wide format</span></span>
+<span id="cb4-35"><a href="housing-data.html#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> date, </span>
+<span id="cb4-36"><a href="housing-data.html#cb4-36" aria-hidden="true" tabindex="-1"></a>                <span class="at">values_from =</span> index) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-37"><a href="housing-data.html#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Price index for sale properties in Copenhagen City&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-38"><a href="housing-data.html#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-39"><a href="housing-data.html#cb4-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:price-index">Table 2.2: </span>Price index for sale properties in Copenhagen City
+<span id="tab:price-index">Table 2.1: </span>Price index for sale properties in Copenhagen City
 </caption>
 <thead>
 <tr>
@@ -1584,25 +1280,319 @@ Owner-occupied flats, total
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="housing-data.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust housing prices</span></span>
-<span id="cb6-2"><a href="housing-data.html#cb6-2" aria-hidden="true" tabindex="-1"></a>price_index_2019 <span class="ot">&lt;-</span> <span class="fu">filter</span>(price_index, date <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">index_2019 =</span> index)</span>
-<span id="cb6-3"><a href="housing-data.html#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="housing-data.html#cb6-4" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="ot">&lt;-</span> res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb6-5"><a href="housing-data.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Column with price index categories</span></span>
-<span id="cb6-6"><a href="housing-data.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">category =</span> <span class="fu">case_when</span>(</span>
-<span id="cb6-7"><a href="housing-data.html#cb6-7" aria-hidden="true" tabindex="-1"></a>    type <span class="sc">==</span> <span class="st">&quot;Single-family house&quot;</span> <span class="sc">~</span> <span class="st">&quot;One-family houses&quot;</span>,</span>
-<span id="cb6-8"><a href="housing-data.html#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Owner-occupied flats, total&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-9"><a href="housing-data.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add price index by year and category</span></span>
-<span id="cb6-10"><a href="housing-data.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(price_index, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;category&quot;</span> <span class="ot">=</span> <span class="st">&quot;category&quot;</span>,</span>
-<span id="cb6-11"><a href="housing-data.html#cb6-11" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;BBR_year&quot;</span> <span class="ot">=</span> <span class="st">&quot;date&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-12"><a href="housing-data.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add price index in 2019 by category</span></span>
-<span id="cb6-13"><a href="housing-data.html#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(price_index_2019, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;category&quot;</span> <span class="ot">=</span> <span class="st">&quot;category&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-14"><a href="housing-data.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate prices 2019</span></span>
-<span id="cb6-15"><a href="housing-data.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price2019_kDKK =</span> (KONTANT_KOEBESUM <span class="sc">*</span> index_2019 <span class="sc">/</span> index) <span class="sc">/</span> <span class="dv">1000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="housing-data.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust housing prices</span></span>
+<span id="cb5-2"><a href="housing-data.html#cb5-2" aria-hidden="true" tabindex="-1"></a>price_index_2019 <span class="ot">&lt;-</span> <span class="fu">filter</span>(price_index, date <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">index_2019 =</span> index)</span>
+<span id="cb5-3"><a href="housing-data.html#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="housing-data.html#cb5-4" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="ot">&lt;-</span> res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="housing-data.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Column with price index categories</span></span>
+<span id="cb5-6"><a href="housing-data.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-7"><a href="housing-data.html#cb5-7" aria-hidden="true" tabindex="-1"></a>    type <span class="sc">==</span> <span class="st">&quot;Single-family house&quot;</span> <span class="sc">~</span> <span class="st">&quot;One-family houses&quot;</span>,</span>
+<span id="cb5-8"><a href="housing-data.html#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Owner-occupied flats, total&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="housing-data.html#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add price index by year and category</span></span>
+<span id="cb5-10"><a href="housing-data.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(price_index, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;category&quot;</span> <span class="ot">=</span> <span class="st">&quot;category&quot;</span>,</span>
+<span id="cb5-11"><a href="housing-data.html#cb5-11" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;BBR_year&quot;</span> <span class="ot">=</span> <span class="st">&quot;date&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-12"><a href="housing-data.html#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add price index in 2019 by category</span></span>
+<span id="cb5-13"><a href="housing-data.html#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(price_index_2019, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;category&quot;</span> <span class="ot">=</span> <span class="st">&quot;category&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-14"><a href="housing-data.html#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate prices 2019</span></span>
+<span id="cb5-15"><a href="housing-data.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price2019_kDKK =</span> (KONTANT_KOEBESUM <span class="sc">*</span> index_2019 <span class="sc">/</span> index) <span class="sc">/</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-16"><a href="housing-data.html#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove prices &lt; 10 kDKK</span></span>
+<span id="cb5-17"><a href="housing-data.html#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(price2019_kDKK <span class="sc">&gt;=</span> <span class="dv">10</span>)</span></code></pre></div>
 <p>The housing price per square meter (<span class="math inline">\(kDDK/m^2\)</span>) is calculated by dividing the 2019 adjusted prices by the dwelling size (<em>BEBO_ARL</em>).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="housing-data.html#cb7-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="ot">&lt;-</span> res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="housing-data.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Price per m2</span></span>
-<span id="cb7-3"><a href="housing-data.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price2019_kDKK_m2 =</span> price2019_kDKK <span class="sc">/</span> BEBO_ARL)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="housing-data.html#cb6-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="ot">&lt;-</span> res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="housing-data.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Price per m2</span></span>
+<span id="cb6-3"><a href="housing-data.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price2019_kDKK_m2 =</span> price2019_kDKK <span class="sc">/</span> BEBO_ARL)</span></code></pre></div>
+<p>The total number of residential units used for the analysis is 192570 (Table <a href="housing-data.html#tab:tbl-runits-clean">2.2</a>).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="housing-data.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with Number of residential units</span></span>
+<span id="cb7-2"><a href="housing-data.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="housing-data.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Summarize by type or residency and year</span></span>
+<span id="cb7-4"><a href="housing-data.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(type, BBR_year) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="housing-data.html#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="housing-data.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="housing-data.html#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Arrange and add row with totals</span></span>
+<span id="cb7-8"><a href="housing-data.html#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(BBR_year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="housing-data.html#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pivot</span></span>
+<span id="cb7-10"><a href="housing-data.html#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> BBR_year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-11"><a href="housing-data.html#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="housing-data.html#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Number of residential dwellings in the free trade by year&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-13"><a href="housing-data.html#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-14"><a href="housing-data.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">4</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-15"><a href="housing-data.html#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tbl-runits-clean">Table 2.2: </span>Number of residential dwellings in the free trade by year
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+type
+</th>
+<th style="text-align:right;">
+2004
+</th>
+<th style="text-align:right;">
+2005
+</th>
+<th style="text-align:right;">
+2006
+</th>
+<th style="text-align:right;">
+2007
+</th>
+<th style="text-align:right;">
+2008
+</th>
+<th style="text-align:right;">
+2009
+</th>
+<th style="text-align:right;">
+2010
+</th>
+<th style="text-align:right;">
+2011
+</th>
+<th style="text-align:right;">
+2012
+</th>
+<th style="text-align:right;">
+2013
+</th>
+<th style="text-align:right;">
+2014
+</th>
+<th style="text-align:right;">
+2015
+</th>
+<th style="text-align:right;">
+2016
+</th>
+<th style="text-align:right;">
+2017
+</th>
+<th style="text-align:right;">
+2018
+</th>
+<th style="text-align:right;">
+2019
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Multi-storey
+</td>
+<td style="text-align:right;">
+12025
+</td>
+<td style="text-align:right;">
+14080
+</td>
+<td style="text-align:right;">
+13723
+</td>
+<td style="text-align:right;">
+12195
+</td>
+<td style="text-align:right;">
+7052
+</td>
+<td style="text-align:right;">
+5056
+</td>
+<td style="text-align:right;">
+13530
+</td>
+<td style="text-align:right;">
+7128
+</td>
+<td style="text-align:right;">
+8663
+</td>
+<td style="text-align:right;">
+9589
+</td>
+<td style="text-align:right;">
+11288
+</td>
+<td style="text-align:right;">
+12733
+</td>
+<td style="text-align:right;">
+11287
+</td>
+<td style="text-align:right;">
+11910
+</td>
+<td style="text-align:right;">
+11413
+</td>
+<td style="text-align:right;">
+11759
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Single-family house
+</td>
+<td style="text-align:right;">
+663
+</td>
+<td style="text-align:right;">
+669
+</td>
+<td style="text-align:right;">
+547
+</td>
+<td style="text-align:right;">
+561
+</td>
+<td style="text-align:right;">
+462
+</td>
+<td style="text-align:right;">
+429
+</td>
+<td style="text-align:right;">
+770
+</td>
+<td style="text-align:right;">
+527
+</td>
+<td style="text-align:right;">
+885
+</td>
+<td style="text-align:right;">
+653
+</td>
+<td style="text-align:right;">
+692
+</td>
+<td style="text-align:right;">
+694
+</td>
+<td style="text-align:right;">
+711
+</td>
+<td style="text-align:right;">
+703
+</td>
+<td style="text-align:right;">
+660
+</td>
+<td style="text-align:right;">
+716
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Semi-detached house
+</td>
+<td style="text-align:right;">
+267
+</td>
+<td style="text-align:right;">
+288
+</td>
+<td style="text-align:right;">
+280
+</td>
+<td style="text-align:right;">
+355
+</td>
+<td style="text-align:right;">
+256
+</td>
+<td style="text-align:right;">
+203
+</td>
+<td style="text-align:right;">
+303
+</td>
+<td style="text-align:right;">
+471
+</td>
+<td style="text-align:right;">
+451
+</td>
+<td style="text-align:right;">
+481
+</td>
+<td style="text-align:right;">
+514
+</td>
+<td style="text-align:right;">
+525
+</td>
+<td style="text-align:right;">
+1347
+</td>
+<td style="text-align:right;">
+1254
+</td>
+<td style="text-align:right;">
+1260
+</td>
+<td style="text-align:right;">
+542
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Total
+</td>
+<td style="text-align:right;font-weight: bold;">
+12955
+</td>
+<td style="text-align:right;font-weight: bold;">
+15037
+</td>
+<td style="text-align:right;font-weight: bold;">
+14550
+</td>
+<td style="text-align:right;font-weight: bold;">
+13111
+</td>
+<td style="text-align:right;font-weight: bold;">
+7770
+</td>
+<td style="text-align:right;font-weight: bold;">
+5688
+</td>
+<td style="text-align:right;font-weight: bold;">
+14603
+</td>
+<td style="text-align:right;font-weight: bold;">
+8126
+</td>
+<td style="text-align:right;font-weight: bold;">
+9999
+</td>
+<td style="text-align:right;font-weight: bold;">
+10723
+</td>
+<td style="text-align:right;font-weight: bold;">
+12494
+</td>
+<td style="text-align:right;font-weight: bold;">
+13952
+</td>
+<td style="text-align:right;font-weight: bold;">
+13345
+</td>
+<td style="text-align:right;font-weight: bold;">
+13867
+</td>
+<td style="text-align:right;font-weight: bold;">
+13333
+</td>
+<td style="text-align:right;font-weight: bold;">
+13017
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <p>The summary descriptive statistics of the housing prices are:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="housing-data.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table theme</span></span>
 <span id="cb8-2"><a href="housing-data.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_gtsummary_compact</span>()</span>
@@ -1971,13 +1961,13 @@ Owner-occupied flats, total
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1"><strong>Overall</strong>, N = 192,568</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1"><strong>Overall</strong>, N = 192,570</th>
       <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
         <span class="gt_column_spanner"><strong>House type</strong></span>
       </th>
     </tr>
     <tr>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Multi-storey</strong>, N = 173,429</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Multi-storey</strong>, N = 173,431</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Semi-detached house</strong>, N = 8,797</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Single-family house</strong>, N = 10,342</th>
     </tr>
@@ -1990,7 +1980,7 @@ Owner-occupied flats, total
 <td class="gt_row gt_center"></td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
 <td class="gt_row gt_center">47,732</td>
-<td class="gt_row gt_center">52,014</td>
+<td class="gt_row gt_center">52,013</td>
 <td class="gt_row gt_center">9,910</td>
 <td class="gt_row gt_center">8,099</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
@@ -2000,12 +1990,12 @@ Owner-occupied flats, total
 <td class="gt_row gt_center">4,973</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
 <td class="gt_row gt_center">2,699 - 14,468</td>
-<td class="gt_row gt_center">2,586 - 20,917</td>
+<td class="gt_row gt_center">2,586 - 20,908</td>
 <td class="gt_row gt_center">3,842 - 6,920</td>
 <td class="gt_row gt_center">3,887 - 6,400</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
-<td class="gt_row gt_center">25 - 1,778,677</td>
-<td class="gt_row gt_center">27 - 1,778,677</td>
+<td class="gt_row gt_center">11 - 1,778,677</td>
+<td class="gt_row gt_center">11 - 1,778,677</td>
 <td class="gt_row gt_center">30 - 261,346</td>
 <td class="gt_row gt_center">25 - 291,062</td></tr>
     <tr><td class="gt_row gt_left" style="font-weight: bold;">Dwelling size (m2)</td>
