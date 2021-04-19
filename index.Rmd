@@ -87,6 +87,10 @@ You would also need to define with `dangeo_set_param()` the local directory wher
 
 Finally, the BBR data are storage in a *OneDrive* folder. You would need to have access to that folder, and save the path on `.Renviron` with `usethis::edit_r_environ()`. It has to be saved as `OneDrive_BBR_path = "your/OneDrive/BBR/path"`. 
 
+## Acknowledgements {-}
+
+This work has been financed by Aalborg University - AAU (Project: [Global flows of migrants and their impact on north European welfare states - FLOW](https://www.flow.aau.dk/)). The sole responsibility of this publication lies with the authors. AAU is not responsible for any use that may be made of the information contained therein.
+
 ## R session {-}
 
 ```{r R-session, echo = FALSE}
