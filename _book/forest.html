@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Railway transport network | Housing prices Copenhagen</title>
+  <title>Chapter 8 Forest | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Railway transport network | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 8 Forest | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Railway transport network | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 8 Forest | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="corine-land-use.html"/>
-<link rel="next" href="open-street-map.html"/>
+<link rel="prev" href="open-street-map.html"/>
+<link rel="next" href="Population.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -929,21 +929,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="railway-transport-network" class="section level1" number="6">
-<h1><span class="header-section-number">Chapter 6</span> Railway transport network</h1>
-<p>Downloaded from kortforsyningen (i.e. Inspire_railway-transport-network).</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="railway-transport-network.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dangeo_get_data</span>(</span>
-<span id="cb21-2"><a href="railway-transport-network.html#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">ftp_folder =</span> <span class="st">&quot;grundlaeggende_landkortdata/inspire_railway-transport-network&quot;</span>,</span>
-<span id="cb21-3"><a href="railway-transport-network.html#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">zip_name   =</span> <span class="st">&quot;DK_RailwayTransportNetwork_GML_UTM32-EUREF89.zip&quot;</span>)</span></code></pre></div>
+<div id="forest" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Forest</h1>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="forest.html#cb31-1" aria-hidden="true" tabindex="-1"></a>CPH_forest <span class="ot">&lt;-</span> CPH_osm_bb <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="forest.html#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opq</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="forest.html#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_osm_feature</span>(<span class="at">key =</span> <span class="st">&quot;landuse&quot;</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;meadow&quot;</span>, <span class="st">&quot;allotments&quot;</span>, <span class="st">&quot;forest&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="forest.html#cb31-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">osmdata_sf</span>() </span>
+<span id="cb31-5"><a href="forest.html#cb31-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-6"><a href="forest.html#cb31-6" aria-hidden="true" tabindex="-1"></a>  CPH_scrub <span class="ot">&lt;-</span> CPH_osm_bb <span class="sc">%&gt;%</span></span>
+<span id="cb31-7"><a href="forest.html#cb31-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opq</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb31-8"><a href="forest.html#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_osm_feature</span>(<span class="at">key =</span> <span class="st">&quot;natural&quot;</span>, <span class="at">value =</span> <span class="st">&quot;scrub&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-9"><a href="forest.html#cb31-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">osmdata_sf</span>() </span>
+<span id="cb31-10"><a href="forest.html#cb31-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-11"><a href="forest.html#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Land_use: recreation_ground</span></span></code></pre></div>
 
 </div>
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="corine-land-use.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="open-street-map.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="open-street-map.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Population.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -974,7 +984,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/025_load_railway_net.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/026_load_OSM.Rmd",
 "text": "Edit"
 },
 "history": {
