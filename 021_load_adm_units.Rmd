@@ -18,7 +18,9 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
   dk_commune  <- read_sf(commune_link) %>%
     st_zm() %>% 
     st_transform(crs = "EPSG:25832")
-
+  
+  dk_country <- st_union(dk_commune)
+  
   cph_commune <- filter(dk_commune, KOMKODE %in% study_area_codes)
 
 # Parishes polygons of Denmark, and select those in the study area 

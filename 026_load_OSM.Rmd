@@ -1,0 +1,171 @@
+# Open Street Map 
+
+We get location information from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We select services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:loc-box)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses. 
+
+```{r loc-box, cache=TRUE}
+
+# Area for OSM data: Copenhagen
+CPH_osm_bb <- getbb("Copenhagen")
+
+# Bounding of the study area (approx. buffer of 2km)
+box <- c(xmin = 714906,
+         xmax = 733618,
+         ymin = 6166579,
+         ymax = 6184092)
+bbox <- st_bbox(box)
+
+bbox_sf <- st_as_sfc(bbox) %>% 
+  st_set_crs("EPSG:25832") 
+
+```
+
+## Parking areas
+
+Parking areas are tagged as `key = amenity` and ´value = parking´ (Figure \@ref(fig:osm-parking)). 
+```{r osm-parking, fig.cap="Parking areas", fig.width = 9, fig.height = 7}
+
+# Get car packs from OSM
+parking_osm <- CPH_osm_bb %>%
+  opq() %>%
+  add_osm_feature(key = "amenity", value = c("parking")) %>%
+  osmdata_sf() 
+
+# Clean dataset
+parking <- parking_osm$osm_polygons %>%
+  # Transform CRS
+  st_transform(crs = "EPSG:25832") %>% 
+  select(osm_id, amenity) %>% 
+  # Estimate the area of the parking
+  mutate(area_m2 = as.numeric(units::set_units(st_area(.), m^2))) %>% 
+  # Crop to area of influence
+  st_crop(bbox_sf)
+
+# Plot
+ggplot() +
+  geom_sf(data = st_crop(dk_country, bbox_sf),
+          fill = "grey95") +
+  geom_sf(data = cph_parish,
+          fill = "grey85",
+          color = "grey50",
+          size = 0.05) +
+  geom_sf(data = parking, fill = "#D55E00", col = NA) +
+  my_theme_map() +
+  labs(caption = "Source: Open Street Map")
+
+```
+
+Potential model
+```{r pot-model-set, cache=TRUE, dependson="loc-box"}
+
+# Based on: https://riatelab.github.io/potential/articles/potential.html
+
+# Points to estimate the potential 
+grids100m_cent <- st_centroid(grids100m)
+
+# Calculate centroid of the parking area
+parking_cent <- st_centroid(parking)
+
+# Distance matrix
+d <- create_matrix(x = parking_cent, y = grids100m_cent)
+
+```
+
+Spatial interaction function (Figure \@ref(fig:pot-model-inter)).
+```{r pot-model-inter, fig.cap="Spatial interaction function"}
+
+span <- 300
+beta <- 2
+plot_inter(fun = "e",
+           span = span,
+           beta = beta)
+
+```
+
+Calculate the potential (Figure \@ref(fig:pot-model)).
+```{r pot-model, fig.cap="Potential of parking areas"}
+
+# Calculate the potential
+grids100m_cent$pot <- potential(x = parking_cent,
+                                y = grids100m_cent,
+                                d = d,
+                                var = "area_m2",
+                                fun = "e",
+                                span = span,
+                                beta = beta)
+
+# Potential relatively to its maximum
+grids100m_cent$pot_perc <- 100 * grids100m_cent$pot / max(grids100m_cent$pot)
+
+# Add info to grids100m
+grids100m_cent <- grids100m_cent %>%
+  as_tibble() %>%
+  select(-geometry, int)
+
+parking_pot <- grids100m %>% 
+  as_tibble() %>% 
+  left_join(grids100m_cent, by = "grid_ID") %>% 
+  st_sf()
+
+# Plot
+ggplot() +
+  geom_sf(data = parking_pot, aes(fill = pot_perc), col = NA) +
+  scale_fill_viridis_c(name = "Perc [%]", option = "plasma") +
+  geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
+  my_theme_map() 
+
+```
+
+## Green areas
+```{r}
+
+# Green areas 
+  CPH_parks <- CPH_osm_bb %>%
+    opq() %>%
+    add_osm_feature(key = "leisure", value = c("park",
+                                               "common",
+                                               "garden",
+                                               "firepit",
+                                               "nature_reserve")) %>%
+    osmdata_sf() 
+  
+  CPH_forest <- CPH_osm_bb %>%
+    opq() %>%
+    add_osm_feature(key = "landuse", value = c("meadow", "allotments", "forest")) %>%
+    osmdata_sf() 
+  
+  CPH_scrub <- CPH_osm_bb %>%
+    opq() %>% 
+    add_osm_feature(key = "natural", value = "scrub") %>% 
+    osmdata_sf() 
+  
+  
+```
+
+```{r}
+
+ggplot() +
+  geom_sf(data =st_crop(dk_country, bbox_sf),
+           fill = "grey95") +
+  geom_sf(data = cph_parish,
+          fill = "grey85",
+          color = "grey50",
+          size = 0.05) +
+  geom_sf(data = CPH_parks$osm_polygons,
+          colour = NA,
+          fill = "red", #palegreen1",
+          alpha = .3) +
+  geom_sf(data = CPH_forest$osm_polygons,
+          colour = NA,
+          fill = "blue", #palegreen2",
+          alpha = .3) +
+  geom_sf(data = CPH_scrub$osm_polygons,
+          colour = NA,
+          fill = "palegreen3",
+          alpha = .3) +
+  geom_sf(data = bbox_sf, fill = NA, col = "blue", size = 1) +
+  my_theme_map()
+  
+```
+
+
+
