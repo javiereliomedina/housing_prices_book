@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Open Street Map | Housing prices Copenhagen</title>
+  <meta name="description" content="Housing prices BBR data" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Open Street Map | Housing prices Copenhagen" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Housing prices BBR data" />
+  <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Open Street Map | Housing prices Copenhagen" />
+  
+  <meta name="twitter:description" content="Housing prices BBR data" />
+  
+
+<meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
+
+
+<meta name="date" content="2021-04-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="railway-transport-network.html"/>
+<link rel="next" href="Population.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script>
+/* ========================================================================
+ * Bootstrap: transition.js v3.3.7
+ * http://getbootstrap.com/javascript/#transitions
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+  // ============================================================
+
+  function transitionEnd() {
+    var el = document.createElement('bootstrap')
+
+    var transEndEventNames = {
+      WebkitTransition : 'webkitTransitionEnd',
+      MozTransition    : 'transitionend',
+      OTransition      : 'oTransitionEnd otransitionend',
+      transition       : 'transitionend'
+    }
+
+    for (var name in transEndEventNames) {
+      if (el.style[name] !== undefined) {
+        return { end: transEndEventNames[name] }
+      }
+    }
+
+    return false // explicit for ie8 (  ._.)
+  }
+
+  // http://blog.alexmaccaw.com/css-transitions
+  $.fn.emulateTransitionEnd = function (duration) {
+    var called = false
+    var $el = this
+    $(this).one('bsTransitionEnd', function () { called = true })
+    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+    setTimeout(callback, duration)
+    return this
+  }
+
+  $(function () {
+    $.support.transition = transitionEnd()
+
+    if (!$.support.transition) return
+
+    $.event.special.bsTransitionEnd = {
+      bindType: $.support.transition.end,
+      delegateType: $.support.transition.end,
+      handle: function (e) {
+        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+      }
+    }
+  })
+
+}(jQuery);
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: collapse.js v3.3.7
+ * http://getbootstrap.com/javascript/#collapse
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+/* jshint latedef: false */
+
++function ($) {
+  'use strict';
+
+  // COLLAPSE PUBLIC CLASS DEFINITION
+  // ================================
+
+  var Collapse = function (element, options) {
+    this.$element      = $(element)
+    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+    this.transitioning = null
+
+    if (this.options.parent) {
+      this.$parent = this.getParent()
+    } else {
+      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+    }
+
+    if (this.options.toggle) this.toggle()
+  }
+
+  Collapse.VERSION  = '3.3.7'
+
+  Collapse.TRANSITION_DURATION = 350
+
+  Collapse.DEFAULTS = {
+    toggle: true
+  }
+
+  Collapse.prototype.dimension = function () {
+    var hasWidth = this.$element.hasClass('width')
+    return hasWidth ? 'width' : 'height'
+  }
+
+  Collapse.prototype.show = function () {
+    if (this.transitioning || this.$element.hasClass('in')) return
+
+    var activesData
+    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+    if (actives && actives.length) {
+      activesData = actives.data('bs.collapse')
+      if (activesData && activesData.transitioning) return
+    }
+
+    var startEvent = $.Event('show.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    if (actives && actives.length) {
+      Plugin.call(actives, 'hide')
+      activesData || actives.data('bs.collapse', null)
+    }
+
+    var dimension = this.dimension()
+
+    this.$element
+      .removeClass('collapse')
+      .addClass('collapsing')[dimension](0)
+      .attr('aria-expanded', true)
+
+    this.$trigger
+      .removeClass('collapsed')
+      .attr('aria-expanded', true)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse in')[dimension]('')
+      this.transitioning = 0
+      this.$element
+        .trigger('shown.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+    this.$element
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+  }
+
+  Collapse.prototype.hide = function () {
+    if (this.transitioning || !this.$element.hasClass('in')) return
+
+    var startEvent = $.Event('hide.bs.collapse')
+    this.$element.trigger(startEvent)
+    if (startEvent.isDefaultPrevented()) return
+
+    var dimension = this.dimension()
+
+    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+    this.$element
+      .addClass('collapsing')
+      .removeClass('collapse in')
+      .attr('aria-expanded', false)
+
+    this.$trigger
+      .addClass('collapsed')
+      .attr('aria-expanded', false)
+
+    this.transitioning = 1
+
+    var complete = function () {
+      this.transitioning = 0
+      this.$element
+        .removeClass('collapsing')
+        .addClass('collapse')
+        .trigger('hidden.bs.collapse')
+    }
+
+    if (!$.support.transition) return complete.call(this)
+
+    this.$element
+      [dimension](0)
+      .one('bsTransitionEnd', $.proxy(complete, this))
+      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+  }
+
+  Collapse.prototype.toggle = function () {
+    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+  }
+
+  Collapse.prototype.getParent = function () {
+    return $(this.options.parent)
+      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+      .each($.proxy(function (i, element) {
+        var $element = $(element)
+        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+      }, this))
+      .end()
+  }
+
+  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+    var isOpen = $element.hasClass('in')
+
+    $element.attr('aria-expanded', isOpen)
+    $trigger
+      .toggleClass('collapsed', !isOpen)
+      .attr('aria-expanded', isOpen)
+  }
+
+  function getTargetFromTrigger($trigger) {
+    var href
+    var target = $trigger.attr('data-target')
+      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+    return $(target)
+  }
+
+
+  // COLLAPSE PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this   = $(this)
+      var data    = $this.data('bs.collapse')
+      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
+
+  var old = $.fn.collapse
+
+  $.fn.collapse             = Plugin
+  $.fn.collapse.Constructor = Collapse
+
+
+  // COLLAPSE NO CONFLICT
+  // ====================
+
+  $.fn.collapse.noConflict = function () {
+    $.fn.collapse = old
+    return this
+  }
+
+
+  // COLLAPSE DATA-API
+  // =================
+
+  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+    var $this   = $(this)
+
+    if (!$this.attr('data-target')) e.preventDefault()
+
+    var $target = getTargetFromTrigger($this)
+    var data    = $target.data('bs.collapse')
+    var option  = data ? 'toggle' : $this.data()
+
+    Plugin.call($target, option)
+  })
+
+}(jQuery);
+</script>
+<script>
+window.initializeCodeFolding = function(show) {
+
+  // handlers for show-all and hide all
+  $("#rmd-show-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('show');
+    });
+  });
+  $("#rmd-hide-all-code").click(function() {
+    // close the dropdown menu when an option is clicked
+    $("#allCodeButton").dropdown("toggle");
+    $('div.r-code-collapse').each(function() {
+      $(this).collapse('hide');
+    });
+  });
+
+  // index for unique code element ids
+  var currentIndex = 1;
+
+  // select all R code blocks
+  var rCodeBlocks = $('pre.sourceCode, pre.r, pre.python, pre.bash, pre.sql, pre.cpp, pre.stan');
+  rCodeBlocks.each(function() {
+
+    // if code block has been labeled with class `fold-show`, show the code on init!
+    var classList = $(this).attr('class').split(/\s+/);
+    for (var i = 0; i < classList.length; i++) {
+    if (classList[i] === 'fold-show') {
+        show = true;
+      }
+    }
+
+    // create a collapsable div to wrap the code in
+    var div = $('<div class="collapse r-code-collapse"></div>');
+    if (show)
+      div.addClass('in');
+    var id = 'rcode-643E0F36' + currentIndex++;
+    div.attr('id', id);
+    $(this).before(div);
+    $(this).detach().appendTo(div);
+
+    // add a show code button right above
+    var showCodeText = $('<span>' + (show ? 'Hide' : 'Code') + '</span>');
+    var showCodeButton = $('<button type="button" class="btn btn-default btn-xs code-folding-btn pull-right"></button>');
+    showCodeButton.append(showCodeText);
+    showCodeButton
+        .attr('data-toggle', 'collapse')
+        .attr('data-target', '#' + id)
+        .attr('aria-expanded', show)
+        .attr('aria-controls', id);
+
+    var buttonRow = $('<div class="row"></div>');
+    var buttonCol = $('<div class="col-md-12"></div>');
+
+    buttonCol.append(showCodeButton);
+    buttonRow.append(buttonCol);
+
+    div.before(buttonRow);
+
+    // hack: return show to false, otherwise all next codeBlocks will be shown!
+    show = false;
+
+    // update state of button on show/hide
+    div.on('hidden.bs.collapse', function () {
+      showCodeText.text('Code');
+    });
+    div.on('show.bs.collapse', function () {
+      showCodeText.text('Hide');
+    });
+  });
+
+}
+</script>
+<script>
+/* ========================================================================
+ * Bootstrap: dropdown.js v3.3.7
+ * http://getbootstrap.com/javascript/#dropdowns
+ * ========================================================================
+ * Copyright 2011-2016 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ * ======================================================================== */
+
+
++function ($) {
+  'use strict';
+
+  // DROPDOWN CLASS DEFINITION
+  // =========================
+
+  var backdrop = '.dropdown-backdrop'
+  var toggle   = '[data-toggle="dropdown"]'
+  var Dropdown = function (element) {
+    $(element).on('click.bs.dropdown', this.toggle)
+  }
+
+  Dropdown.VERSION = '3.3.7'
+
+  function getParent($this) {
+    var selector = $this.attr('data-target')
+
+    if (!selector) {
+      selector = $this.attr('href')
+      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+    }
+
+    var $parent = selector && $(selector)
+
+    return $parent && $parent.length ? $parent : $this.parent()
+  }
+
+  function clearMenus(e) {
+    if (e && e.which === 3) return
+    $(backdrop).remove()
+    $(toggle).each(function () {
+      var $this         = $(this)
+      var $parent       = getParent($this)
+      var relatedTarget = { relatedTarget: this }
+
+      if (!$parent.hasClass('open')) return
+
+      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this.attr('aria-expanded', 'false')
+      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+    })
+  }
+
+  Dropdown.prototype.toggle = function (e) {
+    var $this = $(this)
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    clearMenus()
+
+    if (!isActive) {
+      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+        // if mobile we use a backdrop because click events don't delegate
+        $(document.createElement('div'))
+          .addClass('dropdown-backdrop')
+          .insertAfter($(this))
+          .on('click', clearMenus)
+      }
+
+      var relatedTarget = { relatedTarget: this }
+      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+      if (e.isDefaultPrevented()) return
+
+      $this
+        .trigger('focus')
+        .attr('aria-expanded', 'true')
+
+      $parent
+        .toggleClass('open')
+        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+    }
+
+    return false
+  }
+
+  Dropdown.prototype.keydown = function (e) {
+    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+    var $this = $(this)
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    if ($this.is('.disabled, :disabled')) return
+
+    var $parent  = getParent($this)
+    var isActive = $parent.hasClass('open')
+
+    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+      if (e.which == 27) $parent.find(toggle).trigger('focus')
+      return $this.trigger('click')
+    }
+
+    var desc = ' li:not(.disabled):visible a'
+    var $items = $parent.find('.dropdown-menu' + desc)
+
+    if (!$items.length) return
+
+    var index = $items.index(e.target)
+
+    if (e.which == 38 && index > 0)                 index--         // up
+    if (e.which == 40 && index < $items.length - 1) index++         // down
+    if (!~index)                                    index = 0
+
+    $items.eq(index).trigger('focus')
+  }
+
+
+  // DROPDOWN PLUGIN DEFINITION
+  // ==========================
+
+  function Plugin(option) {
+    return this.each(function () {
+      var $this = $(this)
+      var data  = $this.data('bs.dropdown')
+
+      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+      if (typeof option == 'string') data[option].call($this)
+    })
+  }
+
+  var old = $.fn.dropdown
+
+  $.fn.dropdown             = Plugin
+  $.fn.dropdown.Constructor = Dropdown
+
+
+  // DROPDOWN NO CONFLICT
+  // ====================
+
+  $.fn.dropdown.noConflict = function () {
+    $.fn.dropdown = old
+    return this
+  }
+
+
+  // APPLY TO STANDARD DROPDOWN ELEMENTS
+  // ===================================
+
+  $(document)
+    .on('click.bs.dropdown.data-api', clearMenus)
+    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+}(jQuery);
+</script>
+<style type="text/css">
+.code-folding-btn {
+  margin-bottom: 4px;
+}
+
+.row { display: flex; }
+.collapse { display: none; }
+.in { display:block }
+.pull-right > .dropdown-menu {
+    right: 0;
+    left: auto;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.open > .dropdown-menu {
+    display: block;
+    color: #ffffff;
+    background-color: #ffffff;
+    background-image: none;
+    border-color: #92897e;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+}
+
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #e95420;
+  outline: 0;
+}
+.dropdown-menu > .disabled > a,
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  color: #aea79f;
+}
+
+.dropdown-menu > .disabled > a:hover,
+.dropdown-menu > .disabled > a:focus {
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+}
+
+.btn {
+  display: inline-block;
+  margin-bottom: 1;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus {
+  color: #ffffff;
+  text-decoration: none;
+}
+.btn:active,
+.btn.active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  cursor: not-allowed;
+  filter: alpha(opacity=65);
+  opacity: 0.65;
+  box-shadow: none;
+}
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+.btn-default {
+  color: #ffffff;
+  background-color: #aea79f; #important
+  border-color: #aea79f;
+}
+
+.btn-default:focus,
+.btn-default.focus {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #6f675e;
+}
+
+.btn-default:hover {
+  color: #ffffff;
+  background-color: #978e83;
+  border-color: #92897e;
+}
+.btn-default:active,
+.btn-default.active,
+.btn-group > .btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+  border-radius: 0;
+}
+.btn-group > .btn:first-child {
+  margin-left: 0;
+}
+.btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn:last-child:not(:first-child),
+.btn-group > .dropdown-toggle:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group > .btn-group {
+  float: left;
+}
+.btn-group > .btn-group:not(:first-child):not(:last-child) > .btn {
+  border-radius: 0;
+}
+.btn-group > .btn-group:first-child:not(:last-child) > .btn:last-child,
+.btn-group > .btn-group:first-child:not(:last-child) > .dropdown-toggle {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.btn-group > .btn-group:last-child:not(:first-child) > .btn:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
+  outline: 0;
+}
+.btn-group > .btn + .dropdown-toggle {
+  padding-right: 8px;
+  padding-left: 8px;
+}
+.btn-group > .btn-lg + .dropdown-toggle {
+  padding-right: 12px;
+  padding-left: 12px;
+}
+.btn-group.open .dropdown-toggle {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-group.open .dropdown-toggle.btn-link {
+  box-shadow: none;
+}
+
+</style>
+<script>
+var str = '<div class="btn-group pull-right" style="position: fixed; right: 50px; top: 10px; z-index: 200"><button type="button" class="btn btn-default btn-xs dropdown-toggle" id="allCodeButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" data-_extension-text-contrast=""><span>Code</span> <span class="caret"></span></button><ul class="dropdown-menu" style="min-width: 50px;"><li><a id="rmd-show-all-code" href="#">Show All Code</a></li><li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li></ul></div>';
+document.write(str);
+</script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "hide");
+});
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Housing prices in Copenhagen region</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Prerequisite</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path=""><a href="#part-introduction"><i class="fa fa-check"></i>(PART) Introduction</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#house-characteristics"><i class="fa fa-check"></i><b>0.1</b> House characteristics</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#location-characteristics"><i class="fa fa-check"></i><b>0.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>0.3</b> Neighbourhood characteristics</a></li>
+</ul></li>
+<li class="part"><span><b>I Load data</b></span></li>
+<li class="chapter" data-level="1" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>1</b> Administrative units</a></li>
+<li class="chapter" data-level="2" data-path="housing-data.html"><a href="housing-data.html"><i class="fa fa-check"></i><b>2</b> Housing data</a></li>
+<li class="chapter" data-level="3" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>3</b> Population data</a></li>
+<li class="chapter" data-level="4" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>4</b> CORINE land use</a></li>
+<li class="chapter" data-level="5" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>5</b> Railway transport network</a></li>
+<li class="chapter" data-level="6" data-path="open-street-map.html"><a href="open-street-map.html"><i class="fa fa-check"></i><b>6</b> Open Street Map</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="open-street-map.html"><a href="open-street-map.html#parking-areas"><i class="fa fa-check"></i><b>6.1</b> Parking areas</a></li>
+<li class="chapter" data-level="6.2" data-path="open-street-map.html"><a href="open-street-map.html#green-areas"><i class="fa fa-check"></i><b>6.2</b> Green areas</a></li>
+</ul></li>
+<li class="part"><span><b>II Data analysis</b></span></li>
+<li class="chapter" data-level="7" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>7</b> Population density</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>7.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="7.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>7.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="7.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>7.3</b> Population density WorldPop</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Housing prices Copenhagen</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="open-street-map" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Open Street Map</h1>
+<p>We get location information from <a href="https://wiki.openstreetmap.org/wiki/Map_features">Open Street Map</a>. We select services inside a buffer of approx. 2 km around the study area (Figure <a href="#fig:loc-box"><strong>??</strong></a>), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="open-street-map.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Area for OSM data: Copenhagen</span></span>
+<span id="cb2-2"><a href="open-street-map.html#cb2-2" aria-hidden="true" tabindex="-1"></a>CPH_osm_bb <span class="ot">&lt;-</span> <span class="fu">getbb</span>(<span class="st">&quot;Copenhagen&quot;</span>)</span>
+<span id="cb2-3"><a href="open-street-map.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="open-street-map.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding of the study area (approx. buffer of 2km)</span></span>
+<span id="cb2-5"><a href="open-street-map.html#cb2-5" aria-hidden="true" tabindex="-1"></a>box <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">714906</span>,</span>
+<span id="cb2-6"><a href="open-street-map.html#cb2-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">xmax =</span> <span class="dv">733618</span>,</span>
+<span id="cb2-7"><a href="open-street-map.html#cb2-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">ymin =</span> <span class="dv">6166579</span>,</span>
+<span id="cb2-8"><a href="open-street-map.html#cb2-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">ymax =</span> <span class="dv">6184092</span>)</span>
+<span id="cb2-9"><a href="open-street-map.html#cb2-9" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(box)</span>
+<span id="cb2-10"><a href="open-street-map.html#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="open-street-map.html#cb2-11" aria-hidden="true" tabindex="-1"></a>bbox_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sfc</span>(bbox) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-12"><a href="open-street-map.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:25832&quot;</span>) </span></code></pre></div>
+<div id="parking-areas" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Parking areas</h2>
+<p>Parking areas are tagged as <code>key = amenity</code> and <code>value = parking</code> (Figure <a href="open-street-map.html#fig:osm-parking">6.1</a>).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="open-street-map.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get car packs from OSM</span></span>
+<span id="cb3-2"><a href="open-street-map.html#cb3-2" aria-hidden="true" tabindex="-1"></a>parking_osm <span class="ot">&lt;-</span> CPH_osm_bb <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="open-street-map.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opq</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="open-street-map.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_osm_feature</span>(<span class="at">key =</span> <span class="st">&quot;amenity&quot;</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;parking&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="open-street-map.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">osmdata_sf</span>() </span>
+<span id="cb3-6"><a href="open-street-map.html#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="open-street-map.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean dataset</span></span>
+<span id="cb3-8"><a href="open-street-map.html#cb3-8" aria-hidden="true" tabindex="-1"></a>parking <span class="ot">&lt;-</span> parking_osm<span class="sc">$</span>osm_polygons <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="open-street-map.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
+<span id="cb3-10"><a href="open-street-map.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-11"><a href="open-street-map.html#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(osm_id, amenity) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a href="open-street-map.html#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the area of the polygons</span></span>
+<span id="cb3-13"><a href="open-street-map.html#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), m<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-14"><a href="open-street-map.html#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Crop to area of influence</span></span>
+<span id="cb3-15"><a href="open-street-map.html#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf)</span>
+<span id="cb3-16"><a href="open-street-map.html#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="open-street-map.html#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb3-18"><a href="open-street-map.html#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb3-19"><a href="open-street-map.html#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf),</span>
+<span id="cb3-20"><a href="open-street-map.html#cb3-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-21"><a href="open-street-map.html#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish,</span>
+<span id="cb3-22"><a href="open-street-map.html#cb3-22" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>,</span>
+<span id="cb3-23"><a href="open-street-map.html#cb3-23" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb3-24"><a href="open-street-map.html#cb3-24" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb3-25"><a href="open-street-map.html#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> parking, <span class="at">fill =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb3-26"><a href="open-street-map.html#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb3-27"><a href="open-street-map.html#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:osm-parking"></span>
+<img src="Housing_prices_book_files/figure-html/osm-parking-1.png" alt="Parking areas" width="672" />
+<p class="caption">
+Figure 6.1: Parking areas
+</p>
+</div>
+<p>Potential model</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="open-street-map.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on: https://riatelab.github.io/potential/articles/potential.html</span></span>
+<span id="cb4-2"><a href="open-street-map.html#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="open-street-map.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Points to estimate the potential </span></span>
+<span id="cb4-4"><a href="open-street-map.html#cb4-4" aria-hidden="true" tabindex="-1"></a>grids100m_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(grids100m)</span>
+<span id="cb4-5"><a href="open-street-map.html#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="open-street-map.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate centroid of the parking area</span></span>
+<span id="cb4-7"><a href="open-street-map.html#cb4-7" aria-hidden="true" tabindex="-1"></a>parking_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(parking)</span>
+<span id="cb4-8"><a href="open-street-map.html#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="open-street-map.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Distance matrix</span></span>
+<span id="cb4-10"><a href="open-street-map.html#cb4-10" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">create_matrix</span>(<span class="at">x =</span> parking_cent, <span class="at">y =</span> grids100m_cent)</span></code></pre></div>
+<p>Spatial interaction function (Figure <a href="#fig:pot-model-inter"><strong>??</strong></a>).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="open-street-map.html#cb5-1" aria-hidden="true" tabindex="-1"></a>span <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb5-2"><a href="open-street-map.html#cb5-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb5-3"><a href="open-street-map.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,</span>
+<span id="cb5-4"><a href="open-street-map.html#cb5-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">span =</span> span,</span>
+<span id="cb5-5"><a href="open-street-map.html#cb5-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">beta =</span> beta)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:spat-inter-parking"></span>
+<img src="Housing_prices_book_files/figure-html/spat-inter-parking-1.png" alt="Spatial interaction function" width="672" />
+<p class="caption">
+Figure 6.2: Spatial interaction function
+</p>
+</div>
+<p>Calculate the potential (Figure <a href="open-street-map.html#fig:pot-model-parking">6.3</a>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="open-street-map.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the potential</span></span>
+<span id="cb6-2"><a href="open-street-map.html#cb6-2" aria-hidden="true" tabindex="-1"></a>grids100m_cent<span class="sc">$</span>pot <span class="ot">&lt;-</span> <span class="fu">potential</span>(<span class="at">x =</span> parking_cent,</span>
+<span id="cb6-3"><a href="open-street-map.html#cb6-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">y =</span> grids100m_cent,</span>
+<span id="cb6-4"><a href="open-street-map.html#cb6-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">d =</span> d,</span>
+<span id="cb6-5"><a href="open-street-map.html#cb6-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">var =</span> <span class="st">&quot;area_m2&quot;</span>,</span>
+<span id="cb6-6"><a href="open-street-map.html#cb6-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,</span>
+<span id="cb6-7"><a href="open-street-map.html#cb6-7" aria-hidden="true" tabindex="-1"></a>                                <span class="at">span =</span> span,</span>
+<span id="cb6-8"><a href="open-street-map.html#cb6-8" aria-hidden="true" tabindex="-1"></a>                                <span class="at">beta =</span> beta)</span>
+<span id="cb6-9"><a href="open-street-map.html#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="open-street-map.html#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Potential relatively to its maximum</span></span>
+<span id="cb6-11"><a href="open-street-map.html#cb6-11" aria-hidden="true" tabindex="-1"></a>grids100m_cent<span class="sc">$</span>pot_perc <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> grids100m_cent<span class="sc">$</span>pot <span class="sc">/</span> <span class="fu">max</span>(grids100m_cent<span class="sc">$</span>pot)</span>
+<span id="cb6-12"><a href="open-street-map.html#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="open-street-map.html#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add info to grids100m</span></span>
+<span id="cb6-14"><a href="open-street-map.html#cb6-14" aria-hidden="true" tabindex="-1"></a>grids100m_cent <span class="ot">&lt;-</span> grids100m_cent <span class="sc">%&gt;%</span></span>
+<span id="cb6-15"><a href="open-street-map.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-16"><a href="open-street-map.html#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>geometry, int)</span>
+<span id="cb6-17"><a href="open-street-map.html#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="open-street-map.html#cb6-18" aria-hidden="true" tabindex="-1"></a>parking_pot <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb6-19"><a href="open-street-map.html#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-20"><a href="open-street-map.html#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(grids100m_cent, <span class="at">by =</span> <span class="st">&quot;grid_ID&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-21"><a href="open-street-map.html#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>()</span>
+<span id="cb6-22"><a href="open-street-map.html#cb6-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="open-street-map.html#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb6-24"><a href="open-street-map.html#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb6-25"><a href="open-street-map.html#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> parking_pot, <span class="fu">aes</span>(<span class="at">fill =</span> pot_perc), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="open-street-map.html#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">&quot;Perc [%]&quot;</span>, <span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="open-street-map.html#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb6-28"><a href="open-street-map.html#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() </span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:pot-model-parking"></span>
+<img src="Housing_prices_book_files/figure-html/pot-model-parking-1.png" alt="Potential of parking areas" width="672" />
+<p class="caption">
+Figure 6.3: Potential of parking areas
+</p>
+</div>
+</div>
+<div id="green-areas" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Green areas</h2>
+<p>Green areas (Figure <a href="open-street-map.html#fig:green-areas-osm">6.4</a>).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="open-street-map.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Green areas </span></span>
+<span id="cb7-2"><a href="open-street-map.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  CPH_parks <span class="ot">&lt;-</span> CPH_osm_bb <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="open-street-map.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opq</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="open-street-map.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_osm_feature</span>(<span class="at">key =</span> <span class="st">&quot;leisure&quot;</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;park&quot;</span>,</span>
+<span id="cb7-5"><a href="open-street-map.html#cb7-5" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;common&quot;</span>,</span>
+<span id="cb7-6"><a href="open-street-map.html#cb7-6" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;garden&quot;</span>,</span>
+<span id="cb7-7"><a href="open-street-map.html#cb7-7" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;firepit&quot;</span>,</span>
+<span id="cb7-8"><a href="open-street-map.html#cb7-8" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;nature_reserve&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="open-street-map.html#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">osmdata_sf</span>() </span>
+<span id="cb7-10"><a href="open-street-map.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-11"><a href="open-street-map.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  CPH_forest <span class="ot">&lt;-</span> CPH_osm_bb <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="open-street-map.html#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opq</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-13"><a href="open-street-map.html#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_osm_feature</span>(<span class="at">key =</span> <span class="st">&quot;landuse&quot;</span>, <span class="at">value =</span> <span class="fu">c</span>(<span class="st">&quot;meadow&quot;</span>, <span class="st">&quot;allotments&quot;</span>, <span class="st">&quot;forest&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-14"><a href="open-street-map.html#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">osmdata_sf</span>() </span>
+<span id="cb7-15"><a href="open-street-map.html#cb7-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-16"><a href="open-street-map.html#cb7-16" aria-hidden="true" tabindex="-1"></a>  CPH_scrub <span class="ot">&lt;-</span> CPH_osm_bb <span class="sc">%&gt;%</span></span>
+<span id="cb7-17"><a href="open-street-map.html#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opq</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb7-18"><a href="open-street-map.html#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_osm_feature</span>(<span class="at">key =</span> <span class="st">&quot;natural&quot;</span>, <span class="at">value =</span> <span class="st">&quot;scrub&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-19"><a href="open-street-map.html#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">osmdata_sf</span>() </span>
+<span id="cb7-20"><a href="open-street-map.html#cb7-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-21"><a href="open-street-map.html#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean</span></span>
+<span id="cb7-22"><a href="open-street-map.html#cb7-22" aria-hidden="true" tabindex="-1"></a>  parks <span class="ot">&lt;-</span> <span class="fu">select</span>(CPH_parks<span class="sc">$</span>osm_polygons, osm_id, name) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-23"><a href="open-street-map.html#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># bind_rows(select(CPH_forest$osm_polygons, osm_id, name)) %&gt;% </span></span>
+<span id="cb7-24"><a href="open-street-map.html#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># bind_rows(select(CPH_scrub$osm_polygons, osm_id, name)) %&gt;% </span></span>
+<span id="cb7-25"><a href="open-street-map.html#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Transform CRS</span></span>
+<span id="cb7-26"><a href="open-street-map.html#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-27"><a href="open-street-map.html#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Encoding names (Danish)</span></span>
+<span id="cb7-28"><a href="open-street-map.html#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">iconv</span>(name, <span class="st">&quot;UTF-8&quot;</span>), </span>
+<span id="cb7-29"><a href="open-street-map.html#cb7-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">type =</span> <span class="st">&quot;parks&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-30"><a href="open-street-map.html#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculate the area of the polygons</span></span>
+<span id="cb7-31"><a href="open-street-map.html#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), m<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-32"><a href="open-street-map.html#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Crop to area of influence</span></span>
+<span id="cb7-33"><a href="open-street-map.html#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_crop</span>(bbox_sf) </span>
+<span id="cb7-34"><a href="open-street-map.html#cb7-34" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-35"><a href="open-street-map.html#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb7-36"><a href="open-street-map.html#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb7-37"><a href="open-street-map.html#cb7-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span><span class="fu">st_crop</span>(dk_country, bbox_sf),</span>
+<span id="cb7-38"><a href="open-street-map.html#cb7-38" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-39"><a href="open-street-map.html#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish,</span>
+<span id="cb7-40"><a href="open-street-map.html#cb7-40" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>,</span>
+<span id="cb7-41"><a href="open-street-map.html#cb7-41" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>,</span>
+<span id="cb7-42"><a href="open-street-map.html#cb7-42" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb7-43"><a href="open-street-map.html#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> parks,</span>
+<span id="cb7-44"><a href="open-street-map.html#cb7-44" aria-hidden="true" tabindex="-1"></a>          <span class="at">colour =</span> <span class="cn">NA</span>,</span>
+<span id="cb7-45"><a href="open-street-map.html#cb7-45" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;palegreen3&quot;</span>,</span>
+<span id="cb7-46"><a href="open-street-map.html#cb7-46" aria-hidden="true" tabindex="-1"></a>          <span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb7-47"><a href="open-street-map.html#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:green-areas-osm"></span>
+<img src="Housing_prices_book_files/figure-html/green-areas-osm-1.png" alt="Green areas" width="672" />
+<p class="caption">
+Figure 6.4: Green areas
+</p>
+</div>
+<p>Potential model</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="open-street-map.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Points to estimate the potential </span></span>
+<span id="cb8-2"><a href="open-street-map.html#cb8-2" aria-hidden="true" tabindex="-1"></a>grids100m_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(grids100m)</span>
+<span id="cb8-3"><a href="open-street-map.html#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="open-street-map.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate centroid of the parking area</span></span>
+<span id="cb8-5"><a href="open-street-map.html#cb8-5" aria-hidden="true" tabindex="-1"></a>parks_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(parks)</span>
+<span id="cb8-6"><a href="open-street-map.html#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="open-street-map.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Distance matrix</span></span>
+<span id="cb8-8"><a href="open-street-map.html#cb8-8" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">create_matrix</span>(<span class="at">x =</span> parks_cent, <span class="at">y =</span> grids100m_cent)</span></code></pre></div>
+<p>Spatial interaction function (Figure <a href="open-street-map.html#fig:spat-inter-parks">6.5</a>).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="open-street-map.html#cb9-1" aria-hidden="true" tabindex="-1"></a>span <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb9-2"><a href="open-street-map.html#cb9-2" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb9-3"><a href="open-street-map.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,</span>
+<span id="cb9-4"><a href="open-street-map.html#cb9-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">span =</span> span,</span>
+<span id="cb9-5"><a href="open-street-map.html#cb9-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">beta =</span> beta)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:spat-inter-parks"></span>
+<img src="Housing_prices_book_files/figure-html/spat-inter-parks-1.png" alt="Spatial interaction function" width="672" />
+<p class="caption">
+Figure 6.5: Spatial interaction function
+</p>
+</div>
+<p>Calculate the potential (Figure <a href="open-street-map.html#fig:pot-model-parks">6.6</a>).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="open-street-map.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the potential</span></span>
+<span id="cb10-2"><a href="open-street-map.html#cb10-2" aria-hidden="true" tabindex="-1"></a>grids100m_cent<span class="sc">$</span>pot <span class="ot">&lt;-</span> <span class="fu">potential</span>(<span class="at">x =</span> parks_cent,</span>
+<span id="cb10-3"><a href="open-street-map.html#cb10-3" aria-hidden="true" tabindex="-1"></a>                                <span class="at">y =</span> grids100m_cent,</span>
+<span id="cb10-4"><a href="open-street-map.html#cb10-4" aria-hidden="true" tabindex="-1"></a>                                <span class="at">d =</span> d,</span>
+<span id="cb10-5"><a href="open-street-map.html#cb10-5" aria-hidden="true" tabindex="-1"></a>                                <span class="at">var =</span> <span class="st">&quot;area_m2&quot;</span>,</span>
+<span id="cb10-6"><a href="open-street-map.html#cb10-6" aria-hidden="true" tabindex="-1"></a>                                <span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,</span>
+<span id="cb10-7"><a href="open-street-map.html#cb10-7" aria-hidden="true" tabindex="-1"></a>                                <span class="at">span =</span> span,</span>
+<span id="cb10-8"><a href="open-street-map.html#cb10-8" aria-hidden="true" tabindex="-1"></a>                                <span class="at">beta =</span> beta)</span>
+<span id="cb10-9"><a href="open-street-map.html#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="open-street-map.html#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Potential relatively to its maximum</span></span>
+<span id="cb10-11"><a href="open-street-map.html#cb10-11" aria-hidden="true" tabindex="-1"></a>grids100m_cent<span class="sc">$</span>pot_perc <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> grids100m_cent<span class="sc">$</span>pot <span class="sc">/</span> <span class="fu">max</span>(grids100m_cent<span class="sc">$</span>pot)</span>
+<span id="cb10-12"><a href="open-street-map.html#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="open-street-map.html#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add info to grids100m</span></span>
+<span id="cb10-14"><a href="open-street-map.html#cb10-14" aria-hidden="true" tabindex="-1"></a>grids100m_cent <span class="ot">&lt;-</span> grids100m_cent <span class="sc">%&gt;%</span></span>
+<span id="cb10-15"><a href="open-street-map.html#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="open-street-map.html#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>geometry, int)</span>
+<span id="cb10-17"><a href="open-street-map.html#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="open-street-map.html#cb10-18" aria-hidden="true" tabindex="-1"></a>parks_pot <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb10-19"><a href="open-street-map.html#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-20"><a href="open-street-map.html#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(grids100m_cent, <span class="at">by =</span> <span class="st">&quot;grid_ID&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-21"><a href="open-street-map.html#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>()</span>
+<span id="cb10-22"><a href="open-street-map.html#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="open-street-map.html#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb10-24"><a href="open-street-map.html#cb10-24" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb10-25"><a href="open-street-map.html#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> parks_pot, <span class="fu">aes</span>(<span class="at">fill =</span> pot_perc), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb10-26"><a href="open-street-map.html#cb10-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">&quot;Perc [%]&quot;</span>, <span class="at">option =</span> <span class="st">&quot;plasma&quot;</span>) <span class="sc">+</span></span>
+<span id="cb10-27"><a href="open-street-map.html#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb10-28"><a href="open-street-map.html#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() </span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:pot-model-parks"></span>
+<img src="Housing_prices_book_files/figure-html/pot-model-parks-1.png" alt="Potential of parking areas" width="672" />
+<p class="caption">
+Figure 6.6: Potential of parking areas
+</p>
+</div>
+
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="railway-transport-network.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="Population.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/026_load_OSM.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-19" />
+<meta name="date" content="2021-04-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -891,7 +891,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
 <li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
 <li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
-<li class="chapter" data-level="7" data-path="geodanmark.html"><a href="geodanmark.html"><i class="fa fa-check"></i><b>7</b> GeoDanmark</a></li>
+<li class="chapter" data-level="7" data-path="open-street-map.html"><a href="open-street-map.html"><i class="fa fa-check"></i><b>7</b> Open Street Map</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="open-street-map.html"><a href="open-street-map.html#parking-areas"><i class="fa fa-check"></i><b>7.1</b> Parking areas</a></li>
+<li class="chapter" data-level="7.2" data-path="open-street-map.html"><a href="open-street-map.html#green-areas"><i class="fa fa-check"></i><b>7.2</b> Green areas</a></li>
+</ul></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
 <li class="chapter" data-level="8" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>8</b> Population density</a>
 <ul>
@@ -927,7 +931,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Housing prices Copenhagen</h1>
 <p class="author"><em>Javier Elío, Henning S. Hansen, Carsten Keßler</em></p>
-<p class="date"><em>2021-04-19</em></p>
+<p class="date"><em>2021-04-21</em></p>
 </div>
 <div id="prerequisite" class="section level1 unnumbered">
 <h1>Prerequisite</h1>
@@ -953,14 +957,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;janitor&quot;</span>,</span>
 <span id="cb1-20"><a href="index.html#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;kableExtra&quot;</span>, <span class="st">&quot;knitr&quot;</span>,</span>
 <span id="cb1-21"><a href="index.html#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;latex2exp&quot;</span>,</span>
-<span id="cb1-22"><a href="index.html#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;osmdata&quot;</span>, <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;potential&quot;</span>,</span>
-<span id="cb1-23"><a href="index.html#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;rappdirs&quot;</span>,</span>
-<span id="cb1-24"><a href="index.html#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;SnowballC&quot;</span>, <span class="st">&quot;stars&quot;</span>,</span>
-<span id="cb1-25"><a href="index.html#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;units&quot;</span>,</span>
-<span id="cb1-26"><a href="index.html#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;table1&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;tidytext&quot;</span>, <span class="st">&quot;tm&quot;</span>, <span class="st">&quot;tools&quot;</span>)</span>
-<span id="cb1-27"><a href="index.html#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="index.html#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and install</span></span>
-<span id="cb1-29"><a href="index.html#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
+<span id="cb1-22"><a href="index.html#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;mapview&quot;</span>,</span>
+<span id="cb1-23"><a href="index.html#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;osmdata&quot;</span>, </span>
+<span id="cb1-24"><a href="index.html#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;potential&quot;</span>,</span>
+<span id="cb1-25"><a href="index.html#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;rappdirs&quot;</span>,</span>
+<span id="cb1-26"><a href="index.html#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;SnowballC&quot;</span>, <span class="st">&quot;stars&quot;</span>,</span>
+<span id="cb1-27"><a href="index.html#cb1-27" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;units&quot;</span>,</span>
+<span id="cb1-28"><a href="index.html#cb1-28" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;table1&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;tidytext&quot;</span>, <span class="st">&quot;tm&quot;</span>, <span class="st">&quot;tools&quot;</span>)</span>
+<span id="cb1-29"><a href="index.html#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="index.html#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and install</span></span>
+<span id="cb1-31"><a href="index.html#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
 <p>Furthermore, we have created our own package for downloading <a href="https://kortforsyningen.dk/">kortforsyningen</a> data to a local repository directly from R (i.e. <a href="https://github.com/javiereliomedina/dangeo.git">dangeo</a>). The package can be downloaded from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install package from GitHub</span></span>
 <span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
@@ -993,31 +999,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 # [1] tools     stats     graphics  grDevices utils     datasets  methods   base     
 # 
 # other attached packages:
-#  [1] dangeo_0.0.0.9000  tm_0.7-8           NLP_0.2-1          tidytext_0.3.0     dplyr_1.0.5        purrr_0.3.4       
-#  [7] readr_1.4.0        tidyr_1.1.3        tibble_3.1.0       ggplot2_3.3.3      tidyverse_1.3.0    table1_1.3        
-# [13] units_0.7-1        stars_0.5-2        abind_1.4-5        SnowballC_0.7.0    stringr_1.4.0      sf_0.9-8          
-# [19] rappdirs_0.3.3     RColorBrewer_1.1-2 remotes_2.2.0      rmarkdown_2.7      potential_0.1.0    patchwork_1.1.1   
-# [25] osmdata_0.1.5      latex2exp_0.5.0    knitr_1.31         kableExtra_1.3.4   janitor_2.1.0      gtsummary_1.4.0   
-# [31] giscoR_0.2.2       ggspatial_1.1.5    furrr_0.2.2        future_1.21.0      forcats_0.5.1      danstat_0.1.0     
-# [37] data.table_1.14.0  bookdown_0.21      bit64_4.0.5        bit_4.0.4         
+#  [1] dangeo_0.0.0.9000  tm_0.7-8           NLP_0.2-1          tidytext_0.3.0    
+#  [5] dplyr_1.0.5        purrr_0.3.4        readr_1.4.0        tidyr_1.1.3       
+#  [9] tibble_3.1.0       ggplot2_3.3.3      tidyverse_1.3.0    table1_1.3        
+# [13] units_0.7-1        stars_0.5-2        abind_1.4-5        SnowballC_0.7.0   
+# [17] stringr_1.4.0      sf_0.9-8           rappdirs_0.3.3     RColorBrewer_1.1-2
+# [21] remotes_2.2.0      rmarkdown_2.7      potential_0.1.0    patchwork_1.1.1   
+# [25] osmdata_0.1.5      mapview_2.9.0      latex2exp_0.5.0    knitr_1.31        
+# [29] kableExtra_1.3.4   janitor_2.1.0      gtsummary_1.4.0    giscoR_0.2.2      
+# [33] ggspatial_1.1.5    furrr_0.2.2        future_1.21.0      forcats_0.5.1     
+# [37] danstat_0.1.0      data.table_1.14.0  bookdown_0.21      bit64_4.0.5       
+# [41] bit_4.0.4         
 # 
 # loaded via a namespace (and not attached):
-#  [1] colorspace_2.0-0    ellipsis_0.3.1      class_7.3-18        snakecase_0.11.0    fs_1.5.0           
-#  [6] rstudioapi_0.13     proxy_0.4-25        listenv_0.8.0       fansi_0.4.2         lubridate_1.7.9.2  
-# [11] xml2_1.3.2          codetools_0.2-18    splines_4.0.4       Formula_1.2-4       jsonlite_1.7.2     
-# [16] gt_0.2.2            broom_0.7.6         dbplyr_2.1.0        compiler_4.0.4      httr_1.4.2         
-# [21] backports_1.2.1     assertthat_0.2.1    Matrix_1.3-2        cli_2.4.0           htmltools_0.5.1.1  
-# [26] gtable_0.3.0        glue_1.4.2          Rcpp_1.0.6          slam_0.1-48         cellranger_1.1.0   
-# [31] jquerylib_0.1.3     vctrs_0.3.7         svglite_2.0.0       broom.helpers_1.3.0 lwgeom_0.2-5       
-# [36] xfun_0.22           globals_0.14.0      rvest_1.0.0         lifecycle_1.0.0     scales_1.1.1       
-# [41] hms_1.0.0           parallel_4.0.4      yaml_2.2.1          curl_4.3            sass_0.3.1         
-# [46] stringi_1.5.3       tokenizers_0.2.1    e1071_1.7-6         rlang_0.4.10        pkgconfig_2.0.3    
-# [51] systemfonts_1.0.1   evaluate_0.14       lattice_0.20-41     tidyselect_1.1.0    parallelly_1.24.0  
-# [56] magrittr_2.0.1      R6_2.5.0            generics_0.1.0      DBI_1.1.1           pillar_1.6.0       
-# [61] haven_2.3.1         withr_2.4.1         survival_3.2-10     sp_1.4-5            janeaustenr_0.1.5  
-# [66] modelr_0.1.8        crayon_1.4.1        KernSmooth_2.23-18  utf8_1.2.1          grid_4.0.4         
-# [71] readxl_1.3.1        isoband_0.2.4       reprex_1.0.0        digest_0.6.27       classInt_0.4-3     
-# [76] webshot_0.5.2       munsell_0.5.0       viridisLite_0.4.0   bslib_0.2.4</code></pre>
+#  [1] leafem_0.1.3        colorspace_2.0-0    ellipsis_0.3.1      class_7.3-18       
+#  [5] leaflet_2.0.4.1     snakecase_0.11.0    satellite_1.0.2     fs_1.5.0           
+#  [9] base64enc_0.1-3     rstudioapi_0.13     proxy_0.4-25        listenv_0.8.0      
+# [13] fansi_0.4.2         lubridate_1.7.9.2   xml2_1.3.2          codetools_0.2-18   
+# [17] splines_4.0.4       Formula_1.2-4       jsonlite_1.7.2      gt_0.2.2           
+# [21] broom_0.7.6         dbplyr_2.1.0        png_0.1-7           compiler_4.0.4     
+# [25] httr_1.4.2          backports_1.2.1     assertthat_0.2.1    Matrix_1.3-2       
+# [29] cli_2.4.0           htmltools_0.5.1.1   gtable_0.3.0        glue_1.4.2         
+# [33] Rcpp_1.0.6          slam_0.1-48         cellranger_1.1.0    jquerylib_0.1.3    
+# [37] raster_3.4-5        vctrs_0.3.7         svglite_2.0.0       broom.helpers_1.3.0
+# [41] crosstalk_1.1.1     lwgeom_0.2-5        xfun_0.22           globals_0.14.0     
+# [45] rvest_1.0.0         lifecycle_1.0.0     scales_1.1.1        hms_1.0.0          
+# [49] parallel_4.0.4      yaml_2.2.1          curl_4.3            sass_0.3.1         
+# [53] stringi_1.5.3       tokenizers_0.2.1    e1071_1.7-6         rlang_0.4.10       
+# [57] pkgconfig_2.0.3     systemfonts_1.0.1   evaluate_0.14       lattice_0.20-41    
+# [61] htmlwidgets_1.5.3   tidyselect_1.1.0    parallelly_1.24.0   magrittr_2.0.1     
+# [65] R6_2.5.0            generics_0.1.0      DBI_1.1.1           withr_2.4.1        
+# [69] haven_2.3.1         pillar_1.6.0        survival_3.2-10     sp_1.4-5           
+# [73] janeaustenr_0.1.5   modelr_0.1.8        crayon_1.4.1        KernSmooth_2.23-18 
+# [77] utf8_1.2.1          readxl_1.3.1        grid_4.0.4          isoband_0.2.4      
+# [81] reprex_1.0.0        digest_0.6.27       classInt_0.4-3      webshot_0.5.2      
+# [85] stats4_4.0.4        munsell_0.5.0       viridisLite_0.4.0   bslib_0.2.4</code></pre>
 
 </div>
 </div>
