@@ -25,7 +25,8 @@ my_theme_map <- function() {
       legend.title = element_text(size = 10, face = "bold"),
       legend.text = element_text(size = 10),
       # Facets
-      strip.text = element_text(size = 12, color = "black", face = "italic")
+      strip.text = element_text(size = 12, color = "black", face = "bold"),
+      strip.text.x = element_text(hjust = 0)
     )
 }
 
