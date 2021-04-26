@@ -73,7 +73,8 @@ We have also created grid cells of 100m x 100m for aggregating some data at that
     st_sf() %>% 
     # Select grids only in the study area
     mutate(int = st_intersects(., study_area) %>% lengths > 0) %>% 
-    filter(int == TRUE) %>% 
+    filter(int == TRUE) %>%
+    select(-int) %>% 
     # Name grids as "g001", "g002", ...
     mutate(grid_ID = paste0("g", stringr::str_pad(seq(1, nrow(.), 1), 3, pad = "0")))
 

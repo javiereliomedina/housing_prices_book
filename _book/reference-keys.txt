@@ -5,8 +5,7 @@ tab:price-index
 tab:tbl-runits-clean
 fig:fig-land-use
 fig:fig-osm-data
-fig:spat-inter-parking-1
-fig:spat-inter-parking-2
+fig:spat-inter
 fig:fig-pot-model
 fig:fig-pop-chor
 fig:fig-pop-map-grid
@@ -22,15 +21,12 @@ population-data
 corine-land-use
 railway-transport-network
 open-street-map
-get-data
+areal-features-polygons
 potential-model
+point-features
 Population
 choropleth-by-ancestry
 disaggregating-population-data
 population-density-worldpop
 residential-units-saled-as-free-scale
 residential-units-by-floor-level
-fig:pot-model
-fig:spat-inter-parking
-fig:spat-inter
-fig:loc-box

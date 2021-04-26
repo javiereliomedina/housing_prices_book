@@ -161,7 +161,7 @@ Population in 2019 (at the first dat of the year) by grid cells of 100m x 100m a
   pop_2019_g100m <-  f_pd_grids(.pop = prsh_pop_sf,
                                 .parish = cph_parish,
                                 .res_points = res_units,
-                                .grids = grids100m,
+                                .grids = grids100m$data_poly[[1]],
                                 .year = 2019)
 
   brks <- c(min(pop_2019_g100m$value),

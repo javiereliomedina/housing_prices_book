@@ -1,78 +1,89 @@
 # Open Street Map 
 
-## Get data 
-
-We get location information from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We select services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:loc-box)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses. 
+We get location information from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We select services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:fig-osm-data)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses. 
 
 
 "A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OMS".
 
+## Areal features (polygons) 
 
-```{r loc-box, cache=TRUE, fig.cap="OMS data"}
+The mass of the service ($M_j$) for the potential model is the area (in $m^2$) of the feature.
 
-# Area for OSM data: Copenhagen
-CPH_osm_bb <- getbb("Copenhagen")
+Hospital, and Schools (e.g. schools) may create traffic and noise. Therefore, they may have a negative effect on housing prices (@Gultekin2006). 
+
+```{r tbl-osm-data}
+
+# List of OSM data
+# Available features: https://wiki.openstreetmap.org/wiki/Map_features 
+
+osm_poly_list <- tribble(
+  ~feature, ~key, ~value, ~exp_effect,
+  # Transportation   
+  "Parking", "amenity", "parking", "positive",
+  # Green areas
+  "Park", "leisure",  c("park", "garden", "playground"), "positive",
+  "Forest", "landuse", c("forest", "allotments", "meadow"), "positive",
+  "Forest", "natural", "scrub", "positive",
+  # Education
+  "School", "amenity", c("school", "kindergarten"), "negative",
+  "University", "amenity", c("university", "college"), "positive", 
+  # Healthcare
+  "Hospital", "amenity", "hospital", "negative",
+  "Social facility", "amenity",  "social_facility", "negative",
+  #Entertainment, Arts & Culture.... 
+)
+
+osm_poly_list <- osm_poly_list %>%
+  unnest(c(value)) %>% 
+  as.data.table() 
+
+osm_poly_list %>% 
+  kbl()
+
+```
+
+```{r osm-poly}
 
 # Bounding of the study area (approx. buffer of 2km)
-box <- c(xmin = 714906,
-         xmax = 733618,
-         ymin = 6166579,
-         ymax = 6184092)
+box <- c(xmin = 714906, xmax = 733618, ymin = 6166579, ymax = 6184092)
 bbox <- st_bbox(box)
+bbox_sf <- st_as_sfc(bbox) %>%  st_set_crs("EPSG:25832") 
 
-bbox_sf <- st_as_sfc(bbox) %>% 
-  st_set_crs("EPSG:25832") 
-
-#' Function for downloading data from OMS
-#' @param bb    Bounding box from the area we will get the OSM data (from osmdata::getbb())
-#' @param type  name we give to the data (e.g. parking)
-#' @param key   Feature key
-#' @param value Value for feature key; can be negated with an initial exclamation mark, value = "!this", and can also be a vector, value = c ("this", "that")
-#' @param bbox  Crop results to the area of interest (e.g. Bounding of the study)
-
-f_osm_poly <- function(bb, type, key, value, bbox = bbox_sf) {
-  bb %>%
-    opq() %>%
-    add_osm_feature(key = key, value = value) %>%
-    osmdata_sf() %>% 
-    # Extract polygons
-    pluck("osm_polygons") %>%
-    # Transform CRS
-    st_transform(crs = "EPSG:25832") %>% 
-    # Add column with the name of the feature
-    mutate(type = type) %>%
-    # Get only columns with the name of the feature and the OSM id
-    select(osm_id, type) %>% 
-    # Calculate the area of the polygons
-    mutate(area_m2 = as.numeric(units::set_units(st_area(.), m^2))) %>% 
-    # Crop to area of interest
-    st_crop(bbox)
-}
-
-# List of OSM data to retrieve 
-osm_data_list <- tribble(
-  ~bb,            ~type,      ~key,     ~value,
-  CPH_osm_bb,   "Parking", "amenity",  "parking",
-  CPH_osm_bb,      "Park", "leisure",  c("park", "garden", "playground"),
-  CPH_osm_bb,    "Forest", "landuse",  c("forest", "allotments", "meadow"),
-  CPH_osm_bb,    "Forest", "natural",  "scrub")
-
-# Get data 
-osm_download <- osm_data_list %>%
-  # Get polygons 
-  mutate(data_poly = pmap(., f_osm_poly)) 
-
-# Extract polygons and merge by type 
-osm_data <- osm_download$data_poly %>%
-  bind_rows() %>% 
-  group_by(type) %>% 
+# Get polygons 
+osm_poly_dnld <- oe_get(place = "Copenhagen", layer = "multipolygons") %>% 
+  # Convert to data.table
+  as.data.table() %>% 
+  # Long format 
+  melt(id.vars = c("osm_id", "osm_way_id", "type", "name", "geometry"),
+       variable.name = "key",
+       value.name = "value")
+ 
+# Merge and convert to sf
+osm_poly <- merge(osm_poly_list, osm_poly_dnld, by = c("key", "value")) %>% 
+  # Convert to sf object
+  st_sf() %>% 
+  # Transform CRS
+  st_transform("EPSG:25832") %>% 
+  # Remove non-valid polygons (i.e. 2 polygons)
+  mutate(valid = st_is_valid(.)) %>% 
+  filter(!is.na(valid)) %>% 
+  # Calculate the area of the polygons
+  mutate(area_m2 = as.numeric(units::set_units(st_area(.), m^2))) %>% 
+  # crop to Bounding of the study area %>% 
+  st_crop(bbox_sf) %>% 
+  # Nest by feature
+  group_by(feature) %>% 
   nest() %>% 
   rename(data_poly = data) %>% 
-  # Get centroids
-  mutate(data_point = map(data_poly, ~st_centroid(.)))
+  # Get centroids  
+  mutate(data_points = map(data_poly, st_centroid))
 
-# Plot data
-osm_data %>%
+```
+
+
+```{r fig-osm-data, cache=TRUE, dependson="tbl-osm-data", fig.cap="OMS data"}
+
+osm_poly %>%
   unnest(c(data_poly)) %>% 
   st_sf() %>% 
   ggplot() +
@@ -81,7 +92,7 @@ osm_data %>%
   geom_sf(fill = "#D55E00", col = NA) +
   labs(caption = "Source: Open Street Map") +
   my_theme_map() +
-  facet_wrap(~type)
+  facet_wrap(~feature)
 
 ```
 
@@ -93,32 +104,45 @@ Spatial interaction function (Figure \@ref(fig:spat-inter)).
 par(mfrow=c(1,2))
 
 plot_inter(fun = "e",  span = 300, beta = 2)
-plot_inter(fun = "e",  span = 1500, beta = 2)
+plot_inter(fun = "e",  span = 2000, beta = 2)
 
 ```
-Potential model (Figure \@ref(fig:pot-model))
 
-```{r pot-model, cache=TRUE, dependson="loc-box", fig.cap="Potential model"}
+Potential model (Figure \@ref(fig:fig-pot-model))
 
+```{r sif-pot-model, cache=TRUE, dependson="tbl-osm-data"}
 # Based on: https://riatelab.github.io/potential/articles/potential.html
 
-# Points to estimate the potential 
-grids100m_cent <- st_centroid(grids100m)
-
-# Set Spatial interaction function (fun, span, beta)
-sif <- tribble(    ~type, ~fun,  ~span, ~beta,
+# Set Spatial Interaction Function (fun, span, beta)
+sif <- tribble( ~feature, ~fun,  ~span, ~beta,
                "Parking",  "e",    300,     2,
                   "Park",  "e",    300,     2,
-                "Forest",  "e",   1500,     2)
+                "Forest",  "e",   2000,     2,
+                "School",  "e",    300,     2,
+            "University",  "e",    300,     2,
+            "Sustenance",  "e",    300,     2,
+              "Hospital",  "e",    300,     2,
+       "Social facility",  "e",    300,     2
+               )
 
 # Add to osm_data
-osm_data <- osm_data %>%
-  left_join(sif, by = "type") 
+osm_poly <- osm_poly %>%
+  left_join(sif, by = "feature")
+
+# Points to estimate the potential 
+grids100m <- grids100m %>%
+  # Nesting
+  nest(data_poly = everything()) %>% 
+  # add centroids of the grids
+  mutate(data_points = map(data_poly, ~st_centroid(.)))
+```
+
+```{r est-pot-model, cache=TRUE, dependson="tbl-osm-data"}
 
 # Aux. function for calculating the potential
 f_pot <- function(df, fun, span, beta) {
   mcpotential(x = df,
-              y = grids100m_cent,
+              y = grids100m$data_points[[1]],
               var = "area_m2",
               fun = fun,
               span = span,
@@ -128,32 +152,35 @@ f_pot <- function(df, fun, span, beta) {
 
 # Estimate potential (in percentage)
 pot_est <- list()
-for(i in seq_along(osm_data$data_point)) {
+for(i in seq_along(osm_poly$data_points)) {
   # Values
-  potential <- f_pot(osm_data$data_point[[i]],
-                     osm_data$fun[i], 
-                     osm_data$span[i],
-                     osm_data$beta[i])
+  potential <- f_pot(osm_poly$data_points[[i]],
+                     osm_poly$fun[i], 
+                     osm_poly$span[i],
+                     osm_poly$beta[i])
   # Percentage relatively to the maximun
   pot_est[[i]] <- 100 * potential / max(potential)
   # Add names
-  names(pot_est)[[i]] <- osm_data$type[i] 
+  names(pot_est)[[i]] <- osm_poly$feature[i] 
 }
 
-# Add estimated values to the grid cells of 100 x 100 m (grids100m)
+# Add values to the grid cells of 100 x 100 m (grids100m)
 pot <- rbind(pot_est) %>%
   as_tibble() %>% 
-  unnest(everything()) 
-  
-grids100m_pot <- grids100m %>% 
-  bind_cols(pot)
+  unnest(everything())
 
+grids100m <- grids100m %>% 
+  bind_cols(pot %>% nest(pot = everything()))
+
+```
+
+```{r fig-pot-model, cache=TRUE, dependson="tbl-osm-data", fig.cap="Potential model"}
 # Plots
-grids100m_pot %>% 
-  select(-int) %>% 
-  as_tibble() %>% 
+grids100m %>% 
+  select(data_poly, pot) %>% 
+  unnest(c(data_poly, pot)) %>% 
   pivot_longer(-c(grid_ID, geometry),
-               names_to = "type",
+               names_to = "feature",
                values_to = "value") %>% 
   st_sf() %>% 
   ggplot() +
@@ -161,7 +188,56 @@ grids100m_pot %>%
   scale_fill_viridis_c(name = "[%]", option = "magma", direction = -1) +
   geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
   my_theme_map() +
-  facet_wrap(~type)
+  facet_wrap(~feature)
   
+```
+
+## Point features
+
+The mass of the service ($M_j$) for the potential model is the same for all the points (i.e. 1). Features: 
+
+- Sustenance: bar, cafe, pubs, etc.
+- Shops: 
+
+```{r, osm-points, cache=TRUE}
+
+# Sustenance (points)
+
+oms_points_list <- tribble(
+  ~feature, ~key, ~value, ~exp_effect,
+  # Sustenance
+  "Sustenance", "amenity", c("bar", "biergarten", "cafe", "fast_food", "food_court",
+                             "ice_cream", "pub", "restaurant"), "-",
+  # Shops
+  "Shop", "shop", c("supermarket", "mall", "general", "dairy", "department_store",
+                    "butcher", "seafood", "bakery", "convenience"), "+"
+  ) %>%
+  unnest() %>%
+  unnest(cols = c(value)) %>% 
+  as.data.table()
+
+oms_points_dnld <- oe_get(place = "Copenhagen",
+            layer = "points",
+            extra_tags = c("amenity", "shop"),
+            provider = "bbbike") %>%  
+  # Convert to data.table
+  as.data.table() %>% 
+  # Long format 
+  melt(id.vars = c("osm_id", "name", "address", "geometry"),
+       variable.name = "key",
+       value.name = "value")
+
+oms_points <-  merge(oms_points_list, oms_points_dnld, by = c("key", "value")) %>% 
+  # Convert to sf object
+  st_sf() %>% 
+  # Transform CRS
+  st_transform("EPSG:25832")
+
+```
+
+```{r, map-osm-points, fig.cap="OSM point data"}
+
+mapview::mapview(oms_points, zcol = "feature") 
+
 ```
 

@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-22" />
+<meta name="date" content="2021-04-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,6 +55,26 @@
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
 <script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
+<script src="libs/FlatGeoBuf-3.3.3/fgb.js"></script>
+<script src="libs/FlatGeoBuf-3.3.3/flatgeobuf-geojson.min.js"></script>
+<script src="libs/chromajs-2.1.0/chroma.min.js"></script>
+<link id="oms_points-feature-1-attachment" rel="attachment" href="libs/oms_points-feature-0.0.1/oms_points-feature_layer.fgb"/>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -893,8 +913,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
 <li class="chapter" data-level="7" data-path="open-street-map.html"><a href="open-street-map.html"><i class="fa fa-check"></i><b>7</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="open-street-map.html"><a href="open-street-map.html#get-data"><i class="fa fa-check"></i><b>7.1</b> Get data</a></li>
+<li class="chapter" data-level="7.1" data-path="open-street-map.html"><a href="open-street-map.html#areal-features-polygons"><i class="fa fa-check"></i><b>7.1</b> Areal features (polygons)</a></li>
 <li class="chapter" data-level="7.2" data-path="open-street-map.html"><a href="open-street-map.html#potential-model"><i class="fa fa-check"></i><b>7.2</b> Potential model</a></li>
+<li class="chapter" data-level="7.3" data-path="open-street-map.html"><a href="open-street-map.html#point-features"><i class="fa fa-check"></i><b>7.3</b> Point features</a></li>
 </ul></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
 <li class="chapter" data-level="8" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>8</b> Population density</a>
@@ -999,9 +1020,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-56"><a href="housing-data.html#cb8-56" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb8-57"><a href="housing-data.html#cb8-57" aria-hidden="true" tabindex="-1"></a>  csv_files_link <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OneDrive_BBR_path&quot;</span>),</span>
 <span id="cb8-58"><a href="housing-data.html#cb8-58" aria-hidden="true" tabindex="-1"></a>                               <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>,</span>
-<span id="cb8-59"><a href="housing-data.html#cb8-59" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-59"><a href="housing-data.html#cb8-59" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)[<span class="dv">12</span><span class="sc">:</span><span class="dv">16</span>] <span class="co">#run only with 2015-2019 data</span></span>
 <span id="cb8-60"><a href="housing-data.html#cb8-60" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-61"><a href="housing-data.html#cb8-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">3</span>)</span>
+<span id="cb8-61"><a href="housing-data.html#cb8-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
 <span id="cb8-62"><a href="housing-data.html#cb8-62" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_link, <span class="at">.f =</span> f_res_units)</span>
 <span id="cb8-63"><a href="housing-data.html#cb8-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
 <p>However, for housing prices we focus our analysis to the main building types in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure <a href="housing-data.html#fig:fig-sp-res-builds">3.1</a>).</p>
@@ -1307,7 +1328,7 @@ Owner-occupied flats, total
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="housing-data.html#cb13-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="ot">&lt;-</span> res_units_oft <span class="sc">%&gt;%</span> </span>
 <span id="cb13-2"><a href="housing-data.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Price per m2</span></span>
 <span id="cb13-3"><a href="housing-data.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price2019_kDKK_m2 =</span> price2019_kDKK <span class="sc">/</span> BEBO_ARL)</span></code></pre></div>
-<p>The total number of residential units used for the analysis is 192570 (Table <a href="housing-data.html#tab:tbl-runits-clean">3.2</a>).</p>
+<p>The total number of residential units used for the analysis is 67514 (Table <a href="housing-data.html#tab:tbl-runits-clean">3.2</a>).</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="housing-data.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with Number of residential units</span></span>
 <span id="cb14-2"><a href="housing-data.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span></span>
 <span id="cb14-3"><a href="housing-data.html#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Summarize by type or residency and year</span></span>
@@ -1334,39 +1355,6 @@ Owner-occupied flats, total
 type
 </th>
 <th style="text-align:right;">
-2004
-</th>
-<th style="text-align:right;">
-2005
-</th>
-<th style="text-align:right;">
-2006
-</th>
-<th style="text-align:right;">
-2007
-</th>
-<th style="text-align:right;">
-2008
-</th>
-<th style="text-align:right;">
-2009
-</th>
-<th style="text-align:right;">
-2010
-</th>
-<th style="text-align:right;">
-2011
-</th>
-<th style="text-align:right;">
-2012
-</th>
-<th style="text-align:right;">
-2013
-</th>
-<th style="text-align:right;">
-2014
-</th>
-<th style="text-align:right;">
 2015
 </th>
 <th style="text-align:right;">
@@ -1389,39 +1377,6 @@ type
 Multi-storey
 </td>
 <td style="text-align:right;">
-12025
-</td>
-<td style="text-align:right;">
-14080
-</td>
-<td style="text-align:right;">
-13723
-</td>
-<td style="text-align:right;">
-12195
-</td>
-<td style="text-align:right;">
-7052
-</td>
-<td style="text-align:right;">
-5056
-</td>
-<td style="text-align:right;">
-13530
-</td>
-<td style="text-align:right;">
-7128
-</td>
-<td style="text-align:right;">
-8663
-</td>
-<td style="text-align:right;">
-9589
-</td>
-<td style="text-align:right;">
-11288
-</td>
-<td style="text-align:right;">
 12733
 </td>
 <td style="text-align:right;">
@@ -1440,39 +1395,6 @@ Multi-storey
 <tr>
 <td style="text-align:left;">
 Single-family house
-</td>
-<td style="text-align:right;">
-663
-</td>
-<td style="text-align:right;">
-669
-</td>
-<td style="text-align:right;">
-547
-</td>
-<td style="text-align:right;">
-561
-</td>
-<td style="text-align:right;">
-462
-</td>
-<td style="text-align:right;">
-429
-</td>
-<td style="text-align:right;">
-770
-</td>
-<td style="text-align:right;">
-527
-</td>
-<td style="text-align:right;">
-885
-</td>
-<td style="text-align:right;">
-653
-</td>
-<td style="text-align:right;">
-692
 </td>
 <td style="text-align:right;">
 694
@@ -1495,39 +1417,6 @@ Single-family house
 Semi-detached house
 </td>
 <td style="text-align:right;">
-267
-</td>
-<td style="text-align:right;">
-288
-</td>
-<td style="text-align:right;">
-280
-</td>
-<td style="text-align:right;">
-355
-</td>
-<td style="text-align:right;">
-256
-</td>
-<td style="text-align:right;">
-203
-</td>
-<td style="text-align:right;">
-303
-</td>
-<td style="text-align:right;">
-471
-</td>
-<td style="text-align:right;">
-451
-</td>
-<td style="text-align:right;">
-481
-</td>
-<td style="text-align:right;">
-514
-</td>
-<td style="text-align:right;">
 525
 </td>
 <td style="text-align:right;">
@@ -1546,39 +1435,6 @@ Semi-detached house
 <tr>
 <td style="text-align:left;font-weight: bold;">
 Total
-</td>
-<td style="text-align:right;font-weight: bold;">
-12955
-</td>
-<td style="text-align:right;font-weight: bold;">
-15037
-</td>
-<td style="text-align:right;font-weight: bold;">
-14550
-</td>
-<td style="text-align:right;font-weight: bold;">
-13111
-</td>
-<td style="text-align:right;font-weight: bold;">
-7770
-</td>
-<td style="text-align:right;font-weight: bold;">
-5688
-</td>
-<td style="text-align:right;font-weight: bold;">
-14603
-</td>
-<td style="text-align:right;font-weight: bold;">
-8126
-</td>
-<td style="text-align:right;font-weight: bold;">
-9999
-</td>
-<td style="text-align:right;font-weight: bold;">
-10723
-</td>
-<td style="text-align:right;font-weight: bold;">
-12494
 </td>
 <td style="text-align:right;font-weight: bold;">
 13952
@@ -1624,12 +1480,12 @@ Total
 <span id="cb15-22"><a href="housing-data.html#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_spanning_header</span>(<span class="fu">c</span>(<span class="st">&quot;stat_1&quot;</span>, <span class="st">&quot;stat_2&quot;</span>, <span class="st">&quot;stat_3&quot;</span>) <span class="sc">~</span> <span class="st">&quot;**House type**&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb15-23"><a href="housing-data.html#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_footnote</span>(<span class="at">update =</span> <span class="fu">everything</span>() <span class="sc">~</span> <span class="cn">NA</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb15-24"><a href="housing-data.html#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>() </span></code></pre></div>
-<div id="mwlefoodfi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="wlefoodfie" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#mwlefoodfi .gt_table {
+#wlefoodfie .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1654,7 +1510,7 @@ Total
   border-left-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_heading {
+#wlefoodfie .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1666,7 +1522,7 @@ Total
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_title {
+#wlefoodfie .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1676,7 +1532,7 @@ Total
   border-bottom-width: 0;
 }
 
-#mwlefoodfi .gt_subtitle {
+#wlefoodfie .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1686,13 +1542,13 @@ Total
   border-top-width: 0;
 }
 
-#mwlefoodfi .gt_bottom_border {
+#wlefoodfie .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_col_headings {
+#wlefoodfie .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1707,7 +1563,7 @@ Total
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_col_heading {
+#wlefoodfie .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1727,7 +1583,7 @@ Total
   overflow-x: hidden;
 }
 
-#mwlefoodfi .gt_column_spanner_outer {
+#wlefoodfie .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1739,15 +1595,15 @@ Total
   padding-right: 4px;
 }
 
-#mwlefoodfi .gt_column_spanner_outer:first-child {
+#wlefoodfie .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mwlefoodfi .gt_column_spanner_outer:last-child {
+#wlefoodfie .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mwlefoodfi .gt_column_spanner {
+#wlefoodfie .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1759,7 +1615,7 @@ Total
   width: 100%;
 }
 
-#mwlefoodfi .gt_group_heading {
+#wlefoodfie .gt_group_heading {
   padding: 1px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1781,7 +1637,7 @@ Total
   vertical-align: middle;
 }
 
-#mwlefoodfi .gt_empty_group_heading {
+#wlefoodfie .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1796,15 +1652,15 @@ Total
   vertical-align: middle;
 }
 
-#mwlefoodfi .gt_from_md > :first-child {
+#wlefoodfie .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mwlefoodfi .gt_from_md > :last-child {
+#wlefoodfie .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mwlefoodfi .gt_row {
+#wlefoodfie .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1823,7 +1679,7 @@ Total
   overflow-x: hidden;
 }
 
-#mwlefoodfi .gt_stub {
+#wlefoodfie .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1835,7 +1691,7 @@ Total
   padding-left: 12px;
 }
 
-#mwlefoodfi .gt_summary_row {
+#wlefoodfie .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1845,7 +1701,7 @@ Total
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_first_summary_row {
+#wlefoodfie .gt_first_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1855,7 +1711,7 @@ Total
   border-top-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_grand_summary_row {
+#wlefoodfie .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1865,7 +1721,7 @@ Total
   padding-right: 5px;
 }
 
-#mwlefoodfi .gt_first_grand_summary_row {
+#wlefoodfie .gt_first_grand_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1875,11 +1731,11 @@ Total
   border-top-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_striped {
+#wlefoodfie .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mwlefoodfi .gt_table_body {
+#wlefoodfie .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1888,7 +1744,7 @@ Total
   border-bottom-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_footnotes {
+#wlefoodfie .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1902,13 +1758,13 @@ Total
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_footnote {
+#wlefoodfie .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 1px;
 }
 
-#mwlefoodfi .gt_sourcenotes {
+#wlefoodfie .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1922,41 +1778,41 @@ Total
   border-right-color: #D3D3D3;
 }
 
-#mwlefoodfi .gt_sourcenote {
+#wlefoodfie .gt_sourcenote {
   font-size: 90%;
   padding: 1px;
 }
 
-#mwlefoodfi .gt_left {
+#wlefoodfie .gt_left {
   text-align: left;
 }
 
-#mwlefoodfi .gt_center {
+#wlefoodfie .gt_center {
   text-align: center;
 }
 
-#mwlefoodfi .gt_right {
+#wlefoodfie .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mwlefoodfi .gt_font_normal {
+#wlefoodfie .gt_font_normal {
   font-weight: normal;
 }
 
-#mwlefoodfi .gt_font_bold {
+#wlefoodfie .gt_font_bold {
   font-weight: bold;
 }
 
-#mwlefoodfi .gt_font_italic {
+#wlefoodfie .gt_font_italic {
   font-style: italic;
 }
 
-#mwlefoodfi .gt_super {
+#wlefoodfie .gt_super {
   font-size: 65%;
 }
 
-#mwlefoodfi .gt_footnote_marks {
+#wlefoodfie .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -1967,15 +1823,15 @@ Total
   <thead class="gt_col_headings">
     <tr>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1"><strong>Overall</strong>, N = 192,570</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1"><strong>Overall</strong>, N = 67,514</th>
       <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
         <span class="gt_column_spanner"><strong>House type</strong></span>
       </th>
     </tr>
     <tr>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Multi-storey</strong>, N = 173,431</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Semi-detached house</strong>, N = 8,797</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Single-family house</strong>, N = 10,342</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Multi-storey</strong>, N = 59,102</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Semi-detached house</strong>, N = 4,928</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Single-family house</strong>, N = 3,484</th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
@@ -1985,75 +1841,75 @@ Total
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
-<td class="gt_row gt_center">47,732</td>
-<td class="gt_row gt_center">52,013</td>
-<td class="gt_row gt_center">9,910</td>
-<td class="gt_row gt_center">8,099</td></tr>
+<td class="gt_row gt_center">44,662</td>
+<td class="gt_row gt_center">49,802</td>
+<td class="gt_row gt_center">10,670</td>
+<td class="gt_row gt_center">5,548</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
-<td class="gt_row gt_center">4,375</td>
-<td class="gt_row gt_center">4,255</td>
-<td class="gt_row gt_center">5,057</td>
-<td class="gt_row gt_center">4,973</td></tr>
+<td class="gt_row gt_center">4,023</td>
+<td class="gt_row gt_center">3,863</td>
+<td class="gt_row gt_center">4,524</td>
+<td class="gt_row gt_center">4,994</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
-<td class="gt_row gt_center">2,699 - 14,468</td>
-<td class="gt_row gt_center">2,586 - 20,908</td>
-<td class="gt_row gt_center">3,842 - 6,920</td>
-<td class="gt_row gt_center">3,887 - 6,400</td></tr>
+<td class="gt_row gt_center">2,557 - 7,536</td>
+<td class="gt_row gt_center">2,400 - 8,522</td>
+<td class="gt_row gt_center">3,684 - 6,337</td>
+<td class="gt_row gt_center">3,897 - 6,426</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
-<td class="gt_row gt_center">11 - 1,778,677</td>
-<td class="gt_row gt_center">11 - 1,778,677</td>
-<td class="gt_row gt_center">30 - 261,346</td>
-<td class="gt_row gt_center">25 - 291,062</td></tr>
+<td class="gt_row gt_center">25 - 1,778,677</td>
+<td class="gt_row gt_center">51 - 1,778,677</td>
+<td class="gt_row gt_center">80 - 261,346</td>
+<td class="gt_row gt_center">25 - 52,267</td></tr>
     <tr><td class="gt_row gt_left" style="font-weight: bold;">Dwelling size (m2)</td>
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
-<td class="gt_row gt_center">89</td>
+<td class="gt_row gt_center">91</td>
 <td class="gt_row gt_center">84</td>
-<td class="gt_row gt_center">131</td>
-<td class="gt_row gt_center">137</td></tr>
+<td class="gt_row gt_center">134</td>
+<td class="gt_row gt_center">139</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
-<td class="gt_row gt_center">81</td>
+<td class="gt_row gt_center">83</td>
 <td class="gt_row gt_center">77</td>
 <td class="gt_row gt_center">130</td>
-<td class="gt_row gt_center">128</td></tr>
+<td class="gt_row gt_center">131</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
-<td class="gt_row gt_center">60 - 108</td>
-<td class="gt_row gt_center">58 - 101</td>
-<td class="gt_row gt_center">115 - 142</td>
-<td class="gt_row gt_center">103 - 158</td></tr>
+<td class="gt_row gt_center">61 - 112</td>
+<td class="gt_row gt_center">59 - 102</td>
+<td class="gt_row gt_center">123 - 148</td>
+<td class="gt_row gt_center">104 - 160</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
-<td class="gt_row gt_center">10 - 733</td>
 <td class="gt_row gt_center">11 - 655</td>
-<td class="gt_row gt_center">12 - 402</td>
-<td class="gt_row gt_center">10 - 733</td></tr>
+<td class="gt_row gt_center">11 - 655</td>
+<td class="gt_row gt_center">41 - 386</td>
+<td class="gt_row gt_center">35 - 618</td></tr>
     <tr><td class="gt_row gt_left" style="font-weight: bold;">Adjusted prices per square meter (kDKK/m2)</td>
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td>
 <td class="gt_row gt_center"></td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
-<td class="gt_row gt_center">667</td>
-<td class="gt_row gt_center">730</td>
-<td class="gt_row gt_center">83</td>
-<td class="gt_row gt_center">101</td></tr>
+<td class="gt_row gt_center">572</td>
+<td class="gt_row gt_center">645</td>
+<td class="gt_row gt_center">80</td>
+<td class="gt_row gt_center">40</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
-<td class="gt_row gt_center">46</td>
-<td class="gt_row gt_center">47</td>
-<td class="gt_row gt_center">42</td>
+<td class="gt_row gt_center">44</td>
+<td class="gt_row gt_center">44</td>
+<td class="gt_row gt_center">37</td>
 <td class="gt_row gt_center">40</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
-<td class="gt_row gt_center">36 - 169</td>
-<td class="gt_row gt_center">37 - 254</td>
-<td class="gt_row gt_center">31 - 53</td>
+<td class="gt_row gt_center">35 - 62</td>
+<td class="gt_row gt_center">35 - 83</td>
+<td class="gt_row gt_center">28 - 48</td>
 <td class="gt_row gt_center">32 - 48</td></tr>
     <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
 <td class="gt_row gt_center">0 - 37,056</td>
 <td class="gt_row gt_center">0 - 37,056</td>
-<td class="gt_row gt_center">0 - 15,876</td>
-<td class="gt_row gt_center">0 - 17,500</td></tr>
+<td class="gt_row gt_center">1 - 2,010</td>
+<td class="gt_row gt_center">0 - 374</td></tr>
   </tbody>
   
   

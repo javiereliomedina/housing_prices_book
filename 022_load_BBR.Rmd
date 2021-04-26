@@ -70,9 +70,9 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the Buildin
   
   csv_files_link <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
                                pattern = "*.csv",
-                               full.names = TRUE)
+                               full.names = TRUE)[12:16] #run only with 2015-2019 data
   
-  plan(multisession, workers = 3)
+  plan(multisession, workers = 7)
   res_units <- future_map_dfr(.x = csv_files_link, .f = f_res_units)
   plan("default")
 
