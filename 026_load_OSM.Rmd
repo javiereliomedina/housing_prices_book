@@ -194,7 +194,7 @@ grids100m %>%
 
 ## Point features
 
-The mass of the service ($M_j$) for the potential model is the same for all the points (i.e. 1). Features: 
+Features: (Figure \@ref(fig:fig-osm-points)) The mass of the service ($M_j$) for the potential model is the same for all the points (i.e. 1).  
 
 - Sustenance: bar, cafe, pubs, etc.
 - Shops: supermarket, mall, butcher, etc.
@@ -231,13 +231,28 @@ osm_points <-  merge(osm_points_list, osm_points_dnld, by = c("key", "value")) %
   # Convert to sf object
   st_sf() %>% 
   # Transform CRS
-  st_transform("EPSG:25832")
+  st_transform("EPSG:25832") %>% 
+  # crop to Bounding of the study area %>% 
+  st_crop(bbox_sf) %>% 
+  # Nest by feature
+  group_by(feature) %>% 
+  nest() %>% 
+  rename(data_points = data) 
 
 ```
 
-```{r map-osm-points, fig.cap="OSM point data"}
+```{r fig-osm-points, cache=TRUE, dependson="osm-points", fig.cap="OSM data points"}
 
-mapview::mapview(osm_points, zcol = "feature") 
+osm_points %>%
+  unnest(cols = c(data_points)) %>% 
+  st_sf() %>% 
+  ggplot() +
+  geom_sf(data = st_crop(dk_country, bbox_sf), fill = "grey95") +
+  geom_sf(data = cph_parish, fill = "grey85", color = "grey50", size = 0.05) +
+  geom_sf(colour = "#D55E00", size = 0.5) +
+  labs(caption = "Source: Open Street Map") +
+  my_theme_map() +
+  facet_wrap(~feature)
 
 ```
 

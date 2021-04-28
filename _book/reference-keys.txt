@@ -7,6 +7,7 @@ fig:fig-land-use
 fig:fig-osm-data
 fig:spat-inter
 fig:fig-pot-model
+fig:fig-osm-points
 fig:fig-pop-chor
 fig:fig-pop-map-grid
 fig:fig-pop-den-worldpop
