@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-27" />
+<meta name="date" content="2021-04-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -951,7 +951,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="housing-data" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Housing data</h1>
-<p>We load all buildings for year-round living (<em>BYG_ANVEND_KODE</em>) from the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>), we use this table for disaggregating population density from parish level to grid cells of 100m x 100m.</p>
+<p>We load all residences for year-round living (<em>ENH_ANVEND_KODE</em>) from the Building and Dwelling Register (<a href="https://teknik.bbr.dk/forside">BBR</a>), we use this table for disaggregating population density from parish level to grid cells of 100m x 100m.</p>
 <ul>
 <li>110 = Farmhouse for agricultural property.<br />
 </li>
@@ -963,7 +963,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>190 = Second building for year-round living.</li>
 </ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="housing-data.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Buildings for year round living</span></span>
-<span id="cb8-2"><a href="housing-data.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  res_codes <span class="ot">&lt;-</span> <span class="fu">tribble</span> (<span class="sc">~</span>BYG_ANVEND_KODE, <span class="sc">~</span>type,</span>
+<span id="cb8-2"><a href="housing-data.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  res_codes <span class="ot">&lt;-</span> <span class="fu">tribble</span> (<span class="sc">~</span>ENH_ANVEND_KODE, <span class="sc">~</span>type,</span>
 <span id="cb8-3"><a href="housing-data.html#cb8-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">110</span>, <span class="st">&quot;Farmhouse&quot;</span>,</span>
 <span id="cb8-4"><a href="housing-data.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">120</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
 <span id="cb8-5"><a href="housing-data.html#cb8-5" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">121</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
@@ -976,54 +976,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-12"><a href="housing-data.html#cb8-12" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">160</span>, <span class="st">&quot;Residential institution&quot;</span>,</span>
 <span id="cb8-13"><a href="housing-data.html#cb8-13" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">190</span>, <span class="st">&quot;Second building&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb8-14"><a href="housing-data.html#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert type to factor</span></span>
-<span id="cb8-15"><a href="housing-data.html#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type))</span>
-<span id="cb8-16"><a href="housing-data.html#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="housing-data.html#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for reading residential units from a csv file:</span></span>
-<span id="cb8-18"><a href="housing-data.html#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Read residential units from BBR data </span></span>
-<span id="cb8-19"><a href="housing-data.html#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Get read residential units in an area</span></span>
-<span id="cb8-20"><a href="housing-data.html#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># @param file Link to OneDrive with the data (.csv format)</span></span>
-<span id="cb8-21"><a href="housing-data.html#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co"># @param area Area where we would get the data (default = study_area)</span></span>
-<span id="cb8-22"><a href="housing-data.html#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="housing-data.html#cb8-23" aria-hidden="true" tabindex="-1"></a>  f_res_units  <span class="ot">&lt;-</span> <span class="cf">function</span>(.file, <span class="at">.area =</span> study_area) { </span>
-<span id="cb8-24"><a href="housing-data.html#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fread</span>(.file)[ENH_ANVEND_KODE <span class="sc">%in%</span> res_codes<span class="sc">$</span>BYG_ANVEND_KODE] <span class="sc">%&gt;%</span> </span>
-<span id="cb8-25"><a href="housing-data.html#cb8-25" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to tibble</span></span>
-<span id="cb8-26"><a href="housing-data.html#cb8-26" aria-hidden="true" tabindex="-1"></a>      <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-27"><a href="housing-data.html#cb8-27" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Select only Residential houses - Buildings for year-round living </span></span>
-<span id="cb8-28"><a href="housing-data.html#cb8-28" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
-<span id="cb8-29"><a href="housing-data.html#cb8-29" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">Etagebetegn =</span> <span class="fu">ifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn),</span>
-<span id="cb8-30"><a href="housing-data.html#cb8-30" aria-hidden="true" tabindex="-1"></a>             <span class="co"># Etagebetegn as ordened factor</span></span>
-<span id="cb8-31"><a href="housing-data.html#cb8-31" aria-hidden="true" tabindex="-1"></a>             <span class="at">Etagebetegn =</span> <span class="fu">factor</span>(Etagebetegn, <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)),</span>
-<span id="cb8-32"><a href="housing-data.html#cb8-32" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">ordered =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb8-33"><a href="housing-data.html#cb8-33" aria-hidden="true" tabindex="-1"></a>             <span class="co"># Group floor levels with 5 or more</span></span>
-<span id="cb8-34"><a href="housing-data.html#cb8-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">floor_level =</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
-<span id="cb8-35"><a href="housing-data.html#cb8-35" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
-<span id="cb8-36"><a href="housing-data.html#cb8-36" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb8-37"><a href="housing-data.html#cb8-37" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add residential description (type) into the dataset</span></span>
-<span id="cb8-38"><a href="housing-data.html#cb8-38" aria-hidden="true" tabindex="-1"></a>      <span class="fu">left_join</span>(res_codes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;ENH_ANVEND_KODE&quot;</span> <span class="ot">=</span> <span class="st">&quot;BYG_ANVEND_KODE&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-39"><a href="housing-data.html#cb8-39" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert to sf objects</span></span>
-<span id="cb8-40"><a href="housing-data.html#cb8-40" aria-hidden="true" tabindex="-1"></a>      <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>, <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
-<span id="cb8-41"><a href="housing-data.html#cb8-41" aria-hidden="true" tabindex="-1"></a>               <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-42"><a href="housing-data.html#cb8-42" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Get only points in the study area</span></span>
-<span id="cb8-43"><a href="housing-data.html#cb8-43" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., .area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-44"><a href="housing-data.html#cb8-44" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-45"><a href="housing-data.html#cb8-45" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Add year of the BBR dataset  </span></span>
-<span id="cb8-46"><a href="housing-data.html#cb8-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">BBR_year =</span> <span class="fu">parse_number</span>(stringr<span class="sc">::</span><span class="fu">str_extract</span>(.file, <span class="st">&quot;_[0-9]+_&quot;</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-47"><a href="housing-data.html#cb8-47" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Convert columns with codes (*_KODE) to factors</span></span>
-<span id="cb8-48"><a href="housing-data.html#cb8-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">ends_with</span>(<span class="st">&quot;_KODE&quot;</span>), <span class="at">.fns =</span> as_factor))</span>
-<span id="cb8-49"><a href="housing-data.html#cb8-49" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-50"><a href="housing-data.html#cb8-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-51"><a href="housing-data.html#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: </span></span>
-<span id="cb8-52"><a href="housing-data.html#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Load residential units </span></span>
-<span id="cb8-53"><a href="housing-data.html#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: you may need to change the path to OneDrive - Aalborg Universitet </span></span>
-<span id="cb8-54"><a href="housing-data.html#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Read all the data together </span></span>
-<span id="cb8-55"><a href="housing-data.html#cb8-55" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-56"><a href="housing-data.html#cb8-56" aria-hidden="true" tabindex="-1"></a>  csv_files_link <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OneDrive_BBR_path&quot;</span>),</span>
-<span id="cb8-57"><a href="housing-data.html#cb8-57" aria-hidden="true" tabindex="-1"></a>                               <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>,</span>
-<span id="cb8-58"><a href="housing-data.html#cb8-58" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb8-59"><a href="housing-data.html#cb8-59" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-60"><a href="housing-data.html#cb8-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
-<span id="cb8-61"><a href="housing-data.html#cb8-61" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_link, <span class="at">.f =</span> f_res_units)</span>
-<span id="cb8-62"><a href="housing-data.html#cb8-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
+<span id="cb8-15"><a href="housing-data.html#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-16"><a href="housing-data.html#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to data.table</span></span>
+<span id="cb8-17"><a href="housing-data.html#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.table</span>()</span>
+<span id="cb8-18"><a href="housing-data.html#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="housing-data.html#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for reading residential units from a BBR files (.csv):</span></span>
+<span id="cb8-20"><a href="housing-data.html#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Get only residential units in the study area</span></span>
+<span id="cb8-21"><a href="housing-data.html#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co"># @param .file Path to OneDrive with the data (.csv format)</span></span>
+<span id="cb8-22"><a href="housing-data.html#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># @param .area Area where we would get the data (default = study_area)</span></span>
+<span id="cb8-23"><a href="housing-data.html#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="housing-data.html#cb8-24" aria-hidden="true" tabindex="-1"></a>f_res_units  <span class="ot">&lt;-</span> <span class="cf">function</span>(.file, <span class="at">.area =</span> study_area) { </span>
+<span id="cb8-25"><a href="housing-data.html#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select only Residential houses - Buildings for year-round living</span></span>
+<span id="cb8-26"><a href="housing-data.html#cb8-26" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">fread</span>(.file)[ENH_ANVEND_KODE <span class="sc">%in%</span> res_codes<span class="sc">$</span>ENH_ANVEND_KODE]</span>
+<span id="cb8-27"><a href="housing-data.html#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
+<span id="cb8-28"><a href="housing-data.html#cb8-28" aria-hidden="true" tabindex="-1"></a>  dt[, Etagebetegn <span class="sc">:</span><span class="er">=</span> <span class="fu">fifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn)]</span>
+<span id="cb8-29"><a href="housing-data.html#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Etagebetegn as ordered factor</span></span>
+<span id="cb8-30"><a href="housing-data.html#cb8-30" aria-hidden="true" tabindex="-1"></a>  dt[, Etagebetegn <span class="sc">:</span><span class="er">=</span> <span class="fu">factor</span>(Etagebetegn, <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)), <span class="at">ordered =</span> <span class="cn">TRUE</span>)]</span>
+<span id="cb8-31"><a href="housing-data.html#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group floor levels with 5 or more</span></span>
+<span id="cb8-32"><a href="housing-data.html#cb8-32" aria-hidden="true" tabindex="-1"></a>  dt[, floor_level <span class="sc">:</span><span class="er">=</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
+<span id="cb8-33"><a href="housing-data.html#cb8-33" aria-hidden="true" tabindex="-1"></a>                                <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
+<span id="cb8-34"><a href="housing-data.html#cb8-34" aria-hidden="true" tabindex="-1"></a>                                <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)]</span>
+<span id="cb8-35"><a href="housing-data.html#cb8-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add residential description (type) into the dataset</span></span>
+<span id="cb8-36"><a href="housing-data.html#cb8-36" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> <span class="fu">merge</span>(dt, res_codes, <span class="at">by =</span> <span class="st">&quot;ENH_ANVEND_KODE&quot;</span>) </span>
+<span id="cb8-37"><a href="housing-data.html#cb8-37" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add year of the BBR dataset  </span></span>
+<span id="cb8-38"><a href="housing-data.html#cb8-38" aria-hidden="true" tabindex="-1"></a>  dt[ , BBR_year <span class="sc">:</span><span class="er">=</span> <span class="fu">parse_number</span>(stringr<span class="sc">::</span><span class="fu">str_extract</span>(.file, <span class="st">&quot;_[0-9]+_&quot;</span>))] </span>
+<span id="cb8-39"><a href="housing-data.html#cb8-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert columns with codes (*_KODE) to character</span></span>
+<span id="cb8-40"><a href="housing-data.html#cb8-40" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">&quot;_KODE&quot;</span>,  <span class="fu">names</span>(dt))</span>
+<span id="cb8-41"><a href="housing-data.html#cb8-41" aria-hidden="true" tabindex="-1"></a>  dt[ , (cols) <span class="sc">:</span><span class="er">=</span> <span class="fu">lapply</span>(.SD, as.character), .SDcols <span class="ot">=</span> cols]</span>
+<span id="cb8-42"><a href="housing-data.html#cb8-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-43"><a href="housing-data.html#cb8-43" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf objects and get only points in the study area</span></span>
+<span id="cb8-44"><a href="housing-data.html#cb8-44" aria-hidden="true" tabindex="-1"></a>  dt <span class="ot">&lt;-</span> dt <span class="sc">%&gt;%</span></span>
+<span id="cb8-45"><a href="housing-data.html#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>, <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
+<span id="cb8-46"><a href="housing-data.html#cb8-46" aria-hidden="true" tabindex="-1"></a>             <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-47"><a href="housing-data.html#cb8-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Points in the study area</span></span>
+<span id="cb8-48"><a href="housing-data.html#cb8-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., .area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-49"><a href="housing-data.html#cb8-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) </span>
+<span id="cb8-50"><a href="housing-data.html#cb8-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-51"><a href="housing-data.html#cb8-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-52"><a href="housing-data.html#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all csv files (one file for each year) in the same table with a column indicating the year of the dataset: </span></span>
+<span id="cb8-53"><a href="housing-data.html#cb8-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Load residential units </span></span>
+<span id="cb8-54"><a href="housing-data.html#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: you may need to change the path to OneDrive - Aalborg Universitet </span></span>
+<span id="cb8-55"><a href="housing-data.html#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Read all the data together </span></span>
+<span id="cb8-56"><a href="housing-data.html#cb8-56" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-57"><a href="housing-data.html#cb8-57" aria-hidden="true" tabindex="-1"></a>  csv_files_path <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OneDrive_BBR_path&quot;</span>),</span>
+<span id="cb8-58"><a href="housing-data.html#cb8-58" aria-hidden="true" tabindex="-1"></a>                               <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>,</span>
+<span id="cb8-59"><a href="housing-data.html#cb8-59" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-60"><a href="housing-data.html#cb8-60" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-61"><a href="housing-data.html#cb8-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
+<span id="cb8-62"><a href="housing-data.html#cb8-62" aria-hidden="true" tabindex="-1"></a>  res_units <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_path, <span class="at">.f =</span> f_res_units)</span>
+<span id="cb8-63"><a href="housing-data.html#cb8-63" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
 <p>However, for housing prices we focus our analysis to the main building types in Copenhagen, which are in this order: i) multi-storey residential buildings (multi-family house or two-family house), ii) detached single-family houses, iii) colleges, and iv) semi-detached houses (Figure <a href="housing-data.html#fig:fig-sp-res-builds">3.1</a>).</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="housing-data.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for plotting 2D kernel density maps:</span></span>
 <span id="cb9-2"><a href="housing-data.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  f <span class="ot">&lt;-</span> <span class="cf">function</span>(.data) {</span>

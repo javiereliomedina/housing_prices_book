@@ -1,6 +1,6 @@
 # Housing data    
 
-We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)), we use this table for disaggregating population density from parish level to grid cells of 100m x 100m. 
+We load all residences for year-round living (*ENH_ANVEND_KODE*) from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)), we use this table for disaggregating population density from parish level to grid cells of 100m x 100m. 
 
 - 110           = Farmhouse for agricultural property.  
 - 120, 121, 122 = Detached single-family house (detached house). 
@@ -13,7 +13,7 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the Buildin
 ```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_path"))}
 
 # Buildings for year round living
-  res_codes <- tribble (~BYG_ANVEND_KODE, ~type,
+  res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
                         110, "Farmhouse",
                         120, "Single-family house",
                         121, "Single-family house",
@@ -26,53 +26,54 @@ We load all buildings for year-round living (*BYG_ANVEND_KODE*) from the Buildin
                         160, "Residential institution",
                         190, "Second building") %>%
     # Convert type to factor
-    mutate(type = factor(type))
+    mutate(type = factor(type)) %>%
+    # Convert to data.table
+    as.data.table()
 
-# Function for reading residential units from a csv file:
-# Read residential units from BBR data 
-# Get read residential units in an area
-# @param file Link to OneDrive with the data (.csv format)
-# @param area Area where we would get the data (default = study_area)
+# Function for reading residential units from a BBR files (.csv):
+# Get only residential units in the study area
+# @param .file Path to OneDrive with the data (.csv format)
+# @param .area Area where we would get the data (default = study_area)
 
-  f_res_units  <- function(.file, .area = study_area) { 
-    fread(.file)[ENH_ANVEND_KODE %in% res_codes$BYG_ANVEND_KODE] %>% 
-      # Convert to tibble
-      as_tibble() %>% 
-      # Select only Residential houses - Buildings for year-round living 
-      # Input empty cells (buildings with only one floor) in Etagebetegn as "st"
-      mutate(Etagebetegn = ifelse(Etagebetegn == "", "st", Etagebetegn),
-             # Etagebetegn as ordened factor
-             Etagebetegn = factor(Etagebetegn, c("k2", "kl", "st", seq(1, 36, 1)),
-                                  ordered = TRUE),
-             # Group floor levels with 5 or more
-             floor_level = fct_other(Etagebetegn,
-                                     drop = factor(seq(5, 36)),
-                                     other_level = "5 or more")) %>%
-      # Add residential description (type) into the dataset
-      left_join(res_codes, by = c("ENH_ANVEND_KODE" = "BYG_ANVEND_KODE")) %>% 
-      # Convert to sf objects
-      st_as_sf(coords = c("etrs89koordinat_ost", "etrs89koordinat_nord"),
-               crs = "EPSG:25832") %>% 
-      # Get only points in the study area
-      mutate(int = st_intersects(., .area) %>% lengths > 0) %>% 
-      filter(int == TRUE) %>% 
-      # Add year of the BBR dataset  
-      mutate(BBR_year = parse_number(stringr::str_extract(.file, "_[0-9]+_"))) %>% 
-      # Convert columns with codes (*_KODE) to factors
-      mutate(across(.cols = ends_with("_KODE"), .fns = as_factor))
-  }
+f_res_units  <- function(.file, .area = study_area) { 
+  # Select only Residential houses - Buildings for year-round living
+  dt <- fread(.file)[ENH_ANVEND_KODE %in% res_codes$ENH_ANVEND_KODE]
+  # Input empty cells (buildings with only one floor) in Etagebetegn as "st"
+  dt[, Etagebetegn := fifelse(Etagebetegn == "", "st", Etagebetegn)]
+  # Etagebetegn as ordered factor
+  dt[, Etagebetegn := factor(Etagebetegn, c("k2", "kl", "st", seq(1, 36, 1)), ordered = TRUE)]
+  # Group floor levels with 5 or more
+  dt[, floor_level := fct_other(Etagebetegn,
+                                drop = factor(seq(5, 36)),
+                                other_level = "5 or more")]
+  # Add residential description (type) into the dataset
+  dt <- merge(dt, res_codes, by = "ENH_ANVEND_KODE") 
+  # Add year of the BBR dataset  
+  dt[ , BBR_year := parse_number(stringr::str_extract(.file, "_[0-9]+_"))] 
+  # Convert columns with codes (*_KODE) to character
+  cols <- grep("_KODE",  names(dt))
+  dt[ , (cols) := lapply(.SD, as.character), .SDcols = cols]
+  
+  # Convert to sf objects and get only points in the study area
+  dt <- dt %>%
+    st_as_sf(coords = c("etrs89koordinat_ost", "etrs89koordinat_nord"),
+             crs = "EPSG:25832") %>% 
+    # Points in the study area
+    mutate(int = st_intersects(., .area) %>% lengths > 0) %>% 
+    filter(int == TRUE) 
+}
 
-# Load all csv files (one file for each year) in the same tibble with a column indicating the year of the dataset: 
+# Load all csv files (one file for each year) in the same table with a column indicating the year of the dataset: 
 # Load residential units 
 # NOTE: you may need to change the path to OneDrive - Aalborg Universitet 
 # Read all the data together 
   
-  csv_files_link <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
+  csv_files_path <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
                                pattern = "*.csv",
                                full.names = TRUE)
   
   plan(multisession, workers = 7)
-  res_units <- future_map_dfr(.x = csv_files_link, .f = f_res_units)
+  res_units <- future_map_dfr(.x = csv_files_path, .f = f_res_units)
   plan("default")
 
 ```
