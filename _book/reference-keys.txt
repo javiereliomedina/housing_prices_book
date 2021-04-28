@@ -21,7 +21,7 @@ population-data
 corine-land-use
 railway-transport-network
 open-street-map
-areal-features-polygons
+areal-features
 potential-model
 point-features
 Population

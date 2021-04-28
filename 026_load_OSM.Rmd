@@ -5,7 +5,7 @@ We get location information from [Open Street Map](https://wiki.openstreetmap.or
 
 "A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OSM".
 
-## Areal features (polygons) 
+## Areal features
 
 The mass of the service ($M_j$) for the potential model is the area (in $m^2$) of the feature.
 
@@ -96,7 +96,7 @@ osm_poly %>%
 
 ```
 
-## Potential model
+### Potential model
 
 Spatial interaction function (Figure \@ref(fig:spat-inter)).
 ```{r spat-inter, fig.width = 12, fig.height = 4, fig.cap="Spatial interaction function"}

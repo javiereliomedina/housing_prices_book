@@ -21,7 +21,7 @@
   <meta name="twitter:description" content="Housing prices BBR data" />
   
 
-<meta name="author" content="Javier Elío, Henning S. Hansen, Frederik Seerup Hass, Carsten Keßler" />
+<meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
 <meta name="date" content="2021-04-28" />
@@ -32,7 +32,7 @@
   
   
 
-<link rel="next" href="administrative-units.html"/>
+<link rel="next" href="hedonic-price-model.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,6 +51,30 @@
 
 
 
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+<script src="libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="libs/leaflet-providers-plugin-2.0.4.1/leaflet-providers-plugin.js"></script>
+<script src="libs/FlatGeoBuf-3.3.3/fgb.js"></script>
+<script src="libs/FlatGeoBuf-3.3.3/flatgeobuf-geojson.min.js"></script>
+<script src="libs/chromajs-2.1.0/chroma.min.js"></script>
+<link id="osm_points-feature-1-attachment" rel="attachment" href="libs/osm_points-feature-0.0.1/osm_points-feature_layer.fgb"/>
+<link href="libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<script src="libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -874,34 +898,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path=""><a href="#part-introduction"><i class="fa fa-check"></i>(PART) Introduction</a>
+<li class="part"><span><b>I Introduction</b></span></li>
+<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
 <ul>
-<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#house-characteristics"><i class="fa fa-check"></i><b>0.1</b> House characteristics</a></li>
-<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#location-characteristics"><i class="fa fa-check"></i><b>0.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>0.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
+<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>I Load data</b></span></li>
-<li class="chapter" data-level="1" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>1</b> Administrative units</a></li>
-<li class="chapter" data-level="2" data-path="housing-data.html"><a href="housing-data.html"><i class="fa fa-check"></i><b>2</b> Housing data</a></li>
-<li class="chapter" data-level="3" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>3</b> Population data</a></li>
-<li class="chapter" data-level="4" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>4</b> CORINE land use</a></li>
-<li class="chapter" data-level="5" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>5</b> Railway transport network</a></li>
-<li class="chapter" data-level="6" data-path="open-street-map.html"><a href="open-street-map.html"><i class="fa fa-check"></i><b>6</b> Open Street Map</a>
+<li class="part"><span><b>II Load data</b></span></li>
+<li class="chapter" data-level="2" data-path="administrative-units.html"><a href="administrative-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
+<li class="chapter" data-level="3" data-path="housing-data.html"><a href="housing-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
+<li class="chapter" data-level="4" data-path="population-data.html"><a href="population-data.html"><i class="fa fa-check"></i><b>4</b> Population data</a></li>
+<li class="chapter" data-level="5" data-path="corine-land-use.html"><a href="corine-land-use.html"><i class="fa fa-check"></i><b>5</b> CORINE land use</a></li>
+<li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
+<li class="chapter" data-level="7" data-path="open-street-map.html"><a href="open-street-map.html"><i class="fa fa-check"></i><b>7</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="open-street-map.html"><a href="open-street-map.html#areal-features-polygons"><i class="fa fa-check"></i><b>6.1</b> Areal features (polygons)</a></li>
-<li class="chapter" data-level="6.2" data-path="open-street-map.html"><a href="open-street-map.html#potential-model"><i class="fa fa-check"></i><b>6.2</b> Potential model</a></li>
-<li class="chapter" data-level="6.3" data-path="open-street-map.html"><a href="open-street-map.html#point-features"><i class="fa fa-check"></i><b>6.3</b> Point features</a></li>
+<li class="chapter" data-level="7.1" data-path="open-street-map.html"><a href="open-street-map.html#areal-features"><i class="fa fa-check"></i><b>7.1</b> Areal features</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="open-street-map.html"><a href="open-street-map.html#potential-model"><i class="fa fa-check"></i><b>7.1.1</b> Potential model</a></li>
 </ul></li>
-<li class="part"><span><b>II Data analysis</b></span></li>
-<li class="chapter" data-level="7" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>7</b> Population density</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>7.1</b> Choropleth by ancestry</a></li>
-<li class="chapter" data-level="7.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>7.2</b> Disaggregating population data</a></li>
-<li class="chapter" data-level="7.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>7.3</b> Population density WorldPop</a></li>
+<li class="chapter" data-level="7.2" data-path="open-street-map.html"><a href="open-street-map.html#point-features"><i class="fa fa-check"></i><b>7.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
+<li class="part"><span><b>III Data analysis</b></span></li>
+<li class="chapter" data-level="8" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>8</b> Population density</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="8.1" data-path="Population.html"><a href="Population.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>8.1</b> Choropleth by ancestry</a></li>
+<li class="chapter" data-level="8.2" data-path="Population.html"><a href="Population.html#disaggregating-population-data"><i class="fa fa-check"></i><b>8.2</b> Disaggregating population data</a></li>
+<li class="chapter" data-level="8.3" data-path="Population.html"><a href="Population.html#population-density-worldpop"><i class="fa fa-check"></i><b>8.3</b> Population density WorldPop</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="residential-units-saled-as-free-scale.html"><a href="residential-units-saled-as-free-scale.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -926,7 +953,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="header">
 <h1 class="title">Housing prices Copenhagen</h1>
-<p class="author"><em>Javier Elío, Henning S. Hansen, Frederik Seerup Hass, Carsten Keßler</em></p>
+<p class="author"><em>Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler</em></p>
 <p class="date"><em>2021-04-28</em></p>
 </div>
 <div id="prerequisite" class="section level1 unnumbered">
@@ -1030,27 +1057,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<div id="house-characteristics" class="section level2" number="0.1">
-<h2><span class="header-section-number">0.1</span> House characteristics</h2>
-</div>
-<div id="location-characteristics" class="section level2" number="0.2">
-<h2><span class="header-section-number">0.2</span> Location characteristics</h2>
-</div>
-<div id="neighbourhood-characteristics" class="section level2" number="0.3">
-<h2><span class="header-section-number">0.3</span> Neighbourhood characteristics</h2>
-
-</div>
-</div>
-
-
-
             </section>
 
           </div>
         </div>
       </div>
 
-<a href="administrative-units.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="hedonic-price-model.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1100,6 +1113,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
