@@ -11,7 +11,7 @@ The mass of the service ($M_j$) for the potential model is the area (in $m^2$) o
 
 Hospital, and Schools (e.g. schools) may create traffic and noise. Therefore, they may have a negative effect on housing prices (@Gultekin2006). 
 
-```{r tbl-osm-data}
+```{r tbl-osm-data, cache = TRUE}
 
 # List of OSM data
 # Available features: https://wiki.openstreetmap.org/wiki/Map_features 
@@ -42,7 +42,7 @@ osm_poly_list %>%
 
 ```
 
-```{r osm-poly}
+```{r osm-poly, cache = TRUE}
 
 # Bounding of the study area (approx. buffer of 2km)
 box <- c(xmin = 714906, xmax = 733618, ymin = 6166579, ymax = 6184092)
@@ -81,7 +81,7 @@ osm_poly <- merge(osm_poly_list, osm_poly_dnld, by = c("key", "value")) %>%
 ```
 
 
-```{r fig-osm-data, cache=TRUE, dependson="tbl-osm-data", fig.cap="OSM data"}
+```{r fig-osm-data, cache=TRUE, dependson="osm-poly", fig.cap="OSM data"}
 
 osm_poly %>%
   unnest(c(data_poly)) %>% 
@@ -197,9 +197,9 @@ grids100m %>%
 The mass of the service ($M_j$) for the potential model is the same for all the points (i.e. 1). Features: 
 
 - Sustenance: bar, cafe, pubs, etc.
-- Shops: 
+- Shops: supermarket, mall, butcher, etc.
 
-```{r, osm-points, cache=TRUE}
+```{r osm-points, cache=TRUE}
 
 # Sustenance (points)
 
@@ -235,5 +235,9 @@ osm_points <-  merge(osm_points_list, osm_points_dnld, by = c("key", "value")) %
 
 ```
 
+```{r map-osm-points, fig.cap="OSM point data"}
 
+mapview::mapview(osm_points, zcol = "feature") 
+
+```
 
