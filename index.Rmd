@@ -1,6 +1,6 @@
 ---
 title: "Housing prices Copenhagen"
-author: "Javier Elío, Henning S. Hansen, Carsten Keßler"
+author: "Javier Elío, Henning S. Hansen, Frederik Seerup Hass, Carsten Keßler"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 github-repo: javiereliomedina/housing_prices_book
