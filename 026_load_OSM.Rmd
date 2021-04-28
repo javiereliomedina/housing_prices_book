@@ -3,7 +3,7 @@
 We get location information from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We select services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:fig-osm-data)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses. 
 
 
-"A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OMS".
+"A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OSM".
 
 ## Areal features (polygons) 
 
@@ -81,7 +81,7 @@ osm_poly <- merge(osm_poly_list, osm_poly_dnld, by = c("key", "value")) %>%
 ```
 
 
-```{r fig-osm-data, cache=TRUE, dependson="tbl-osm-data", fig.cap="OMS data"}
+```{r fig-osm-data, cache=TRUE, dependson="tbl-osm-data", fig.cap="OSM data"}
 
 osm_poly %>%
   unnest(c(data_poly)) %>% 
@@ -203,7 +203,7 @@ The mass of the service ($M_j$) for the potential model is the same for all the 
 
 # Sustenance (points)
 
-oms_points_list <- tribble(
+osm_points_list <- tribble(
   ~feature, ~key, ~value, ~exp_effect,
   # Sustenance
   "Sustenance", "amenity", c("bar", "biergarten", "cafe", "fast_food", "food_court",
@@ -216,7 +216,7 @@ oms_points_list <- tribble(
   unnest(cols = c(value)) %>% 
   as.data.table()
 
-oms_points_dnld <- oe_get(place = "Copenhagen",
+osm_points_dnld <- oe_get(place = "Copenhagen",
             layer = "points",
             extra_tags = c("amenity", "shop"),
             provider = "bbbike") %>%  
@@ -227,7 +227,7 @@ oms_points_dnld <- oe_get(place = "Copenhagen",
        variable.name = "key",
        value.name = "value")
 
-oms_points <-  merge(oms_points_list, oms_points_dnld, by = c("key", "value")) %>% 
+osm_points <-  merge(osm_points_list, osm_points_dnld, by = c("key", "value")) %>% 
   # Convert to sf object
   st_sf() %>% 
   # Transform CRS
@@ -235,9 +235,5 @@ oms_points <-  merge(oms_points_list, oms_points_dnld, by = c("key", "value")) %
 
 ```
 
-```{r, map-osm-points, fig.cap="OSM point data"}
 
-mapview::mapview(oms_points, zcol = "feature") 
-
-```
 
