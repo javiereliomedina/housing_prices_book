@@ -5,9 +5,9 @@ tab:price-index
 tab:tbl-runits-clean
 fig:fig-land-use
 fig:fig-osm-data
+fig:fig-osm-points
 fig:spat-inter
 fig:fig-pot-model
-fig:fig-osm-points
 fig:fig-pop-chor
 fig:fig-pop-map-grid
 fig:fig-pop-den-worldpop
@@ -22,9 +22,10 @@ population-data
 corine-land-use
 railway-transport-network
 open-street-map
+features
 areal-features
-potential-model
 point-features
+potential-model
 Population
 choropleth-by-ancestry
 disaggregating-population-data

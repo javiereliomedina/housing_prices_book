@@ -5,7 +5,9 @@ We get location information from [Open Street Map](https://wiki.openstreetmap.or
 
 "A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OSM".
 
-## Areal features
+## Features
+
+### Areal features
 
 The mass of the service ($M_j$) for the potential model is the area (in $m^2$) of the feature.
 
@@ -22,15 +24,14 @@ osm_poly_list <- tribble(
   "Parking", "amenity", "parking", "positive",
   # Green areas
   "Park", "leisure",  c("park", "garden", "playground"), "positive",
-  "Forest", "landuse", c("forest", "allotments", "meadow"), "positive",
+  "Forest", "landuse", c("forest", "meadow"), "positive",
   "Forest", "natural", "scrub", "positive",
+  "Allotment", "landuse", "allotments", "positive",
   # Education
   "School", "amenity", c("school", "kindergarten"), "negative",
   "University", "amenity", c("university", "college"), "positive", 
   # Healthcare
-  "Hospital", "amenity", "hospital", "negative",
-  "Social facility", "amenity",  "social_facility", "negative",
-  #Entertainment, Arts & Culture.... 
+  "Hospital", "amenity", c("hospital"), "negative"
 )
 
 osm_poly_list <- osm_poly_list %>%
@@ -42,7 +43,7 @@ osm_poly_list %>%
 
 ```
 
-```{r osm-poly, cache = TRUE}
+```{r osm-poly, cache = TRUE, dependson="tbl-osm-data"}
 
 # Bounding of the study area (approx. buffer of 2km)
 box <- c(xmin = 714906, xmax = 733618, ymin = 6166579, ymax = 6184092)
@@ -74,9 +75,11 @@ osm_poly <- merge(osm_poly_list, osm_poly_dnld, by = c("key", "value")) %>%
   # Nest by feature
   group_by(feature) %>% 
   nest() %>% 
+  ungroup() %>% 
   rename(data_poly = data) %>% 
   # Get centroids  
   mutate(data_points = map(data_poly, st_centroid))
+
 
 ```
 
@@ -84,7 +87,7 @@ osm_poly <- merge(osm_poly_list, osm_poly_dnld, by = c("key", "value")) %>%
 ```{r fig-osm-data, cache=TRUE, dependson="osm-poly", fig.cap="OSM data"}
 
 osm_poly %>%
-  unnest(c(data_poly)) %>% 
+  unnest(cols = c(data_poly)) %>% 
   st_sf() %>% 
   ggplot() +
   geom_sf(data = st_crop(dk_country, bbox_sf), fill = "grey95") +
@@ -96,103 +99,7 @@ osm_poly %>%
 
 ```
 
-### Potential model
-
-Spatial interaction function (Figure \@ref(fig:spat-inter)).
-```{r spat-inter, fig.width = 12, fig.height = 4, fig.cap="Spatial interaction function"}
-
-par(mfrow=c(1,2))
-
-plot_inter(fun = "e",  span = 300, beta = 2)
-plot_inter(fun = "e",  span = 2000, beta = 2)
-
-```
-
-Potential model (Figure \@ref(fig:fig-pot-model))
-
-```{r sif-pot-model, cache=TRUE, dependson="tbl-osm-data"}
-# Based on: https://riatelab.github.io/potential/articles/potential.html
-
-# Set Spatial Interaction Function (fun, span, beta)
-sif <- tribble( ~feature, ~fun,  ~span, ~beta,
-               "Parking",  "e",    300,     2,
-                  "Park",  "e",    300,     2,
-                "Forest",  "e",   2000,     2,
-                "School",  "e",    300,     2,
-            "University",  "e",    300,     2,
-            "Sustenance",  "e",    300,     2,
-              "Hospital",  "e",    300,     2,
-       "Social facility",  "e",    300,     2
-               )
-
-# Add to osm_data
-osm_poly <- osm_poly %>%
-  left_join(sif, by = "feature")
-
-# Points to estimate the potential 
-grids100m <- grids100m %>%
-  # Nesting
-  nest(data_poly = everything()) %>% 
-  # add centroids of the grids
-  mutate(data_points = map(data_poly, ~st_centroid(.)))
-```
-
-```{r est-pot-model, cache=TRUE, dependson="tbl-osm-data"}
-
-# Aux. function for calculating the potential
-f_pot <- function(df, fun, span, beta) {
-  mcpotential(x = df,
-              y = grids100m$data_points[[1]],
-              var = "area_m2",
-              fun = fun,
-              span = span,
-              beta = beta,
-              limit = 5 * span)
-  }
-
-# Estimate potential (in percentage)
-pot_est <- list()
-for(i in seq_along(osm_poly$data_points)) {
-  # Values
-  potential <- f_pot(osm_poly$data_points[[i]],
-                     osm_poly$fun[i], 
-                     osm_poly$span[i],
-                     osm_poly$beta[i])
-  # Percentage relatively to the maximun
-  pot_est[[i]] <- 100 * potential / max(potential)
-  # Add names
-  names(pot_est)[[i]] <- osm_poly$feature[i] 
-}
-
-# Add values to the grid cells of 100 x 100 m (grids100m)
-pot <- rbind(pot_est) %>%
-  as_tibble() %>% 
-  unnest(everything())
-
-grids100m <- grids100m %>% 
-  bind_cols(pot %>% nest(pot = everything()))
-
-```
-
-```{r fig-pot-model, cache=TRUE, dependson="tbl-osm-data", fig.cap="Potential model"}
-# Plots
-grids100m %>% 
-  select(data_poly, pot) %>% 
-  unnest(c(data_poly, pot)) %>% 
-  pivot_longer(-c(grid_ID, geometry),
-               names_to = "feature",
-               values_to = "value") %>% 
-  st_sf() %>% 
-  ggplot() +
-  geom_sf(aes(fill = value), col = NA) +
-  scale_fill_viridis_c(name = "[%]", option = "magma", direction = -1) +
-  geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
-  my_theme_map() +
-  facet_wrap(~feature)
-  
-```
-
-## Point features
+### Point features
 
 Features: (Figure \@ref(fig:fig-osm-points)) The mass of the service ($M_j$) for the potential model is the same for all the points (i.e. 1).  
 
@@ -207,12 +114,18 @@ osm_points_list <- tribble(
   ~feature, ~key, ~value, ~exp_effect,
   # Sustenance
   "Sustenance", "amenity", c("bar", "biergarten", "cafe", "fast_food", "food_court",
-                             "ice_cream", "pub", "restaurant"), "-",
+                             "ice_cream", "pub", "restaurant"), "negative",
   # Shops
   "Shop", "shop", c("supermarket", "mall", "general", "dairy", "department_store",
-                    "butcher", "seafood", "bakery", "convenience"), "+"
+                    "butcher", "seafood", "bakery", "convenience"), "positive",
+  # Entertainment, Arts & Culture....
+  "Positive entertainment", "amenity", c("cinema", "social_centre", "theatre",
+                                "community_centre", "arts_centre", "public_bookcase"), "positive",
+  "Negative entertainment", "amenity", c("brothel", "casino", "gambling", "love_hotel",
+                                         "nightclub", "stripclub", "swingerclub"), "negative",
+  # Healthcare
+  "Social facility", "amenity",  "social_facility", "negative"
   ) %>%
-  unnest() %>%
   unnest(cols = c(value)) %>% 
   as.data.table()
 
@@ -234,10 +147,13 @@ osm_points <-  merge(osm_points_list, osm_points_dnld, by = c("key", "value")) %
   st_transform("EPSG:25832") %>% 
   # crop to Bounding of the study area %>% 
   st_crop(bbox_sf) %>% 
+  # Mass of the service
+  mutate(area_m2 = 1)  %>% # NOTE: Change Name!!
   # Nest by feature
   group_by(feature) %>% 
   nest() %>% 
-  rename(data_points = data) 
+  rename(data_points = data)  
+  
 
 ```
 
@@ -256,3 +172,105 @@ osm_points %>%
 
 ```
 
+## Potential model
+
+Spatial interaction function (Figure \@ref(fig:spat-inter)).
+```{r spat-inter, fig.width = 12, fig.height = 4, fig.cap="Spatial interaction function"}
+
+par(mfrow=c(1,2))
+
+plot_inter(fun = "e",  span = 300, beta = 2)
+plot_inter(fun = "e",  span = 1000, beta = 2)
+
+```
+
+Potential model (Figure \@ref(fig:fig-pot-model))
+
+```{r sif-pot-model, cache=TRUE, dependson="tbl-osm-data"}
+# Based on: https://riatelab.github.io/potential/articles/potential.html
+
+# Set Spatial Interaction Function (fun, span, beta)
+sif <- tribble(   ~feature, ~fun,  ~span, ~beta,
+                 "Parking",  "e",    300,     2,
+                    "Park",  "e",    300,     2,
+                  "Forest",  "e",   1000,     2,
+                  "School",  "e",    300,     2,
+              "University",  "e",    300,     2,
+                "Hospital",  "e",    300,     2,
+               "Allotment",  "e",    300,     2,
+  "Positive entertainment",  "e",    300,     2,
+              "Sustenance",  "e",    300,     2,
+  "Negative entertainment",  "e",    300,     2,
+         "Social facility",  "e",    300,     2,
+                    "Shop",  "e",    300,     2
+  )
+
+# All OMS data
+OMS <- osm_poly %>%
+  select(feature, data_points) %>% 
+  bind_rows(osm_points) %>% 
+  left_join(sif, by = "feature")
+
+# Points to estimate the potential 
+grids100m <- grids100m %>%
+  # Nesting
+  nest(data_poly = everything()) %>% 
+  # add centroids of the grids
+  mutate(data_points = map(data_poly, st_centroid))
+
+```
+
+```{r est-pot-model, cache=TRUE, dependson="tbl-osm-data"}
+
+# Aux. function for calculating the potential
+f_pot <- function(df, fun, span, beta) {
+  mcpotential(x = df,
+              y = grids100m$data_points[[1]],
+              var = "area_m2",
+              fun = fun,
+              span = span,
+              beta = beta,
+              limit = 5 * span)
+  }
+
+# Estimate potential (in percentage)
+pot_est <- list()
+for(i in seq_along(OMS$data_points)) {
+  # Values
+  potential <- f_pot(OMS$data_points[[i]],
+                     OMS$fun[i], 
+                     OMS$span[i],
+                     OMS$beta[i])
+  # Percentage relatively to the maximun
+  pot_est[[i]] <- 100 * potential / max(potential)
+  # Add names
+  names(pot_est)[[i]] <- OMS$feature[i] 
+}
+
+# Add values to the grid cells of 100 x 100 m (grids100m)
+pot <- rbind(pot_est) %>%
+  as_tibble() %>% 
+  unnest(everything())
+
+grids100m <- grids100m %>% 
+  bind_cols(pot %>% nest(pot = everything()))
+
+```
+
+```{r fig-pot-model, fig.width = 12, cache=TRUE, dependson="tbl-osm-data", fig.cap="Potential model"}
+# Plots
+grids100m %>% 
+  select(data_poly, pot) %>% 
+  unnest(c(data_poly, pot)) %>% 
+  pivot_longer(-c(grid_ID, geometry),
+               names_to = "feature",
+               values_to = "value") %>% 
+  st_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = value), col = NA) +
+  scale_fill_viridis_c(name = "[%]", option = "magma", direction = -1) +
+  geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
+  my_theme_map() +
+  facet_wrap(~feature, ncol = 3)
+  
+```

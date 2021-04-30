@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-28" />
+<meta name="date" content="2021-04-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -893,11 +893,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="railway-transport-network.html"><a href="railway-transport-network.html"><i class="fa fa-check"></i><b>6</b> Railway transport network</a></li>
 <li class="chapter" data-level="7" data-path="open-street-map.html"><a href="open-street-map.html"><i class="fa fa-check"></i><b>7</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="open-street-map.html"><a href="open-street-map.html#areal-features"><i class="fa fa-check"></i><b>7.1</b> Areal features</a>
+<li class="chapter" data-level="7.1" data-path="open-street-map.html"><a href="open-street-map.html#features"><i class="fa fa-check"></i><b>7.1</b> Features</a>
 <ul>
-<li class="chapter" data-level="7.1.1" data-path="open-street-map.html"><a href="open-street-map.html#potential-model"><i class="fa fa-check"></i><b>7.1.1</b> Potential model</a></li>
+<li class="chapter" data-level="7.1.1" data-path="open-street-map.html"><a href="open-street-map.html#areal-features"><i class="fa fa-check"></i><b>7.1.1</b> Areal features</a></li>
+<li class="chapter" data-level="7.1.2" data-path="open-street-map.html"><a href="open-street-map.html#point-features"><i class="fa fa-check"></i><b>7.1.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="open-street-map.html"><a href="open-street-map.html#point-features"><i class="fa fa-check"></i><b>7.2</b> Point features</a></li>
+<li class="chapter" data-level="7.2" data-path="open-street-map.html"><a href="open-street-map.html#potential-model"><i class="fa fa-check"></i><b>7.2</b> Potential model</a></li>
 </ul></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
 <li class="chapter" data-level="8" data-path="Population.html"><a href="Population.html"><i class="fa fa-check"></i><b>8</b> Population density</a>
@@ -935,36 +936,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 7</span> Open Street Map</h1>
 <p>We get location information from <a href="https://wiki.openstreetmap.org/wiki/Map_features">Open Street Map</a>. We select services inside a buffer of approx. 2 km around the study area (Figure <a href="open-street-map.html#fig:fig-osm-data">7.1</a>), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses.</p>
 <p>“A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OSM.”</p>
-<div id="areal-features" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> Areal features</h2>
+<div id="features" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Features</h2>
+<div id="areal-features" class="section level3" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Areal features</h3>
 <p>The mass of the service (<span class="math inline">\(M_j\)</span>) for the potential model is the area (in <span class="math inline">\(m^2\)</span>) of the feature.</p>
 <p>Hospital, and Schools (e.g. schools) may create traffic and noise. Therefore, they may have a negative effect on housing prices (<span class="citation"><a href="references.html#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="references.html#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="open-street-map.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of OSM data</span></span>
-<span id="cb2-2"><a href="open-street-map.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Available features: https://wiki.openstreetmap.org/wiki/Map_features </span></span>
-<span id="cb2-3"><a href="open-street-map.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="open-street-map.html#cb2-4" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb2-5"><a href="open-street-map.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
-<span id="cb2-6"><a href="open-street-map.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transportation   </span></span>
-<span id="cb2-7"><a href="open-street-map.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Parking&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;parking&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb2-8"><a href="open-street-map.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Green areas</span></span>
-<span id="cb2-9"><a href="open-street-map.html#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Park&quot;</span>, <span class="st">&quot;leisure&quot;</span>,  <span class="fu">c</span>(<span class="st">&quot;park&quot;</span>, <span class="st">&quot;garden&quot;</span>, <span class="st">&quot;playground&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb2-10"><a href="open-street-map.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Forest&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;forest&quot;</span>, <span class="st">&quot;allotments&quot;</span>, <span class="st">&quot;meadow&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb2-11"><a href="open-street-map.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Forest&quot;</span>, <span class="st">&quot;natural&quot;</span>, <span class="st">&quot;scrub&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb2-12"><a href="open-street-map.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Education</span></span>
-<span id="cb2-13"><a href="open-street-map.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;School&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;school&quot;</span>, <span class="st">&quot;kindergarten&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb2-14"><a href="open-street-map.html#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;University&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;university&quot;</span>, <span class="st">&quot;college&quot;</span>), <span class="st">&quot;positive&quot;</span>, </span>
-<span id="cb2-15"><a href="open-street-map.html#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
-<span id="cb2-16"><a href="open-street-map.html#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Hospital&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;hospital&quot;</span>, <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb2-17"><a href="open-street-map.html#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Social facility&quot;</span>, <span class="st">&quot;amenity&quot;</span>,  <span class="st">&quot;social_facility&quot;</span>, <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb2-18"><a href="open-street-map.html#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Entertainment, Arts &amp; Culture.... </span></span>
-<span id="cb2-19"><a href="open-street-map.html#cb2-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-20"><a href="open-street-map.html#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-21"><a href="open-street-map.html#cb2-21" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> osm_poly_list <span class="sc">%&gt;%</span></span>
-<span id="cb2-22"><a href="open-street-map.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-23"><a href="open-street-map.html#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() </span>
-<span id="cb2-24"><a href="open-street-map.html#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-25"><a href="open-street-map.html#cb2-25" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="sc">%&gt;%</span> </span>
-<span id="cb2-26"><a href="open-street-map.html#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="open-street-map.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of OSM data</span></span>
+<span id="cb22-2"><a href="open-street-map.html#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Available features: https://wiki.openstreetmap.org/wiki/Map_features </span></span>
+<span id="cb22-3"><a href="open-street-map.html#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="open-street-map.html#cb22-4" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb22-5"><a href="open-street-map.html#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
+<span id="cb22-6"><a href="open-street-map.html#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transportation   </span></span>
+<span id="cb22-7"><a href="open-street-map.html#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Parking&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;parking&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb22-8"><a href="open-street-map.html#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Green areas</span></span>
+<span id="cb22-9"><a href="open-street-map.html#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Park&quot;</span>, <span class="st">&quot;leisure&quot;</span>,  <span class="fu">c</span>(<span class="st">&quot;park&quot;</span>, <span class="st">&quot;garden&quot;</span>, <span class="st">&quot;playground&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb22-10"><a href="open-street-map.html#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Forest&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;forest&quot;</span>, <span class="st">&quot;meadow&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb22-11"><a href="open-street-map.html#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Forest&quot;</span>, <span class="st">&quot;natural&quot;</span>, <span class="st">&quot;scrub&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb22-12"><a href="open-street-map.html#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Allotment&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;allotments&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb22-13"><a href="open-street-map.html#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Education</span></span>
+<span id="cb22-14"><a href="open-street-map.html#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;School&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;school&quot;</span>, <span class="st">&quot;kindergarten&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb22-15"><a href="open-street-map.html#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;University&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;university&quot;</span>, <span class="st">&quot;college&quot;</span>), <span class="st">&quot;positive&quot;</span>, </span>
+<span id="cb22-16"><a href="open-street-map.html#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
+<span id="cb22-17"><a href="open-street-map.html#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Hospital&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;hospital&quot;</span>), <span class="st">&quot;negative&quot;</span></span>
+<span id="cb22-18"><a href="open-street-map.html#cb22-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-19"><a href="open-street-map.html#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="open-street-map.html#cb22-20" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> osm_poly_list <span class="sc">%&gt;%</span></span>
+<span id="cb22-21"><a href="open-street-map.html#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-22"><a href="open-street-map.html#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() </span>
+<span id="cb22-23"><a href="open-street-map.html#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="open-street-map.html#cb22-24" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="sc">%&gt;%</span> </span>
+<span id="cb22-25"><a href="open-street-map.html#cb22-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>()</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1061,20 +1063,6 @@ Forest
 landuse
 </td>
 <td style="text-align:left;">
-allotments
-</td>
-<td style="text-align:left;">
-positive
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Forest
-</td>
-<td style="text-align:left;">
-landuse
-</td>
-<td style="text-align:left;">
 meadow
 </td>
 <td style="text-align:left;">
@@ -1090,6 +1078,20 @@ natural
 </td>
 <td style="text-align:left;">
 scrub
+</td>
+<td style="text-align:left;">
+positive
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Allotment
+</td>
+<td style="text-align:left;">
+landuse
+</td>
+<td style="text-align:left;">
+allotments
 </td>
 <td style="text-align:left;">
 positive
@@ -1165,231 +1167,233 @@ hospital
 negative
 </td>
 </tr>
-<tr>
-<td style="text-align:left;">
-Social facility
-</td>
-<td style="text-align:left;">
-amenity
-</td>
-<td style="text-align:left;">
-social_facility
-</td>
-<td style="text-align:left;">
-negative
-</td>
-</tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="open-street-map.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding of the study area (approx. buffer of 2km)</span></span>
-<span id="cb3-2"><a href="open-street-map.html#cb3-2" aria-hidden="true" tabindex="-1"></a>box <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">714906</span>, <span class="at">xmax =</span> <span class="dv">733618</span>, <span class="at">ymin =</span> <span class="dv">6166579</span>, <span class="at">ymax =</span> <span class="dv">6184092</span>)</span>
-<span id="cb3-3"><a href="open-street-map.html#cb3-3" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(box)</span>
-<span id="cb3-4"><a href="open-street-map.html#cb3-4" aria-hidden="true" tabindex="-1"></a>bbox_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sfc</span>(bbox) <span class="sc">%&gt;%</span>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:25832&quot;</span>) </span>
-<span id="cb3-5"><a href="open-street-map.html#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="open-street-map.html#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get polygons </span></span>
-<span id="cb3-7"><a href="open-street-map.html#cb3-7" aria-hidden="true" tabindex="-1"></a>osm_poly_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>, <span class="at">layer =</span> <span class="st">&quot;multipolygons&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-8"><a href="open-street-map.html#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
-<span id="cb3-9"><a href="open-street-map.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb3-10"><a href="open-street-map.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
-<span id="cb3-11"><a href="open-street-map.html#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;osm_way_id&quot;</span>, <span class="st">&quot;type&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
-<span id="cb3-12"><a href="open-street-map.html#cb3-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
-<span id="cb3-13"><a href="open-street-map.html#cb3-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="open-street-map.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding of the study area (approx. buffer of 2km)</span></span>
+<span id="cb23-2"><a href="open-street-map.html#cb23-2" aria-hidden="true" tabindex="-1"></a>box <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">714906</span>, <span class="at">xmax =</span> <span class="dv">733618</span>, <span class="at">ymin =</span> <span class="dv">6166579</span>, <span class="at">ymax =</span> <span class="dv">6184092</span>)</span>
+<span id="cb23-3"><a href="open-street-map.html#cb23-3" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(box)</span>
+<span id="cb23-4"><a href="open-street-map.html#cb23-4" aria-hidden="true" tabindex="-1"></a>bbox_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sfc</span>(bbox) <span class="sc">%&gt;%</span>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:25832&quot;</span>) </span>
+<span id="cb23-5"><a href="open-street-map.html#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="open-street-map.html#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get polygons </span></span>
+<span id="cb23-7"><a href="open-street-map.html#cb23-7" aria-hidden="true" tabindex="-1"></a>osm_poly_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>, <span class="at">layer =</span> <span class="st">&quot;multipolygons&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-8"><a href="open-street-map.html#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
+<span id="cb23-9"><a href="open-street-map.html#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb23-10"><a href="open-street-map.html#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
+<span id="cb23-11"><a href="open-street-map.html#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;osm_way_id&quot;</span>, <span class="st">&quot;type&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
+<span id="cb23-12"><a href="open-street-map.html#cb23-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
+<span id="cb23-13"><a href="open-street-map.html#cb23-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
 <pre><code># Reading layer `multipolygons&#39; from data source `C:\OSM_data\geofabrik_Copenhagen.gpkg&#39; using driver `GPKG&#39;
 # Simple feature collection with 376968 features and 25 fields
 # Geometry type: MULTIPOLYGON
 # Dimension:     XY
 # Bounding box:  xmin: 12.3 ymin: 55.6 xmax: 12.7 ymax: 55.8
 # Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="open-street-map.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge and convert to sf</span></span>
-<span id="cb5-2"><a href="open-street-map.html#cb5-2" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="ot">&lt;-</span> <span class="fu">merge</span>(osm_poly_list, osm_poly_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-3"><a href="open-street-map.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
-<span id="cb5-4"><a href="open-street-map.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb5-5"><a href="open-street-map.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
-<span id="cb5-6"><a href="open-street-map.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-7"><a href="open-street-map.html#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove non-valid polygons (i.e. 2 polygons)</span></span>
-<span id="cb5-8"><a href="open-street-map.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">valid =</span> <span class="fu">st_is_valid</span>(.)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-9"><a href="open-street-map.html#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(valid)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-10"><a href="open-street-map.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the area of the polygons</span></span>
-<span id="cb5-11"><a href="open-street-map.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), m<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-12"><a href="open-street-map.html#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
-<span id="cb5-13"><a href="open-street-map.html#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-14"><a href="open-street-map.html#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
-<span id="cb5-15"><a href="open-street-map.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-16"><a href="open-street-map.html#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb5-17"><a href="open-street-map.html#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_poly =</span> data) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-18"><a href="open-street-map.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get centroids  </span></span>
-<span id="cb5-19"><a href="open-street-map.html#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="open-street-map.html#cb6-1" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="open-street-map.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(data_poly)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-3"><a href="open-street-map.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-4"><a href="open-street-map.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb6-5"><a href="open-street-map.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
-<span id="cb6-6"><a href="open-street-map.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb6-7"><a href="open-street-map.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb6-8"><a href="open-street-map.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
-<span id="cb6-9"><a href="open-street-map.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb6-10"><a href="open-street-map.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="open-street-map.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge and convert to sf</span></span>
+<span id="cb25-2"><a href="open-street-map.html#cb25-2" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="ot">&lt;-</span> <span class="fu">merge</span>(osm_poly_list, osm_poly_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="open-street-map.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
+<span id="cb25-4"><a href="open-street-map.html#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb25-5"><a href="open-street-map.html#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
+<span id="cb25-6"><a href="open-street-map.html#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-7"><a href="open-street-map.html#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove non-valid polygons (i.e. 2 polygons)</span></span>
+<span id="cb25-8"><a href="open-street-map.html#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">valid =</span> <span class="fu">st_is_valid</span>(.)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-9"><a href="open-street-map.html#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(valid)) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-10"><a href="open-street-map.html#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate the area of the polygons</span></span>
+<span id="cb25-11"><a href="open-street-map.html#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), m<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-12"><a href="open-street-map.html#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
+<span id="cb25-13"><a href="open-street-map.html#cb25-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-14"><a href="open-street-map.html#cb25-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
+<span id="cb25-15"><a href="open-street-map.html#cb25-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-16"><a href="open-street-map.html#cb25-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb25-17"><a href="open-street-map.html#cb25-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb25-18"><a href="open-street-map.html#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_poly =</span> data) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-19"><a href="open-street-map.html#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get centroids  </span></span>
+<span id="cb25-20"><a href="open-street-map.html#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="open-street-map.html#cb26-1" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="open-street-map.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_poly)) <span class="sc">%&gt;%</span> </span>
+<span id="cb26-3"><a href="open-street-map.html#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="open-street-map.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb26-5"><a href="open-street-map.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="open-street-map.html#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="open-street-map.html#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="open-street-map.html#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="open-street-map.html#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb26-10"><a href="open-street-map.html#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-osm-data"></span>
 <img src="Housing_prices_book_files/figure-html/fig-osm-data-1.png" alt="OSM data" width="672" />
 <p class="caption">
 Figure 7.1: OSM data
 </p>
 </div>
-<div id="potential-model" class="section level3" number="7.1.1">
-<h3><span class="header-section-number">7.1.1</span> Potential model</h3>
-<p>Spatial interaction function (Figure <a href="open-street-map.html#fig:spat-inter">7.2</a>).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="open-street-map.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
-<span id="cb7-2"><a href="open-street-map.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="open-street-map.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">300</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span>
-<span id="cb7-4"><a href="open-street-map.html#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">2000</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:spat-inter"></span>
-<img src="Housing_prices_book_files/figure-html/spat-inter-1.png" alt="Spatial interaction function" width="1152" />
-<p class="caption">
-Figure 7.2: Spatial interaction function
-</p>
 </div>
-<p>Potential model (Figure <a href="open-street-map.html#fig:fig-pot-model">7.3</a>)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="open-street-map.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on: https://riatelab.github.io/potential/articles/potential.html</span></span>
-<span id="cb8-2"><a href="open-street-map.html#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="open-street-map.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Spatial Interaction Function (fun, span, beta)</span></span>
-<span id="cb8-4"><a href="open-street-map.html#cb8-4" aria-hidden="true" tabindex="-1"></a>sif <span class="ot">&lt;-</span> <span class="fu">tribble</span>( <span class="sc">~</span>feature, <span class="sc">~</span>fun,  <span class="sc">~</span>span, <span class="sc">~</span>beta,</span>
-<span id="cb8-5"><a href="open-street-map.html#cb8-5" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Parking&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-6"><a href="open-street-map.html#cb8-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;Park&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-7"><a href="open-street-map.html#cb8-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Forest&quot;</span>,  <span class="st">&quot;e&quot;</span>,   <span class="dv">2000</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-8"><a href="open-street-map.html#cb8-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;School&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-9"><a href="open-street-map.html#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;University&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-10"><a href="open-street-map.html#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Sustenance&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-11"><a href="open-street-map.html#cb8-11" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Hospital&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb8-12"><a href="open-street-map.html#cb8-12" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;Social facility&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span></span>
-<span id="cb8-13"><a href="open-street-map.html#cb8-13" aria-hidden="true" tabindex="-1"></a>               )</span>
-<span id="cb8-14"><a href="open-street-map.html#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="open-street-map.html#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Add to osm_data</span></span>
-<span id="cb8-16"><a href="open-street-map.html#cb8-16" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="ot">&lt;-</span> osm_poly <span class="sc">%&gt;%</span></span>
-<span id="cb8-17"><a href="open-street-map.html#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sif, <span class="at">by =</span> <span class="st">&quot;feature&quot;</span>)</span>
-<span id="cb8-18"><a href="open-street-map.html#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-19"><a href="open-street-map.html#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Points to estimate the potential </span></span>
-<span id="cb8-20"><a href="open-street-map.html#cb8-20" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span></span>
-<span id="cb8-21"><a href="open-street-map.html#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nesting</span></span>
-<span id="cb8-22"><a href="open-street-map.html#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data_poly =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-23"><a href="open-street-map.html#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add centroids of the grids</span></span>
-<span id="cb8-24"><a href="open-street-map.html#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, <span class="sc">~</span><span class="fu">st_centroid</span>(.)))</span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="open-street-map.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for calculating the potential</span></span>
-<span id="cb9-2"><a href="open-street-map.html#cb9-2" aria-hidden="true" tabindex="-1"></a>f_pot <span class="ot">&lt;-</span> <span class="cf">function</span>(df, fun, span, beta) {</span>
-<span id="cb9-3"><a href="open-street-map.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcpotential</span>(<span class="at">x =</span> df,</span>
-<span id="cb9-4"><a href="open-street-map.html#cb9-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> grids100m<span class="sc">$</span>data_points[[<span class="dv">1</span>]],</span>
-<span id="cb9-5"><a href="open-street-map.html#cb9-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">var =</span> <span class="st">&quot;area_m2&quot;</span>,</span>
-<span id="cb9-6"><a href="open-street-map.html#cb9-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fun =</span> fun,</span>
-<span id="cb9-7"><a href="open-street-map.html#cb9-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> span,</span>
-<span id="cb9-8"><a href="open-street-map.html#cb9-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">beta =</span> beta,</span>
-<span id="cb9-9"><a href="open-street-map.html#cb9-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">limit =</span> <span class="dv">5</span> <span class="sc">*</span> span)</span>
-<span id="cb9-10"><a href="open-street-map.html#cb9-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb9-11"><a href="open-street-map.html#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="open-street-map.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate potential (in percentage)</span></span>
-<span id="cb9-13"><a href="open-street-map.html#cb9-13" aria-hidden="true" tabindex="-1"></a>pot_est <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb9-14"><a href="open-street-map.html#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(osm_poly<span class="sc">$</span>data_points)) {</span>
-<span id="cb9-15"><a href="open-street-map.html#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Values</span></span>
-<span id="cb9-16"><a href="open-street-map.html#cb9-16" aria-hidden="true" tabindex="-1"></a>  potential <span class="ot">&lt;-</span> <span class="fu">f_pot</span>(osm_poly<span class="sc">$</span>data_points[[i]],</span>
-<span id="cb9-17"><a href="open-street-map.html#cb9-17" aria-hidden="true" tabindex="-1"></a>                     osm_poly<span class="sc">$</span>fun[i], </span>
-<span id="cb9-18"><a href="open-street-map.html#cb9-18" aria-hidden="true" tabindex="-1"></a>                     osm_poly<span class="sc">$</span>span[i],</span>
-<span id="cb9-19"><a href="open-street-map.html#cb9-19" aria-hidden="true" tabindex="-1"></a>                     osm_poly<span class="sc">$</span>beta[i])</span>
-<span id="cb9-20"><a href="open-street-map.html#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Percentage relatively to the maximun</span></span>
-<span id="cb9-21"><a href="open-street-map.html#cb9-21" aria-hidden="true" tabindex="-1"></a>  pot_est[[i]] <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> potential <span class="sc">/</span> <span class="fu">max</span>(potential)</span>
-<span id="cb9-22"><a href="open-street-map.html#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add names</span></span>
-<span id="cb9-23"><a href="open-street-map.html#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(pot_est)[[i]] <span class="ot">&lt;-</span> osm_poly<span class="sc">$</span>feature[i] </span>
-<span id="cb9-24"><a href="open-street-map.html#cb9-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb9-25"><a href="open-street-map.html#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-26"><a href="open-street-map.html#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add values to the grid cells of 100 x 100 m (grids100m)</span></span>
-<span id="cb9-27"><a href="open-street-map.html#cb9-27" aria-hidden="true" tabindex="-1"></a>pot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pot_est) <span class="sc">%&gt;%</span></span>
-<span id="cb9-28"><a href="open-street-map.html#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-29"><a href="open-street-map.html#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">everything</span>())</span>
-<span id="cb9-30"><a href="open-street-map.html#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-31"><a href="open-street-map.html#cb9-31" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
-<span id="cb9-32"><a href="open-street-map.html#cb9-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(pot <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">pot =</span> <span class="fu">everything</span>()))</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="open-street-map.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots</span></span>
-<span id="cb10-2"><a href="open-street-map.html#cb10-2" aria-hidden="true" tabindex="-1"></a>grids100m <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="open-street-map.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(data_poly, pot) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-4"><a href="open-street-map.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(data_poly, pot)) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a href="open-street-map.html#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(grid_ID, geometry),</span>
-<span id="cb10-6"><a href="open-street-map.html#cb10-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;feature&quot;</span>,</span>
-<span id="cb10-7"><a href="open-street-map.html#cb10-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-8"><a href="open-street-map.html#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-9"><a href="open-street-map.html#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb10-10"><a href="open-street-map.html#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> value), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb10-11"><a href="open-street-map.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">&quot;[%]&quot;</span>, <span class="at">option =</span> <span class="st">&quot;magma&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb10-12"><a href="open-street-map.html#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb10-13"><a href="open-street-map.html#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb10-14"><a href="open-street-map.html#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pot-model"></span>
-<img src="Housing_prices_book_files/figure-html/fig-pot-model-1.png" alt="Potential model" width="672" />
-<p class="caption">
-Figure 7.3: Potential model
-</p>
-</div>
-</div>
-</div>
-<div id="point-features" class="section level2" number="7.2">
-<h2><span class="header-section-number">7.2</span> Point features</h2>
-<p>Features: (Figure <a href="open-street-map.html#fig:fig-osm-points">7.4</a>) The mass of the service (<span class="math inline">\(M_j\)</span>) for the potential model is the same for all the points (i.e. 1).</p>
+<div id="point-features" class="section level3" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Point features</h3>
+<p>Features: (Figure <a href="open-street-map.html#fig:fig-osm-points">7.2</a>) The mass of the service (<span class="math inline">\(M_j\)</span>) for the potential model is the same for all the points (i.e. 1).</p>
 <ul>
 <li>Sustenance: bar, cafe, pubs, etc.</li>
 <li>Shops: supermarket, mall, butcher, etc.</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="open-street-map.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sustenance (points)</span></span>
-<span id="cb11-2"><a href="open-street-map.html#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="open-street-map.html#cb11-3" aria-hidden="true" tabindex="-1"></a>osm_points_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb11-4"><a href="open-street-map.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
-<span id="cb11-5"><a href="open-street-map.html#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sustenance</span></span>
-<span id="cb11-6"><a href="open-street-map.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Sustenance&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;bar&quot;</span>, <span class="st">&quot;biergarten&quot;</span>, <span class="st">&quot;cafe&quot;</span>, <span class="st">&quot;fast_food&quot;</span>, <span class="st">&quot;food_court&quot;</span>,</span>
-<span id="cb11-7"><a href="open-street-map.html#cb11-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">&quot;ice_cream&quot;</span>, <span class="st">&quot;pub&quot;</span>, <span class="st">&quot;restaurant&quot;</span>), <span class="st">&quot;-&quot;</span>,</span>
-<span id="cb11-8"><a href="open-street-map.html#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Shops</span></span>
-<span id="cb11-9"><a href="open-street-map.html#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Shop&quot;</span>, <span class="st">&quot;shop&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;supermarket&quot;</span>, <span class="st">&quot;mall&quot;</span>, <span class="st">&quot;general&quot;</span>, <span class="st">&quot;dairy&quot;</span>, <span class="st">&quot;department_store&quot;</span>,</span>
-<span id="cb11-10"><a href="open-street-map.html#cb11-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;butcher&quot;</span>, <span class="st">&quot;seafood&quot;</span>, <span class="st">&quot;bakery&quot;</span>, <span class="st">&quot;convenience&quot;</span>), <span class="st">&quot;+&quot;</span></span>
-<span id="cb11-11"><a href="open-street-map.html#cb11-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb11-12"><a href="open-street-map.html#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-13"><a href="open-street-map.html#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-14"><a href="open-street-map.html#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>()</span>
-<span id="cb11-15"><a href="open-street-map.html#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="open-street-map.html#cb11-16" aria-hidden="true" tabindex="-1"></a>osm_points_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>,</span>
-<span id="cb11-17"><a href="open-street-map.html#cb11-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">layer =</span> <span class="st">&quot;points&quot;</span>,</span>
-<span id="cb11-18"><a href="open-street-map.html#cb11-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">extra_tags =</span> <span class="fu">c</span>(<span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;shop&quot;</span>),</span>
-<span id="cb11-19"><a href="open-street-map.html#cb11-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">provider =</span> <span class="st">&quot;bbbike&quot;</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb11-20"><a href="open-street-map.html#cb11-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
-<span id="cb11-21"><a href="open-street-map.html#cb11-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb11-22"><a href="open-street-map.html#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
-<span id="cb11-23"><a href="open-street-map.html#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;address&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
-<span id="cb11-24"><a href="open-street-map.html#cb11-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
-<span id="cb11-25"><a href="open-street-map.html#cb11-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="open-street-map.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sustenance (points)</span></span>
+<span id="cb27-2"><a href="open-street-map.html#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="open-street-map.html#cb27-3" aria-hidden="true" tabindex="-1"></a>osm_points_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb27-4"><a href="open-street-map.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
+<span id="cb27-5"><a href="open-street-map.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sustenance</span></span>
+<span id="cb27-6"><a href="open-street-map.html#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Sustenance&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;bar&quot;</span>, <span class="st">&quot;biergarten&quot;</span>, <span class="st">&quot;cafe&quot;</span>, <span class="st">&quot;fast_food&quot;</span>, <span class="st">&quot;food_court&quot;</span>,</span>
+<span id="cb27-7"><a href="open-street-map.html#cb27-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">&quot;ice_cream&quot;</span>, <span class="st">&quot;pub&quot;</span>, <span class="st">&quot;restaurant&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb27-8"><a href="open-street-map.html#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Shops</span></span>
+<span id="cb27-9"><a href="open-street-map.html#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Shop&quot;</span>, <span class="st">&quot;shop&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;supermarket&quot;</span>, <span class="st">&quot;mall&quot;</span>, <span class="st">&quot;general&quot;</span>, <span class="st">&quot;dairy&quot;</span>, <span class="st">&quot;department_store&quot;</span>,</span>
+<span id="cb27-10"><a href="open-street-map.html#cb27-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;butcher&quot;</span>, <span class="st">&quot;seafood&quot;</span>, <span class="st">&quot;bakery&quot;</span>, <span class="st">&quot;convenience&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb27-11"><a href="open-street-map.html#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Entertainment, Arts &amp; Culture....</span></span>
+<span id="cb27-12"><a href="open-street-map.html#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Positive entertainment&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;cinema&quot;</span>, <span class="st">&quot;social_centre&quot;</span>, <span class="st">&quot;theatre&quot;</span>,</span>
+<span id="cb27-13"><a href="open-street-map.html#cb27-13" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;community_centre&quot;</span>, <span class="st">&quot;arts_centre&quot;</span>, <span class="st">&quot;public_bookcase&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb27-14"><a href="open-street-map.html#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Negative entertainment&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;brothel&quot;</span>, <span class="st">&quot;casino&quot;</span>, <span class="st">&quot;gambling&quot;</span>, <span class="st">&quot;love_hotel&quot;</span>,</span>
+<span id="cb27-15"><a href="open-street-map.html#cb27-15" aria-hidden="true" tabindex="-1"></a>                                         <span class="st">&quot;nightclub&quot;</span>, <span class="st">&quot;stripclub&quot;</span>, <span class="st">&quot;swingerclub&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb27-16"><a href="open-street-map.html#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
+<span id="cb27-17"><a href="open-street-map.html#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Social facility&quot;</span>, <span class="st">&quot;amenity&quot;</span>,  <span class="st">&quot;social_facility&quot;</span>, <span class="st">&quot;negative&quot;</span></span>
+<span id="cb27-18"><a href="open-street-map.html#cb27-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-19"><a href="open-street-map.html#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-20"><a href="open-street-map.html#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>()</span>
+<span id="cb27-21"><a href="open-street-map.html#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-22"><a href="open-street-map.html#cb27-22" aria-hidden="true" tabindex="-1"></a>osm_points_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>,</span>
+<span id="cb27-23"><a href="open-street-map.html#cb27-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">layer =</span> <span class="st">&quot;points&quot;</span>,</span>
+<span id="cb27-24"><a href="open-street-map.html#cb27-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">extra_tags =</span> <span class="fu">c</span>(<span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;shop&quot;</span>),</span>
+<span id="cb27-25"><a href="open-street-map.html#cb27-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">provider =</span> <span class="st">&quot;bbbike&quot;</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb27-26"><a href="open-street-map.html#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
+<span id="cb27-27"><a href="open-street-map.html#cb27-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb27-28"><a href="open-street-map.html#cb27-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
+<span id="cb27-29"><a href="open-street-map.html#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;address&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
+<span id="cb27-30"><a href="open-street-map.html#cb27-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
+<span id="cb27-31"><a href="open-street-map.html#cb27-31" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
 <pre><code># Reading layer `points&#39; from data source `C:\OSM_data\bbbike_Copenhagen.gpkg&#39; using driver `GPKG&#39;
 # Simple feature collection with 399818 features and 12 fields
 # Geometry type: POINT
 # Dimension:     XY
 # Bounding box:  xmin: 12.3 ymin: 55.6 xmax: 12.7 ymax: 55.8
 # Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="open-street-map.html#cb13-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="ot">&lt;-</span>  <span class="fu">merge</span>(osm_points_list, osm_points_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="open-street-map.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
-<span id="cb13-3"><a href="open-street-map.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="open-street-map.html#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
-<span id="cb13-5"><a href="open-street-map.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-6"><a href="open-street-map.html#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
-<span id="cb13-7"><a href="open-street-map.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-8"><a href="open-street-map.html#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
-<span id="cb13-9"><a href="open-street-map.html#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-10"><a href="open-street-map.html#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb13-11"><a href="open-street-map.html#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_points =</span> data) </span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="open-street-map.html#cb14-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="open-street-map.html#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_points)) <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="open-street-map.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb14-4"><a href="open-street-map.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb14-5"><a href="open-street-map.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-6"><a href="open-street-map.html#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb14-7"><a href="open-street-map.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">colour =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href="open-street-map.html#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
-<span id="cb14-9"><a href="open-street-map.html#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb14-10"><a href="open-street-map.html#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="open-street-map.html#cb29-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="ot">&lt;-</span>  <span class="fu">merge</span>(osm_points_list, osm_points_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="open-street-map.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
+<span id="cb29-3"><a href="open-street-map.html#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="open-street-map.html#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
+<span id="cb29-5"><a href="open-street-map.html#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-6"><a href="open-street-map.html#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
+<span id="cb29-7"><a href="open-street-map.html#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-8"><a href="open-street-map.html#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mass of the service</span></span>
+<span id="cb29-9"><a href="open-street-map.html#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area_m2 =</span> <span class="dv">1</span>)  <span class="sc">%&gt;%</span> <span class="co"># </span><span class="al">NOTE</span><span class="co">: Change Name!!</span></span>
+<span id="cb29-10"><a href="open-street-map.html#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
+<span id="cb29-11"><a href="open-street-map.html#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-12"><a href="open-street-map.html#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-13"><a href="open-street-map.html#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_points =</span> data)  </span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="open-street-map.html#cb30-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="open-street-map.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_points)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-3"><a href="open-street-map.html#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb30-4"><a href="open-street-map.html#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb30-5"><a href="open-street-map.html#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="open-street-map.html#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="open-street-map.html#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">colour =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb30-8"><a href="open-street-map.html#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-9"><a href="open-street-map.html#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb30-10"><a href="open-street-map.html#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-osm-points"></span>
 <img src="Housing_prices_book_files/figure-html/fig-osm-points-1.png" alt="OSM data points" width="672" />
 <p class="caption">
-Figure 7.4: OSM data points
+Figure 7.2: OSM data points
+</p>
+</div>
+</div>
+</div>
+<div id="potential-model" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Potential model</h2>
+<p>Spatial interaction function (Figure <a href="open-street-map.html#fig:spat-inter">7.3</a>).</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="open-street-map.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb31-2"><a href="open-street-map.html#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="open-street-map.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">300</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span>
+<span id="cb31-4"><a href="open-street-map.html#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">1000</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:spat-inter"></span>
+<img src="Housing_prices_book_files/figure-html/spat-inter-1.png" alt="Spatial interaction function" width="1152" />
+<p class="caption">
+Figure 7.3: Spatial interaction function
+</p>
+</div>
+<p>Potential model (Figure <a href="open-street-map.html#fig:fig-pot-model">7.4</a>)</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="open-street-map.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on: https://riatelab.github.io/potential/articles/potential.html</span></span>
+<span id="cb32-2"><a href="open-street-map.html#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="open-street-map.html#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Spatial Interaction Function (fun, span, beta)</span></span>
+<span id="cb32-4"><a href="open-street-map.html#cb32-4" aria-hidden="true" tabindex="-1"></a>sif <span class="ot">&lt;-</span> <span class="fu">tribble</span>(   <span class="sc">~</span>feature, <span class="sc">~</span>fun,  <span class="sc">~</span>span, <span class="sc">~</span>beta,</span>
+<span id="cb32-5"><a href="open-street-map.html#cb32-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Parking&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-6"><a href="open-street-map.html#cb32-6" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Park&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-7"><a href="open-street-map.html#cb32-7" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;Forest&quot;</span>,  <span class="st">&quot;e&quot;</span>,   <span class="dv">1000</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-8"><a href="open-street-map.html#cb32-8" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;School&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-9"><a href="open-street-map.html#cb32-9" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;University&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-10"><a href="open-street-map.html#cb32-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Hospital&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-11"><a href="open-street-map.html#cb32-11" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Allotment&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-12"><a href="open-street-map.html#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Positive entertainment&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-13"><a href="open-street-map.html#cb32-13" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Sustenance&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-14"><a href="open-street-map.html#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Negative entertainment&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-15"><a href="open-street-map.html#cb32-15" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;Social facility&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb32-16"><a href="open-street-map.html#cb32-16" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Shop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span></span>
+<span id="cb32-17"><a href="open-street-map.html#cb32-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb32-18"><a href="open-street-map.html#cb32-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-19"><a href="open-street-map.html#cb32-19" aria-hidden="true" tabindex="-1"></a><span class="co"># All OMS data</span></span>
+<span id="cb32-20"><a href="open-street-map.html#cb32-20" aria-hidden="true" tabindex="-1"></a>OMS <span class="ot">&lt;-</span> osm_poly <span class="sc">%&gt;%</span></span>
+<span id="cb32-21"><a href="open-street-map.html#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(feature, data_points) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-22"><a href="open-street-map.html#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(osm_points) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-23"><a href="open-street-map.html#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sif, <span class="at">by =</span> <span class="st">&quot;feature&quot;</span>)</span>
+<span id="cb32-24"><a href="open-street-map.html#cb32-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-25"><a href="open-street-map.html#cb32-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Points to estimate the potential </span></span>
+<span id="cb32-26"><a href="open-street-map.html#cb32-26" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span></span>
+<span id="cb32-27"><a href="open-street-map.html#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nesting</span></span>
+<span id="cb32-28"><a href="open-street-map.html#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data_poly =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-29"><a href="open-street-map.html#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add centroids of the grids</span></span>
+<span id="cb32-30"><a href="open-street-map.html#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="open-street-map.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for calculating the potential</span></span>
+<span id="cb33-2"><a href="open-street-map.html#cb33-2" aria-hidden="true" tabindex="-1"></a>f_pot <span class="ot">&lt;-</span> <span class="cf">function</span>(df, fun, span, beta) {</span>
+<span id="cb33-3"><a href="open-street-map.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcpotential</span>(<span class="at">x =</span> df,</span>
+<span id="cb33-4"><a href="open-street-map.html#cb33-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> grids100m<span class="sc">$</span>data_points[[<span class="dv">1</span>]],</span>
+<span id="cb33-5"><a href="open-street-map.html#cb33-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">var =</span> <span class="st">&quot;area_m2&quot;</span>,</span>
+<span id="cb33-6"><a href="open-street-map.html#cb33-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fun =</span> fun,</span>
+<span id="cb33-7"><a href="open-street-map.html#cb33-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> span,</span>
+<span id="cb33-8"><a href="open-street-map.html#cb33-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">beta =</span> beta,</span>
+<span id="cb33-9"><a href="open-street-map.html#cb33-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">limit =</span> <span class="dv">5</span> <span class="sc">*</span> span)</span>
+<span id="cb33-10"><a href="open-street-map.html#cb33-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb33-11"><a href="open-street-map.html#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="open-street-map.html#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate potential (in percentage)</span></span>
+<span id="cb33-13"><a href="open-street-map.html#cb33-13" aria-hidden="true" tabindex="-1"></a>pot_est <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb33-14"><a href="open-street-map.html#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(OMS<span class="sc">$</span>data_points)) {</span>
+<span id="cb33-15"><a href="open-street-map.html#cb33-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Values</span></span>
+<span id="cb33-16"><a href="open-street-map.html#cb33-16" aria-hidden="true" tabindex="-1"></a>  potential <span class="ot">&lt;-</span> <span class="fu">f_pot</span>(OMS<span class="sc">$</span>data_points[[i]],</span>
+<span id="cb33-17"><a href="open-street-map.html#cb33-17" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>fun[i], </span>
+<span id="cb33-18"><a href="open-street-map.html#cb33-18" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>span[i],</span>
+<span id="cb33-19"><a href="open-street-map.html#cb33-19" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>beta[i])</span>
+<span id="cb33-20"><a href="open-street-map.html#cb33-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Percentage relatively to the maximun</span></span>
+<span id="cb33-21"><a href="open-street-map.html#cb33-21" aria-hidden="true" tabindex="-1"></a>  pot_est[[i]] <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> potential <span class="sc">/</span> <span class="fu">max</span>(potential)</span>
+<span id="cb33-22"><a href="open-street-map.html#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add names</span></span>
+<span id="cb33-23"><a href="open-street-map.html#cb33-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(pot_est)[[i]] <span class="ot">&lt;-</span> OMS<span class="sc">$</span>feature[i] </span>
+<span id="cb33-24"><a href="open-street-map.html#cb33-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-25"><a href="open-street-map.html#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="open-street-map.html#cb33-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add values to the grid cells of 100 x 100 m (grids100m)</span></span>
+<span id="cb33-27"><a href="open-street-map.html#cb33-27" aria-hidden="true" tabindex="-1"></a>pot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pot_est) <span class="sc">%&gt;%</span></span>
+<span id="cb33-28"><a href="open-street-map.html#cb33-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb33-29"><a href="open-street-map.html#cb33-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">everything</span>())</span>
+<span id="cb33-30"><a href="open-street-map.html#cb33-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-31"><a href="open-street-map.html#cb33-31" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb33-32"><a href="open-street-map.html#cb33-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(pot <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">pot =</span> <span class="fu">everything</span>()))</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="open-street-map.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots</span></span>
+<span id="cb34-2"><a href="open-street-map.html#cb34-2" aria-hidden="true" tabindex="-1"></a>grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="open-street-map.html#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(data_poly, pot) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-4"><a href="open-street-map.html#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(data_poly, pot)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-5"><a href="open-street-map.html#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(grid_ID, geometry),</span>
+<span id="cb34-6"><a href="open-street-map.html#cb34-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;feature&quot;</span>,</span>
+<span id="cb34-7"><a href="open-street-map.html#cb34-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-8"><a href="open-street-map.html#cb34-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb34-9"><a href="open-street-map.html#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb34-10"><a href="open-street-map.html#cb34-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> value), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb34-11"><a href="open-street-map.html#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">name =</span> <span class="st">&quot;[%]&quot;</span>, <span class="at">option =</span> <span class="st">&quot;magma&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb34-12"><a href="open-street-map.html#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb34-13"><a href="open-street-map.html#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb34-14"><a href="open-street-map.html#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-pot-model"></span>
+<img src="Housing_prices_book_files/figure-html/fig-pot-model-1.png" alt="Potential model" width="1152" />
+<p class="caption">
+Figure 7.4: Potential model
 </p>
 </div>
 
