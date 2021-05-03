@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-04-30" />
+<meta name="date" content="2021-05-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -947,12 +947,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>What about housing prices = 0?</li>
 <li>Dwelling Area &lt;= 0?</li>
 </ul>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="residential-units-saled-as-free-scale.html#cb39-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb39-2"><a href="residential-units-saled-as-free-scale.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
-<span id="cb39-3"><a href="residential-units-saled-as-free-scale.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb39-4"><a href="residential-units-saled-as-free-scale.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb39-5"><a href="residential-units-saled-as-free-scale.html#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb39-6"><a href="residential-units-saled-as-free-scale.html#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="residential-units-saled-as-free-scale.html#cb41-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb41-2"><a href="residential-units-saled-as-free-scale.html#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="residential-units-saled-as-free-scale.html#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
+<span id="cb41-4"><a href="residential-units-saled-as-free-scale.html#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
+<span id="cb41-5"><a href="residential-units-saled-as-free-scale.html#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
+<span id="cb41-6"><a href="residential-units-saled-as-free-scale.html#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="residential-units-by-floor-level" class="section level2" number="9.1">
 <h2><span class="header-section-number">9.1</span> Residential units by floor level</h2>
@@ -965,24 +965,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>4 - 4th floor</li>
 <li>5 or more = etc.</li>
 </ul>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="residential-units-saled-as-free-scale.html#cb40-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb40-2"><a href="residential-units-saled-as-free-scale.html#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-3"><a href="residential-units-saled-as-free-scale.html#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb40-4"><a href="residential-units-saled-as-free-scale.html#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb40-5"><a href="residential-units-saled-as-free-scale.html#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb40-6"><a href="residential-units-saled-as-free-scale.html#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb40-7"><a href="residential-units-saled-as-free-scale.html#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb40-8"><a href="residential-units-saled-as-free-scale.html#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb40-9"><a href="residential-units-saled-as-free-scale.html#cb40-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb40-10"><a href="residential-units-saled-as-free-scale.html#cb40-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb40-11"><a href="residential-units-saled-as-free-scale.html#cb40-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb40-12"><a href="residential-units-saled-as-free-scale.html#cb40-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb40-13"><a href="residential-units-saled-as-free-scale.html#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb40-14"><a href="residential-units-saled-as-free-scale.html#cb40-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb40-15"><a href="residential-units-saled-as-free-scale.html#cb40-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb40-16"><a href="residential-units-saled-as-free-scale.html#cb40-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb40-17"><a href="residential-units-saled-as-free-scale.html#cb40-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb40-18"><a href="residential-units-saled-as-free-scale.html#cb40-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="residential-units-saled-as-free-scale.html#cb42-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb42-2"><a href="residential-units-saled-as-free-scale.html#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-3"><a href="residential-units-saled-as-free-scale.html#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb42-4"><a href="residential-units-saled-as-free-scale.html#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb42-5"><a href="residential-units-saled-as-free-scale.html#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
+<span id="cb42-6"><a href="residential-units-saled-as-free-scale.html#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb42-7"><a href="residential-units-saled-as-free-scale.html#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
+<span id="cb42-8"><a href="residential-units-saled-as-free-scale.html#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-9"><a href="residential-units-saled-as-free-scale.html#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb42-10"><a href="residential-units-saled-as-free-scale.html#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-11"><a href="residential-units-saled-as-free-scale.html#cb42-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb42-12"><a href="residential-units-saled-as-free-scale.html#cb42-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-13"><a href="residential-units-saled-as-free-scale.html#cb42-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb42-14"><a href="residential-units-saled-as-free-scale.html#cb42-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb42-15"><a href="residential-units-saled-as-free-scale.html#cb42-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb42-16"><a href="residential-units-saled-as-free-scale.html#cb42-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb42-17"><a href="residential-units-saled-as-free-scale.html#cb42-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb42-18"><a href="residential-units-saled-as-free-scale.html#cb42-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
 <img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
 <p class="caption">

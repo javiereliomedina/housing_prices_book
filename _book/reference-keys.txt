@@ -4,9 +4,12 @@ fig:fig-sp-res-builds
 tab:price-index
 tab:tbl-runits-clean
 fig:fig-land-use
-fig:fig-osm-data
+tab:tbl-osm-poly
+fig:fig-osm-poly
+tab:tbl-osm-points
 fig:fig-osm-points
 fig:spat-inter
+tab:tbl-sif-pot-model
 fig:fig-pot-model
 fig:fig-pop-chor
 fig:fig-pop-map-grid
