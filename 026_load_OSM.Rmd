@@ -1,14 +1,12 @@
 # Open Street Map 
 
-We get location information from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We select services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:fig-osm-poly) and \@ref(fig:fig-osm-points)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to they houses. 
-
-"A park is an area of open space for recreational use, usually designed and in semi-natural state with grassy areas, trees and bushes - OSM".
+We get location information from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We select services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:fig-osm-poly) and \@ref(fig:fig-osm-points)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to the people houses. 
 
 ## Features
 
 ### Areal features
 
-The mass of the service ($M_j$) for the potential model is the area (in $m^2$) of the feature. Features: (Table \@ref(tab:tbl-osm-poly))
+The selected features, and their expected effect on housing prices, are reported in Table \@ref(tab:tbl-osm-poly). The mass of the service ($M_j$) for the potential model is the area (in $m^2$) of the feature, and we estimate the distance to the grid cells of 100m x 100m from the centroid of the polygon. 
 
 Hospital, and Schools (e.g. schools) may create traffic and noise. Therefore, they may have a negative effect on housing prices (@Gultekin2006). 
 
@@ -108,10 +106,7 @@ osm_poly %>%
 
 ### Point features
 
-Features: (Table \@ref(tab:tbl-osm-points)) The mass of the service ($M_j$) for the potential model is the same for all points (i.e. 1).  
-
-- Sustenance: bar, cafe, pubs, etc.
-- Shops: supermarket, mall, butcher, etc.
+Point features and their expected effect on housing prices (Table \@ref(tab:tbl-osm-points)). In this case, the mass of the service ($M_j$) for the potential model is the same for all points (i.e. 1).  
 
 ```{r tbl-osm-points}
 # Sustenance (points)
@@ -197,7 +192,7 @@ par(mfrow=c(1,3))
 
 plot_inter(fun = "e",  span = 300, beta = 2)
 plot_inter(fun = "e",  span = 500, beta = 2)
-plot_inter(fun = "e",  span = 2000, beta = 2)
+plot_inter(fun = "e",  span = 5000, beta = 2)
 
 ```
 
@@ -207,7 +202,7 @@ Parameters for each OSM feature (Table \@ref(tab:tbl-sif-pot-model))
 
 # Set Spatial Interaction Function (fun, span, beta)
 sif <- tribble(   ~feature, ~fun,  ~span, ~beta,
-         "Kalvebod_Fælled",  "e",   2000,     2,
+         "Kalvebod_Fælled",  "e",   5000,     2,
               "Recreation",  "e",    500,     2,
               "Train_stop",  "e",    500,     2,
              "Underground",  "e",    500,     2,
