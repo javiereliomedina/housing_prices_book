@@ -64,35 +64,46 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
 
 We have also created grid cells of 100m x 100m for aggregating some data at that scale (i.e. population density).   
 
-```{r fig-grids-100m, cache = TRUE, dependson = "adm-units", fig.cap="Grid cells of 100m x 100m"}
+```{r grids-100m}
 
 # Make grids
-  grids100m <- study_area %>% 
-    # Make regular grids (100m x 100m)
-    st_make_grid(cellsize = 100) %>% 
-    st_sf() %>% 
-    # Select grids only in the study area
-    mutate(int = st_intersects(., study_area) %>% lengths > 0) %>% 
-    filter(int == TRUE) %>%
-    select(-int) %>% 
-    # Name grids as "g001", "g002", ...
-    mutate(grid_ID = paste0("g", stringr::str_pad(seq(1, nrow(.), 1), 3, pad = "0")))
+grids100m <- study_area %>% 
+  # Make regular grids (100m x 100m)
+  st_make_grid(cellsize = 100) %>% 
+  st_sf() %>% 
+  # Select grids only in the study area
+  mutate(int = st_intersects(., study_area) %>% lengths > 0) %>% 
+  filter(int == TRUE) %>%
+  select(-int) %>% 
+  # Name grids as "g001", "g002", ...
+  mutate(grid_ID = paste0("g", stringr::str_pad(seq(1, nrow(.), 1), 3, pad = "0")))
 
+# Points to estimate the potential (centroid of the grids of 100m x 100m) 
+grids100m <- grids100m %>%
+  # Nesting
+  nest(data_poly = everything()) %>% 
+  # add centroids of the grids
+  mutate(data_points = map(data_poly, st_centroid))
+
+```
+
+
+```{r fig-grids-100m, fig.cap="Grid cells of 100m x 100m"}
 # Plot
-  ggplot() + 
-    geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
-    geom_sf(data = grids100m, fill = NA, color = "red", size = 0.05) + 
-    my_theme_map() +
-    annotation_scale(location = "br", text_cex = 1) +
-    annotation_north_arrow(location = "br",
-                           pad_x = unit(1.6, "cm"),
-                           pad_y = unit(0.65, "cm"),
-                           which_north = "true",
-                           height = unit(0.5, "cm"),
-                           width = unit(0.5, "cm"),
-                           style = north_arrow_orienteering(text_col = "white",
-                                                            text_size = 1))
-  
+ggplot() + 
+  geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
+  geom_sf(data = grids100m$data_poly[[1]], fill = NA, color = "red", size = 0.05) + 
+  my_theme_map() +
+  annotation_scale(location = "br", text_cex = 1) +
+  annotation_north_arrow(location = "br",
+                         pad_x = unit(1.6, "cm"),
+                         pad_y = unit(0.65, "cm"),
+                         which_north = "true",
+                         height = unit(0.5, "cm"),
+                         width = unit(0.5, "cm"),
+                         style = north_arrow_orienteering(text_col = "white",
+                                                          text_size = 1))
+
 ```
 
 
