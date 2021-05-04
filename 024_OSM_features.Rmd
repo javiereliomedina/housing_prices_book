@@ -1,4 +1,4 @@
-# Open Street Map 
+# Open Street Map {#OSM-features}
 
 The location information has been obtained from [Open Street Map](https://wiki.openstreetmap.org/wiki/Map_features). We have selected services inside a buffer of approx. 2 km around the study area (Figure \@ref(fig:fig-osm-poly) and \@ref(fig:fig-osm-points)), assuming that people may use then (e.g. parks, parking areas) outside Copenhagen City but they are close enough to people houses. Then, we estimate the accessibility to each services (i.e. feature) in the centroid of the grid cell of 100m x 100m; i.e. Potential model [chapter 1](#hedonic-price-model). We selected two types of features; *i. areal features* and *ii. point features*; where the mass of the service ($M_j$) is the area of the polygon in $m^2$ or equal for all services (i.e. 1), respectively. On the other hand, the distance ($d_{ij}$ in $m^2$) is the distance between the centroid of the polygon (i.e. areas features) or the point (i.e. point feature) and the centroid of the grid cells. 
 
@@ -218,7 +218,7 @@ sif %>%
 ```
 
 The spatial interaction functions are therefero as follow (Figure \@ref(fig:spat-inter)).
-```{r spat-inter, fig.width = 12, fig.height = 4, fig.cap="Spatial interaction functions"}
+```{r spat-inter, fig.width = 12, fig.height = 8, fig.cap="Spatial interaction functions"}
 
 par(mfrow=c(2,2))
 

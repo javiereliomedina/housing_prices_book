@@ -1,4 +1,4 @@
-# Population data 
+# Population data {#pop-DST}
 
 Population data at parish level have been retrieved from [Statistics Denmark](https://www.dst.dk/en) using the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html). We have created two auxiliary function for reading the data. `steps` loops by year for getting small pieces of information from the DST API and then putting all together in a data frame. In this sense, we overcome the limitation of the number of rows we can retrieve from the API (i.e. if we call a large dataset we get the error: *Error: API did not return text/csv*). Then, `rm_words` is used in the cleaning process for simplifying the description of some variables we would like to use as columns names. 
 

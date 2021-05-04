@@ -1,6 +1,4 @@
-# (PART) Data analysis {-}
-
-# Residential units saled as free scale
+# Residential units saled as free scale {#EDA-house-prices}
 
 We focused our study in residential dwellings on the ordinary free trade (Table \@ref(tab:tbl-runits-clean)). 
 

@@ -1,6 +1,4 @@
-# (PART) Load data {-}
-
-# Administrative units
+# Administrative units {#adm-units}
 
 The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/)) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes. 
 
