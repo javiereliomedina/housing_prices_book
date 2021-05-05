@@ -36,7 +36,10 @@ osm_poly_list <- osm_poly_list %>%
   unnest(c(value)) %>% 
   as.data.table() 
 
-osm_poly_list %>% 
+osm_poly_list %>%
+  group_by(feature, key, exp_effect) %>%
+  summarise(value = paste(value, collapse = ", ")) %>%
+  relocate(value, .after = key) %>% 
   kbl(caption = "Expeced effect of polygon features on housing prices") %>% 
   kable_paper()
 
@@ -135,6 +138,9 @@ osm_points_list <- tribble(
   as.data.table()
 
 osm_points_list %>% 
+  group_by(feature, key, exp_effect) %>%
+  summarise(value = paste(value, collapse = ", ")) %>% 
+  relocate(value, .after = key) %>%
   kbl(caption = "Expeced effect of points features on housing prices") %>% 
   kable_paper()
 
@@ -212,6 +218,9 @@ sif <- tribble(   ~feature, ~fun,  ~span, ~beta,
          )
 
 sif %>% 
+  group_by(fun, beta, span,) %>%
+  summarise(feature = paste(feature, collapse = ", ")) %>% 
+  relocate(feature, .after = span) %>% 
   kbl(caption = "Spatial interaction parameters") %>% 
   kable_paper()
 
