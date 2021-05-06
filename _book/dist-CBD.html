@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Residential units saled as free scale | Housing prices Copenhagen</title>
+  <title>Chapter 6 Distance to Central Business District | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 6 Distance to Central Business District | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 6 Distance to Central Business District | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="dist-CBD.html"/>
-<link rel="next" href="references.html"/>
+<link rel="prev" href="OSM-features.html"/>
+<link rel="next" href="EDA-house-prices.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,10 +51,6 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -933,73 +929,133 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="EDA-house-prices" class="section level1" number="7">
-<h1><span class="header-section-number">Chapter 7</span> Residential units saled as free scale</h1>
-<p>We focused our study in residential dwellings on the ordinary free trade (Table <a href="BBR-data.html#tab:tbl-runits-clean">3.2</a>).</p>
-<p>NOTES:</p>
-<ul>
-<li>There are large differences in the number of residential units between years, why??</li>
-<li>Study only one year for the moment (e.g. 2019)??</li>
-<li>Housing prices in different years -&gt; adjust to 2019 prices (what index; Table <a href="BBR-data.html#tab:price-index">3.1</a>)?</li>
-<li><strong>KONTANT_KOEBESUM</strong> = cash purchase price? Analyse it?? What about <strong>KOEBESUM_BELOEB</strong> = The purchase price agreed upon the sale of the property???</li>
-<li><strong>KONTANT_KOEBESUM</strong> = 0 or (&lt; 100000 DKK)?</li>
-<li><strong>SKOEDE_DATO</strong> = “The date on which the deed was signed” -&gt; use as sale date?? Should we use this date (i.e. for the price index)? …<br />
-</li>
-<li>What about housing prices = 0?</li>
-<li>Dwelling Area &lt;= 0?</li>
-</ul>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="EDA-house-prices.html#cb43-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb43-2"><a href="EDA-house-prices.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
-<span id="cb43-3"><a href="EDA-house-prices.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb43-4"><a href="EDA-house-prices.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb43-5"><a href="EDA-house-prices.html#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb43-6"><a href="EDA-house-prices.html#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="residential-units-by-floor-level" class="section level2" number="7.1">
-<h2><span class="header-section-number">7.1</span> Residential units by floor level</h2>
-<ul>
-<li>KL - basement</li>
-<li>ST - ground floor</li>
-<li>1 - 1st floor</li>
-<li>2 - 2nd floor</li>
-<li>3 - 3rd floor</li>
-<li>4 - 4th floor</li>
-<li>5 or more = etc.</li>
-</ul>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="EDA-house-prices.html#cb44-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb44-2"><a href="EDA-house-prices.html#cb44-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-3"><a href="EDA-house-prices.html#cb44-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb44-4"><a href="EDA-house-prices.html#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb44-5"><a href="EDA-house-prices.html#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb44-6"><a href="EDA-house-prices.html#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-7"><a href="EDA-house-prices.html#cb44-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb44-8"><a href="EDA-house-prices.html#cb44-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb44-9"><a href="EDA-house-prices.html#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb44-10"><a href="EDA-house-prices.html#cb44-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb44-11"><a href="EDA-house-prices.html#cb44-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb44-12"><a href="EDA-house-prices.html#cb44-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb44-13"><a href="EDA-house-prices.html#cb44-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb44-14"><a href="EDA-house-prices.html#cb44-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb44-15"><a href="EDA-house-prices.html#cb44-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb44-16"><a href="EDA-house-prices.html#cb44-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb44-17"><a href="EDA-house-prices.html#cb44-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb44-18"><a href="EDA-house-prices.html#cb44-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
-<img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
+<div id="dist-CBD" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Distance to Central Business District</h1>
+<p>The distance between a house and the Central Business District (CBD) has an important role in its price (<span class="citation"><a href="references.html#ref-Chen2008" role="doc-biblioref">Chen and Hao</a> (<a href="references.html#ref-Chen2008" role="doc-biblioref">2008</a>)</span>). We add thereofre it as another feature in our model, with a possitive expected effec (i.e. the closer the house to the CBT, the higer the price). However, we do not measure the distance in km but the commuting time from the house to the CBD (i.e. “Indre By”). In this regard, we estimate the travel time (in public transport) from the centre of each grid cell of 100m x 100m to “Kongens Nytorv” (coordinates: 55.6805° N, 12.5860° E), and we associate the time to all dwellings at that grid.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="dist-CBD.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kongens Nytorv</span></span>
+<span id="cb1-2"><a href="dist-CBD.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="dist-CBD.html#cb1-3" aria-hidden="true" tabindex="-1"></a>KN <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">name =</span> <span class="st">&quot;Kongens Nytorv&quot;</span>, <span class="at">x =</span> <span class="fl">12.5860</span>, <span class="at">y =</span> <span class="fl">55.6805</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-4"><a href="dist-CBD.html#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-5"><a href="dist-CBD.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:4326&quot;</span>) </span></code></pre></div>
+<p>We have used used the Open Source Routing Machine API (<span class="citation"><a href="references.html#ref-R-osrm" role="doc-biblioref">Giraud</a> (<a href="references.html#ref-R-osrm" role="doc-biblioref">2021</a>)</span>) for calculating the travel times by foot, bike, and car (Figure <a href="#fig:fig-osm-points"><strong>??</strong></a>).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="dist-CBD.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # </span><span class="al">NOTE</span><span class="co">: Distance by foot in min</span></span>
+<span id="cb2-2"><a href="dist-CBD.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># # It is a long process so we only run it once, and safe the results</span></span>
+<span id="cb2-3"><a href="dist-CBD.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># # uncomment for re-run the code</span></span>
+<span id="cb2-4"><a href="dist-CBD.html#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-5"><a href="dist-CBD.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># # Origin points</span></span>
+<span id="cb2-6"><a href="dist-CBD.html#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># op &lt;- grids100m$data_points[[1]] %&gt;%</span></span>
+<span id="cb2-7"><a href="dist-CBD.html#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:4326&quot;)</span></span>
+<span id="cb2-8"><a href="dist-CBD.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-9"><a href="dist-CBD.html#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># # Aux. function</span></span>
+<span id="cb2-10"><a href="dist-CBD.html#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># f_osmr &lt;- function(df, profile) {</span></span>
+<span id="cb2-11"><a href="dist-CBD.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   df %&gt;%</span></span>
+<span id="cb2-12"><a href="dist-CBD.html#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#     mutate(dist_min = osrmTable(src = ., dst = KN, osrm.profile = profile) %&gt;%</span></span>
+<span id="cb2-13"><a href="dist-CBD.html#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#              pluck(&quot;durations&quot;) %&gt;%</span></span>
+<span id="cb2-14"><a href="dist-CBD.html#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#              as.vector())</span></span>
+<span id="cb2-15"><a href="dist-CBD.html#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb2-16"><a href="dist-CBD.html#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-17"><a href="dist-CBD.html#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># # Split data in smaller parts (for API restrictions)</span></span>
+<span id="cb2-18"><a href="dist-CBD.html#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># chunk &lt;- 350</span></span>
+<span id="cb2-19"><a href="dist-CBD.html#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># n &lt;- nrow(op)</span></span>
+<span id="cb2-20"><a href="dist-CBD.html#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># r &lt;- rep(1:ceiling(n/chunk), each = chunk)[1:n]</span></span>
+<span id="cb2-21"><a href="dist-CBD.html#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co"># d &lt;- split(op, r)</span></span>
+<span id="cb2-22"><a href="dist-CBD.html#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-23"><a href="dist-CBD.html#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># # Calculate distance to city centre by foot</span></span>
+<span id="cb2-24"><a href="dist-CBD.html#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co"># plan(multisession, workers = 7)</span></span>
+<span id="cb2-25"><a href="dist-CBD.html#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-26"><a href="dist-CBD.html#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># ## By foot</span></span>
+<span id="cb2-27"><a href="dist-CBD.html#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co"># dist_foot_1 &lt;- map_dfr(d[  1:7], ~f_osmr(., &quot;foot&quot;))</span></span>
+<span id="cb2-28"><a href="dist-CBD.html#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co"># dist_foot_2 &lt;- map_dfr(d[ 8:14], ~f_osmr(., &quot;foot&quot;))</span></span>
+<span id="cb2-29"><a href="dist-CBD.html#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># dist_foot_3 &lt;- map_dfr(d[15:21], ~f_osmr(., &quot;foot&quot;))</span></span>
+<span id="cb2-30"><a href="dist-CBD.html#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># dist_foot_4 &lt;- map_dfr(d[22:31], ~f_osmr(., &quot;foot&quot;))</span></span>
+<span id="cb2-31"><a href="dist-CBD.html#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co"># # Merge</span></span>
+<span id="cb2-32"><a href="dist-CBD.html#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># dist_foot &lt;- bind_rows(dist_foot_1, dist_foot_2, dist_foot_3, dist_foot_4)</span></span>
+<span id="cb2-33"><a href="dist-CBD.html#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co"># # Save</span></span>
+<span id="cb2-34"><a href="dist-CBD.html#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(dist_foot, file = &quot;dist_osrm_foot.rds&quot;)</span></span>
+<span id="cb2-35"><a href="dist-CBD.html#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-36"><a href="dist-CBD.html#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Bike</span></span>
+<span id="cb2-37"><a href="dist-CBD.html#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_bike_1 &lt;- map_dfr(d[  1:7], ~f_osmr(., &quot;bike&quot;))</span></span>
+<span id="cb2-38"><a href="dist-CBD.html#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_bike_2 &lt;- map_dfr(d[ 8:14], ~f_osmr(., &quot;bike&quot;))</span></span>
+<span id="cb2-39"><a href="dist-CBD.html#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_bike_3 &lt;- map_dfr(d[15:21], ~f_osmr(., &quot;bike&quot;))</span></span>
+<span id="cb2-40"><a href="dist-CBD.html#cb2-40" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_bike_4 &lt;- map_dfr(d[22:31], ~f_osmr(., &quot;bike&quot;))</span></span>
+<span id="cb2-41"><a href="dist-CBD.html#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="co">#   # Merge</span></span>
+<span id="cb2-42"><a href="dist-CBD.html#cb2-42" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_bike &lt;- bind_rows(dist_bike_1, dist_bike_2, dist_bike_3, dist_bike_4)</span></span>
+<span id="cb2-43"><a href="dist-CBD.html#cb2-43" aria-hidden="true" tabindex="-1"></a><span class="co">#   # Save</span></span>
+<span id="cb2-44"><a href="dist-CBD.html#cb2-44" aria-hidden="true" tabindex="-1"></a><span class="co">#   saveRDS(dist_bike, file = &quot;dist_osrm_bike.rds&quot;)</span></span>
+<span id="cb2-45"><a href="dist-CBD.html#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb2-46"><a href="dist-CBD.html#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Car</span></span>
+<span id="cb2-47"><a href="dist-CBD.html#cb2-47" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_car_1 &lt;- map_dfr(d[  1:7], ~f_osmr(., &quot;car&quot;))</span></span>
+<span id="cb2-48"><a href="dist-CBD.html#cb2-48" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_car_2 &lt;- map_dfr(d[ 8:14], ~f_osmr(., &quot;car&quot;))</span></span>
+<span id="cb2-49"><a href="dist-CBD.html#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_car_3 &lt;- map_dfr(d[15:21], ~f_osmr(., &quot;car&quot;))</span></span>
+<span id="cb2-50"><a href="dist-CBD.html#cb2-50" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_car_4 &lt;- map_dfr(d[22:31], ~f_osmr(., &quot;car&quot;))</span></span>
+<span id="cb2-51"><a href="dist-CBD.html#cb2-51" aria-hidden="true" tabindex="-1"></a><span class="co">#   # Merge</span></span>
+<span id="cb2-52"><a href="dist-CBD.html#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="co">#   dist_car &lt;- bind_rows(dist_car_1, dist_car_2, dist_car_3, dist_car_4)</span></span>
+<span id="cb2-53"><a href="dist-CBD.html#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="co">#   # Save</span></span>
+<span id="cb2-54"><a href="dist-CBD.html#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="co">#   saveRDS(dist_car, file = &quot;dist_osrm_car.rds&quot;)</span></span>
+<span id="cb2-55"><a href="dist-CBD.html#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="co">#   </span></span>
+<span id="cb2-56"><a href="dist-CBD.html#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="co"># plan(&quot;default&quot;)</span></span>
+<span id="cb2-57"><a href="dist-CBD.html#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-58"><a href="dist-CBD.html#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Read data </span></span>
+<span id="cb2-59"><a href="dist-CBD.html#cb2-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-60"><a href="dist-CBD.html#cb2-60" aria-hidden="true" tabindex="-1"></a>dist_foot <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;dist_osrm_foot.rds&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-61"><a href="dist-CBD.html#cb2-61" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-62"><a href="dist-CBD.html#cb2-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">dist_min_foot =</span> dist_min)</span>
+<span id="cb2-63"><a href="dist-CBD.html#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-64"><a href="dist-CBD.html#cb2-64" aria-hidden="true" tabindex="-1"></a>dist_bike <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;dist_osrm_bike.rds&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-65"><a href="dist-CBD.html#cb2-65" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-66"><a href="dist-CBD.html#cb2-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">dist_min_bike =</span> dist_min)</span>
+<span id="cb2-67"><a href="dist-CBD.html#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-68"><a href="dist-CBD.html#cb2-68" aria-hidden="true" tabindex="-1"></a>dist_car  <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;dist_osrm_car.rds&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-69"><a href="dist-CBD.html#cb2-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_drop_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-70"><a href="dist-CBD.html#cb2-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">dist_min_car =</span> dist_min)</span>
+<span id="cb2-71"><a href="dist-CBD.html#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-72"><a href="dist-CBD.html#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge datasets</span></span>
+<span id="cb2-73"><a href="dist-CBD.html#cb2-73" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> dist_foot <span class="sc">%&gt;%</span> </span>
+<span id="cb2-74"><a href="dist-CBD.html#cb2-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dist_bike, <span class="at">by =</span> <span class="st">&quot;grid_ID&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-75"><a href="dist-CBD.html#cb2-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(dist_car, <span class="at">by =</span> <span class="st">&quot;grid_ID&quot;</span>)</span>
+<span id="cb2-76"><a href="dist-CBD.html#cb2-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-77"><a href="dist-CBD.html#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-78"><a href="dist-CBD.html#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="co"># Add info to grids100m</span></span>
+<span id="cb2-79"><a href="dist-CBD.html#cb2-79" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb2-80"><a href="dist-CBD.html#cb2-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(dist <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">dist =</span> <span class="fu">everything</span>()))</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="dist-CBD.html#cb3-1" aria-hidden="true" tabindex="-1"></a>grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="dist-CBD.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(data_poly, dist) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="dist-CBD.html#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(data_poly, dist), <span class="at">names_repair =</span> <span class="st">&quot;minimal&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="dist-CBD.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(grid_ID, geometry),</span>
+<span id="cb3-5"><a href="dist-CBD.html#cb3-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;feature&quot;</span>,</span>
+<span id="cb3-6"><a href="dist-CBD.html#cb3-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;duration&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-7"><a href="dist-CBD.html#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">gsub</span>(<span class="st">&quot;dist_min_&quot;</span>, <span class="st">&quot;&quot;</span>, feature),</span>
+<span id="cb3-8"><a href="dist-CBD.html#cb3-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">feature =</span> <span class="fu">factor</span>(feature, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;foot&quot;</span>, <span class="st">&quot;bike&quot;</span>, <span class="st">&quot;car&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-9"><a href="dist-CBD.html#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-10"><a href="dist-CBD.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb3-11"><a href="dist-CBD.html#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(duration,</span>
+<span id="cb3-12"><a href="dist-CBD.html#cb3-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="fu">ceiling</span>(<span class="fu">max</span>(duration))),</span>
+<span id="cb3-13"><a href="dist-CBD.html#cb3-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb3-14"><a href="dist-CBD.html#cb3-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb3-15"><a href="dist-CBD.html#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">name =</span> <span class="st">&quot;min&quot;</span>, <span class="at">option =</span> <span class="st">&quot;magma&quot;</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb3-16"><a href="dist-CBD.html#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="dist-CBD.html#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> KN, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">shape =</span> <span class="dv">16</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb3-18"><a href="dist-CBD.html#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb3-19"><a href="dist-CBD.html#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-travel-time"></span>
+<img src="Housing_prices_book_files/figure-html/fig-travel-time-1.png" alt="Travel times to Kongens Nytorv (blue point) by foot, bike, and car" width="672" />
 <p class="caption">
-Figure 7.1: Residential units distribution by floor level
+Figure 6.1: Travel times to Kongens Nytorv (blue point) by foot, bike, and car
 </p>
 </div>
 
 </div>
+
+
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="dist-CBD.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="OSM-features.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="EDA-house-prices.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1030,7 +1086,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/031_EDA.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/025_distance_CBD.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -1049,20 +1105,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

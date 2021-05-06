@@ -1,0 +1,123 @@
+# Distance to Central Business District {#dist-CBD}
+
+The distance between a house and the Central Business District (CBD) has an important role in its price (@Chen2008). We add thereofre it as another feature in our model, with a possitive expected effec (i.e. the closer the house to the CBT, the higer the price). However, we do not measure the distance in km but the commuting time from the house to the CBD (i.e. "Indre By"). In this regard, we estimate the travel time (in public transport) from the centre of each grid cell of 100m x 100m to "Kongens Nytorv" (coordinates: 55.6805° N, 12.5860° E), and we associate the time to all dwellings at that grid. 
+
+```{r Kongens-Nytorv}
+
+# Kongens Nytorv
+
+KN <- tibble(name = "Kongens Nytorv", x = 12.5860, y = 55.6805) %>% 
+  st_as_sf(coords = c("x", "y")) %>% 
+  st_set_crs("EPSG:4326") 
+  
+```
+ 
+We have used used the  Open Source Routing Machine API (@R-osrm) for calculating the travel times by foot, bike, and car (Figure \@ref(fig:fig-osm-points)).  
+```{r osrm-travel-time}
+
+# # NOTE: Distance by foot in min
+# # It is a long process so we only run it once, and safe the results
+# # uncomment for re-run the code
+# 
+# # Origin points
+# op <- grids100m$data_points[[1]] %>%
+#   st_transform(crs = "EPSG:4326")
+# 
+# # Aux. function
+# f_osmr <- function(df, profile) {
+#   df %>%
+#     mutate(dist_min = osrmTable(src = ., dst = KN, osrm.profile = profile) %>%
+#              pluck("durations") %>%
+#              as.vector())
+# }
+# 
+# # Split data in smaller parts (for API restrictions)
+# chunk <- 350
+# n <- nrow(op)
+# r <- rep(1:ceiling(n/chunk), each = chunk)[1:n]
+# d <- split(op, r)
+# 
+# # Calculate distance to city centre by foot
+# plan(multisession, workers = 7)
+# 
+# ## By foot
+# dist_foot_1 <- map_dfr(d[  1:7], ~f_osmr(., "foot"))
+# dist_foot_2 <- map_dfr(d[ 8:14], ~f_osmr(., "foot"))
+# dist_foot_3 <- map_dfr(d[15:21], ~f_osmr(., "foot"))
+# dist_foot_4 <- map_dfr(d[22:31], ~f_osmr(., "foot"))
+# # Merge
+# dist_foot <- bind_rows(dist_foot_1, dist_foot_2, dist_foot_3, dist_foot_4)
+# # Save
+# saveRDS(dist_foot, file = "dist_osrm_foot.rds")
+# 
+# ## Bike
+#   dist_bike_1 <- map_dfr(d[  1:7], ~f_osmr(., "bike"))
+#   dist_bike_2 <- map_dfr(d[ 8:14], ~f_osmr(., "bike"))
+#   dist_bike_3 <- map_dfr(d[15:21], ~f_osmr(., "bike"))
+#   dist_bike_4 <- map_dfr(d[22:31], ~f_osmr(., "bike"))
+#   # Merge
+#   dist_bike <- bind_rows(dist_bike_1, dist_bike_2, dist_bike_3, dist_bike_4)
+#   # Save
+#   saveRDS(dist_bike, file = "dist_osrm_bike.rds")
+# 
+# ## Car
+#   dist_car_1 <- map_dfr(d[  1:7], ~f_osmr(., "car"))
+#   dist_car_2 <- map_dfr(d[ 8:14], ~f_osmr(., "car"))
+#   dist_car_3 <- map_dfr(d[15:21], ~f_osmr(., "car"))
+#   dist_car_4 <- map_dfr(d[22:31], ~f_osmr(., "car"))
+#   # Merge
+#   dist_car <- bind_rows(dist_car_1, dist_car_2, dist_car_3, dist_car_4)
+#   # Save
+#   saveRDS(dist_car, file = "dist_osrm_car.rds")
+#   
+# plan("default")
+
+# Read data 
+
+dist_foot <- readRDS(file = "dist_osrm_foot.rds") %>%
+  st_drop_geometry() %>%
+  rename(dist_min_foot = dist_min)
+
+dist_bike <- readRDS(file = "dist_osrm_bike.rds") %>%
+  st_drop_geometry() %>%
+  rename(dist_min_bike = dist_min)
+
+dist_car  <- readRDS(file = "dist_osrm_car.rds") %>%
+  st_drop_geometry() %>%
+  rename(dist_min_car = dist_min)
+
+# Merge datasets
+dist <- dist_foot %>% 
+  left_join(dist_bike, by = "grid_ID") %>% 
+  left_join(dist_car, by = "grid_ID")
+
+
+# Add info to grids100m
+grids100m <- grids100m %>% 
+  bind_cols(dist %>% nest(dist = everything()))
+
+```
+
+```{r fig-travel-time, fig.cap="Travel times to Kongens Nytorv (blue point) by foot, bike, and car"}
+
+grids100m %>% 
+  select(data_poly, dist) %>% 
+  unnest(c(data_poly, dist), names_repair = "minimal") %>% 
+  pivot_longer(-c(grid_ID, geometry),
+               names_to = "feature",
+               values_to = "duration") %>% 
+  mutate(feature = gsub("dist_min_", "", feature),
+         feature = factor(feature, levels = c("foot", "bike", "car"))) %>% 
+  st_sf() %>% 
+  ggplot() +
+  geom_sf(aes(fill = cut(duration,
+                         breaks = c(0, 5, 10, 15, 20, 30, 40, 50, 100, ceiling(max(duration))),
+                         include.lowest = TRUE)),
+          col = NA) +
+  scale_fill_viridis_d(name = "min", option = "magma", direction = -1) +
+  geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
+  geom_sf(data = KN, color = "blue", shape = 16, size = 3) +
+  theme_void() +
+  facet_wrap(~feature, ncol = 2)
+
+```
