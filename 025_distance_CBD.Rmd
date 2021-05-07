@@ -121,3 +121,148 @@ grids100m %>%
   facet_wrap(~feature, ncol = 2)
 
 ```
+
+Time in public transport from [OpenTripPlanner](https://www.opentripplanner.org/), and the r-package [opentripplanner](https://github.com/ropensci/opentripplanner) (@Morgan2019). 
+
+```{r}
+
+library(opentripplanner)
+library(osmextract)
+
+# OTP folder structure
+dir.create("otp")
+dir.create("otp/graphs/default")
+
+path_data <- file.path("./otp")
+# 
+# # Data
+# 
+# ## Download Denmark GTFS from dk_gtfs <- "http://www.rejseplanen.info/labs/GTFS.zip"
+# ## and save as "~./otp/graphs/default/gtfs.zip")
+# 
+# ## Copenhagen pbf (get from oe_get)
+# oe_get(place = "Copenhagen",
+#        provider = "bbbike",
+#        download_directory = "./otp/graphs/default",
+#        download_only = F,
+#        quiet = TRUE)
+# file.rename(from = "./otp/graphs/default/bbbike_Copenhagen.osm.pbf",
+#             to = "./otp/graphs/default/osm.pbf")
+# file.remove("./otp/graphs/default/bbbike_Copenhagen.gpkg")
+# 
+# Open Trip Planner
+
+## Downloading OTP
+path_otp <- otp_dl_jar()
+
+## Building an OTP Graph
+log1 <- otp_build_graph(otp = path_otp, dir = path_data, memory = 10240)
+
+## Start OTP
+log2 <- otp_setup(otp = path_otp, dir = path_data)
+
+## Connect R to OTP
+otpcon <- otp_connect()
+
+## Isochone
+isochrone_pt  <- otp_isochrone(
+  otpcon = otpcon,
+  fromPlace = c(12.5860, 55.6805),
+  mode = c("WALK","TRANSIT"),
+  maxWalkDistance = 1000,
+  date_time = as.POSIXct(strptime("2021-05-11 08:00", "%Y-%m-%d %H:%M")),
+  cutoffSec = c(15, 30, 45, 60, 75, 90) * 60) %>%
+  # Transform crs
+  st_transform(crs = "EPSG:25832") %>%
+  # Get only values inside the study area
+  st_intersection(study_area) %>%
+  # Time in minutes
+  mutate(time = time/60)
+
+# Stop OTP
+otp_stop()
+
+## Export result
+saveRDS(isochrone_pt, file = "isochrone_public_transport.rds")
+
+```
+
+```{r fig-isochrone-public, fig.cap="isochrone travel time from Kongens Nytorv (blue point) by public transport"}
+
+isochrone_pt <- readRDS(file = "isochrone_public_transport.rds")
+
+ggplot() +
+  geom_sf(data = isochrone_pt, aes(fill = time), color = "grey50", size = 0.05) +
+  scale_fill_viridis_c(name = "min", option = "magma", direction = -1) +
+  geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
+  geom_sf(data = KN, color = "blue", shape = 16, size = 3) +
+  theme_void() 
+
+```
+```{r}
+
+op <- grids100m$data_points[[1]] %>%
+  st_transform(crs = "EPSG:4326")
+
+f_dist <- function(feature){
+  otp_plan(otpcon = otpcon,
+           fromPlace = op,
+           toPlace = c(12.5860, 55.6805),
+           get_geometry = FALSE,
+           mode = feature,
+           ncores = 7) %>% 
+    select(fromPlace, toPlace, duration)
+}
+
+dur_features <- list(walk = "WALK",
+                     bike = "BICYCLE",
+                     car = "CAR",
+                     transit = c("WALK", "TRANSIT"))
+
+aa <- map(dur_features, f_dist)
+
+f <- . %>% 
+  as_tibble() %>% 
+  mutate(duration = duration/60) %>% 
+  separate(fromPlace, c("Y", "X"), sep = ",") %>% 
+  st_as_sf(coords = c("X", "Y")) %>% 
+  st_set_crs("EPSG:4326") %>% 
+  st_transform(crs = "EPSG:25832") %>% 
+  st_intersection(grids100m$data_poly[[1]])
+
+bb <- aa %>% map(~f(.))
+
+f1 <- . %>% 
+  st_drop_geometry() %>% 
+  left_join(as_tibble(grids100m$data_poly[[1]]), by = "grid_ID") %>% 
+  st_sf()
+
+cc <- bb %>%  map(~f1(.))
+
+f2 <- function(feature){
+  cc %>% 
+    pluck(feature) %>% 
+    mutate(feature = feature)
+}
+
+dd <- names(cc) %>% map(~f2(.))
+
+ee <- bind_rows(dd) %>% 
+  mutate(feature = factor(feature, levels = c("walk", "byke", "car", "transit")))
+
+ee %>% 
+  ggplot() +
+  geom_sf(aes(fill = cut(duration,
+                         breaks = c(0, 5, 10, 15, 20, 30, 40, 50, 100, ceiling(max(duration))),
+                         include.lowest = TRUE)),
+          col = NA) +
+  scale_fill_viridis_d(name = "min", option = "magma", direction = -1) +
+  geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
+  geom_sf(data = KN, color = "blue", shape = 16, size = 3) +
+  theme_void() +
+  facet_wrap(~feature, ncol = 2)
+
+saveRDS(ee, file = "isochrone_otp.rds")
+
+```
+
