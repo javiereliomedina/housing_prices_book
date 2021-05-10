@@ -1,6 +1,6 @@
 # Distance to Central Business District {#dist-CBD}
 
-The distance between a house and the Central Business District (CBD) has an important role in its price (@Chen2008). We add thereofre it as another feature in our model, with a possitive expected effec (i.e. the closer the house to the CBT, the higer the price). However, we do not measure the distance in km but the commuting time from the house to the CBD (i.e. "Indre By"). In this regard, we estimate the travel time (in public transport) from the centre of each grid cell of 100m x 100m to "Kongens Nytorv" (coordinates: 55.6805° N, 12.5860° E), and we associate the time to all dwellings at that grid. 
+The distance between a house and the Central Business District (CBD) has an important role in its price (@Chen2008). We add thereofre it as another feature in our model, with a possitive expected effec (i.e. the closer the house to the CBT, the higer the price). However, we do not measure the distance in km but the commuting time from the house to the CBD (i.e. "Indre By"). In this regard, we estimate the travel time (in public transport) from the centre of each grid cell of 100m x 100m to "Kongens Nytorv" (coordinates: 55.6805° N, 12.5860° E), and we associate the time to all dwellings at that grid. We have used used the  open source [OpenTripPlanner](https://www.opentripplanner.org/), and the r-package [opentripplanner](https://github.com/ropensci/opentripplanner) (@Morgan2019) for calculating the travel times by foot, bike, car, and public transport (Figure \@ref(fig:fig-travel-times)).  
 
 ```{r Kongens-Nytorv}
 
@@ -12,112 +12,186 @@ KN <- tibble(name = "Kongens Nytorv", x = 12.5860, y = 55.6805) %>%
   
 ```
  
-We have used used the  Open Source Routing Machine API (@R-osrm) for calculating the travel times by foot, bike, and car (Figure \@ref(fig:fig-osm-points)).  
-```{r osrm-travel-time}
+```{r open-trip-planner-data, results='hide'}
 
-# # NOTE: Distance by foot in min
-# # It is a long process so we only run it once, and safe the results
-# # uncomment for re-run the code
-# 
-# # Origin points
-# op <- grids100m$data_points[[1]] %>%
-#   st_transform(crs = "EPSG:4326")
-# 
-# # Aux. function
-# f_osmr <- function(df, profile) {
-#   df %>%
-#     mutate(dist_min = osrmTable(src = ., dst = KN, osrm.profile = profile) %>%
-#              pluck("durations") %>%
-#              as.vector())
-# }
-# 
-# # Split data in smaller parts (for API restrictions)
-# chunk <- 350
-# n <- nrow(op)
-# r <- rep(1:ceiling(n/chunk), each = chunk)[1:n]
-# d <- split(op, r)
-# 
-# # Calculate distance to city centre by foot
-# plan(multisession, workers = 7)
-# 
-# ## By foot
-# dist_foot_1 <- map_dfr(d[  1:7], ~f_osmr(., "foot"))
-# dist_foot_2 <- map_dfr(d[ 8:14], ~f_osmr(., "foot"))
-# dist_foot_3 <- map_dfr(d[15:21], ~f_osmr(., "foot"))
-# dist_foot_4 <- map_dfr(d[22:31], ~f_osmr(., "foot"))
-# # Merge
-# dist_foot <- bind_rows(dist_foot_1, dist_foot_2, dist_foot_3, dist_foot_4)
-# # Save
-# saveRDS(dist_foot, file = "dist_osrm_foot.rds")
-# 
-# ## Bike
-#   dist_bike_1 <- map_dfr(d[  1:7], ~f_osmr(., "bike"))
-#   dist_bike_2 <- map_dfr(d[ 8:14], ~f_osmr(., "bike"))
-#   dist_bike_3 <- map_dfr(d[15:21], ~f_osmr(., "bike"))
-#   dist_bike_4 <- map_dfr(d[22:31], ~f_osmr(., "bike"))
-#   # Merge
-#   dist_bike <- bind_rows(dist_bike_1, dist_bike_2, dist_bike_3, dist_bike_4)
-#   # Save
-#   saveRDS(dist_bike, file = "dist_osrm_bike.rds")
-# 
-# ## Car
-#   dist_car_1 <- map_dfr(d[  1:7], ~f_osmr(., "car"))
-#   dist_car_2 <- map_dfr(d[ 8:14], ~f_osmr(., "car"))
-#   dist_car_3 <- map_dfr(d[15:21], ~f_osmr(., "car"))
-#   dist_car_4 <- map_dfr(d[22:31], ~f_osmr(., "car"))
-#   # Merge
-#   dist_car <- bind_rows(dist_car_1, dist_car_2, dist_car_3, dist_car_4)
-#   # Save
-#   saveRDS(dist_car, file = "dist_osrm_car.rds")
-#   
-# plan("default")
+# OTP folder structure
+dir.create("otp")
+dir.create("otp/graphs/default")
 
-# Read data 
+path_data <- file.path("./otp")
 
-dist_foot <- readRDS(file = "dist_osrm_foot.rds") %>%
-  st_drop_geometry() %>%
-  rename(dist_min_foot = dist_min)
+# Data
 
-dist_bike <- readRDS(file = "dist_osrm_bike.rds") %>%
-  st_drop_geometry() %>%
-  rename(dist_min_bike = dist_min)
+## Download Denmark GTFS from dk_gtfs <- "http://www.rejseplanen.info/labs/GTFS.zip"
+## and save as "~./otp/graphs/default/gtfs.zip")
 
-dist_car  <- readRDS(file = "dist_osrm_car.rds") %>%
-  st_drop_geometry() %>%
-  rename(dist_min_car = dist_min)
+## Copenhagen pbf
+cph_match <- oe_match("Copenhagen",
+                      provider = "bbbike",
+                      quiet = TRUE)
+oe_download(cph_match$url,
+            provider = "bbbike",
+            download_directory = "./otp/graphs/default",
+            quiet = TRUE)
+file.rename(from = "./otp/graphs/default/bbbike_Copenhagen.osm.pbf",
+            to = "./otp/graphs/default/osm.pbf")
 
-# Merge datasets
-dist <- dist_foot %>% 
-  left_join(dist_bike, by = "grid_ID") %>% 
-  left_join(dist_car, by = "grid_ID")
+## Get DEM
 
+# Download elevation model (10m resolution)
+zip_files <- c("DTM10_616_71_ASC_UTM32-EUREF89.ZIP",
+               "DTM10_616_72_ASC_UTM32-EUREF89.ZIP",
+               "DTM10_617_71_ASC_UTM32-EUREF89.ZIP",
+               "DTM10_617_72_ASC_UTM32-EUREF89.ZIP",
+               "DTM10_618_71_ASC_UTM32-EUREF89.ZIP",
+               "DTM10_618_72_ASC_UTM32-EUREF89.ZIP")
 
-# Add info to grids100m
-grids100m <- grids100m %>% 
-  bind_cols(dist %>% nest(dist = everything()))
+f1 <- function(zip_file){ 
+  dangeo_get_data(ftp_folder = "dhm_danmarks_hoejdemodel/DHM-HISTORIK/DHM-2007/DTM_10M",
+                  zip_name   = zip_file)
+}
+
+map(zip_files, f1)
+
+# Read files
+asc_files_path <- list.files(path = loc_dir ,
+                             pattern = "*.asc",
+                             full.names = TRUE, 
+                             recursive = TRUE)
+
+# Read blocks
+dtm10_blocks <- map(.x = asc_files_path, .f = read_stars)
+
+# Set crs (UTM32-ETRS89)
+dtm10_blocks <- map(dtm10_blocks, ~st_set_crs(., st_crs(study_area)))
+
+# Build a mosaic 
+dtm10 <- st_mosaic(dtm10_blocks[[1]],
+                   dtm10_blocks[[2]],
+                   dtm10_blocks[[3]],
+                   dtm10_blocks[[4]],
+                   dtm10_blocks[[5]],
+                   dtm10_blocks[[6]])
+
+# Intersect with study area
+cph_dtm10 <- st_crop(dtm10, study_area)
+
+# Warping the raster
+newgrid <- study_area %>%
+  st_transform(crs = "EPSG:4326") %>%
+  st_bbox() %>%
+  st_as_stars(dx = 0.000065, dy = 0.000065) # approx. 10m
+
+cph_dtm10_WGS84 <- cph_dtm10 %>% st_warp(newgrid)
+
+# Export to otp folder 
+write_stars(cph_dtm10_WGS84, "otp/graphs/default/dem.tif")
 
 ```
 
-```{r fig-travel-time, fig.cap="Travel times to Kongens Nytorv (blue point) by foot, bike, and car"}
+```{r open-trip-planner}
 
-grids100m %>% 
-  select(data_poly, dist) %>% 
-  unnest(c(data_poly, dist), names_repair = "minimal") %>% 
-  pivot_longer(-c(grid_ID, geometry),
-               names_to = "feature",
-               values_to = "duration") %>% 
-  mutate(feature = gsub("dist_min_", "", feature),
-         feature = factor(feature, levels = c("foot", "bike", "car"))) %>% 
-  st_sf() %>% 
-  ggplot() +
-  geom_sf(aes(fill = cut(duration,
-                         breaks = c(0, 5, 10, 15, 20, 30, 40, 50, 100, ceiling(max(duration))),
+# Open Trip Planner
+
+## Downloading OTP
+path_otp <- otp_dl_jar()
+
+## Building an OTP Graph
+log1 <- otp_build_graph(otp = path_otp, dir = path_data, memory = 10240)
+
+## Start OTP
+log2 <- otp_setup(otp = path_otp, dir = path_data)
+
+## Connect R to OTP
+otpcon <- otp_connect()
+
+```
+
+```{r travel-times}
+
+# Origin points
+op <- grids100m$data_points[[1]] %>%
+  st_transform(crs = "EPSG:4326")
+
+# Calculate travel times (i.e. walk, bike, car, and public transport)
+f_tt <- function(feature){
+  otp_plan(otpcon = otpcon,
+           fromPlace = op,
+           toPlace = c(12.5860, 55.6805),
+           get_geometry = FALSE,
+           mode = feature,
+           ncores = as.numeric(availableCores() - 1)) %>% 
+    select(fromPlace, toPlace, duration)
+}
+
+dur_features <- list(walk = "WALK",
+                     bike = "BICYCLE",
+                     car = "CAR",
+                     transit = c("WALK", "TRANSIT"))
+
+tt <- map(dur_features, f_tt)
+
+# Intersect with grid cells of 100 x 100 m
+f1 <- . %>% 
+  as_tibble() %>% 
+  mutate(duration = duration/60) %>% 
+  separate(fromPlace, c("Y", "X"), sep = ",") %>% 
+  st_as_sf(coords = c("X", "Y")) %>% 
+  st_set_crs("EPSG:4326") %>% 
+  st_transform(crs = "EPSG:25832") %>% 
+  st_intersection(grids100m$data_poly[[1]])
+
+tt_grids_cent <- tt %>% map(~f1(.))
+
+# Add to grids polygons
+f2 <- . %>% 
+  st_drop_geometry() %>% 
+  left_join(as_tibble(grids100m$data_poly[[1]]), by = "grid_ID") %>% 
+  st_sf()
+
+tt_grids_poly <- tt_grids_cent %>%  map(~f2(.))
+
+f3 <- function(feature){
+  tt_grids_poly %>% 
+    pluck(feature) %>% 
+    mutate(feature = feature)
+}
+
+tt_grids_poly <- names(tt_grids_poly) %>% map(~f3(.))
+
+# Merge grids
+tt_cph_grids100m <- bind_rows(tt_grids_poly) %>% 
+  mutate(feature = factor(feature, levels = c("walk", "bike", "car", "transit")))
+
+saveRDS(tt_cph_grids100m, file = "travel_times_grids100m_otp.rds")
+
+```
+
+```{r stop-otp, results='hide'}
+
+# Stop OTP
+otp_stop(warn = FALSE)
+
+```
+
+```{r fig-travel-times, fig.cap="Travel times to Kongens Nytorv (black point)"}
+
+tt_cph_grids100m <- readRDS(file = "travel_times_grids100m_otp.rds")
+
+myPalette <- RColorBrewer::brewer.pal(8, "RdYlBu")
+
+ggplot() +
+  geom_sf(data = tt_cph_grids100m, 
+          aes(fill = cut(duration,
+                         breaks = c(0, 10, 20, 30, 40, 50, 60, 120,
+                                    ceiling(max(duration))),
                          include.lowest = TRUE)),
           col = NA) +
-  scale_fill_viridis_d(name = "min", option = "magma", direction = -1) +
+  scale_fill_manual(name = "min", values = rev(myPalette)) +
   geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
-  geom_sf(data = KN, color = "blue", shape = 16, size = 3) +
+  geom_sf(data = KN, color = "black", shape = 16, size = 1.5) +
   theme_void() +
-  facet_wrap(~feature, ncol = 2)
+  facet_wrap(~feature)
 
 ```
+

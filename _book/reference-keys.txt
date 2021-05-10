@@ -13,7 +13,7 @@ fig:fig-osm-points
 tab:tbl-sif-pot-model
 fig:spat-inter
 fig:fig-pot-model
-fig:fig-travel-time
+fig:fig-travel-times
 fig:fig-runits-floor
 hedonic-price-model
 house-characteristics
