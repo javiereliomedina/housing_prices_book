@@ -298,7 +298,11 @@ grids100m %>%
   st_sf() %>% 
   ggplot() +
   geom_sf(aes(fill = value), col = NA) +
-  scale_fill_viridis_c(name = "[%]", option = "magma", direction = -1) +
+  scale_fill_gradient2(name = "[%]",
+                         low = "blue",
+                         mid = "white",
+                         high = "red",
+                         midpoint = 50) +
   geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
   theme_void() +
   facet_wrap(~feature)
