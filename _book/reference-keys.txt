@@ -32,5 +32,6 @@ areal-features
 point-features
 potential-model
 dist-CBD
+noise
 EDA-house-prices
 residential-units-by-floor-level

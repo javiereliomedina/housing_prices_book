@@ -1,0 +1,41 @@
+# Noise
+
+We have download the [Danish Environmental Protection Agency](https://mst.dk/), and its ftp server [link](https://SIT-FTP.Statens-it.dk) (i.e. Noise - Noise2012 -  GST Støjdata 2012 - ds_pg_data_noise_poly), and save on ".~/data". The data are measured at 1.5 meter, and are divided in 5 categories:
+
+ - Category 1: 55-60 dB
+ - Category 2: 60-65 dB
+ - Category 3: 65-70 dB
+ - Category 4: 70-75 dB 
+ - Category 5:  > 75 dB
+
+```{r}
+
+wkt <-  st_as_text(st_geometry(study_area[1,]))
+noise_2012 <- read_sf("data/GST Støjdata 2012 - ds_pg_data_noise_poly/ds_pg_data_noise_poly.shp",
+             wkt_filter = wkt)
+
+noise_2012_B1 <- noise_2012 %>% 
+  filter(noise_cl == "B1") %>%
+  st_make_valid() %>% 
+  st_crop(study_area)
+
+noise_2012_B1_g <- noise_2012_B1 %>% 
+  group_by(noise_cl, noise_in, org, origin_fil) %>% 
+  summarise(n = n()) %>%
+  ungroup()
+
+```
+
+
+```{r}
+
+mypal <- c("#0065FD", "#9833C9", "#FD3300", "#FD9800", "#FDFD00")
+ggplot() +
+  geom_sf(data = study_area, fill = "grey", color = "grey50", size = 0.05) +
+  geom_sf(data = noise_2012_B1_g, aes(fill = factor(noise_in)), col = NA) +
+  scale_fill_manual(name = "Category", values = mypal) +
+  theme_void()
+
+```
+
+
