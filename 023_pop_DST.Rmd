@@ -29,7 +29,7 @@ We have loaded the following tables:
 
 - [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree)
 
-```{r load-KMSTA001, cache = TRUE, dependson = "adm-units"}
+```{r load-KMSTA001}
 
   id_table <- "KMSTA001"
   var_pop <- get_table_metadata(table_id = id_table, variables_only = TRUE)
@@ -46,6 +46,7 @@ We have loaded the following tables:
   id_year <- var_pop$values[[4]]$id   # Select all years
   
 # Read data
+  plan(multisession, workers = 7)
   prsh_ances_dst <- id_year %>%
     future_map(steps) %>% 
     bind_rows()
@@ -93,7 +94,7 @@ We have loaded the following tables:
 
 - [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree)
 
-```{r load-KMSTA003, cache = TRUE, dependson = "adm-units"}
+```{r load-KMSTA003}
 
   id_table <- "KMSTA003"
   var_pop <- get_table_metadata(table_id = id_table, variables_only = TRUE)
@@ -110,7 +111,7 @@ We have loaded the following tables:
   id_year <- var_pop$values[[3]]$id   # Select all years
 
 # Read data
-  plan(multisession)  
+ plan(multisession, workers = 7)
   prsh_stats_dst <- id_year %>%
     future_map(steps) %>% 
     bind_rows()
@@ -145,7 +146,7 @@ We have loaded the following tables:
 ```
 
 One we have the data we merge both dataset and add the spatial information (note that there are only summary statistics from 2015): 
-```{r merge-DST, cache = TRUE, dependson = "adm-units"}
+```{r merge-DST}
 
 # Merge both tables in one:
   prsh_pop <- prsh_ances %>%  
@@ -154,6 +155,11 @@ One we have the data we merge both dataset and add the spatial information (note
     filter(date >= 2015, date <= 2020)
 
 # Add the spatial information:
+  prsh_ances_sf <- cph_parish %>%
+    rename(prsh_id = SOGNEKODE) %>% 
+    select(prsh_id, prsh_area_km2) %>% 
+    left_join(prsh_ances, by = c("prsh_id"))
+
   prsh_pop_sf <- cph_parish %>%
     rename(prsh_id = SOGNEKODE) %>% 
     select(prsh_id, prsh_area_km2) %>% 
@@ -168,51 +174,60 @@ We disaggregate the population data at Parish level to grid cells of 100m x 100m
 ### Choropleth by ancestry
 
 Plot population density at the last day of 2019 (first of 2010) by parish and ancestry (figure \@ref(fig:fig-pop-chor)).
-```{r fig-pop-chor, fig.width = 9, fig.height = 7, fig.cap = "Population density at the first day of 2019 by parishes (choropleth)"}
+```{r fig-pop-chor, fig.width = 9, fig.height = 7, fig.cap = "Choropleth map)"}
 
-  col <- brewer.pal(9, "YlGnBu")
-  pal <- colorRampPalette(col)
-  my_pallette <- pal(10)
+col <- brewer.pal(9, "YlGnBu")
+pal <- colorRampPalette(col)
+my_pallette <- pal(10)
   
-  pop_dens_choropleth <-  prsh_pop_sf %>% 
-    select(prsh_id, prsh_name, prsh_area_km2, date, 
-           pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) %>% 
-    filter(date == 2019) %>%
-    # Calulate population density (pop/area)
-    mutate(across(starts_with("pop_"), ~ . / (1000 * prsh_area_km2))) %>% 
-    rename_with(~paste(.x, "km2", sep = "_"), starts_with("pop")) %>% 
-    as_tibble() %>% 
-    pivot_longer(starts_with("pop_")) %>% 
-    st_as_sf() %>% 
-    mutate(name = factor(name, 
-                         levels = c("pop_total_km2", 
-                                    "pop_dan_km2",
-                                    "pop_frgn_wst_km2",
-                                    "pop_frgn_nwst_km2"),
-                         labels = c("Total",
-                                    "Danish origin",
-                                    "Immigrants and their descendants from western countries",
-                                    "Immigrants and their descendants from non-western countries")))
-  
-  brks_c <- c(min(pop_dens_choropleth$value),
-              1, 2, 4, 8, 12, 16, 20, 25, 30,
-              ceiling(max(pop_dens_choropleth$value)))
-  
-  pop_dens_choropleth  %>% 
-    ggplot() +
-    geom_sf(aes(fill = cut(value, breaks = brks_c, include.lowest = T)),
-            color = "grey50",
-            size = 0.05) +
-    scale_fill_manual(name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
-                      values = my_pallette,
-                      drop = FALSE,
-                      guide = guide_legend(reverse=TRUE))  +
-    my_theme_map() + 
-    theme(plot.title = element_text(size = 12, colour = "darkblue", face = "bold"),
-          strip.text = element_text(size = 9, color = "black", face = "italic")) +
-    labs(x = "",
-         y = "") +
-    facet_wrap( ~ name)
+pop_dens_choropleth <-  prsh_ances_sf %>% 
+  # Calulate population density (pop/area)
+  mutate(across(starts_with("pop_"), ~ . / (1000 * prsh_area_km2))) %>% 
+  rename_with(~paste(.x, "km2", sep = "_"), starts_with("pop")) %>% 
+  as_tibble() %>% 
+  pivot_longer(starts_with("pop_")) %>%
+  # First day of the year
+  mutate(date = as.Date(paste(date, 1, 1, sep = "-"))) %>%  
+  arrange(prsh_name, date) %>% 
+  st_as_sf() %>% 
+  mutate(
+    name =
+      factor(
+        name,
+        levels = c("pop_total_km2", 
+                   "pop_dan_km2",
+                   "pop_frgn_wst_km2",
+                   "pop_frgn_nwst_km2"),
+        labels = c("Total",
+                   "Danish origin",
+                   "Immigrants and their descendants\nfrom western countries",
+                   "Immigrants and their descendants\nfrom non-western countries")
+        )
+    ) 
+
+library(gganimate)
+
+brks <- c(min(pop_dens_choropleth$value),
+          1, 2, 4, 8, 12, 16, 20, 25, 30,
+          ceiling(max(pop_dens_choropleth$value)))
+
+pop_dens_choropleth  %>% 
+  mutate(value_cut = cut(value, breaks = brks, include.lowest = T)) %>% 
+  ggplot() +
+  geom_sf(aes(fill = value_cut, group = interaction(value_cut, date)),
+          color = "grey50",
+          size = 0.05) +
+  scale_fill_manual(name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
+                    values = my_pallette,
+                    drop = FALSE,
+                    guide = guide_legend(reverse=TRUE))  +
+  my_theme_map() +
+  facet_wrap( ~ name) +
+  transition_states(date) +
+  labs(x = "",
+       y = "",
+       title = "Population density by parish",
+       subtitle = "Date: {closest_state}")
 
 ```
 
@@ -239,92 +254,92 @@ We have created the following function for the analysis:
 
 #' Calculate the population density in the grids created by f_grids 
 #' @param .pop        POLYGONS with the population data (i.e. prsh_pop_sf)
-#' @param .parish     POLYGONS where the number of units will be calculated 
+#' @param .parish     POLYGONS where the number of units will be calculated (i.e. cph_parish)
 #' @param .res_points POINTS with the residential units (e.g. res_units) 
-#' @param .grids      Grid cells generated by f_grids
-#' @param .year       Year of the analysis
+#' @param .grids      Grid cells generated by f_grids (i.e. grids100m$data_poly[[1]])
+#' @param .year       Year of the analysis (e.g. 2019)
 
-  f_pd_grids <- function(.pop, .parish, .res_points, .grids, .year) {
-    
-    # Population at the last day of the year (.year)
-    pop_year <- .pop %>%
-      # Select population data at the first day of the quarter 
-      select(prsh_id, prsh_name, prsh_area_km2, date, 
-             pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) %>% 
-      # select the data at the end of the year (first dat of the next year) 
-      filter(date == (.year))
-    
-    # BBR of the selected year (represent the last day of the year)
-    BBR_year <- filter(.res_points, BBR_year == .year) 
-    
-    # Calculate occupancy rate ("OR") of the residential units in each parish in a year
-    OR <- pop_year %>%  
-      # number of units per parish
-      mutate(n_units = st_intersects(., BBR_year, dist = 10) %>%
-               map(., ~length(.)) %>%
-               unlist()) %>% 
-      # mean population per unit in each parish
-      mutate(across(starts_with("pop"), ~ . / n_units)) %>% 
-      rename_with(~paste(.x, "or", sep = "_"), starts_with("pop")) %>% 
-      # output as table 
-      as_tibble() %>% 
-      select(-n_units, -geometry)
-    
-    # Get only the grids with residential units on them
-    gru <- .grids %>% 
-      # Number of residential units per grid
-      mutate(n_units = st_intersects(., BBR_year , dist = 10) %>%
-               map(., ~length(.)) %>%
-               unlist()) %>% 
-      # Get grids with residential buildings
-      filter(n_units > 0) %>%
-      # Detect to what parish belong the grid
-      st_intersection(., .parish ) %>% 
-      # Remove parish area
-      select(-prsh_area_km2, -SOGNENAVN) %>% 
-      # convert to table
-      as_tibble()
+f_pd_grids <- function(.pop = prsh_pop_sf,
+                       .parish = cph_parish,
+                       .res_points = res_units,
+                       .grids = grids100m$data_poly[[1]],
+                       .year = NULL) {
   
-    # Population density by grids
-    gru %>% 
-      # Merge OR per parish  
-      left_join(OR, by = c("SOGNEKODE" = "prsh_id")) %>% 
-      st_sf() %>% 
-      # recalculate population by grid 
-      mutate(across(starts_with("pop"), ~ . * n_units)) %>% 
-      rename_with(~gsub("_or", "", .), .col = starts_with("pop")) %>% 
-      # sum population of each parish of the grid
-      group_by(grid_ID) %>% 
-      summarise(pop_total = sum(pop_total),
-                pop_dan = sum(pop_dan),
-                pop_frgn_wst = sum(pop_frgn_wst),
-                pop_frgn_nwst = sum(pop_frgn_nwst),
-                n_units = sum(n_units)) %>% 
-      ungroup() %>% 
-      # Area of the grid
-      mutate(area_km2 = as.numeric(units::set_units(st_area(.), km^2))) %>% 
-      # Population density (pop/area)
-      mutate(across(starts_with("pop_"), ~ . / (1000 * area_km2))) %>% 
-      rename_with(~paste(.x, "km2", sep = "_"), starts_with("pop")) %>% 
-      # Pivot longer
-      as_tibble() %>% 
-      pivot_longer(starts_with("pop_")) %>% 
-      st_as_sf() %>% 
-      # Remove polygons with 0 population
-      filter(value > 0)
-  }
+  # Population at the last day of the year (.year)
+  pop_year <- .pop %>%
+    # Select population data at the first day of the quarter 
+    select(prsh_id, prsh_name, prsh_area_km2, date, 
+           pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) %>% 
+    # select the data at the end of the year (first dat of the next year) 
+    filter(date == (.year))
+  
+  # BBR of the selected year (represent the last day of the year)
+  BBR_year <- filter(.res_points, BBR_year == .year) 
+  
+  # Calculate occupancy rate ("OR") of the residential units in each parish in a year
+  OR <- pop_year %>%  
+    # number of units per parish
+    mutate(n_units = st_intersects(., BBR_year, dist = 10) %>%
+             map(., ~length(.)) %>%
+             unlist()) %>% 
+    # mean population per unit in each parish
+    mutate(across(starts_with("pop"), ~ . / n_units)) %>% 
+    rename_with(~paste(.x, "or", sep = "_"), starts_with("pop")) %>% 
+    # output as table 
+    as_tibble() %>% 
+    select(-n_units, -geometry)
+  
+  # Get only the grids with residential units on them
+  gru <- .grids %>% 
+    # Number of residential units per grid
+    mutate(n_units = st_intersects(., BBR_year , dist = 10) %>%
+             map(., ~length(.)) %>%
+             unlist()) %>% 
+    # Get grids with residential buildings
+    filter(n_units > 0) %>%
+    # Detect to what parish belong the grid
+    st_intersection(., .parish ) %>% 
+    # Remove parish area
+    select(-prsh_area_km2, -SOGNENAVN) %>% 
+    # convert to table
+    as_tibble()
+  
+  # Population density by grids
+  gru %>% 
+    # Merge OR per parish  
+    left_join(OR, by = c("SOGNEKODE" = "prsh_id")) %>% 
+    st_sf() %>% 
+    # recalculate population by grid 
+    mutate(across(starts_with("pop"), ~ . * n_units)) %>% 
+    rename_with(~gsub("_or", "", .), .col = starts_with("pop")) %>% 
+    # sum population of each parish of the grid
+    group_by(grid_ID) %>% 
+    summarise(pop_total = sum(pop_total),
+              pop_dan = sum(pop_dan),
+              pop_frgn_wst = sum(pop_frgn_wst),
+              pop_frgn_nwst = sum(pop_frgn_nwst),
+              n_units = sum(n_units)) %>% 
+    ungroup() %>% 
+    # Area of the grid
+    mutate(area_km2 = as.numeric(units::set_units(st_area(.), km^2))) %>% 
+    # Population density (pop/area)
+    mutate(across(starts_with("pop_"), ~ . / (1000 * area_km2))) %>% 
+    rename_with(~paste(.x, "km2", sep = "_"), starts_with("pop")) %>% 
+    # Pivot longer
+    as_tibble() %>% 
+    pivot_longer(starts_with("pop_")) %>% 
+    st_as_sf() %>% 
+    # Remove polygons with 0 population
+    filter(value > 0)
+}
 
 ```
 
 We can therefore estimate the population in a specific year (e.g. 2019) at the first day of the year by grid cells of 100m x 100m and ancestry (figure \@ref(fig:fig-pop-den-grid)).
 
-```{r fig-pop-den-grid, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "grids-100m", fig.cap = "Population density at the first day of 2019 by grid cells of 100m x 100m"}
+```{r fig-pop-den-grid, fig.width = 9, fig.height = 7, fig.cap = "Population density at the first day of 2019 by grid cells of 100m x 100m"}
 
-pop_2019_g100m <-  f_pd_grids(.pop = prsh_pop_sf,
-                              .parish = cph_parish,
-                              .res_points = res_units,
-                              .grids = grids100m$data_poly[[1]],
-                              .year = 2019)
+pop_2019_g100m <-  f_pd_grids(.year = 2019)
 
 brks <- c(min(pop_2019_g100m$value),
           1, 2, 4, 8, 12, 16, 20, 25, 30,
@@ -364,7 +379,7 @@ pop_2019_g100m %>%
 
 We compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m; Figure \@ref(fig:fig-pop-den-worldpop)), and the spatial pattern is similar between both maps although our approach seems more precise since it takes into account the population data at parish level from Statistic Denmark.  
 
-```{r fig-pop-den-worldpop, fig.width = 9, fig.height = 7, cache=TRUE, dependson = "adm-units", fig.cap = "WorldPop total population density estimations in 2019"}
+```{r fig-pop-den-worldpop, fig.width = 9, fig.height = 7, fig.cap = "WorldPop total population density estimations in 2019"}
 
   dnk_ppp_2019_link <- "https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif"
   
