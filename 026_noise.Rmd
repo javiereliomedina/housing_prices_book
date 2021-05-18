@@ -1,41 +1,138 @@
 # Noise
 
-We have download the [Danish Environmental Protection Agency](https://mst.dk/), and its ftp server [link](https://SIT-FTP.Statens-it.dk) (i.e. Noise - Noise2012 -  GST Støjdata 2012 - ds_pg_data_noise_poly), and save on ".~/data". The data are measured at 1.5 meter, and are divided in 5 categories:
+Denmark maps the noise levels from roads, railways, and aircraft in accordance with the guidelines in the Danish [Noise Executive Order](https://www.retsinformation.dk/eli/lta/2011/1309). The agency responsible for the measurements and the implementation of noise regulation is the Environmental Protection Agency, which display the maps in its website ([link](https://mst.dk/luft-stoej/stoej/kortlaegning-af-stoej-og-handlingsplaner/stoejkortet/)). The noise level are divided in six categories from 50 dB to more than 75 dB, and they represent a weighted mean value of the noise ($L_{den}$) or the night noise ($L_{night}$) both at 1.5 and 4 meters. We have used the last version of the noise map (i.e. 2017), which we have downloaded from the Danish Environmental Protection Agency ([ftp server](https://SIT-FTP.Statens-it.dk); file: *Noise - Stoej2018_ArcGIS.zip*). 
 
- - Category 1: 55-60 dB
- - Category 2: 60-65 dB
- - Category 3: 65-70 dB
- - Category 4: 70-75 dB 
- - Category 5:  > 75 dB
+The main hypothesis is that high noise levels would have a negative impact on the prices. Furthermore, nigh noise would be more annoying and it may have a higher impact on housing prices. Therefore, we use both the average noise during a day ($L_{den}$) and the noise in the night ($L_{night}$) in our analysis. The perception of the noise is also different for roads and railways and they will therefore be analysed separately. However, aircraft noise is not significant in the area and we did not take it into account. From the two measurements heights (i.e. 1.5 and 4 meters) we select the last one for the study (Figure \@ref(fig:fig-roads-noise) and (Figure \@ref(fig:fig-train-noise))).  
 
-```{r}
 
-wkt <-  st_as_text(st_geometry(study_area[1,]))
-noise_2012 <- read_sf("data/GST Støjdata 2012 - ds_pg_data_noise_poly/ds_pg_data_noise_poly.shp",
-             wkt_filter = wkt)
+```{r dwnld-noise-data-2018}
 
-noise_2012_B1 <- noise_2012 %>% 
-  filter(noise_cl == "B1") %>%
-  st_make_valid() %>% 
-  st_crop(study_area)
-
-noise_2012_B1_g <- noise_2012_B1 %>% 
-  group_by(noise_cl, noise_in, org, origin_fil) %>% 
-  summarise(n = n()) %>%
-  ungroup()
+# Large file (3.5 GB)
+#
+# Stoej2018_link <- "https://sit-ftp.statens-it.dk/main.html?download&weblink=6433b7b2af7578629f752343ad0d8e22&realfilename=Stoej2018_ArcGIS.zip"
+# # options(timeout = max(300, getOption("timeout")))
+# # download.file(Stoej2018_link, destfile = "data/Stoej2018_ArcGIS.zip")
+# 
+# httr::GET(Stoej2018_link,
+#           httr::write_disk("data/Stoej2018_ArcGIS.zip"),
+#           httr::progress())
+# 
+# system2("unzip",
+#         args = c("-o",
+#                  "data/Stoej2018_ArcGIS.zip",
+#                  paste0("-d ", "data/Stoej2018_ArcGIS")),
+#         stdout = TRUE)
 
 ```
 
+```{r fig-roads-noise, fig.cap="Road noise"}
 
-```{r}
+# Aux. function for loading road noise data 
+f_roads <- function(df) { 
+  read_sf(df, crs = "EPSG:25832") %>% 
+    st_zm() %>% 
+    janitor::clean_names() %>% 
+    st_make_valid() %>%
+    select(org, noise_cl, noise_in, date) %>%
+    group_by(org, noise_cl, noise_in, date) %>%
+    summarise(n = n()) %>%
+    ungroup() %>%
+    mutate(noise_type = case_when(noise_cl == "B1" ~ "Lden (1.5 m)",
+                                  noise_cl == "B2" ~ "Lden (4.0 m)",
+                                  noise_cl == "B3" ~ "Lnight (1.5 m)",
+                                  noise_cl == "B4" ~ "Lnight (4.0 m)"),
+           noise_type = factor(noise_type)) %>% 
+    mutate(noise_level = case_when(noise_in == "1" ~ "> 75 dB",
+                                   noise_in == "2" ~ "70-74 dB",
+                                   noise_in == "3" ~ "65-69 dB",
+                                   noise_in == "4" ~ "60-64 dB",
+                                   noise_in == "5" ~ "55-59 dB",
+                                   noise_in == "6" ~ "50-54 dB"),
+           noise_level = factor(noise_level,
+                                levels = c("> 75 dB",
+                                           "70-74 dB",
+                                           "65-69 dB",
+                                           "60-64 dB",
+                                           "55-59 dB",
+                                           "50-54 dB"),
+                                ordered = TRUE)) %>% 
+    mutate(date = as.Date(date))
+}
 
-mypal <- c("#0065FD", "#9833C9", "#FD3300", "#FD9800", "#FDFD00")
+# Files
+noise_files_path <- c("data/Stoej2018_ArcGIS/b2_101_agg_road_lden_4m_region.shp",
+                      "data/Stoej2018_ArcGIS/b2_147_agg_road_lden_4m.shp",
+                      "data/Stoej2018_ArcGIS/b4_101_agg_road_lnight_4m.shp",
+                      "data/Stoej2018_ArcGIS/b4_147_agg_road_lnight_4m.shp")
+
+noise_roads <- map_dfr(.x = noise_files_path, .f = f_roads)
+
+# Plot
+mypal <- c("#0065FD", "#9833C9", "#FD3300", "#FD9800" , "#FDFD00", "#90ee90")
 ggplot() +
   geom_sf(data = study_area, fill = "grey", color = "grey50", size = 0.05) +
-  geom_sf(data = noise_2012_B1_g, aes(fill = factor(noise_in)), col = NA) +
+  geom_sf(data = noise_roads, aes(fill = noise_level), col = NA) +
   scale_fill_manual(name = "Category", values = mypal) +
-  theme_void()
+  theme_void() +
+  facet_wrap(~noise_type)
 
 ```
 
+```{r fig-train-noise, fig.cap="Railway noise"}
+
+# Aux. function for loading train noise data 
+f_train <- function(df) {
+  read_sf(df, crs = "EPSG:25832") %>% 
+    janitor::clean_names() %>%
+    st_intersection(study_area) %>%
+    # Merge polygons with the same noise category
+    group_by(org, noise_cl, noise_in, date) %>%
+    summarise(n = n()) %>%
+    ungroup() %>% 
+    # Polygons of lower noise level overlap other categories (get difference)  
+    st_difference() %>% 
+    # Filter valid polygons
+    filter(!st_is(. , c("MULTILINESTRING", "LINESTRING"))) %>% 
+    # Format variables 
+    mutate(noise_type = case_when(noise_cl == "C1" ~ "Lden (1.5 m)",
+                                  noise_cl == "C2" ~ "Lden (4.0 m)",
+                                  noise_cl == "C3" ~ "Lnight (1.5 m)",
+                                  noise_cl == "C4" ~ "Lnight (4.0 m)"),
+           noise_type = factor(noise_type)) %>% 
+    mutate(noise_level = case_when(noise_in == "1" ~ "> 75 dB",
+                                   noise_in == "2" ~ "70-74 dB",
+                                   noise_in == "3" ~ "65-69 dB",
+                                   noise_in == "4" ~ "60-64 dB",
+                                   noise_in == "5" ~ "55-59 dB",
+                                   noise_in == "6" ~ "50-54 dB"),
+           noise_level = factor(noise_level,
+                                levels = c("> 75 dB",
+                                           "70-74 dB",
+                                           "65-69 dB",
+                                           "60-64 dB",
+                                           "55-59 dB",
+                                           "50-54 dB"),
+                                ordered = TRUE)) %>% 
+    mutate(date = as.Date(date))
+}
+
+# Read files
+noise_files_path <- c("data/Stoej2018_ArcGIS/c2_bdk_mrail_lden_4m.shp",
+                      "data/Stoej2018_ArcGIS/c2_ores_mrail_lden_4m.shp",
+                      "data/Stoej2018_ArcGIS/c4_bdk_mrail_lnight_4m.shp",
+                      "data/Stoej2018_ArcGIS/c4_ores_mrail_lnight_4m.shp")
+
+noise_train <- map_dfr(.x = noise_files_path, .f = f_train)
+
+# Plot
+mypal <- c("#0065FD", "#9833C9", "#FD3300", "#FD9800" , "#FDFD00", "#90ee90")
+ggplot() +
+  geom_sf(data = study_area, fill = "grey", color = "grey50", size = 0.05) +
+  geom_sf(data = noise_train, aes(fill = noise_level), col = NA) +
+  scale_fill_manual(name = "Category", values = mypal) +
+  theme_void() +
+  facet_wrap(~noise_type)
+
+
+```
 
