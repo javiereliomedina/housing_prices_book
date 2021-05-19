@@ -177,6 +177,9 @@ Population density at the first day of the year by parish (figure \@ref(fig:fig-
 
 ```{r fig-pop-chor, animation.hook="gifski", fig.cap = "Choropleth map"}
 
+col <- brewer.pal(9, "YlGnBu")
+pal <- colorRampPalette(col)
+my_pallette <- pal(10)
 
 f_plot <- function(df) {
   df %>%
@@ -225,11 +228,9 @@ for(i in 1:12) { print(plts[[i]]) }
 
 The procedure is as follow: 
 
-1. We calculate the occupancy rate (*OR*) for the residential units of each parish (*j*): $$OR_{j} = \frac{pop_{j}}{N_{j}}$$
+1. Calculate the occupancy rate (*OR*) for the residential units of each parish (*j*): $$OR_{j} = \frac{pop_{j}}{N_{j}}$$
 
-1. We make grid cells of 100m x 100m over the study area
-
-1. We select only the grids with residential units 
+1. Make grid cells of 100m x 100m over the study area, and select only the grids with residential units 
 
 1. Detect to what parish (*j*) belong each grid (*i*). (Note that one grids may be in more that one parish)
 
@@ -256,15 +257,14 @@ We have created the following function for the analysis:
     .res_points = res_units
     .grids = grids100m$data_poly[[1]]
   
-    # Population at the last day of the year (.year)
+    # Population at the first day of the year (.year)
     pop_year <- .pop %>%
-      # Select population data at the first day of the quarter 
-      select(prsh_id, prsh_name, prsh_area_km2, date, 
-             pop_total, pop_dan, pop_frgn_wst, pop_frgn_nwst) %>% 
-      # select the data at the end of the year (first dat of the next year) 
+      # Select population data  
+      select(prsh_id, prsh_name, prsh_area_km2, date, pop_total) %>% 
+      # select the data at the first day of the year 
       filter(date == (.year))
     
-    # BBR of the selected year (represent the last day of the year)
+    # BBR of the selected year (represent the first day of the year)
     BBR_year <- filter(.res_points, BBR_year == .year) 
     
     # Calculate occupancy rate ("OR") of the residential units in each parish in a year
@@ -306,13 +306,10 @@ We have created the following function for the analysis:
       # sum population of each parish of the grid
       group_by(grid_ID) %>% 
       summarise(pop_total = sum(pop_total),
-                pop_dan = sum(pop_dan),
-                pop_frgn_wst = sum(pop_frgn_wst),
-                pop_frgn_nwst = sum(pop_frgn_nwst),
                 n_units = sum(n_units)) %>% 
       ungroup() %>% 
       # Add date
-      mutate(date = as.Date(paste(.year, 1, 1, sep = "-"))) %>% 
+      mutate(date = .year) %>% 
       # Area of the grid
       mutate(area_km2 = as.numeric(units::set_units(st_area(.), km^2))) %>% 
       # Population density (pop/area)
@@ -328,7 +325,7 @@ We have created the following function for the analysis:
 
 ```
 
-We can therefore estimate the population in a specific year (e.g. 2019) at the first day of the year by grid cells of 100m x 100m and ancestry (figure \@ref(fig:fig-pop-den-grid)).
+We can therefore estimate the population density at the first day of the year by grid cells of 100m x 100m (figure \@ref(fig:fig-pop-den-grid)).
 
 ```{r pop-den-grid}
 
@@ -344,33 +341,18 @@ plan("default")
 # Default value
 options(future.globals.maxSize = 500 * 1024^2)
 
-# Format 
-brks <- c(min(pop_g100m$value),
-          1, 2, 4, 8, 12, 16, 20, 25, 30,
-          ceiling(max(pop_g100m$value)))
-
+# Add breaks
 pop_g100m <- pop_g100m %>%
-  mutate(value_cut = cut(value, breaks = brks, include.lowest = T)) %>% 
-  mutate(name = 
-           factor(name, 
-                  levels = c("pop_total_km2", 
-                             "pop_dan_km2",
-                             "pop_frgn_wst_km2",
-                             "pop_frgn_nwst_km2"),
-                  labels = c("Total",
-                             "Danish origin",
-                             "Immigrants and their descendants\nfrom western countries",
-                             "Immigrants and their descendants\nfrom non-western countries"))) 
-
-# Export results as .rds
-saveRDS(pop_g100m, "pop_density_g100m.rds") 
+  mutate(value_cut = cut(value,
+                         breaks = c(min(value),
+                                    1, 2, 4, 8, 12, 16, 20, 25, 30,
+                                    ceiling(max(value))),
+                         include.lowest = TRUE))  
 
 ```
 
 
-```{r fig-pop-den-grid, fig.width = 9, fig.height = 7, fig.cap = "Dasymetric map"}
-
-pop_g100m <- readRDS(file = "pop_density_g100m.rds")
+```{r fig-pop-den-grid, animation.hook="gifski", fig.cap = "Dasymetric map"}
 
 col <- brewer.pal(9, "YlGnBu")
 pal <- colorRampPalette(col)
@@ -383,11 +365,15 @@ f_plot <- function(df) {
             aes(fill = value_cut, group = interaction(value_cut, date)),
             color = NA) +
     geom_sf(data = cph_parish, fill = NA, color = "grey50", size = 0.05) +
-    scale_fill_brewer(name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
-                      palette = "RdYlBu",
-                      direction = -1)  +
+    # scale_fill_brewer(name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
+    #                   palette = "RdYlBu",
+    #                   direction = -1)  +
+    scale_fill_manual(
+      name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
+      values = my_pallette,
+      drop = FALSE,
+      guide = guide_legend(reverse=TRUE)) +
     my_theme_map() +
-    facet_wrap( ~ name) +
     labs(x = "",
          y = "",
          title = "Population density by grid cells of 100m x 100m",
@@ -400,12 +386,7 @@ plts <- pop_g100m %>%
   future_map(., .f = f_plot, .options = furrr_options(seed = 123))
 plan("default")
 
-
-library(animation)
-saveGIF({ for(i in 1:12){print(plts[[i]])} },
-        interval = 1,
-        movie.name = "pop_density_g100m_1.gif",
-        )
+for(i in 1:12) { print(plts[[i]]) }
 
 ```
 
@@ -413,7 +394,7 @@ saveGIF({ for(i in 1:12){print(plts[[i]])} },
 
 We compare our results with the WorldPop total population estimation per grid-cell of 3 arc (approx. gri cells of 100m x 100m; Figure \@ref(fig:fig-pop-den-worldpop)), and the spatial pattern is similar between both maps although our approach seems more precise since it takes into account the population data at parish level from Statistic Denmark.  
 
-```{r fig-pop-den-worldpop, fig.width = 9, fig.height = 7, fig.cap = "WorldPop total population density estimations in 2019"}
+```{r fig-pop-den-worldpop, fig.cap = "WorldPop total population density estimations in 2019"}
 
   dnk_ppp_2019_link <- "https://data.worldpop.org/GIS/Population/Global_2000_2020/2019/DNK/dnk_ppp_2019.tif"
   
@@ -454,8 +435,3 @@ We compare our results with the WorldPop total population estimation per grid-ce
     my_theme_map()
   
 ```
-
-
-
-
-

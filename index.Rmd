@@ -35,7 +35,7 @@ The data have been analysed with **R** (version `r paste(R.Version()$major, R.Ve
   pkg <- c("bit64", "bookdown",
            "data.table", "danstat",
            "forcats", "furrr",
-           "ggspatial", "giscoR", "gtsummary",
+           "ggspatial", "giscoR", "gtsummary", "gganimate", "gifski",
            "janitor",
            "kableExtra", "knitr",
            "latex2exp",
