@@ -3,9 +3,7 @@ fig:fig-grids-100m
 fig:fig-sp-res-builds
 tab:price-index
 tab:tbl-runits-clean
-fig:fig-pop-chor
-fig:fig-pop-den-grid
-fig:fig-pop-den-worldpop
+fig:fig-pop-density
 tab:tbl-osm-poly
 fig:fig-osm-poly
 tab:tbl-osm-points
@@ -24,10 +22,7 @@ neighbourhood-characteristics
 adm-units
 BBR-data
 pop-DST
-population-density
-choropleth-by-ancestry
-disaggregating-population-data
-population-density-worldpop
+migrants
 OSM-features
 features
 areal-features
@@ -35,7 +30,5 @@ point-features
 potential-model
 dist-CBD
 noise
-roads
-train
 EDA-house-prices
 residential-units-by-floor-level

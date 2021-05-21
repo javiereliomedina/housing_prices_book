@@ -80,7 +80,7 @@ f_res_units  <- function(.file, .area = study_area) {
 
 However, for housing prices we focus our analysis to the main building types in the City of Copenhagen (Figure \@ref(fig:fig-sp-res-builds)), which are in this order: i) multi-storey residential buildings (code 140), ii) detached single-family houses (codes 120, 121, 122), iii) colleges (code 150), and iv) semi-detached houses (codes 130, 131, 132).
 
-```{r, fig-sp-res-builds, fig.width = 9, fig.height = 7, cache = TRUE, dependson = "load-BBR", fig.cap = "2D kernel density map"}
+```{r, fig-sp-res-builds, fig.width = 9, fig.height = 7, fig.cap = "2D kernel density map"}
 
 # Aux. function for plotting 2D kernel density maps:
   f <- function(.data) {
@@ -162,7 +162,8 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
 
 ```{r price-index}
 
-# DST table (EJ66: Price index for sales property (2006=100) by region, category of real property and unit)
+# DST table (EJ66: Price index for sales property (2006=100) by region,
+# category of real property and unit)
   id_table <- "EJ66"
   dat_meta <- get_table_metadata(table_id = id_table, variables_only = TRUE)
   
@@ -207,7 +208,9 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
 ```{r adj-price}
 
 # Adjust housing prices
-price_index_2019 <- filter(price_index, date == 2019) %>% rename(index_2019 = index)
+price_index_2019 <- price_index %>% 
+  filter(date == 2019) %>% 
+  rename(index_2019 = index)
 
 res_units_oft <- res_units_oft %>% 
   # Column with price index categories

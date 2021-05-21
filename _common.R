@@ -19,13 +19,13 @@ my_theme_map <- function() {
   theme_void() +
     theme(
       # Title and captions
-      plot.title = element_text(size = 14, colour = "darkblue", face = "bold"),
+      plot.title = element_text(size = 12, colour = "darkblue", face = "bold"),
       plot.caption = element_text(size = 10, colour = "grey25"),
       # Legend
       legend.title = element_text(size = 10, face = "bold"),
       legend.text = element_text(size = 10),
       # Facets
-      strip.text = element_text(size = 12, color = "black", face = "bold"),
+      strip.text = element_text(size = 10, color = "black", face = "italic"),
       strip.text.x = element_text(hjust = 0)
     )
 }

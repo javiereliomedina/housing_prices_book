@@ -2,8 +2,7 @@
 
 The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/)) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (*KOMKODE = 0101*) and Frederiksberg (*KOMKODE = 0147*) communes. 
 
-```{r fig-adm-units, cache=TRUE, fig.cap="Parishes in the study area"}
-
+```{r adm-units, fig.cap="Parishes in the study area"}
 # Download DAGI (scale 1:10000)
   dangeo_get_data(ftp_folder = "landinddelinger/dagi/SHAPE",
                   zip_name   = "DAGIREF_SHAPE_UTM32-EUREF89.zip")
@@ -22,8 +21,16 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
   
   dk_country <- st_union(dk_commune)
   
-  cph_commune <- filter(dk_commune, KOMKODE %in% study_area_codes)
-
+  cph_commune <- filter(dk_commune, KOMKODE %in% study_area_codes) %>%
+    select(KOMKODE, KOMNAVN) %>% 
+    rename(muni_id = KOMKODE,
+           muni_name = KOMNAVN) %>% 
+    mutate(muni_name = gsub("København", "Copenhagen", muni_name)) %>% 
+    group_by(muni_id, muni_name) %>%
+    summarise(geometry = sf::st_union(geometry)) %>%
+    ungroup() %>% 
+    mutate(muni_area_km2 = as.numeric(units::set_units(st_area(.), km^2)))
+  
 # Parishes polygons of Denmark, and select those in the study area 
   parish_link <- paste(loc_dir,
                        "DAGIREF_SHAPE_UTM32-EUREF89/ADM",
@@ -50,6 +57,9 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
     st_union() %>%
     st_sf() %>% 
     st_transform(crs = "EPSG:25832")
+```
+
+```{r fig-adm-units, fig.cap="Parishes in the study area"}
 
 # Plot parish 
   ggplot() + 
@@ -64,6 +74,7 @@ The Denmark's Administrative Geographical Division ([DAGI](https://sdfe.dk/hent-
                            width = unit(0.5, "cm"),
                            style = north_arrow_orienteering(text_col = "white",
                                                             text_size = 1))
+  
 ```
 
 We have also created grid cells of 100m x 100m for aggregating some data at that scale (i.e. population density).   
@@ -97,7 +108,10 @@ grids100m <- grids100m %>%
 # Plot
 ggplot() + 
   geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
-  geom_sf(data = grids100m$data_poly[[1]], fill = NA, color = "red", size = 0.05) + 
+  geom_sf(data = grids100m$data_poly[[1]],
+          fill = NA,
+          color = "red",
+          size = 0.05) + 
   my_theme_map() +
   annotation_scale(location = "br", text_cex = 1) +
   annotation_north_arrow(location = "br",

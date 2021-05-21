@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-05-18" />
+<meta name="date" content="2021-05-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -888,14 +888,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="part"><span><b>II Load data</b></span></li>
 <li class="chapter" data-level="2" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
 <li class="chapter" data-level="3" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
-<li class="chapter" data-level="4" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>4</b> Population data</a>
+<li class="chapter" data-level="4" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>4</b> Population density</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="pop-DST.html"><a href="pop-DST.html#population-density"><i class="fa fa-check"></i><b>4.1</b> Population density</a>
-<ul>
-<li class="chapter" data-level="4.1.1" data-path="pop-DST.html"><a href="pop-DST.html#choropleth-by-ancestry"><i class="fa fa-check"></i><b>4.1.1</b> Choropleth by ancestry</a></li>
-<li class="chapter" data-level="4.1.2" data-path="pop-DST.html"><a href="pop-DST.html#disaggregating-population-data"><i class="fa fa-check"></i><b>4.1.2</b> Disaggregating population data</a></li>
-<li class="chapter" data-level="4.1.3" data-path="pop-DST.html"><a href="pop-DST.html#population-density-worldpop"><i class="fa fa-check"></i><b>4.1.3</b> Population density WorldPop</a></li>
-</ul></li>
+<li class="chapter" data-level="4.1" data-path="pop-DST.html"><a href="pop-DST.html#migrants"><i class="fa fa-check"></i><b>4.1</b> Migrants</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>5</b> Open Street Map</a>
 <ul>
@@ -907,11 +902,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>5.2</b> Potential model</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>6</b> Distance to Central Business District</a></li>
-<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="noise.html"><a href="noise.html#roads"><i class="fa fa-check"></i><b>7.1</b> Roads</a></li>
-<li class="chapter" data-level="7.2" data-path="noise.html"><a href="noise.html#train"><i class="fa fa-check"></i><b>7.2</b> Train</a></li>
-</ul></li>
+<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a></li>
 <li class="part"><span><b>III Data analysis</b></span></li>
 <li class="chapter" data-level="8" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
 <ul>
@@ -941,7 +932,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Housing prices Copenhagen</h1>
 <p class="author"><em>Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler</em></p>
-<p class="date"><em>2021-05-18</em></p>
+<p class="date"><em>2021-05-21</em></p>
 </div>
 <div id="prerequisite" class="section level1 unnumbered">
 <h1>Prerequisite</h1>
@@ -963,7 +954,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-15"><a href="index.html#cb1-15" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;bit64&quot;</span>, <span class="st">&quot;bookdown&quot;</span>,</span>
 <span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;data.table&quot;</span>, <span class="st">&quot;danstat&quot;</span>,</span>
 <span id="cb1-17"><a href="index.html#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;forcats&quot;</span>, <span class="st">&quot;furrr&quot;</span>,</span>
-<span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggspatial&quot;</span>, <span class="st">&quot;giscoR&quot;</span>, <span class="st">&quot;gtsummary&quot;</span>,</span>
+<span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggspatial&quot;</span>, <span class="st">&quot;giscoR&quot;</span>, <span class="st">&quot;gtsummary&quot;</span>, <span class="st">&quot;gganimate&quot;</span>, <span class="st">&quot;gifski&quot;</span>,</span>
 <span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;janitor&quot;</span>,</span>
 <span id="cb1-20"><a href="index.html#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;kableExtra&quot;</span>, <span class="st">&quot;knitr&quot;</span>,</span>
 <span id="cb1-21"><a href="index.html#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;latex2exp&quot;</span>,</span>
