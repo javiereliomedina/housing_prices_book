@@ -1,3 +1,9 @@
+fig:fig-pop-pyramith
+fig:fig-pop-growth-total
+fig:fig-pop-growth-ancestry
+fig:fig-pop-change
+fig:unnamed-chunk-5
+fig:unnamed-chunk-6
 fig:fig-adm-units
 fig:fig-grids-100m
 fig:fig-sp-res-builds
@@ -15,6 +21,7 @@ fig:fig-travel-times
 fig:fig-roads-noise
 fig:fig-train-noise
 fig:fig-runits-floor
+pop-growth
 hedonic-price-model
 house-characteristics
 location-characteristics
@@ -22,7 +29,6 @@ neighbourhood-characteristics
 adm-units
 BBR-data
 pop-DST
-migrants
 OSM-features
 features
 areal-features
@@ -32,3 +38,6 @@ dist-CBD
 noise
 EDA-house-prices
 residential-units-by-floor-level
+fig:fig-DK-pop
+fig:unnamed-chunk-3
+fig:unnamed-chunk-4

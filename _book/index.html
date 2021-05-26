@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-05-21" />
+<meta name="date" content="2021-05-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 
-<link rel="next" href="hedonic-price-model.html"/>
+<link rel="next" href="pop-growth.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -878,35 +878,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
-<li class="part"><span><b>I Introduction</b></span></li>
-<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
+<li class="part"><span><b>I Population growth in Denmark and housing prices</b></span></li>
+<li class="chapter" data-level="1" data-path="pop-growth.html"><a href="pop-growth.html"><i class="fa fa-check"></i><b>1</b> Population growth</a></li>
+<li class="part"><span><b>II Hedonic price model</b></span></li>
+<li class="chapter" data-level="2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>2</b> Hedonic model</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
-<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="2.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>2.1</b> House characteristics</a></li>
+<li class="chapter" data-level="2.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>2.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="2.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>2.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>II Load data</b></span></li>
-<li class="chapter" data-level="2" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
-<li class="chapter" data-level="3" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
-<li class="chapter" data-level="4" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>4</b> Population density</a>
+<li class="part"><span><b>III Load data</b></span></li>
+<li class="chapter" data-level="3" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>3</b> Administrative units</a></li>
+<li class="chapter" data-level="4" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>4</b> Housing data</a></li>
+<li class="chapter" data-level="5" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>5</b> Population density</a></li>
+<li class="chapter" data-level="6" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>6</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="pop-DST.html"><a href="pop-DST.html#migrants"><i class="fa fa-check"></i><b>4.1</b> Migrants</a></li>
+<li class="chapter" data-level="6.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>6.1</b> Features</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>6.1.1</b> Areal features</a></li>
+<li class="chapter" data-level="6.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>6.1.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>5</b> Open Street Map</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>5.1</b> Features</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>5.1.1</b> Areal features</a></li>
-<li class="chapter" data-level="5.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>5.1.2</b> Point features</a></li>
+<li class="chapter" data-level="6.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>6.2</b> Potential model</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>5.2</b> Potential model</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>6</b> Distance to Central Business District</a></li>
-<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a></li>
-<li class="part"><span><b>III Data analysis</b></span></li>
-<li class="chapter" data-level="8" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
+<li class="chapter" data-level="7" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>7</b> Distance to Central Business District</a></li>
+<li class="chapter" data-level="8" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>8</b> Noise</a></li>
+<li class="part"><span><b>IV Data analysis</b></span></li>
+<li class="chapter" data-level="9" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="9.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -932,7 +931,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Housing prices Copenhagen</h1>
 <p class="author"><em>Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler</em></p>
-<p class="date"><em>2021-05-21</em></p>
+<p class="date"><em>2021-05-26</em></p>
 </div>
 <div id="prerequisite" class="section level1 unnumbered">
 <h1>Prerequisite</h1>
@@ -952,7 +951,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="index.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># List of packages </span></span>
 <span id="cb1-15"><a href="index.html#cb1-15" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;bit64&quot;</span>, <span class="st">&quot;bookdown&quot;</span>,</span>
-<span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;data.table&quot;</span>, <span class="st">&quot;danstat&quot;</span>,</span>
+<span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;data.table&quot;</span>, <span class="st">&quot;danstat&quot;</span>, <span class="st">&quot;dint&quot;</span>,</span>
 <span id="cb1-17"><a href="index.html#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;forcats&quot;</span>, <span class="st">&quot;furrr&quot;</span>,</span>
 <span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggspatial&quot;</span>, <span class="st">&quot;giscoR&quot;</span>, <span class="st">&quot;gtsummary&quot;</span>, <span class="st">&quot;gganimate&quot;</span>, <span class="st">&quot;gifski&quot;</span>,</span>
 <span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;janitor&quot;</span>,</span>
@@ -969,9 +968,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-30"><a href="index.html#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and install</span></span>
 <span id="cb1-31"><a href="index.html#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
 <p>Furthermore, we have created our own package for downloading <a href="https://kortforsyningen.dk/">kortforsyningen</a> data to a local repository directly from R (i.e. <a href="https://github.com/javiereliomedina/dangeo.git">dangeo</a>). The package can be downloaded from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install package from GitHub</span></span>
-<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
-<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dangeo)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from GitHub</span></span>
+<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;devtools&quot;</span>))  <span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="index.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
+<span id="cb2-5"><a href="index.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dangeo)</span>
+<span id="cb2-6"><a href="index.html#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="index.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;ggsflabel&quot;</span>)) devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;yutannihilation/ggsflabel&quot;</span>)</span>
+<span id="cb2-8"><a href="index.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggsflabel)</span>
+<span id="cb2-9"><a href="index.html#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="index.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;ggpyramid&quot;</span>)) remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/ggpyramid&quot;</span>)</span>
+<span id="cb2-11"><a href="index.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggpyramid)</span></code></pre></div>
 <p>Although the <em>kortforsyningen</em> data are free, we would need to create a <em>username</em> and a <em>password</em> for getting access to them (you can make it here: <a href="https://kortforsyningen.dk/indhold/min-side-0">“Opret ny bruger”</a>). By default <strong>dangeo</strong> looks for credentials on <code>.Renviron</code> as: <code>kortforsyningen_id = "username"</code> and <code>kortforsyningen_pwd = "password"</code>. You would need to save them with <code>usethis::edit_r_environ()</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set username and password </span></span>
 <span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = &quot;your_username&quot;) and password (kortforsyningen_pwd = &quot;your_password&quot;)</span></span></code></pre></div>
@@ -1045,14 +1052,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-</div>
             </section>
 
           </div>
         </div>
       </div>
 
-<a href="hedonic-price-model.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="pop-growth.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

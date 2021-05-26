@@ -33,7 +33,7 @@ The data have been analysed with **R** (version `r paste(R.Version()$major, R.Ve
 
 # List of packages 
   pkg <- c("bit64", "bookdown",
-           "data.table", "danstat",
+           "data.table", "danstat", "dint",
            "forcats", "furrr",
            "ggspatial", "giscoR", "gtsummary", "gganimate", "gifski",
            "janitor",
@@ -63,9 +63,17 @@ Furthermore, we have created our own package for downloading [kortforsyningen](h
 
 ```{r install-dangeo}
 
-# Install package from GitHub
+# Install packages from GitHub
+  if(!require("devtools"))  install.packages("devtools")
+
   if (!require("dangeo"))  remotes::install_github("javiereliomedina/dangeo")
   library(dangeo)
+
+  if(!require("ggsflabel")) devtools::install_github("yutannihilation/ggsflabel")
+  library(ggsflabel)
+
+  if(!require("ggpyramid")) remotes::install_github("javiereliomedina/ggpyramid")
+  library(ggpyramid)
 
 ```
 

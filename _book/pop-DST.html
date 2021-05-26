@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Population density | Housing prices Copenhagen</title>
+  <title>Chapter 5 Population density | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 4 Population density | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 5 Population density | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Population density | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 5 Population density | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-05-21" />
+<meta name="date" content="2021-05-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -51,6 +51,10 @@
 
 
 
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -874,32 +878,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
-<li class="part"><span><b>I Introduction</b></span></li>
-<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
+<li class="part"><span><b>I Population growth in Denmark and housing prices</b></span></li>
+<li class="chapter" data-level="1" data-path="pop-growth.html"><a href="pop-growth.html"><i class="fa fa-check"></i><b>1</b> Population growth</a></li>
+<li class="part"><span><b>II Hedonic price model</b></span></li>
+<li class="chapter" data-level="2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>2</b> Hedonic model</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
-<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="2.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>2.1</b> House characteristics</a></li>
+<li class="chapter" data-level="2.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>2.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="2.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>2.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>II Load data</b></span></li>
-<li class="chapter" data-level="2" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
-<li class="chapter" data-level="3" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
-<li class="chapter" data-level="4" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>4</b> Population density</a></li>
-<li class="chapter" data-level="5" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>5</b> Open Street Map</a>
+<li class="part"><span><b>III Load data</b></span></li>
+<li class="chapter" data-level="3" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>3</b> Administrative units</a></li>
+<li class="chapter" data-level="4" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>4</b> Housing data</a></li>
+<li class="chapter" data-level="5" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>5</b> Population density</a></li>
+<li class="chapter" data-level="6" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>6</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>5.1</b> Features</a>
+<li class="chapter" data-level="6.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>6.1</b> Features</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>5.1.1</b> Areal features</a></li>
-<li class="chapter" data-level="5.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>5.1.2</b> Point features</a></li>
+<li class="chapter" data-level="6.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>6.1.1</b> Areal features</a></li>
+<li class="chapter" data-level="6.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>6.1.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>5.2</b> Potential model</a></li>
+<li class="chapter" data-level="6.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>6.2</b> Potential model</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>6</b> Distance to Central Business District</a></li>
-<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a></li>
-<li class="part"><span><b>III Data analysis</b></span></li>
-<li class="chapter" data-level="8" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
+<li class="chapter" data-level="7" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>7</b> Distance to Central Business District</a></li>
+<li class="chapter" data-level="8" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>8</b> Noise</a></li>
+<li class="part"><span><b>IV Data analysis</b></span></li>
+<li class="chapter" data-level="9" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="9.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -922,30 +928,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="pop-DST" class="section level1" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Population density</h1>
+<div id="pop-DST" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Population density</h1>
 <p>Population data at municipality level for the same period we have BBR data (2004-2019) have been retrieved from <a href="https://www.dst.dk/en">Statistics Denmark</a>. We have used the R-package <a href="https://cran.r-project.org/web/packages/danstat/index.html">danstat</a> and the table <a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?Maintable=FT&amp;PLanguage=1">FT: Population figures from the censuses</a>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="pop-DST.html#cb1-1" aria-hidden="true" tabindex="-1"></a>id_table <span class="ot">&lt;-</span> <span class="st">&quot;FT&quot;</span></span>
-<span id="cb1-2"><a href="pop-DST.html#cb1-2" aria-hidden="true" tabindex="-1"></a>dat_meta <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-3"><a href="pop-DST.html#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="pop-DST.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables</span></span>
-<span id="cb1-5"><a href="pop-DST.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  variables <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb1-6"><a href="pop-DST.html#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Municipalities</span></span>
-<span id="cb1-7"><a href="pop-DST.html#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;HOVEDDELE&quot;</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;101&quot;</span>,<span class="st">&quot;147&quot;</span>)),</span>
-<span id="cb1-8"><a href="pop-DST.html#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population at the first day of the year (from 2004 to 2019)</span></span>
-<span id="cb1-9"><a href="pop-DST.html#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;Tid&quot;</span>, <span class="at">values =</span> <span class="fu">seq</span>(<span class="dv">2004</span>, <span class="dv">2019</span>, <span class="dv">1</span>))</span>
-<span id="cb1-10"><a href="pop-DST.html#cb1-10" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb1-11"><a href="pop-DST.html#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="pop-DST.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data </span></span>
-<span id="cb1-13"><a href="pop-DST.html#cb1-13" aria-hidden="true" tabindex="-1"></a>  pop_tot_muni <span class="ot">&lt;-</span> <span class="fu">get_data</span>(<span class="st">&quot;FT&quot;</span>, variables) <span class="sc">%&gt;%</span></span>
-<span id="cb1-14"><a href="pop-DST.html#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate names into English </span></span>
-<span id="cb1-15"><a href="pop-DST.html#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">muni_name =</span> HOVEDDELE,</span>
-<span id="cb1-16"><a href="pop-DST.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> TID, </span>
-<span id="cb1-17"><a href="pop-DST.html#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">pop_total =</span> INDHOLD) </span>
-<span id="cb1-18"><a href="pop-DST.html#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="pop-DST.html#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add spatial information</span></span>
-<span id="cb1-20"><a href="pop-DST.html#cb1-20" aria-hidden="true" tabindex="-1"></a>   pop_tot_muni_sf <span class="ot">&lt;-</span> cph_commune <span class="sc">%&gt;%</span> </span>
-<span id="cb1-21"><a href="pop-DST.html#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(pop_tot_muni, <span class="at">by =</span> <span class="st">&quot;muni_name&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="pop-DST.html#cb29-1" aria-hidden="true" tabindex="-1"></a>id_table <span class="ot">&lt;-</span> <span class="st">&quot;FT&quot;</span></span>
+<span id="cb29-2"><a href="pop-DST.html#cb29-2" aria-hidden="true" tabindex="-1"></a>dat_meta <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb29-3"><a href="pop-DST.html#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="pop-DST.html#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables</span></span>
+<span id="cb29-5"><a href="pop-DST.html#cb29-5" aria-hidden="true" tabindex="-1"></a>  variables <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb29-6"><a href="pop-DST.html#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Municipalities</span></span>
+<span id="cb29-7"><a href="pop-DST.html#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;HOVEDDELE&quot;</span>, <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;101&quot;</span>,<span class="st">&quot;147&quot;</span>)),</span>
+<span id="cb29-8"><a href="pop-DST.html#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population at the first day of the year (from 2004 to 2019)</span></span>
+<span id="cb29-9"><a href="pop-DST.html#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">code =</span> <span class="st">&quot;Tid&quot;</span>, <span class="at">values =</span> <span class="fu">seq</span>(<span class="dv">2004</span>, <span class="dv">2019</span>, <span class="dv">1</span>))</span>
+<span id="cb29-10"><a href="pop-DST.html#cb29-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb29-11"><a href="pop-DST.html#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="pop-DST.html#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Get data </span></span>
+<span id="cb29-13"><a href="pop-DST.html#cb29-13" aria-hidden="true" tabindex="-1"></a>  pop_tot_muni <span class="ot">&lt;-</span> <span class="fu">get_data</span>(<span class="st">&quot;FT&quot;</span>, variables) <span class="sc">%&gt;%</span></span>
+<span id="cb29-14"><a href="pop-DST.html#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate names into English </span></span>
+<span id="cb29-15"><a href="pop-DST.html#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">muni_name =</span> HOVEDDELE,</span>
+<span id="cb29-16"><a href="pop-DST.html#cb29-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> TID, </span>
+<span id="cb29-17"><a href="pop-DST.html#cb29-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">pop_total =</span> INDHOLD) </span>
+<span id="cb29-18"><a href="pop-DST.html#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-19"><a href="pop-DST.html#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add spatial information</span></span>
+<span id="cb29-20"><a href="pop-DST.html#cb29-20" aria-hidden="true" tabindex="-1"></a>   pop_tot_muni_sf <span class="ot">&lt;-</span> cph_commune <span class="sc">%&gt;%</span> </span>
+<span id="cb29-21"><a href="pop-DST.html#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(pop_tot_muni, <span class="at">by =</span> <span class="st">&quot;muni_name&quot;</span>)</span></code></pre></div>
 <p>We disaggregate the population data to grid cells of 100m x 100m using residential buildings as ancillary data. The procedure is as follow:</p>
 <ol style="list-style-type: decimal">
 <li><p>Calculate the occupancy rate (<em>OR</em>) for the residential units of each municipality (<em>j</em>): <span class="math display">\[OR_{j} = \frac{pop_{j}}{N_{j}}\]</span></p></li>
@@ -955,136 +961,136 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Estimate the population in each grid (<em>i</em>) base the occupancy rate by parish (<em>j</em>): <span class="math display">\[pop_{gi} = \sum_{j = 1}^{n}(OR_{j} \cdot N_{ij})\]</span></p></li>
 <li><p>Population density: <span class="math display">\[PD_{i} = \frac{pop_{i}}{A_{i}}\]</span></p></li>
 </ol>
-<p>We can therefore estimate the population density at the first day of the year by grid cells of 100m x 100m (figure <a href="pop-DST.html#fig:fig-pop-density">4.1</a>).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="pop-DST.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Aux. function for calculate the population density in the grids created by f_grids </span></span>
-<span id="cb2-2"><a href="pop-DST.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .year       Year of the analysis (e.g. 2019)</span></span>
-<span id="cb2-3"><a href="pop-DST.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="pop-DST.html#cb2-4" aria-hidden="true" tabindex="-1"></a>f_pd_grids <span class="ot">&lt;-</span> <span class="cf">function</span>(.year) {</span>
-<span id="cb2-5"><a href="pop-DST.html#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="pop-DST.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population at the first day of the year (.year) in each municipality</span></span>
-<span id="cb2-7"><a href="pop-DST.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  pop_year <span class="ot">&lt;-</span> pop_tot_muni_sf <span class="sc">%&gt;%</span></span>
-<span id="cb2-8"><a href="pop-DST.html#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># select the data at the first day of the year </span></span>
-<span id="cb2-9"><a href="pop-DST.html#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">==</span> .year)  </span>
-<span id="cb2-10"><a href="pop-DST.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-11"><a href="pop-DST.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># BBR of the selected year (represent the first day of the year)</span></span>
-<span id="cb2-12"><a href="pop-DST.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  BBR_year <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span> </span>
-<span id="cb2-13"><a href="pop-DST.html#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BBR_year <span class="sc">==</span> .year) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-14"><a href="pop-DST.html#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(geometry)</span>
-<span id="cb2-15"><a href="pop-DST.html#cb2-15" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-16"><a href="pop-DST.html#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate occupancy rate (&quot;OR&quot;) of the residential units in each municipality in a year</span></span>
-<span id="cb2-17"><a href="pop-DST.html#cb2-17" aria-hidden="true" tabindex="-1"></a>  OR <span class="ot">&lt;-</span> pop_year <span class="sc">%&gt;%</span>  </span>
-<span id="cb2-18"><a href="pop-DST.html#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># number of units per parish</span></span>
-<span id="cb2-19"><a href="pop-DST.html#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year) <span class="sc">%&gt;%</span></span>
-<span id="cb2-20"><a href="pop-DST.html#cb2-20" aria-hidden="true" tabindex="-1"></a>             <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-21"><a href="pop-DST.html#cb2-21" aria-hidden="true" tabindex="-1"></a>             <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-22"><a href="pop-DST.html#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mean population per unit in each parish</span></span>
-<span id="cb2-23"><a href="pop-DST.html#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> n_units)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-24"><a href="pop-DST.html#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># output as table </span></span>
-<span id="cb2-25"><a href="pop-DST.html#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-26"><a href="pop-DST.html#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>n_units, <span class="sc">-</span>geometry)</span>
-<span id="cb2-27"><a href="pop-DST.html#cb2-27" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-28"><a href="pop-DST.html#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get only the grids with residential units on them</span></span>
-<span id="cb2-29"><a href="pop-DST.html#cb2-29" aria-hidden="true" tabindex="-1"></a>  gru <span class="ot">&lt;-</span> grids100m<span class="sc">$</span>data_poly[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
-<span id="cb2-30"><a href="pop-DST.html#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Number of residential units per grid</span></span>
-<span id="cb2-31"><a href="pop-DST.html#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year) <span class="sc">%&gt;%</span></span>
-<span id="cb2-32"><a href="pop-DST.html#cb2-32" aria-hidden="true" tabindex="-1"></a>             <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-33"><a href="pop-DST.html#cb2-33" aria-hidden="true" tabindex="-1"></a>             <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-34"><a href="pop-DST.html#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get grids with residential buildings</span></span>
-<span id="cb2-35"><a href="pop-DST.html#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n_units <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-36"><a href="pop-DST.html#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add date</span></span>
-<span id="cb2-37"><a href="pop-DST.html#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> .year)</span>
-<span id="cb2-38"><a href="pop-DST.html#cb2-38" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-39"><a href="pop-DST.html#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Detect to what area belong the grid</span></span>
-<span id="cb2-40"><a href="pop-DST.html#cb2-40" aria-hidden="true" tabindex="-1"></a>  gru_muni <span class="ot">&lt;-</span> gru <span class="sc">%&gt;%</span> </span>
-<span id="cb2-41"><a href="pop-DST.html#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersection</span>(., cph_commune) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-42"><a href="pop-DST.html#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove parish area</span></span>
-<span id="cb2-43"><a href="pop-DST.html#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>muni_area_km2, <span class="sc">-</span>muni_name) </span>
-<span id="cb2-44"><a href="pop-DST.html#cb2-44" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-45"><a href="pop-DST.html#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population density by grids</span></span>
-<span id="cb2-46"><a href="pop-DST.html#cb2-46" aria-hidden="true" tabindex="-1"></a>  pop_grids <span class="ot">&lt;-</span> gru_muni <span class="sc">%&gt;%</span> </span>
-<span id="cb2-47"><a href="pop-DST.html#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># convert to table</span></span>
-<span id="cb2-48"><a href="pop-DST.html#cb2-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb2-49"><a href="pop-DST.html#cb2-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>geometry) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-50"><a href="pop-DST.html#cb2-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge OR per area  </span></span>
-<span id="cb2-51"><a href="pop-DST.html#cb2-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(OR, <span class="at">by =</span> <span class="st">&quot;muni_id&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-52"><a href="pop-DST.html#cb2-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># recalculate population by grid </span></span>
-<span id="cb2-53"><a href="pop-DST.html#cb2-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">*</span> n_units)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-54"><a href="pop-DST.html#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sum population of each municipality of the grid</span></span>
-<span id="cb2-55"><a href="pop-DST.html#cb2-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(grid_ID) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-56"><a href="pop-DST.html#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">pop_total =</span> <span class="fu">sum</span>(pop_total),</span>
-<span id="cb2-57"><a href="pop-DST.html#cb2-57" aria-hidden="true" tabindex="-1"></a>              <span class="at">n_units =</span> <span class="fu">sum</span>(n_units)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-58"><a href="pop-DST.html#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() </span>
-<span id="cb2-59"><a href="pop-DST.html#cb2-59" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-60"><a href="pop-DST.html#cb2-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spatial information</span></span>
-<span id="cb2-61"><a href="pop-DST.html#cb2-61" aria-hidden="true" tabindex="-1"></a>  gru <span class="sc">%&gt;%</span> </span>
-<span id="cb2-62"><a href="pop-DST.html#cb2-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>n_units) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-63"><a href="pop-DST.html#cb2-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(pop_grids, <span class="at">by =</span> <span class="st">&quot;grid_ID&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-64"><a href="pop-DST.html#cb2-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Area of the grid</span></span>
-<span id="cb2-65"><a href="pop-DST.html#cb2-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-66"><a href="pop-DST.html#cb2-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population density (pop/area)</span></span>
-<span id="cb2-67"><a href="pop-DST.html#cb2-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> area_km2))) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-68"><a href="pop-DST.html#cb2-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb2-69"><a href="pop-DST.html#cb2-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove polygons with 0 population</span></span>
-<span id="cb2-70"><a href="pop-DST.html#cb2-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(pop_total_km2 <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb2-71"><a href="pop-DST.html#cb2-71" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-72"><a href="pop-DST.html#cb2-72" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="pop-DST.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of years with BBR data (2004-2019) and population data (2008-2019)</span></span>
-<span id="cb3-2"><a href="pop-DST.html#cb3-2" aria-hidden="true" tabindex="-1"></a>years_pd <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2004</span>, <span class="dv">2019</span>, <span class="dv">1</span>) </span>
-<span id="cb3-3"><a href="pop-DST.html#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="pop-DST.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase future maximum allowed size of global variables</span></span>
-<span id="cb3-5"><a href="pop-DST.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">8000</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb3-6"><a href="pop-DST.html#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="pop-DST.html#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Population density </span></span>
-<span id="cb3-8"><a href="pop-DST.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
-<span id="cb3-9"><a href="pop-DST.html#cb3-9" aria-hidden="true" tabindex="-1"></a>pop_g100m <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> years_pd, <span class="at">.f =</span> f_pd_grids) </span>
-<span id="cb3-10"><a href="pop-DST.html#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
-<span id="cb3-11"><a href="pop-DST.html#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="pop-DST.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Default value</span></span>
-<span id="cb3-13"><a href="pop-DST.html#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">500</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="pop-DST.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add breaks</span></span>
-<span id="cb4-2"><a href="pop-DST.html#cb4-2" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_g100m<span class="sc">$</span>pop_total_km2),</span>
-<span id="cb4-3"><a href="pop-DST.html#cb4-3" aria-hidden="true" tabindex="-1"></a>          <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">30</span>,</span>
-<span id="cb4-4"><a href="pop-DST.html#cb4-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_g100m<span class="sc">$</span>pop_total_km2)))</span>
-<span id="cb4-5"><a href="pop-DST.html#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="pop-DST.html#cb4-6" aria-hidden="true" tabindex="-1"></a>pop_g100m <span class="ot">&lt;-</span> pop_g100m <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="pop-DST.html#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pop_total_km2_cut =</span> <span class="fu">cut</span>(pop_total_km2,</span>
-<span id="cb4-8"><a href="pop-DST.html#cb4-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> brks,</span>
-<span id="cb4-9"><a href="pop-DST.html#cb4-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">include.lowest =</span> <span class="cn">TRUE</span>))  </span>
-<span id="cb4-10"><a href="pop-DST.html#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="pop-DST.html#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for plotting</span></span>
-<span id="cb4-12"><a href="pop-DST.html#cb4-12" aria-hidden="true" tabindex="-1"></a>f_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb4-13"><a href="pop-DST.html#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb4-14"><a href="pop-DST.html#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> study_area, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb4-15"><a href="pop-DST.html#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> df, </span>
-<span id="cb4-16"><a href="pop-DST.html#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> pop_total_km2_cut,</span>
-<span id="cb4-17"><a href="pop-DST.html#cb4-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">group =</span> <span class="fu">interaction</span>(pop_total_km2_cut, date)),</span>
-<span id="cb4-18"><a href="pop-DST.html#cb4-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb4-19"><a href="pop-DST.html#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_commune, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb4-20"><a href="pop-DST.html#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(</span>
-<span id="cb4-21"><a href="pop-DST.html#cb4-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
-<span id="cb4-22"><a href="pop-DST.html#cb4-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">&quot;RdYlBu&quot;</span>,</span>
-<span id="cb4-23"><a href="pop-DST.html#cb4-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
-<span id="cb4-24"><a href="pop-DST.html#cb4-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">drop =</span> <span class="cn">FALSE</span>)  <span class="sc">+</span></span>
-<span id="cb4-25"><a href="pop-DST.html#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb4-26"><a href="pop-DST.html#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb4-27"><a href="pop-DST.html#cb4-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb4-28"><a href="pop-DST.html#cb4-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">&quot;Population density by grid cells of 100m x 100m&quot;</span>,</span>
-<span id="cb4-29"><a href="pop-DST.html#cb4-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Date&quot;</span>, df<span class="sc">$</span>date, <span class="at">sep =</span> <span class="st">&quot;: &quot;</span>))</span>
-<span id="cb4-30"><a href="pop-DST.html#cb4-30" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb4-31"><a href="pop-DST.html#cb4-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-32"><a href="pop-DST.html#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each year</span></span>
-<span id="cb4-33"><a href="pop-DST.html#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
-<span id="cb4-34"><a href="pop-DST.html#cb4-34" aria-hidden="true" tabindex="-1"></a>plts <span class="ot">&lt;-</span> pop_g100m <span class="sc">%&gt;%</span> </span>
-<span id="cb4-35"><a href="pop-DST.html#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_split</span>(date) <span class="sc">%&gt;%</span>  </span>
-<span id="cb4-36"><a href="pop-DST.html#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">future_map</span>(., <span class="at">.f =</span> f_plot, <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="dv">123</span>))</span>
-<span id="cb4-37"><a href="pop-DST.html#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
-<span id="cb4-38"><a href="pop-DST.html#cb4-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-39"><a href="pop-DST.html#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Animation</span></span>
-<span id="cb4-40"><a href="pop-DST.html#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(years_pd)) { <span class="fu">print</span>(plts[[i]]) }</span></code></pre></div>
+<p>We can therefore estimate the population density at the first day of the year by grid cells of 100m x 100m (figure <a href="pop-DST.html#fig:fig-pop-density">5.1</a>).</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="pop-DST.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Aux. function for calculate the population density in the grids created by f_grids </span></span>
+<span id="cb30-2"><a href="pop-DST.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param .year       Year of the analysis (e.g. 2019)</span></span>
+<span id="cb30-3"><a href="pop-DST.html#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="pop-DST.html#cb30-4" aria-hidden="true" tabindex="-1"></a>f_pd_grids <span class="ot">&lt;-</span> <span class="cf">function</span>(.year) {</span>
+<span id="cb30-5"><a href="pop-DST.html#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="pop-DST.html#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population at the first day of the year (.year) in each municipality</span></span>
+<span id="cb30-7"><a href="pop-DST.html#cb30-7" aria-hidden="true" tabindex="-1"></a>  pop_year <span class="ot">&lt;-</span> pop_tot_muni_sf <span class="sc">%&gt;%</span></span>
+<span id="cb30-8"><a href="pop-DST.html#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># select the data at the first day of the year </span></span>
+<span id="cb30-9"><a href="pop-DST.html#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">==</span> .year)  </span>
+<span id="cb30-10"><a href="pop-DST.html#cb30-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-11"><a href="pop-DST.html#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># BBR of the selected year (represent the first day of the year)</span></span>
+<span id="cb30-12"><a href="pop-DST.html#cb30-12" aria-hidden="true" tabindex="-1"></a>  BBR_year <span class="ot">&lt;-</span> res_units <span class="sc">%&gt;%</span> </span>
+<span id="cb30-13"><a href="pop-DST.html#cb30-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(BBR_year <span class="sc">==</span> .year) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-14"><a href="pop-DST.html#cb30-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(geometry)</span>
+<span id="cb30-15"><a href="pop-DST.html#cb30-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-16"><a href="pop-DST.html#cb30-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate occupancy rate (&quot;OR&quot;) of the residential units in each municipality in a year</span></span>
+<span id="cb30-17"><a href="pop-DST.html#cb30-17" aria-hidden="true" tabindex="-1"></a>  OR <span class="ot">&lt;-</span> pop_year <span class="sc">%&gt;%</span>  </span>
+<span id="cb30-18"><a href="pop-DST.html#cb30-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># number of units per parish</span></span>
+<span id="cb30-19"><a href="pop-DST.html#cb30-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year) <span class="sc">%&gt;%</span></span>
+<span id="cb30-20"><a href="pop-DST.html#cb30-20" aria-hidden="true" tabindex="-1"></a>             <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-21"><a href="pop-DST.html#cb30-21" aria-hidden="true" tabindex="-1"></a>             <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-22"><a href="pop-DST.html#cb30-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># mean population per unit in each parish</span></span>
+<span id="cb30-23"><a href="pop-DST.html#cb30-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-24"><a href="pop-DST.html#cb30-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># output as table </span></span>
+<span id="cb30-25"><a href="pop-DST.html#cb30-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb30-26"><a href="pop-DST.html#cb30-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>n_units, <span class="sc">-</span>geometry)</span>
+<span id="cb30-27"><a href="pop-DST.html#cb30-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-28"><a href="pop-DST.html#cb30-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get only the grids with residential units on them</span></span>
+<span id="cb30-29"><a href="pop-DST.html#cb30-29" aria-hidden="true" tabindex="-1"></a>  gru <span class="ot">&lt;-</span> grids100m<span class="sc">$</span>data_poly[[<span class="dv">1</span>]] <span class="sc">%&gt;%</span> </span>
+<span id="cb30-30"><a href="pop-DST.html#cb30-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Number of residential units per grid</span></span>
+<span id="cb30-31"><a href="pop-DST.html#cb30-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">n_units =</span> <span class="fu">st_intersects</span>(., BBR_year) <span class="sc">%&gt;%</span></span>
+<span id="cb30-32"><a href="pop-DST.html#cb30-32" aria-hidden="true" tabindex="-1"></a>             <span class="fu">map</span>(., <span class="sc">~</span><span class="fu">length</span>(.)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-33"><a href="pop-DST.html#cb30-33" aria-hidden="true" tabindex="-1"></a>             <span class="fu">unlist</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-34"><a href="pop-DST.html#cb30-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get grids with residential buildings</span></span>
+<span id="cb30-35"><a href="pop-DST.html#cb30-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(n_units <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-36"><a href="pop-DST.html#cb30-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add date</span></span>
+<span id="cb30-37"><a href="pop-DST.html#cb30-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> .year)</span>
+<span id="cb30-38"><a href="pop-DST.html#cb30-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-39"><a href="pop-DST.html#cb30-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Detect to what area belong the grid</span></span>
+<span id="cb30-40"><a href="pop-DST.html#cb30-40" aria-hidden="true" tabindex="-1"></a>  gru_muni <span class="ot">&lt;-</span> gru <span class="sc">%&gt;%</span> </span>
+<span id="cb30-41"><a href="pop-DST.html#cb30-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersection</span>(., cph_commune) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-42"><a href="pop-DST.html#cb30-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove parish area</span></span>
+<span id="cb30-43"><a href="pop-DST.html#cb30-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>muni_area_km2, <span class="sc">-</span>muni_name) </span>
+<span id="cb30-44"><a href="pop-DST.html#cb30-44" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-45"><a href="pop-DST.html#cb30-45" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population density by grids</span></span>
+<span id="cb30-46"><a href="pop-DST.html#cb30-46" aria-hidden="true" tabindex="-1"></a>  pop_grids <span class="ot">&lt;-</span> gru_muni <span class="sc">%&gt;%</span> </span>
+<span id="cb30-47"><a href="pop-DST.html#cb30-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># convert to table</span></span>
+<span id="cb30-48"><a href="pop-DST.html#cb30-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb30-49"><a href="pop-DST.html#cb30-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>geometry) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-50"><a href="pop-DST.html#cb30-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge OR per area  </span></span>
+<span id="cb30-51"><a href="pop-DST.html#cb30-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(OR, <span class="at">by =</span> <span class="st">&quot;muni_id&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-52"><a href="pop-DST.html#cb30-52" aria-hidden="true" tabindex="-1"></a>    <span class="co"># recalculate population by grid </span></span>
+<span id="cb30-53"><a href="pop-DST.html#cb30-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span> . <span class="sc">*</span> n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-54"><a href="pop-DST.html#cb30-54" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sum population of each municipality of the grid</span></span>
+<span id="cb30-55"><a href="pop-DST.html#cb30-55" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(grid_ID) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-56"><a href="pop-DST.html#cb30-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">pop_total =</span> <span class="fu">sum</span>(pop_total),</span>
+<span id="cb30-57"><a href="pop-DST.html#cb30-57" aria-hidden="true" tabindex="-1"></a>              <span class="at">n_units =</span> <span class="fu">sum</span>(n_units)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-58"><a href="pop-DST.html#cb30-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() </span>
+<span id="cb30-59"><a href="pop-DST.html#cb30-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-60"><a href="pop-DST.html#cb30-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spatial information</span></span>
+<span id="cb30-61"><a href="pop-DST.html#cb30-61" aria-hidden="true" tabindex="-1"></a>  gru <span class="sc">%&gt;%</span> </span>
+<span id="cb30-62"><a href="pop-DST.html#cb30-62" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>n_units) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-63"><a href="pop-DST.html#cb30-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join</span>(pop_grids, <span class="at">by =</span> <span class="st">&quot;grid_ID&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-64"><a href="pop-DST.html#cb30-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Area of the grid</span></span>
+<span id="cb30-65"><a href="pop-DST.html#cb30-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-66"><a href="pop-DST.html#cb30-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Population density (pop/area)</span></span>
+<span id="cb30-67"><a href="pop-DST.html#cb30-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>), <span class="sc">~</span> . <span class="sc">/</span> (<span class="dv">1000</span> <span class="sc">*</span> area_km2))) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-68"><a href="pop-DST.html#cb30-68" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">paste</span>(.x, <span class="st">&quot;km2&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb30-69"><a href="pop-DST.html#cb30-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove polygons with 0 population</span></span>
+<span id="cb30-70"><a href="pop-DST.html#cb30-70" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(pop_total_km2 <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb30-71"><a href="pop-DST.html#cb30-71" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb30-72"><a href="pop-DST.html#cb30-72" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="pop-DST.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of years with BBR data (2004-2019) and population data (2008-2019)</span></span>
+<span id="cb31-2"><a href="pop-DST.html#cb31-2" aria-hidden="true" tabindex="-1"></a>years_pd <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2004</span>, <span class="dv">2019</span>, <span class="dv">1</span>) </span>
+<span id="cb31-3"><a href="pop-DST.html#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="pop-DST.html#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase future maximum allowed size of global variables</span></span>
+<span id="cb31-5"><a href="pop-DST.html#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">8000</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb31-6"><a href="pop-DST.html#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="pop-DST.html#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Population density </span></span>
+<span id="cb31-8"><a href="pop-DST.html#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
+<span id="cb31-9"><a href="pop-DST.html#cb31-9" aria-hidden="true" tabindex="-1"></a>pop_g100m <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> years_pd, <span class="at">.f =</span> f_pd_grids) </span>
+<span id="cb31-10"><a href="pop-DST.html#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
+<span id="cb31-11"><a href="pop-DST.html#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="pop-DST.html#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Default value</span></span>
+<span id="cb31-13"><a href="pop-DST.html#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">future.globals.maxSize =</span> <span class="dv">500</span> <span class="sc">*</span> <span class="dv">1024</span><span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="pop-DST.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add breaks</span></span>
+<span id="cb32-2"><a href="pop-DST.html#cb32-2" aria-hidden="true" tabindex="-1"></a>brks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(pop_g100m<span class="sc">$</span>pop_total_km2),</span>
+<span id="cb32-3"><a href="pop-DST.html#cb32-3" aria-hidden="true" tabindex="-1"></a>          <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">30</span>,</span>
+<span id="cb32-4"><a href="pop-DST.html#cb32-4" aria-hidden="true" tabindex="-1"></a>          <span class="fu">ceiling</span>(<span class="fu">max</span>(pop_g100m<span class="sc">$</span>pop_total_km2)))</span>
+<span id="cb32-5"><a href="pop-DST.html#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="pop-DST.html#cb32-6" aria-hidden="true" tabindex="-1"></a>pop_g100m <span class="ot">&lt;-</span> pop_g100m <span class="sc">%&gt;%</span></span>
+<span id="cb32-7"><a href="pop-DST.html#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pop_total_km2_cut =</span> <span class="fu">cut</span>(pop_total_km2,</span>
+<span id="cb32-8"><a href="pop-DST.html#cb32-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> brks,</span>
+<span id="cb32-9"><a href="pop-DST.html#cb32-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">include.lowest =</span> <span class="cn">TRUE</span>))  </span>
+<span id="cb32-10"><a href="pop-DST.html#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="pop-DST.html#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for plotting</span></span>
+<span id="cb32-12"><a href="pop-DST.html#cb32-12" aria-hidden="true" tabindex="-1"></a>f_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb32-13"><a href="pop-DST.html#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb32-14"><a href="pop-DST.html#cb32-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> study_area, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-15"><a href="pop-DST.html#cb32-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> df, </span>
+<span id="cb32-16"><a href="pop-DST.html#cb32-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">fill =</span> pop_total_km2_cut,</span>
+<span id="cb32-17"><a href="pop-DST.html#cb32-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">group =</span> <span class="fu">interaction</span>(pop_total_km2_cut, date)),</span>
+<span id="cb32-18"><a href="pop-DST.html#cb32-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb32-19"><a href="pop-DST.html#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_commune, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb32-20"><a href="pop-DST.html#cb32-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_brewer</span>(</span>
+<span id="cb32-21"><a href="pop-DST.html#cb32-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">name =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">overset{</span><span class="sc">\\</span><span class="st">textbf{Population}}{(x1000/km^2)}$&quot;</span>),</span>
+<span id="cb32-22"><a href="pop-DST.html#cb32-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">palette =</span> <span class="st">&quot;RdYlBu&quot;</span>,</span>
+<span id="cb32-23"><a href="pop-DST.html#cb32-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb32-24"><a href="pop-DST.html#cb32-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">drop =</span> <span class="cn">FALSE</span>)  <span class="sc">+</span></span>
+<span id="cb32-25"><a href="pop-DST.html#cb32-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb32-26"><a href="pop-DST.html#cb32-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb32-27"><a href="pop-DST.html#cb32-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb32-28"><a href="pop-DST.html#cb32-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">&quot;Population density by grid cells of 100m x 100m&quot;</span>,</span>
+<span id="cb32-29"><a href="pop-DST.html#cb32-29" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Date&quot;</span>, df<span class="sc">$</span>date, <span class="at">sep =</span> <span class="st">&quot;: &quot;</span>))</span>
+<span id="cb32-30"><a href="pop-DST.html#cb32-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-31"><a href="pop-DST.html#cb32-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-32"><a href="pop-DST.html#cb32-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each year</span></span>
+<span id="cb32-33"><a href="pop-DST.html#cb32-33" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
+<span id="cb32-34"><a href="pop-DST.html#cb32-34" aria-hidden="true" tabindex="-1"></a>plts <span class="ot">&lt;-</span> pop_g100m <span class="sc">%&gt;%</span> </span>
+<span id="cb32-35"><a href="pop-DST.html#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_split</span>(date) <span class="sc">%&gt;%</span>  </span>
+<span id="cb32-36"><a href="pop-DST.html#cb32-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">future_map</span>(., <span class="at">.f =</span> f_plot, <span class="at">.options =</span> <span class="fu">furrr_options</span>(<span class="at">seed =</span> <span class="dv">123</span>))</span>
+<span id="cb32-37"><a href="pop-DST.html#cb32-37" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
+<span id="cb32-38"><a href="pop-DST.html#cb32-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-39"><a href="pop-DST.html#cb32-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Animation</span></span>
+<span id="cb32-40"><a href="pop-DST.html#cb32-40" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(years_pd)) { <span class="fu">print</span>(plts[[i]]) }</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-pop-density"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-density-.gif" alt="Dasymetric map" width="672" />
 <p class="caption">
-Figure 4.1: Dasymetric map
+Figure 5.1: Dasymetric map
 </p>
 </div>
 

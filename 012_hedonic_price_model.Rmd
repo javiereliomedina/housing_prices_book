@@ -1,4 +1,6 @@
-# Hedonic price model {#hedonic-price-model} 
+# (PART) Hedonic price model {-}
+
+# Hedonic model {#hedonic-price-model} 
 
 House prices can be modelled based on the structural characteristics of the house (e.g. age, size, building materials, floor level, etc.), their location (e.g. proximity to urban services, distance to Central Business District - CBD, accessibility, etc.), and the surrounding environment (e.g. neighbourhood services and socio-economic aspects of its inhabitants, leisure facilities, noise levels, etc.) (@Chen2008, @Gultekin2006). We will focus our study in the socio-economic aspects of the neighbourhood and, in particular, in the migration structure (e.g. migration pressure, ethnic groups, ...). The house prices can be therefore defined by the following function (@Chen2008, @Gultekin2006).
 

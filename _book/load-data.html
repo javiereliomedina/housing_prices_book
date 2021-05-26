@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Residential units saled as free scale | Housing prices Copenhagen</title>
+  <title>Chapter 10 Load data | Data visualization in R: animations</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 10 Load data | Data visualization in R: animations" />
   <meta property="og:type" content="book" />
   
   
@@ -16,23 +16,23 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 10 Load data | Data visualization in R: animations" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
 
-<meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
+<meta name="author" content="Javier Elío" />
 
 
-<meta name="date" content="2021-05-26" />
+<meta name="date" content="2021-03-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="noise.html"/>
-<link rel="next" href="references.html"/>
+<link rel="prev" href="libraries.html"/>
+<link rel="next" href="animation.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,10 +51,6 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -878,36 +874,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
-<li class="part"><span><b>I Population growth in Denmark and housing prices</b></span></li>
-<li class="chapter" data-level="1" data-path="pop-growth.html"><a href="pop-growth.html"><i class="fa fa-check"></i><b>1</b> Population growth</a></li>
-<li class="part"><span><b>II Hedonic price model</b></span></li>
-<li class="chapter" data-level="2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>2</b> Hedonic model</a>
+<li class="part"><span><b>I Introduction</b></span></li>
+<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>2.1</b> House characteristics</a></li>
-<li class="chapter" data-level="2.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>2.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="2.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>2.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
+<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>III Load data</b></span></li>
-<li class="chapter" data-level="3" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>3</b> Administrative units</a></li>
-<li class="chapter" data-level="4" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>4</b> Housing data</a></li>
-<li class="chapter" data-level="5" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>5</b> Population density</a></li>
-<li class="chapter" data-level="6" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>6</b> Open Street Map</a>
+<li class="part"><span><b>II Load data</b></span></li>
+<li class="chapter" data-level="2" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
+<li class="chapter" data-level="3" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
+<li class="chapter" data-level="4" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>4</b> Population density</a></li>
+<li class="chapter" data-level="5" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>5</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>6.1</b> Features</a>
+<li class="chapter" data-level="5.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>5.1</b> Features</a>
 <ul>
-<li class="chapter" data-level="6.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>6.1.1</b> Areal features</a></li>
-<li class="chapter" data-level="6.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>6.1.2</b> Point features</a></li>
+<li class="chapter" data-level="5.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>5.1.1</b> Areal features</a></li>
+<li class="chapter" data-level="5.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>5.1.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>6.2</b> Potential model</a></li>
+<li class="chapter" data-level="5.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>5.2</b> Potential model</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>7</b> Distance to Central Business District</a></li>
-<li class="chapter" data-level="8" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>8</b> Noise</a></li>
-<li class="part"><span><b>IV Data analysis</b></span></li>
-<li class="chapter" data-level="9" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
+<li class="chapter" data-level="6" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>6</b> Distance to Central Business District</a></li>
+<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a></li>
+<li class="part"><span><b>III Data analysis</b></span></li>
+<li class="chapter" data-level="8" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.1</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="8.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="9" data-path="libraries.html"><a href="libraries.html"><i class="fa fa-check"></i><b>9</b> Libraries</a></li>
+<li class="chapter" data-level="10" data-path="load-data.html"><a href="load-data.html"><i class="fa fa-check"></i><b>10</b> Load data</a></li>
+<li class="chapter" data-level="11" data-path="animation.html"><a href="animation.html"><i class="fa fa-check"></i><b>11</b> Animation</a></li>
+<li class="chapter" data-level="12" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>12</b> Notes</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -920,7 +918,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Housing prices Copenhagen</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data visualization in R: animations</a>
           </h1>
         </div>
 
@@ -928,73 +926,82 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="EDA-house-prices" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Residential units saled as free scale</h1>
-<p>We focused our study in residential dwellings on the ordinary free trade (Table <a href="BBR-data.html#tab:tbl-runits-clean">4.2</a>).</p>
-<p>NOTES:</p>
-<ul>
-<li>There are large differences in the number of residential units between years, why??</li>
-<li>Study only one year for the moment (e.g. 2019)??</li>
-<li>Housing prices in different years -&gt; adjust to 2019 prices (what index; Table <a href="BBR-data.html#tab:price-index">4.1</a>)?</li>
-<li><strong>KONTANT_KOEBESUM</strong> = cash purchase price? Analyse it?? What about <strong>KOEBESUM_BELOEB</strong> = The purchase price agreed upon the sale of the property???</li>
-<li><strong>KONTANT_KOEBESUM</strong> = 0 or (&lt; 100000 DKK)?</li>
-<li><strong>SKOEDE_DATO</strong> = “The date on which the deed was signed” -&gt; use as sale date?? Should we use this date (i.e. for the price index)? …<br />
-</li>
-<li>What about housing prices = 0?</li>
-<li>Dwelling Area &lt;= 0?</li>
-</ul>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="EDA-house-prices.html#cb57-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb57-2"><a href="EDA-house-prices.html#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
-<span id="cb57-3"><a href="EDA-house-prices.html#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb57-4"><a href="EDA-house-prices.html#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb57-5"><a href="EDA-house-prices.html#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb57-6"><a href="EDA-house-prices.html#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="residential-units-by-floor-level" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Residential units by floor level</h2>
-<ul>
-<li>KL - basement</li>
-<li>ST - ground floor</li>
-<li>1 - 1st floor</li>
-<li>2 - 2nd floor</li>
-<li>3 - 3rd floor</li>
-<li>4 - 4th floor</li>
-<li>5 or more = etc.</li>
-</ul>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="EDA-house-prices.html#cb58-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb58-2"><a href="EDA-house-prices.html#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb58-3"><a href="EDA-house-prices.html#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb58-4"><a href="EDA-house-prices.html#cb58-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb58-5"><a href="EDA-house-prices.html#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb58-6"><a href="EDA-house-prices.html#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb58-7"><a href="EDA-house-prices.html#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb58-8"><a href="EDA-house-prices.html#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb58-9"><a href="EDA-house-prices.html#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb58-10"><a href="EDA-house-prices.html#cb58-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb58-11"><a href="EDA-house-prices.html#cb58-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb58-12"><a href="EDA-house-prices.html#cb58-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb58-13"><a href="EDA-house-prices.html#cb58-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb58-14"><a href="EDA-house-prices.html#cb58-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb58-15"><a href="EDA-house-prices.html#cb58-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb58-16"><a href="EDA-house-prices.html#cb58-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb58-17"><a href="EDA-house-prices.html#cb58-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb58-18"><a href="EDA-house-prices.html#cb58-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
-<img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
-<p class="caption">
-Figure 9.1: Residential units distribution by floor level
-</p>
-</div>
-
-</div>
+<div id="load-data" class="section level1" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Load data</h1>
+<ol style="list-style-type: decimal">
+<li>Population data:</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="load-data.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data</span></span>
+<span id="cb2-2"><a href="load-data.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  id_table <span class="ot">&lt;-</span> <span class="st">&quot;FOLK1C&quot;</span></span>
+<span id="cb2-3"><a href="load-data.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  var_pop <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-4"><a href="load-data.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-5"><a href="load-data.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># loop by quarter for getting the data </span></span>
+<span id="cb2-6"><a href="load-data.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  steps <span class="ot">&lt;-</span> <span class="cf">function</span>(quarter){</span>
+<span id="cb2-7"><a href="load-data.html#cb2-7" aria-hidden="true" tabindex="-1"></a>    var_values <span class="ot">&lt;-</span> <span class="fu">list</span>(id_region, id_ancestry, quarter)</span>
+<span id="cb2-8"><a href="load-data.html#cb2-8" aria-hidden="true" tabindex="-1"></a>    var_input <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map2</span>(<span class="at">.x =</span> var_codes, <span class="at">.y =</span> var_values, <span class="at">.f =</span> <span class="sc">~</span><span class="fu">list</span>(<span class="at">code =</span> .x, <span class="at">values =</span> .y))</span>
+<span id="cb2-9"><a href="load-data.html#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_data</span>(id_table, <span class="at">variables =</span> var_input)</span>
+<span id="cb2-10"><a href="load-data.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-11"><a href="load-data.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-12"><a href="load-data.html#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Codes for var_input</span></span>
+<span id="cb2-13"><a href="load-data.html#cb2-13" aria-hidden="true" tabindex="-1"></a>  var_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;OMRÅDE&quot;</span>, <span class="st">&quot;HERKOMST&quot;</span>, <span class="st">&quot;Tid&quot;</span>)</span>
+<span id="cb2-14"><a href="load-data.html#cb2-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-15"><a href="load-data.html#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Values for var_input</span></span>
+<span id="cb2-16"><a href="load-data.html#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Region: Denmark</span></span>
+<span id="cb2-17"><a href="load-data.html#cb2-17" aria-hidden="true" tabindex="-1"></a>  id_region <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(var_pop<span class="sc">$</span>values[[<span class="dv">1</span>]]<span class="sc">$</span>id)</span>
+<span id="cb2-18"><a href="load-data.html#cb2-18" aria-hidden="true" tabindex="-1"></a>  id_region <span class="ot">&lt;-</span> id_region[id_region <span class="sc">&gt;</span> <span class="dv">100</span>]</span>
+<span id="cb2-19"><a href="load-data.html#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Ancestry (only total population)</span></span>
+<span id="cb2-20"><a href="load-data.html#cb2-20" aria-hidden="true" tabindex="-1"></a>  id_ancestry <span class="ot">&lt;-</span> <span class="st">&quot;TOT&quot;</span></span>
+<span id="cb2-21"><a href="load-data.html#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="do">## Quarters</span></span>
+<span id="cb2-22"><a href="load-data.html#cb2-22" aria-hidden="true" tabindex="-1"></a>  id_quarter <span class="ot">&lt;-</span> var_pop<span class="sc">$</span>values[[<span class="dv">6</span>]]<span class="sc">$</span>id   <span class="co"># Select all quarters</span></span>
+<span id="cb2-23"><a href="load-data.html#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parallel process with {future}</span></span>
+<span id="cb2-24"><a href="load-data.html#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession)  </span>
+<span id="cb2-25"><a href="load-data.html#cb2-25" aria-hidden="true" tabindex="-1"></a>  pop_LAU <span class="ot">&lt;-</span> id_quarter <span class="sc">%&gt;%</span> <span class="fu">future_map</span>(steps)</span>
+<span id="cb2-26"><a href="load-data.html#cb2-26" aria-hidden="true" tabindex="-1"></a>  pop_LAU <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(pop_LAU)</span>
+<span id="cb2-27"><a href="load-data.html#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
+<span id="cb2-28"><a href="load-data.html#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="load-data.html#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean data </span></span>
+<span id="cb2-30"><a href="load-data.html#cb2-30" aria-hidden="true" tabindex="-1"></a>  pop_LAU <span class="ot">&lt;-</span> pop_LAU <span class="sc">%&gt;%</span> </span>
+<span id="cb2-31"><a href="load-data.html#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Column names</span></span>
+<span id="cb2-32"><a href="load-data.html#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">LAU_NAME =</span> OMRÅDE,</span>
+<span id="cb2-33"><a href="load-data.html#cb2-33" aria-hidden="true" tabindex="-1"></a>           <span class="at">ancestry =</span> HERKOMST,</span>
+<span id="cb2-34"><a href="load-data.html#cb2-34" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> TID, </span>
+<span id="cb2-35"><a href="load-data.html#cb2-35" aria-hidden="true" tabindex="-1"></a>           <span class="at">pop =</span> INDHOLD) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-36"><a href="load-data.html#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># format date (first day of the quarter)</span></span>
+<span id="cb2-37"><a href="load-data.html#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">gsub</span>(<span class="st">&quot;Q&quot;</span>, <span class="st">&quot;&quot;</span>, date),</span>
+<span id="cb2-38"><a href="load-data.html#cb2-38" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> <span class="fu">as_date_yq</span>(<span class="fu">as.integer</span>(date)),</span>
+<span id="cb2-39"><a href="load-data.html#cb2-39" aria-hidden="true" tabindex="-1"></a>           <span class="at">date =</span> <span class="fu">first_of_quarter</span>(date))  <span class="sc">%&gt;%</span> </span>
+<span id="cb2-40"><a href="load-data.html#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Standardize population growth to % change with 2008-Q1 as baseline</span></span>
+<span id="cb2-41"><a href="load-data.html#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(LAU_NAME, ancestry) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-42"><a href="load-data.html#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(LAU_NAME, date) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-43"><a href="load-data.html#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">pop_pct_2008 =</span> (pop<span class="sc">/</span><span class="fu">first</span>(pop) <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-44"><a href="load-data.html#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() </span></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>Local Administrative Units (LAU):</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="load-data.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create local directory for caching big files</span></span>
+<span id="cb3-2"><a href="load-data.html#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">options</span>(<span class="at">gisco_cache_dir =</span> <span class="st">&quot;C:/GISCO_spatial_data&quot;</span>)</span>
+<span id="cb3-3"><a href="load-data.html#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="load-data.html#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load LAUs data</span></span>
+<span id="cb3-5"><a href="load-data.html#cb3-5" aria-hidden="true" tabindex="-1"></a>  dk_lau <span class="ot">&lt;-</span> <span class="fu">gisco_get_lau</span>(<span class="at">year =</span> <span class="st">&quot;2019&quot;</span>, <span class="at">country =</span> <span class="st">&quot;DNK&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-6"><a href="load-data.html#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Thanslate &quot;København&quot; = &quot;Copenhagen&quot;</span></span>
+<span id="cb3-7"><a href="load-data.html#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">LAU_NAME =</span> <span class="fu">gsub</span>(<span class="st">&quot;København&quot;</span>, <span class="st">&quot;Copenhagen&quot;</span>, LAU_NAME))</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Join both datasets:</li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="load-data.html#cb4-1" aria-hidden="true" tabindex="-1"></a>dk_lau_pop <span class="ot">&lt;-</span>  <span class="fu">left_join</span>(dk_lau, pop_LAU, <span class="at">by =</span> <span class="st">&quot;LAU_NAME&quot;</span>) </span></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li>Big cities/urban areas:</li>
+</ol>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="load-data.html#cb5-1" aria-hidden="true" tabindex="-1"></a>bc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Copenhagen&quot;</span>, <span class="st">&quot;Aarhus&quot;</span>, <span class="st">&quot;Odense&quot;</span>, <span class="st">&quot;Aalborg&quot;</span>)</span>
+<span id="cb5-2"><a href="load-data.html#cb5-2" aria-hidden="true" tabindex="-1"></a>big_cities <span class="ot">&lt;-</span> dk_lau <span class="sc">%&gt;%</span> <span class="fu">filter</span>(LAU_NAME <span class="sc">%in%</span> bc) </span></code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="noise.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="libraries.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="animation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1025,7 +1032,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/031_EDA.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/index.en.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -1044,20 +1051,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

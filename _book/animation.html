@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Residential units saled as free scale | Housing prices Copenhagen</title>
+  <title>Chapter 11 Animation | Data visualization in R: animations</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 11 Animation | Data visualization in R: animations" />
   <meta property="og:type" content="book" />
   
   
@@ -16,23 +16,23 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 11 Animation | Data visualization in R: animations" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
 
-<meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
+<meta name="author" content="Javier Elío" />
 
 
-<meta name="date" content="2021-05-26" />
+<meta name="date" content="2021-03-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="noise.html"/>
-<link rel="next" href="references.html"/>
+<link rel="prev" href="load-data.html"/>
+<link rel="next" href="notes.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,10 +51,6 @@
 
 
 
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -878,36 +874,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i>Acknowledgements</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#r-session"><i class="fa fa-check"></i>R session</a></li>
 </ul></li>
-<li class="part"><span><b>I Population growth in Denmark and housing prices</b></span></li>
-<li class="chapter" data-level="1" data-path="pop-growth.html"><a href="pop-growth.html"><i class="fa fa-check"></i><b>1</b> Population growth</a></li>
-<li class="part"><span><b>II Hedonic price model</b></span></li>
-<li class="chapter" data-level="2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>2</b> Hedonic model</a>
+<li class="part"><span><b>I Introduction</b></span></li>
+<li class="chapter" data-level="1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>1</b> Hedonic price model</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>2.1</b> House characteristics</a></li>
-<li class="chapter" data-level="2.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>2.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="2.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>2.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="1.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>1.1</b> House characteristics</a></li>
+<li class="chapter" data-level="1.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>1.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="1.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>1.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>III Load data</b></span></li>
-<li class="chapter" data-level="3" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>3</b> Administrative units</a></li>
-<li class="chapter" data-level="4" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>4</b> Housing data</a></li>
-<li class="chapter" data-level="5" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>5</b> Population density</a></li>
-<li class="chapter" data-level="6" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>6</b> Open Street Map</a>
+<li class="part"><span><b>II Load data</b></span></li>
+<li class="chapter" data-level="2" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>2</b> Administrative units</a></li>
+<li class="chapter" data-level="3" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>3</b> Housing data</a></li>
+<li class="chapter" data-level="4" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>4</b> Population density</a></li>
+<li class="chapter" data-level="5" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>5</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>6.1</b> Features</a>
+<li class="chapter" data-level="5.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>5.1</b> Features</a>
 <ul>
-<li class="chapter" data-level="6.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>6.1.1</b> Areal features</a></li>
-<li class="chapter" data-level="6.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>6.1.2</b> Point features</a></li>
+<li class="chapter" data-level="5.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>5.1.1</b> Areal features</a></li>
+<li class="chapter" data-level="5.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>5.1.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>6.2</b> Potential model</a></li>
+<li class="chapter" data-level="5.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>5.2</b> Potential model</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>7</b> Distance to Central Business District</a></li>
-<li class="chapter" data-level="8" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>8</b> Noise</a></li>
-<li class="part"><span><b>IV Data analysis</b></span></li>
-<li class="chapter" data-level="9" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>9</b> Residential units saled as free scale</a>
+<li class="chapter" data-level="6" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>6</b> Distance to Central Business District</a></li>
+<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a></li>
+<li class="part"><span><b>III Data analysis</b></span></li>
+<li class="chapter" data-level="8" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>9.1</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="8.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="9" data-path="libraries.html"><a href="libraries.html"><i class="fa fa-check"></i><b>9</b> Libraries</a></li>
+<li class="chapter" data-level="10" data-path="load-data.html"><a href="load-data.html"><i class="fa fa-check"></i><b>10</b> Load data</a></li>
+<li class="chapter" data-level="11" data-path="animation.html"><a href="animation.html"><i class="fa fa-check"></i><b>11</b> Animation</a></li>
+<li class="chapter" data-level="12" data-path="notes.html"><a href="notes.html"><i class="fa fa-check"></i><b>12</b> Notes</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -920,7 +918,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Housing prices Copenhagen</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Data visualization in R: animations</a>
           </h1>
         </div>
 
@@ -928,73 +926,84 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="EDA-house-prices" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Residential units saled as free scale</h1>
-<p>We focused our study in residential dwellings on the ordinary free trade (Table <a href="BBR-data.html#tab:tbl-runits-clean">4.2</a>).</p>
-<p>NOTES:</p>
-<ul>
-<li>There are large differences in the number of residential units between years, why??</li>
-<li>Study only one year for the moment (e.g. 2019)??</li>
-<li>Housing prices in different years -&gt; adjust to 2019 prices (what index; Table <a href="BBR-data.html#tab:price-index">4.1</a>)?</li>
-<li><strong>KONTANT_KOEBESUM</strong> = cash purchase price? Analyse it?? What about <strong>KOEBESUM_BELOEB</strong> = The purchase price agreed upon the sale of the property???</li>
-<li><strong>KONTANT_KOEBESUM</strong> = 0 or (&lt; 100000 DKK)?</li>
-<li><strong>SKOEDE_DATO</strong> = “The date on which the deed was signed” -&gt; use as sale date?? Should we use this date (i.e. for the price index)? …<br />
-</li>
-<li>What about housing prices = 0?</li>
-<li>Dwelling Area &lt;= 0?</li>
-</ul>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="EDA-house-prices.html#cb57-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb57-2"><a href="EDA-house-prices.html#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
-<span id="cb57-3"><a href="EDA-house-prices.html#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb57-4"><a href="EDA-house-prices.html#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb57-5"><a href="EDA-house-prices.html#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb57-6"><a href="EDA-house-prices.html#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="residential-units-by-floor-level" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Residential units by floor level</h2>
-<ul>
-<li>KL - basement</li>
-<li>ST - ground floor</li>
-<li>1 - 1st floor</li>
-<li>2 - 2nd floor</li>
-<li>3 - 3rd floor</li>
-<li>4 - 4th floor</li>
-<li>5 or more = etc.</li>
-</ul>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="EDA-house-prices.html#cb58-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb58-2"><a href="EDA-house-prices.html#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb58-3"><a href="EDA-house-prices.html#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb58-4"><a href="EDA-house-prices.html#cb58-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb58-5"><a href="EDA-house-prices.html#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb58-6"><a href="EDA-house-prices.html#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb58-7"><a href="EDA-house-prices.html#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb58-8"><a href="EDA-house-prices.html#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb58-9"><a href="EDA-house-prices.html#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb58-10"><a href="EDA-house-prices.html#cb58-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb58-11"><a href="EDA-house-prices.html#cb58-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb58-12"><a href="EDA-house-prices.html#cb58-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb58-13"><a href="EDA-house-prices.html#cb58-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb58-14"><a href="EDA-house-prices.html#cb58-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb58-15"><a href="EDA-house-prices.html#cb58-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb58-16"><a href="EDA-house-prices.html#cb58-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb58-17"><a href="EDA-house-prices.html#cb58-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb58-18"><a href="EDA-house-prices.html#cb58-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
-<img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
-<p class="caption">
-Figure 9.1: Residential units distribution by floor level
-</p>
-</div>
-
-</div>
+<div id="animation" class="section level1" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Animation</h1>
+<p>The package <em>gganimate</em> is an extension of <em>ggplot2</em> where animations are defined by adding on layers of information in our code with the operator <em>+</em>. The basic function takes the form <em>transition_xxx()</em>, and it is where we define how the data should be treated. For example, we will use <em>transition_states()</em> which split the data based on the levels of a given column. However, there are other options that can be used depending on the structure of our data and what we would like to achieve. I would therefore recommend you to read the help for getting other transition options.</p>
+<p>In this regards, the process of building an animation starts in a similar way that when we create a static graph. In our case, we have a <em>sf</em> objects (i.e. <em>dk_lau_pop</em>) and we would like to plot the population change over time (i.e. <em>pop_pct_2008</em>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="animation.html#cb6-1" aria-hidden="true" tabindex="-1"></a>dk_lau_pop</span></code></pre></div>
+<pre><code># Simple feature collection with 5346 features and 9 fields
+# Geometry type: GEOMETRY
+# Dimension:     XY
+# Bounding box:  xmin: 8.08 ymin: 54.6 xmax: 15.2 ymax: 57.8
+# Geodetic CRS:  WGS 84
+# First 10 features:
+#    CNTR_CODE   LAU_NAME LAU_CODE    FID GISCO_ID ancestry       date   pop pop_pct_2008
+# 1         DK Kalundborg      326 DK_326   DK_326    Total 2008-01-01 49743      0.00000
+# 2         DK Kalundborg      326 DK_326   DK_326    Total 2008-04-01 49711     -0.06433
+# 3         DK Kalundborg      326 DK_326   DK_326    Total 2008-07-01 49845      0.20505
+# 4         DK Kalundborg      326 DK_326   DK_326    Total 2008-10-01 49777      0.06835
+# 5         DK Kalundborg      326 DK_326   DK_326    Total 2009-01-01 49741     -0.00402
+# 6         DK Kalundborg      326 DK_326   DK_326    Total 2009-04-01 49613     -0.26134
+# 7         DK Kalundborg      326 DK_326   DK_326    Total 2009-07-01 49583     -0.32165
+# 8         DK Kalundborg      326 DK_326   DK_326    Total 2009-10-01 49359     -0.77197
+# 9         DK Kalundborg      326 DK_326   DK_326    Total 2010-01-01 49265     -0.96094
+# 10        DK Kalundborg      326 DK_326   DK_326    Total 2010-04-01 49271     -0.94888
+#                          geometry
+# 1  MULTIPOLYGON (((11.3 55.8, ...
+# 2  MULTIPOLYGON (((11.3 55.8, ...
+# 3  MULTIPOLYGON (((11.3 55.8, ...
+# 4  MULTIPOLYGON (((11.3 55.8, ...
+# 5  MULTIPOLYGON (((11.3 55.8, ...
+# 6  MULTIPOLYGON (((11.3 55.8, ...
+# 7  MULTIPOLYGON (((11.3 55.8, ...
+# 8  MULTIPOLYGON (((11.3 55.8, ...
+# 9  MULTIPOLYGON (((11.3 55.8, ...
+# 10 MULTIPOLYGON (((11.3 55.8, ...</code></pre>
+<p>Therefore, we’d use <em>geom_sf()</em> for the static part as we saw in previous post:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="animation.html#cb8-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb8-2"><a href="animation.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> dk_lau_pop,</span>
+<span id="cb8-3"><a href="animation.html#cb8-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> pop_pct_2008),</span>
+<span id="cb8-4"><a href="animation.html#cb8-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>,</span>
+<span id="cb8-5"><a href="animation.html#cb8-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="animation.html#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">name =</span> <span class="st">&quot;Change [%]&quot;</span>,</span>
+<span id="cb8-7"><a href="animation.html#cb8-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">low =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb8-8"><a href="animation.html#cb8-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb8-9"><a href="animation.html#cb8-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">high =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb8-10"><a href="animation.html#cb8-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb8-11"><a href="animation.html#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb8-12"><a href="animation.html#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_label_repel</span>(<span class="at">data =</span> big_cities,</span>
+<span id="cb8-13"><a href="animation.html#cb8-13" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">label =</span> LAU_NAME),</span>
+<span id="cb8-14"><a href="animation.html#cb8-14" aria-hidden="true" tabindex="-1"></a>                      <span class="at">force =</span> <span class="dv">20</span>,</span>
+<span id="cb8-15"><a href="animation.html#cb8-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nudge_y =</span> <span class="dv">1</span>,</span>
+<span id="cb8-16"><a href="animation.html#cb8-16" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nudge_x =</span> <span class="dv">2</span>,</span>
+<span id="cb8-17"><a href="animation.html#cb8-17" aria-hidden="true" tabindex="-1"></a>                      <span class="at">seed =</span> <span class="dv">15</span>) <span class="sc">+</span></span>
+<span id="cb8-18"><a href="animation.html#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Danish population change by LAUs&quot;</span>,</span>
+<span id="cb8-19"><a href="animation.html#cb8-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb8-20"><a href="animation.html#cb8-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb8-21"><a href="animation.html#cb8-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Data sources: Statistics Denmark and ©EuroGeographics</span><span class="sc">\n</span><span class="st">Author: J. Elio (@Elio_Javi), C. Keßler, H.S. Hansen.</span><span class="sc">\n</span><span class="st">Aalborg University, Department of Planning&quot;</span>)</span>
+<span id="cb8-22"><a href="animation.html#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="animation.html#cb8-23" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div>
+<p><img src="Housing_prices_book_files/figure-html/fig-static-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Once we have the static part, we add the functions for the animation. As we can see in our data (<em>dk_lau_pop</em>), there is a column called <em>“date”</em> that represents the first day of the quarter where we have population data. It goes from “2008-01-01” to “2021-01-01” and thus we can use <em>transition_states()</em> to split our data based on those dates and plot them individually.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="animation.html#cb9-1" aria-hidden="true" tabindex="-1"></a>anim_1 <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">transition_states</span>(date)</span>
+<span id="cb9-2"><a href="animation.html#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="animation.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Export animation (.gif)</span></span>
+<span id="cb9-4"><a href="animation.html#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">anim_save</span>(<span class="st">&quot;anim_1.gif&quot;</span>, anim_1)</span></code></pre></div>
+<p><img src="anim_1.gif" /></p>
+<p>Finally, we should add labels that help us to interpret the transition stages (e.g. add a subtitle with the dates). We can do that by providing a frame variable to our plot. In our case, as we have used <em>transition_states()</em>, we can use <em>closest_state</em> which is the name of each state we split the data (i.e. <em>date</em>). However, different transitions provide different frame variables and we may need to use other frame variable (e.g. <em>frame</em>).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="animation.html#cb10-1" aria-hidden="true" tabindex="-1"></a>anim_2 <span class="ot">&lt;-</span> anim_1 <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Date: {closest_state}&quot;</span>) </span>
+<span id="cb10-2"><a href="animation.html#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="animation.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Export animation</span></span>
+<span id="cb10-4"><a href="animation.html#cb10-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">anim_save</span>(<span class="st">&quot;anim_2.gif&quot;</span>, anim_2)</span></code></pre></div>
+<p><img src="anim_2.gif" /></p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="noise.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="load-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="notes.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1025,7 +1034,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/031_EDA.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/index.en.Rmd",
 "text": "Edit"
 },
 "history": {
@@ -1044,20 +1053,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>
