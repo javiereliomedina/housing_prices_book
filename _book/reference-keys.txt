@@ -1,9 +1,10 @@
+fig:fig-DK-pop
 fig:fig-pop-pyramith
 fig:fig-pop-growth-total
 fig:fig-pop-growth-ancestry
 fig:fig-pop-change
-fig:unnamed-chunk-5
-fig:unnamed-chunk-6
+fig:fig-pop-migr-total
+fig:fig-pop-migr-top10-countries
 fig:fig-adm-units
 fig:fig-grids-100m
 fig:fig-sp-res-builds
@@ -38,6 +39,3 @@ dist-CBD
 noise
 EDA-house-prices
 residential-units-by-floor-level
-fig:fig-DK-pop
-fig:unnamed-chunk-3
-fig:unnamed-chunk-4

@@ -14,163 +14,165 @@ KN <- tibble(name = "Kongens Nytorv", x = 12.5860, y = 55.6805) %>%
  
 ```{r open-trip-planner-data, results='hide'}
 
-# OTP folder structure
-dir.create("otp")
-dir.create("otp/graphs/default")
+# NOT RUN (slow) uncomment if needed
 
-path_data <- file.path("./otp")
-
-# Data
-
-## Download Denmark GTFS from dk_gtfs <- "http://www.rejseplanen.info/labs/GTFS.zip"
-## and save as "~./otp/graphs/default/gtfs.zip")
-
-## Copenhagen pbf
-cph_match <- oe_match("Copenhagen",
-                      provider = "bbbike",
-                      quiet = TRUE)
-oe_download(cph_match$url,
-            provider = "bbbike",
-            download_directory = "./otp/graphs/default",
-            quiet = TRUE)
-file.rename(from = "./otp/graphs/default/bbbike_Copenhagen.osm.pbf",
-            to = "./otp/graphs/default/osm.pbf")
-
-## Get DEM
-
-# Download elevation model (10m resolution)
-zip_files <- c("DTM10_616_71_ASC_UTM32-EUREF89.ZIP",
-               "DTM10_616_72_ASC_UTM32-EUREF89.ZIP",
-               "DTM10_617_71_ASC_UTM32-EUREF89.ZIP",
-               "DTM10_617_72_ASC_UTM32-EUREF89.ZIP",
-               "DTM10_618_71_ASC_UTM32-EUREF89.ZIP",
-               "DTM10_618_72_ASC_UTM32-EUREF89.ZIP")
-
-f1 <- function(zip_file){ 
-  dangeo_get_data(ftp_folder = "dhm_danmarks_hoejdemodel/DHM-HISTORIK/DHM-2007/DTM_10M",
-                  zip_name   = zip_file)
-}
-
-map(zip_files, f1)
-
-# Read files
-asc_files_path <- list.files(path = loc_dir ,
-                             pattern = "*.asc",
-                             full.names = TRUE, 
-                             recursive = TRUE)
-
-# Read blocks
-dtm10_blocks <- map(.x = asc_files_path, .f = read_stars)
-
-# Set crs (UTM32-ETRS89)
-dtm10_blocks <- map(dtm10_blocks, ~st_set_crs(., st_crs(study_area)))
-
-# Build a mosaic 
-dtm10 <- st_mosaic(dtm10_blocks[[1]],
-                   dtm10_blocks[[2]],
-                   dtm10_blocks[[3]],
-                   dtm10_blocks[[4]],
-                   dtm10_blocks[[5]],
-                   dtm10_blocks[[6]])
-
-# Intersect with study area
-cph_dtm10 <- st_crop(dtm10, study_area)
-
-# Warping the raster
-newgrid <- study_area %>%
-  st_transform(crs = "EPSG:4326") %>%
-  st_bbox() %>%
-  st_as_stars(dx = 0.000065, dy = 0.000065) # approx. 10m
-
-cph_dtm10_WGS84 <- cph_dtm10 %>% st_warp(newgrid)
-
-# Export to otp folder 
-write_stars(cph_dtm10_WGS84, "otp/graphs/default/dem.tif")
+# # OTP folder structure
+# dir.create("otp")
+# dir.create("otp/graphs/default")
+# 
+# path_data <- file.path("./otp")
+# 
+# # Data
+# 
+# ## Download Denmark GTFS from dk_gtfs <- "http://www.rejseplanen.info/labs/GTFS.zip"
+# ## and save as "~./otp/graphs/default/gtfs.zip")
+# 
+# ## Copenhagen pbf
+# cph_match <- oe_match("Copenhagen",
+#                       provider = "bbbike",
+#                       quiet = TRUE)
+# oe_download(cph_match$url,
+#             provider = "bbbike",
+#             download_directory = "./otp/graphs/default",
+#             quiet = TRUE)
+# file.rename(from = "./otp/graphs/default/bbbike_Copenhagen.osm.pbf",
+#             to = "./otp/graphs/default/osm.pbf")
+# 
+# ## Get DEM
+# 
+# # Download elevation model (10m resolution)
+# zip_files <- c("DTM10_616_71_ASC_UTM32-EUREF89.ZIP",
+#                "DTM10_616_72_ASC_UTM32-EUREF89.ZIP",
+#                "DTM10_617_71_ASC_UTM32-EUREF89.ZIP",
+#                "DTM10_617_72_ASC_UTM32-EUREF89.ZIP",
+#                "DTM10_618_71_ASC_UTM32-EUREF89.ZIP",
+#                "DTM10_618_72_ASC_UTM32-EUREF89.ZIP")
+# 
+# f1 <- function(zip_file){ 
+#   dangeo_get_data(ftp_folder = "dhm_danmarks_hoejdemodel/DHM-HISTORIK/DHM-2007/DTM_10M",
+#                   zip_name   = zip_file)
+# }
+# 
+# map(zip_files, f1)
+# 
+# # Read files
+# asc_files_path <- list.files(path = loc_dir ,
+#                              pattern = "*.asc",
+#                              full.names = TRUE, 
+#                              recursive = TRUE)
+# 
+# # Read blocks
+# dtm10_blocks <- map(.x = asc_files_path, .f = read_stars)
+# 
+# # Set crs (UTM32-ETRS89)
+# dtm10_blocks <- map(dtm10_blocks, ~st_set_crs(., st_crs(study_area)))
+# 
+# # Build a mosaic 
+# dtm10 <- st_mosaic(dtm10_blocks[[1]],
+#                    dtm10_blocks[[2]],
+#                    dtm10_blocks[[3]],
+#                    dtm10_blocks[[4]],
+#                    dtm10_blocks[[5]],
+#                    dtm10_blocks[[6]])
+# 
+# # Intersect with study area
+# cph_dtm10 <- st_crop(dtm10, study_area)
+# 
+# # Warping the raster
+# newgrid <- study_area %>%
+#   st_transform(crs = "EPSG:4326") %>%
+#   st_bbox() %>%
+#   st_as_stars(dx = 0.000065, dy = 0.000065) # approx. 10m
+# 
+# cph_dtm10_WGS84 <- cph_dtm10 %>% st_warp(newgrid)
+# 
+# # Export to otp folder 
+# write_stars(cph_dtm10_WGS84, "otp/graphs/default/dem.tif")
 
 ```
 
 ```{r open-trip-planner}
 
-# Open Trip Planner
-
-## Downloading OTP
-path_otp <- otp_dl_jar()
-
-## Building an OTP Graph
-log1 <- otp_build_graph(otp = path_otp, dir = path_data, memory = 10240)
-
-## Start OTP
-log2 <- otp_setup(otp = path_otp, dir = path_data)
-
-## Connect R to OTP
-otpcon <- otp_connect()
+# # Open Trip Planner
+# 
+# ## Downloading OTP
+# path_otp <- otp_dl_jar()
+# 
+# ## Building an OTP Graph
+# log1 <- otp_build_graph(otp = path_otp, dir = path_data, memory = 10240)
+# 
+# ## Start OTP
+# log2 <- otp_setup(otp = path_otp, dir = path_data)
+# 
+# ## Connect R to OTP
+# otpcon <- otp_connect()
 
 ```
 
 ```{r travel-times}
 
-# Origin points
-op <- grids100m$data_points[[1]] %>%
-  st_transform(crs = "EPSG:4326")
-
-# Calculate travel times (i.e. walk, bike, car, and public transport)
-f_tt <- function(feature){
-  otp_plan(otpcon = otpcon,
-           fromPlace = op,
-           toPlace = c(12.5860, 55.6805),
-           get_geometry = FALSE,
-           mode = feature,
-           ncores = as.numeric(availableCores() - 1)) %>% 
-    select(fromPlace, toPlace, duration)
-}
-
-dur_features <- list(walk = "WALK",
-                     bike = "BICYCLE",
-                     car = "CAR",
-                     transit = c("WALK", "TRANSIT"))
-
-tt <- map(dur_features, f_tt)
-
-# Intersect with grid cells of 100 x 100 m
-f1 <- . %>% 
-  as_tibble() %>% 
-  mutate(duration = duration/60) %>% 
-  separate(fromPlace, c("Y", "X"), sep = ",") %>% 
-  st_as_sf(coords = c("X", "Y")) %>% 
-  st_set_crs("EPSG:4326") %>% 
-  st_transform(crs = "EPSG:25832") %>% 
-  st_intersection(grids100m$data_poly[[1]])
-
-tt_grids_cent <- tt %>% map(~f1(.))
-
-# Add to grids polygons
-f2 <- . %>% 
-  st_drop_geometry() %>% 
-  left_join(as_tibble(grids100m$data_poly[[1]]), by = "grid_ID") %>% 
-  st_sf()
-
-tt_grids_poly <- tt_grids_cent %>%  map(~f2(.))
-
-f3 <- function(feature){
-  tt_grids_poly %>% 
-    pluck(feature) %>% 
-    mutate(feature = feature)
-}
-
-tt_grids_poly <- names(tt_grids_poly) %>% map(~f3(.))
-
-# Merge grids
-tt_cph_grids100m <- bind_rows(tt_grids_poly) %>% 
-  mutate(feature = factor(feature, levels = c("walk", "bike", "car", "transit")))
-
-saveRDS(tt_cph_grids100m, file = "travel_times_grids100m_otp.rds")
+# # Origin points
+# op <- grids100m$data_points[[1]] %>%
+#   st_transform(crs = "EPSG:4326")
+# 
+# # Calculate travel times (i.e. walk, bike, car, and public transport)
+# f_tt <- function(feature){
+#   otp_plan(otpcon = otpcon,
+#            fromPlace = op,
+#            toPlace = c(12.5860, 55.6805),
+#            get_geometry = FALSE,
+#            mode = feature,
+#            ncores = as.numeric(availableCores() - 1)) %>% 
+#     select(fromPlace, toPlace, duration)
+# }
+# 
+# dur_features <- list(walk = "WALK",
+#                      bike = "BICYCLE",
+#                      car = "CAR",
+#                      transit = c("WALK", "TRANSIT"))
+# 
+# tt <- map(dur_features, f_tt)
+# 
+# # Intersect with grid cells of 100 x 100 m
+# f1 <- . %>% 
+#   as_tibble() %>% 
+#   mutate(duration = duration/60) %>% 
+#   separate(fromPlace, c("Y", "X"), sep = ",") %>% 
+#   st_as_sf(coords = c("X", "Y")) %>% 
+#   st_set_crs("EPSG:4326") %>% 
+#   st_transform(crs = "EPSG:25832") %>% 
+#   st_intersection(grids100m$data_poly[[1]])
+# 
+# tt_grids_cent <- tt %>% map(~f1(.))
+# 
+# # Add to grids polygons
+# f2 <- . %>% 
+#   st_drop_geometry() %>% 
+#   left_join(as_tibble(grids100m$data_poly[[1]]), by = "grid_ID") %>% 
+#   st_sf()
+# 
+# tt_grids_poly <- tt_grids_cent %>%  map(~f2(.))
+# 
+# f3 <- function(feature){
+#   tt_grids_poly %>% 
+#     pluck(feature) %>% 
+#     mutate(feature = feature)
+# }
+# 
+# tt_grids_poly <- names(tt_grids_poly) %>% map(~f3(.))
+# 
+# # Merge grids
+# tt_cph_grids100m <- bind_rows(tt_grids_poly) %>% 
+#   mutate(feature = factor(feature, levels = c("walk", "bike", "car", "transit")))
+# 
+# saveRDS(tt_cph_grids100m, file = "travel_times_grids100m_otp.rds")
 
 ```
 
 ```{r stop-otp, results='hide'}
 
-# Stop OTP
-otp_stop(warn = FALSE)
+# # Stop OTP
+# otp_stop(warn = FALSE)
 
 ```
 

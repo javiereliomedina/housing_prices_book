@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-05-26" />
+<meta name="date" content="2021-05-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 
 <link rel="next" href="pop-growth.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
@@ -857,6 +859,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -931,11 +956,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Housing prices Copenhagen</h1>
 <p class="author"><em>Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler</em></p>
-<p class="date"><em>2021-05-26</em></p>
+<p class="date" style="margin-top: 1.5em;"><em>2021-05-28</em></p>
 </div>
 <div id="prerequisite" class="section level1 unnumbered">
 <h1>Prerequisite</h1>
-<p>The data have been analysed with <strong>R</strong> (version 4.0.5) and <strong>Rstudio</strong> (version 1.4.1106), and the book has been created with <strong>bookdown</strong> package. The required packages are automatically checked and installed if needed from CRAN.</p>
+<p>The data have been analysed with <strong>R</strong> (version 4.1.0) and <strong>Rstudio</strong> (version 1.4.1717), and the book has been created with <strong>bookdown</strong> package. The required packages are automatically checked and installed if needed from CRAN.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an auxiliary function for checking if a package is installed,</span></span>
 <span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install it if it is not, and load the package</span></span>
 <span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (based on https://gist.github.com/stevenworthington/3178163) </span></span>
@@ -950,23 +975,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-12"><a href="index.html#cb1-12" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="index.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># List of packages </span></span>
-<span id="cb1-15"><a href="index.html#cb1-15" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;bit64&quot;</span>, <span class="st">&quot;bookdown&quot;</span>,</span>
-<span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;data.table&quot;</span>, <span class="st">&quot;danstat&quot;</span>, <span class="st">&quot;dint&quot;</span>,</span>
-<span id="cb1-17"><a href="index.html#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;forcats&quot;</span>, <span class="st">&quot;furrr&quot;</span>,</span>
-<span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggspatial&quot;</span>, <span class="st">&quot;giscoR&quot;</span>, <span class="st">&quot;gtsummary&quot;</span>, <span class="st">&quot;gganimate&quot;</span>, <span class="st">&quot;gifski&quot;</span>,</span>
-<span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;janitor&quot;</span>,</span>
-<span id="cb1-20"><a href="index.html#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;kableExtra&quot;</span>, <span class="st">&quot;knitr&quot;</span>,</span>
-<span id="cb1-21"><a href="index.html#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;latex2exp&quot;</span>,</span>
-<span id="cb1-22"><a href="index.html#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;mapview&quot;</span>,</span>
-<span id="cb1-23"><a href="index.html#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;osmextract&quot;</span>, <span class="st">&quot;osrm&quot;</span>, <span class="st">&quot;opentripplanner&quot;</span>,</span>
-<span id="cb1-24"><a href="index.html#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;potential&quot;</span>,</span>
-<span id="cb1-25"><a href="index.html#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;rappdirs&quot;</span>,</span>
-<span id="cb1-26"><a href="index.html#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;SnowballC&quot;</span>, <span class="st">&quot;stars&quot;</span>,</span>
-<span id="cb1-27"><a href="index.html#cb1-27" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;units&quot;</span>,</span>
-<span id="cb1-28"><a href="index.html#cb1-28" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;table1&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;tidytext&quot;</span>, <span class="st">&quot;tm&quot;</span>, <span class="st">&quot;tools&quot;</span>)</span>
-<span id="cb1-29"><a href="index.html#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="index.html#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and install</span></span>
-<span id="cb1-31"><a href="index.html#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
+<span id="cb1-15"><a href="index.html#cb1-15" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;animation&quot;</span>,</span>
+<span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;bit64&quot;</span>, <span class="st">&quot;bookdown&quot;</span>,</span>
+<span id="cb1-17"><a href="index.html#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;data.table&quot;</span>, <span class="st">&quot;danstat&quot;</span>, <span class="st">&quot;dint&quot;</span>,</span>
+<span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;forcats&quot;</span>, <span class="st">&quot;furrr&quot;</span>,</span>
+<span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggspatial&quot;</span>, <span class="st">&quot;giscoR&quot;</span>, <span class="st">&quot;gtsummary&quot;</span>, <span class="st">&quot;gganimate&quot;</span>, <span class="st">&quot;gifski&quot;</span>,</span>
+<span id="cb1-20"><a href="index.html#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;janitor&quot;</span>,</span>
+<span id="cb1-21"><a href="index.html#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;kableExtra&quot;</span>, <span class="st">&quot;knitr&quot;</span>,</span>
+<span id="cb1-22"><a href="index.html#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;latex2exp&quot;</span>,</span>
+<span id="cb1-23"><a href="index.html#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;mapview&quot;</span>,</span>
+<span id="cb1-24"><a href="index.html#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;osmextract&quot;</span>, <span class="st">&quot;osrm&quot;</span>, <span class="st">&quot;opentripplanner&quot;</span>,</span>
+<span id="cb1-25"><a href="index.html#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;potential&quot;</span>,</span>
+<span id="cb1-26"><a href="index.html#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;rappdirs&quot;</span>,</span>
+<span id="cb1-27"><a href="index.html#cb1-27" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;SnowballC&quot;</span>, <span class="st">&quot;stars&quot;</span>,</span>
+<span id="cb1-28"><a href="index.html#cb1-28" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;units&quot;</span>,</span>
+<span id="cb1-29"><a href="index.html#cb1-29" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;table1&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;tidytext&quot;</span>, <span class="st">&quot;tidytable&quot;</span>, <span class="st">&quot;tm&quot;</span>, <span class="st">&quot;tools&quot;</span>)</span>
+<span id="cb1-30"><a href="index.html#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="index.html#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and install</span></span>
+<span id="cb1-32"><a href="index.html#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
 <p>Furthermore, we have created our own package for downloading <a href="https://kortforsyningen.dk/">kortforsyningen</a> data to a local repository directly from R (i.e. <a href="https://github.com/javiereliomedina/dangeo.git">dangeo</a>). The package can be downloaded from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from GitHub</span></span>
 <span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;devtools&quot;</span>))  <span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
@@ -1081,6 +1107,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": false
 },
 "fontsettings": {

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 9 Residential units saled as free scale | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-05-26" />
+<meta name="date" content="2021-05-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   
 <link rel="prev" href="noise.html"/>
 <link rel="next" href="references.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
@@ -857,6 +859,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -943,13 +968,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>What about housing prices = 0?</li>
 <li>Dwelling Area &lt;= 0?</li>
 </ul>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="EDA-house-prices.html#cb57-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb57-2"><a href="EDA-house-prices.html#cb57-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
-<span id="cb57-3"><a href="EDA-house-prices.html#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb57-4"><a href="EDA-house-prices.html#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb57-5"><a href="EDA-house-prices.html#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb57-6"><a href="EDA-house-prices.html#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="EDA-house-prices.html#cb61-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb61-2"><a href="EDA-house-prices.html#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(BBR_year))) <span class="sc">+</span></span>
+<span id="cb61-3"><a href="EDA-house-prices.html#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
+<span id="cb61-4"><a href="EDA-house-prices.html#cb61-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
+<span id="cb61-5"><a href="EDA-house-prices.html#cb61-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
+<span id="cb61-6"><a href="EDA-house-prices.html#cb61-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="residential-units-by-floor-level" class="section level2" number="9.1">
 <h2><span class="header-section-number">9.1</span> Residential units by floor level</h2>
 <ul>
@@ -961,24 +986,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>4 - 4th floor</li>
 <li>5 or more = etc.</li>
 </ul>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="EDA-house-prices.html#cb58-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb58-2"><a href="EDA-house-prices.html#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb58-3"><a href="EDA-house-prices.html#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb58-4"><a href="EDA-house-prices.html#cb58-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb58-5"><a href="EDA-house-prices.html#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb58-6"><a href="EDA-house-prices.html#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb58-7"><a href="EDA-house-prices.html#cb58-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb58-8"><a href="EDA-house-prices.html#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb58-9"><a href="EDA-house-prices.html#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb58-10"><a href="EDA-house-prices.html#cb58-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb58-11"><a href="EDA-house-prices.html#cb58-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb58-12"><a href="EDA-house-prices.html#cb58-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb58-13"><a href="EDA-house-prices.html#cb58-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb58-14"><a href="EDA-house-prices.html#cb58-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb58-15"><a href="EDA-house-prices.html#cb58-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb58-16"><a href="EDA-house-prices.html#cb58-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb58-17"><a href="EDA-house-prices.html#cb58-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb58-18"><a href="EDA-house-prices.html#cb58-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="EDA-house-prices.html#cb62-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
+<span id="cb62-2"><a href="EDA-house-prices.html#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
+<span id="cb62-3"><a href="EDA-house-prices.html#cb62-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb62-4"><a href="EDA-house-prices.html#cb62-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb62-5"><a href="EDA-house-prices.html#cb62-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
+<span id="cb62-6"><a href="EDA-house-prices.html#cb62-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb62-7"><a href="EDA-house-prices.html#cb62-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
+<span id="cb62-8"><a href="EDA-house-prices.html#cb62-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb62-9"><a href="EDA-house-prices.html#cb62-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb62-10"><a href="EDA-house-prices.html#cb62-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
+<span id="cb62-11"><a href="EDA-house-prices.html#cb62-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb62-12"><a href="EDA-house-prices.html#cb62-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb62-13"><a href="EDA-house-prices.html#cb62-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb62-14"><a href="EDA-house-prices.html#cb62-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb62-15"><a href="EDA-house-prices.html#cb62-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
+<span id="cb62-16"><a href="EDA-house-prices.html#cb62-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
+<span id="cb62-17"><a href="EDA-house-prices.html#cb62-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
+<span id="cb62-18"><a href="EDA-house-prices.html#cb62-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
 <img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
 <p class="caption">
@@ -1017,6 +1042,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": false
 },
 "fontsettings": {
