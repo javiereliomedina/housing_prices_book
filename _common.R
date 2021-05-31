@@ -33,4 +33,6 @@ my_theme_map <- function() {
 # Set local repository for downloading data (i.e. kortforsyningen)
 dangeo::dangeo_set_param()
 
+memory.limit(size=50000)
+
   
