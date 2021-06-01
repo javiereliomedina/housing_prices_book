@@ -5,6 +5,9 @@ fig:fig-pop-growth-ancestry
 fig:fig-pop-change
 fig:fig-pop-migr-total
 fig:fig-pop-migr-top10-countries
+tab:price-index-DK
+fig:fig-price-change-muni
+fig:fig-prices-LAUs
 fig:fig-adm-units
 fig:fig-grids-100m
 fig:fig-sp-res-builds
@@ -23,6 +26,7 @@ fig:fig-roads-noise
 fig:fig-train-noise
 fig:fig-runits-floor
 pop-growth
+house-prices-LAUs
 hedonic-price-model
 house-characteristics
 location-characteristics

@@ -47,8 +47,6 @@ osm_poly_list %>%
 
 ```{r osm-poly}
 
-memory.limit(size=50000)
-
 # Bounding of the study area (approx. buffer of 2km)
 box <- c(xmin = 714906, xmax = 733618, ymin = 6166579, ymax = 6184092)
 bbox <- st_bbox(box)

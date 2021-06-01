@@ -1,0 +1,244 @@
+# Housing prices at municipality level {#house-prices-LAUs}
+
+We load all residences for year-round living (*ENH_ANVEND_KODE*) from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)), and then we estimate the mean and median prices in each municipality. 
+
+- 110           = Farmhouse for agricultural property.  
+- 120, 121, 122 = Detached single-family house (detached house). 
+- 130, 131, 132 = Townhouse, chain, or semi-detached house (vertical separation between the units).
+- 140           = Multi-storey residential building (multi-family house, including two-family house (horizontal separation between the units).
+- 150           = College.
+- 160           = Residential building for residential institution.
+- 190           = Second building for year-round living.
+
+
+We selected from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*). Furthermore, we filtered those dwellings that are actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*). Dwelling with a size lower that 10 $m^2$ were removed from the analysis. Colleges were also excluded from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.
+
+
+```{r res-units-codes}
+
+# Residential buildings for year round living
+res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
+                      110, "Farmhouse",
+                      120, "Single-family house",
+                      121, "Single-family house",
+                      122, "Single-family house",
+                      130, "Semi-detached house",
+                      131, "Semi-detached house",
+                      132, "Semi-detached house",
+                      140, "Multi-storey") %>%
+  # Convert type to factor
+  mutate(type = factor(type)) %>%
+  # Convert to data.table
+  as.data.table()
+
+# Aux. function
+f_average_price_muni <- function(.file) {
+  fread(.file) %>% 
+    # Select only Residential houses - Buildings for year-round living
+    filter.(ENH_ANVEND_KODE %in% res_codes$ENH_ANVEND_KODE) %>%
+    # ordinary free trade or auction
+    filter.(OVERDRAGELSES_KODE == "1" | OVERDRAGELSES_KODE == "3") %>% 
+    # Remove residential units not used for for residential purpose
+    filter.(BOLIGTYPE_KODE != "E" | BOLIGTYPE_KODE != "5") %>% 
+    # Remove tiny dwellings (area < 10 m2)
+    filter.(BEBO_ARL >= 10) %>%
+    # Add year of the BBR dataset 
+    mutate.(year = parse_number(stringr::str_extract(.file, "_[0-9]+_"))) %>% 
+    # Convert house price (KONTANT_KOEBESUM) to numeric and kDKK
+    mutate.(price_kDKK = KONTANT_KOEBESUM / 1000,
+            price_kDKK = as.numeric(price_kDKK)) %>% 
+    # Drop unused factors levels
+    droplevels()
+}
+
+# Read in parallel 
+
+csv_files_path <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
+                             pattern = "*.csv",
+                             full.names = TRUE)
+
+plan(multisession, workers = 7)
+res_prices <- future_map_dfr(.x = csv_files_path,
+                             .f = f_average_price_muni) %>% 
+  # rename KomKode
+  mutate.(KomKode = paste0("0", KomKode)) %>% 
+  rename.(muni_id = KomKode)
+plan("default")
+
+```
+
+We adjusted the housing prices to 2019 prices. In this regard, we take into  account the inflation and, therefore, prices from different years can be compared (@Valtersdorf2020). The adjusted price is obtained as follow:
+
+$$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
+
+Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the price of the respective year $i$, and $Index_{i}$ and $Index_{2019}$ are the price indexes for the origin year ${i}$ and $2019$, respectively. The indexes have been obtained from Statistic Denmark; i.e. table [EJ6: Price index for sales property (2006=100) by category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ6&PLanguage=1&PXSId=0&wsid=cftree) (Table \@ref(tab:price-index-DK)). 
+
+```{r price-index-DK}
+
+# DST table (PRIS112 - Consumer price index (2015=100) by main figures and time)
+  id_table <- "EJ6"
+  dat_meta <- get_table_metadata(table_id = id_table, variables_only = TRUE)
+  
+# Values to retrieve
+  variables <- list(
+    # Category of real property (i.e. One-family houses)
+    list(code = "EJENDOMSKATE", values = "0111"),
+    # Index
+    list(code = "TAL", values = "100"),
+    # From 2004 to 2019
+    list(code = "Tid", values = seq(2004, 2019, 1))
+    )
+
+# Get index
+  price_index <- get_data("EJ6", variables) %>% 
+    select(-TAL) %>% 
+    # Translate into English 
+    rename(index_desc = EJENDOMSKATE,
+           index_year = TID, 
+           index_value = INDHOLD) %>% 
+    # Convert index tu numeric
+    mutate(index_value = index_value/10) 
+    
+# Print price index table  
+  price_index %>% 
+    # Wide format
+    pivot_wider(names_from = index_year, 
+                values_from = index_value) %>% 
+    kbl(caption = "Price index for sale properties in Denmark") %>% 
+    kable_paper() %>% 
+    scroll_box(width = "100%")
+  
+```
+
+```{r adj-price-DK}
+
+# Adjust housing prices
+price_index_2019 <- price_index %>% 
+  filter(index_year == 2019) %>% 
+  rename(index_2019 = index_value)
+
+# Add adjusted prices 
+res_prices <- res_prices %>% 
+  # Add price index by year and category
+  left_join.(price_index, by = c("year" = "index_year")) %>% 
+  # Add columns with index_2019
+  mutate.(index_2019 = price_index_2019$index_2019) %>% 
+  # Calculate prices 2019
+  mutate.(price_2019_kDKK = (price_kDKK * index_2019 / index_value)) %>% 
+  # Price per m2
+  mutate(price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL)
+  
+```
+
+
+
+
+
+Summary statistics of 2019 adjusted housing prices by municipalities 
+```{r}
+
+res_prices_muni <- res_prices %>%
+    # Estimate mean and median values (house prices)
+    summarise.(n = n(), 
+               median_2019_kDKK_m2 = median(price_2019_kDKK_m2),
+               .by = c(muni_id, year)) 
+
+```
+
+Price change with 2008 as baseline (year we start to have data of population change).
+
+```{r}
+
+res_prices_muni <- res_prices_muni %>% 
+  filter.(year >= 2008) %>% 
+  arrange.(muni_id, year) %>% 
+  mutate.(
+    median_2019_kDKK_m2_dif = 
+      100 * (median_2019_kDKK_m2 - first(median_2019_kDKK_m2)) / first(median_2019_kDKK_m2),
+    .by = muni_id) 
+
+# Add spatial information
+dk_muni_prices <- dk_muni %>% 
+  left_join.(res_prices_muni, by = "muni_id") %>% 
+  st_sf()
+
+```
+
+Plots variation over time (adjusted prices)
+
+```{r fig-price-change-muni, fig.height=25, fig.width=10, fig.cap = "Adjusted median house price (kDKK/m2) change from 2008"}
+
+# Short municipalities b population (e.g same order than pop_muni)
+lvls <- levels(pop_muni$muni_name)
+dk_muni_prices <- dk_muni_prices %>% 
+  mutate(muni_name = factor(muni_name, levels = lvls))
+
+# Plot
+ggplot() +
+  geom_line(data = dk_muni_prices,
+            aes(x = year,
+                y = median_2019_kDKK_m2_dif)) +
+  geom_hline(yintercept = 0, linetype="dashed", color = "grey", size = 0.5) +
+  facet_wrap(~muni_name, ncol = 6) +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 14),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14, face = "bold"),
+        plot.title = element_text(size = 14, face = "bold"),
+        title = element_text(size = 14)) +
+  scale_y_continuous(name = "[%]") +
+  coord_cartesian(ylim = c(-80, 80)) +
+  scale_x_continuous(name = "",
+                     breaks = seq(2008, 2019, 3))
+
+```
+
+
+Prices
+
+```{r fig-prices-LAUs, animation.hook="gifski", fig.cap = "Adjusted 2019 housing prices variation (baseline 2008)"}
+
+# Make intervals
+brks <- dk_muni_prices$median_2019_kDKK_m2_dif %>% quantile(seq(0,1,0.1),na.rm = T)
+dk_muni_prices <- dk_muni_prices %>% 
+  mutate(median_2019_kDKK_m2_dif_brk = cut(dk_muni_prices$median_2019_kDKK_m2_dif,
+                                           breaks = brks,
+                                           include.lowest = TRUE))
+
+# Aux. function for plotting
+f_plot <- function(df) {
+  ggplot() +
+    geom_sf(data = df,
+            aes(fill = median_2019_kDKK_m2_dif_brk),
+            color = "grey", size = 0.05) +
+    # scale_fill_gradient2(name = "Change [%]",
+    #                      low = "blue",
+    #                      mid = "white",
+    #                      high = "red",
+    #                      midpoint = 0,
+    #                      limits = c(-100, 300)) +
+    scale_fill_brewer(name = "Change [%]",
+                      palette = "RdYlBu",
+                      direction = -1,
+                      drop = FALSE) +
+    my_theme_map() +
+    labs(subtitle = paste("Date", df$year, sep = ": "),
+         x = "",
+         y = "")
+}
+
+# Plot each year
+plan(multisession, workers = 7)
+plts <- dk_muni_prices %>% 
+  filter(muni_id != "0411") %>% 
+  group_split(year) %>%  
+  future_map(., .f = f_plot, .options = furrr_options(seed = 123))
+plan("default")
+
+# Animation
+for(i in seq_along(plts)) { print(plts[[i]]) }
+
+```
+

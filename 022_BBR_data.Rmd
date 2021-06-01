@@ -10,7 +10,7 @@ We load all residences for year-round living (*ENH_ANVEND_KODE*) from the Buildi
 - 160           = Residential building for residential institution.
 - 190           = Second building for year-round living.
 
-```{r load-BBR, cache=TRUE, dependson = "adm-units", cache.extra = file.mtime(Sys.getenv("OneDrive_BBR_path"))}
+```{r load-BBR}
 
 # Buildings for year round living
   res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
@@ -134,7 +134,7 @@ However, for housing prices we focus our analysis to the main building types in 
 
 Then, we selected from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*). Finally, we filtered those dwellings that are actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*). Dwelling with a size lower that 10 $m^2$ were removed from the analysis. Colleges were also excluded  from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.    
 
-```{r runits-clean, cache = TRUE, dependson = "load-BBR"}
+```{r runits-clean}
 
   selected_res_units <- c("Multi-storey", "Single-family house", "Semi-detached house")
 
@@ -240,7 +240,7 @@ res_units_oft <- res_units_oft %>%
 ```
 
 The total number of residential units used for the analysis is `r nrow(res_units_oft)` (Table \@ref(tab:tbl-runits-clean)).
-```{r tbl-runits-clean, cache = TRUE, dependson = "runits-clean"}
+```{r tbl-runits-clean}
 
 # Table with Number of residential units
   res_units_oft %>%
