@@ -190,10 +190,11 @@ dk_muni_prices <- dk_muni_prices %>%
   mutate(muni_name = factor(muni_name, levels = lvls))
 
 # Plot
-ggplot() +
-  geom_line(data = dk_muni_prices,
+ggplot(data = dk_muni_prices,
             aes(x = year,
                 y = median_2019_kDKK_m2_dif)) +
+  geom_point() +
+  geom_smooth(method = "gam", se = FALSE) +
   geom_hline(yintercept = 0, linetype="dashed", color = "grey", size = 0.5) +
   facet_wrap(~muni_name, ncol = 6) +
   theme_bw() +
