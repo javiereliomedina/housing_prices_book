@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-06-01" />
+<meta name="date" content="2021-06-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -957,73 +957,73 @@ div.csl-indent {
 <div id="adm-units" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Administrative units</h1>
 <p>The Denmark’s Administrative Geographical Division (<a href="https://sdfe.dk/hent-data/danmarks-administrative-geografiske-inddeling/">DAGI</a>) has been used for obtaining the administrative boundaries of Denmark. In this sense, the country is divided in approx. 2200 parishes, 98 municipalities, 5 regions, 22 judicial districts, 12 police districts, 92 constituencies and approx. 1100 postcodes. However, we focused our study in the Copenhagen (<em>KOMKODE = 0101</em>) and Frederiksberg (<em>KOMKODE = 0147</em>) communes.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="adm-units.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download DAGI (scale 1:10000)</span></span>
-<span id="cb26-2"><a href="adm-units.html#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;landinddelinger/dagi/SHAPE&quot;</span>,</span>
-<span id="cb26-3"><a href="adm-units.html#cb26-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">zip_name   =</span> <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span>
-<span id="cb26-4"><a href="adm-units.html#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="adm-units.html#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Codes of the communes under study (KOMKODE)</span></span>
-<span id="cb26-6"><a href="adm-units.html#cb26-6" aria-hidden="true" tabindex="-1"></a>  study_area_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0101&quot;</span>, <span class="st">&quot;0147&quot;</span>)</span>
-<span id="cb26-7"><a href="adm-units.html#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="adm-units.html#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Communes polygons of Denmark, and select those in the study area</span></span>
-<span id="cb26-9"><a href="adm-units.html#cb26-9" aria-hidden="true" tabindex="-1"></a>  commune_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir,</span>
-<span id="cb26-10"><a href="adm-units.html#cb26-10" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>,</span>
-<span id="cb26-11"><a href="adm-units.html#cb26-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;KOMMUNE.shp&quot;</span>,</span>
-<span id="cb26-12"><a href="adm-units.html#cb26-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb26-13"><a href="adm-units.html#cb26-13" aria-hidden="true" tabindex="-1"></a>  dk_commune  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(commune_link) <span class="sc">%&gt;%</span></span>
-<span id="cb26-14"><a href="adm-units.html#cb26-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb26-15"><a href="adm-units.html#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb26-16"><a href="adm-units.html#cb26-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-17"><a href="adm-units.html#cb26-17" aria-hidden="true" tabindex="-1"></a>  dk_country <span class="ot">&lt;-</span> <span class="fu">st_union</span>(dk_commune)</span>
-<span id="cb26-18"><a href="adm-units.html#cb26-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-19"><a href="adm-units.html#cb26-19" aria-hidden="true" tabindex="-1"></a>  cph_commune <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_commune, KOMKODE <span class="sc">%in%</span> study_area_codes) <span class="sc">%&gt;%</span></span>
-<span id="cb26-20"><a href="adm-units.html#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(KOMKODE, KOMNAVN) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-21"><a href="adm-units.html#cb26-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">muni_id =</span> KOMKODE,</span>
-<span id="cb26-22"><a href="adm-units.html#cb26-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">muni_name =</span> KOMNAVN) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-23"><a href="adm-units.html#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">muni_name =</span> <span class="fu">gsub</span>(<span class="st">&quot;København&quot;</span>, <span class="st">&quot;Copenhagen&quot;</span>, muni_name)) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-24"><a href="adm-units.html#cb26-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(muni_id, muni_name) <span class="sc">%&gt;%</span></span>
-<span id="cb26-25"><a href="adm-units.html#cb26-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">geometry =</span> sf<span class="sc">::</span><span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span></span>
-<span id="cb26-26"><a href="adm-units.html#cb26-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb26-27"><a href="adm-units.html#cb26-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">muni_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
-<span id="cb26-28"><a href="adm-units.html#cb26-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb26-29"><a href="adm-units.html#cb26-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Parishes polygons of Denmark, and select those in the study area </span></span>
-<span id="cb26-30"><a href="adm-units.html#cb26-30" aria-hidden="true" tabindex="-1"></a>  parish_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir,</span>
-<span id="cb26-31"><a href="adm-units.html#cb26-31" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>,</span>
-<span id="cb26-32"><a href="adm-units.html#cb26-32" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;SOGN.shp&quot;</span>,</span>
-<span id="cb26-33"><a href="adm-units.html#cb26-33" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
-<span id="cb26-34"><a href="adm-units.html#cb26-34" aria-hidden="true" tabindex="-1"></a>  dk_parish  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(parish_link) <span class="sc">%&gt;%</span></span>
-<span id="cb26-35"><a href="adm-units.html#cb26-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb26-36"><a href="adm-units.html#cb26-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
-<span id="cb26-37"><a href="adm-units.html#cb26-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-38"><a href="adm-units.html#cb26-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the study area</span></span>
-<span id="cb26-39"><a href="adm-units.html#cb26-39" aria-hidden="true" tabindex="-1"></a>  dk_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_parish)</span>
-<span id="cb26-40"><a href="adm-units.html#cb26-40" aria-hidden="true" tabindex="-1"></a>  cph_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_parish_cent, cph_commune)</span>
-<span id="cb26-41"><a href="adm-units.html#cb26-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-42"><a href="adm-units.html#cb26-42" aria-hidden="true" tabindex="-1"></a>  cph_parish <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_parish, SOGNEKODE <span class="sc">%in%</span> cph_parish_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-43"><a href="adm-units.html#cb26-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combine several parish features geometries into one polygon</span></span>
-<span id="cb26-44"><a href="adm-units.html#cb26-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-45"><a href="adm-units.html#cb26-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-46"><a href="adm-units.html#cb26-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb26-47"><a href="adm-units.html#cb26-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add area of the parish (in km2)</span></span>
-<span id="cb26-48"><a href="adm-units.html#cb26-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
-<span id="cb26-49"><a href="adm-units.html#cb26-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-50"><a href="adm-units.html#cb26-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of the study area (merge the parishes in one polygon):</span></span>
-<span id="cb26-51"><a href="adm-units.html#cb26-51" aria-hidden="true" tabindex="-1"></a>  study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
-<span id="cb26-52"><a href="adm-units.html#cb26-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb26-53"><a href="adm-units.html#cb26-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb26-54"><a href="adm-units.html#cb26-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="adm-units.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot parish </span></span>
-<span id="cb27-2"><a href="adm-units.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb27-3"><a href="adm-units.html#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb27-4"><a href="adm-units.html#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb27-5"><a href="adm-units.html#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb27-6"><a href="adm-units.html#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
-<span id="cb27-7"><a href="adm-units.html#cb27-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.6</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb27-8"><a href="adm-units.html#cb27-8" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb27-9"><a href="adm-units.html#cb27-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
-<span id="cb27-10"><a href="adm-units.html#cb27-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb27-11"><a href="adm-units.html#cb27-11" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb27-12"><a href="adm-units.html#cb27-12" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb27-13"><a href="adm-units.html#cb27-13" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="adm-units.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download DAGI (scale 1:10000)</span></span>
+<span id="cb29-2"><a href="adm-units.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_get_data</span>(<span class="at">ftp_folder =</span> <span class="st">&quot;landinddelinger/dagi/SHAPE&quot;</span>,</span>
+<span id="cb29-3"><a href="adm-units.html#cb29-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">zip_name   =</span> <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89.zip&quot;</span>)</span>
+<span id="cb29-4"><a href="adm-units.html#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="adm-units.html#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Codes of the communes under study (KOMKODE)</span></span>
+<span id="cb29-6"><a href="adm-units.html#cb29-6" aria-hidden="true" tabindex="-1"></a>  study_area_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;0101&quot;</span>, <span class="st">&quot;0147&quot;</span>)</span>
+<span id="cb29-7"><a href="adm-units.html#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="adm-units.html#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Communes polygons of Denmark, and select those in the study area</span></span>
+<span id="cb29-9"><a href="adm-units.html#cb29-9" aria-hidden="true" tabindex="-1"></a>  commune_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir,</span>
+<span id="cb29-10"><a href="adm-units.html#cb29-10" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>,</span>
+<span id="cb29-11"><a href="adm-units.html#cb29-11" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;KOMMUNE.shp&quot;</span>,</span>
+<span id="cb29-12"><a href="adm-units.html#cb29-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb29-13"><a href="adm-units.html#cb29-13" aria-hidden="true" tabindex="-1"></a>  dk_commune  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(commune_link) <span class="sc">%&gt;%</span></span>
+<span id="cb29-14"><a href="adm-units.html#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-15"><a href="adm-units.html#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb29-16"><a href="adm-units.html#cb29-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-17"><a href="adm-units.html#cb29-17" aria-hidden="true" tabindex="-1"></a>  dk_country <span class="ot">&lt;-</span> <span class="fu">st_union</span>(dk_commune)</span>
+<span id="cb29-18"><a href="adm-units.html#cb29-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-19"><a href="adm-units.html#cb29-19" aria-hidden="true" tabindex="-1"></a>  cph_commune <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_commune, KOMKODE <span class="sc">%in%</span> study_area_codes) <span class="sc">%&gt;%</span></span>
+<span id="cb29-20"><a href="adm-units.html#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(KOMKODE, KOMNAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-21"><a href="adm-units.html#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">muni_id =</span> KOMKODE,</span>
+<span id="cb29-22"><a href="adm-units.html#cb29-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">muni_name =</span> KOMNAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-23"><a href="adm-units.html#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">muni_name =</span> <span class="fu">gsub</span>(<span class="st">&quot;København&quot;</span>, <span class="st">&quot;Copenhagen&quot;</span>, muni_name)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-24"><a href="adm-units.html#cb29-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(muni_id, muni_name) <span class="sc">%&gt;%</span></span>
+<span id="cb29-25"><a href="adm-units.html#cb29-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">geometry =</span> sf<span class="sc">::</span><span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-26"><a href="adm-units.html#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-27"><a href="adm-units.html#cb29-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">muni_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb29-28"><a href="adm-units.html#cb29-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb29-29"><a href="adm-units.html#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Parishes polygons of Denmark, and select those in the study area </span></span>
+<span id="cb29-30"><a href="adm-units.html#cb29-30" aria-hidden="true" tabindex="-1"></a>  parish_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir,</span>
+<span id="cb29-31"><a href="adm-units.html#cb29-31" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>,</span>
+<span id="cb29-32"><a href="adm-units.html#cb29-32" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;SOGN.shp&quot;</span>,</span>
+<span id="cb29-33"><a href="adm-units.html#cb29-33" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb29-34"><a href="adm-units.html#cb29-34" aria-hidden="true" tabindex="-1"></a>  dk_parish  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(parish_link) <span class="sc">%&gt;%</span></span>
+<span id="cb29-35"><a href="adm-units.html#cb29-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-36"><a href="adm-units.html#cb29-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb29-37"><a href="adm-units.html#cb29-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-38"><a href="adm-units.html#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the study area</span></span>
+<span id="cb29-39"><a href="adm-units.html#cb29-39" aria-hidden="true" tabindex="-1"></a>  dk_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_parish)</span>
+<span id="cb29-40"><a href="adm-units.html#cb29-40" aria-hidden="true" tabindex="-1"></a>  cph_parish_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_parish_cent, cph_commune)</span>
+<span id="cb29-41"><a href="adm-units.html#cb29-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-42"><a href="adm-units.html#cb29-42" aria-hidden="true" tabindex="-1"></a>  cph_parish <span class="ot">&lt;-</span> <span class="fu">filter</span>(dk_parish, SOGNEKODE <span class="sc">%in%</span> cph_parish_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-43"><a href="adm-units.html#cb29-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combine several parish features geometries into one polygon</span></span>
+<span id="cb29-44"><a href="adm-units.html#cb29-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-45"><a href="adm-units.html#cb29-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-46"><a href="adm-units.html#cb29-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-47"><a href="adm-units.html#cb29-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add area of the parish (in km2)</span></span>
+<span id="cb29-48"><a href="adm-units.html#cb29-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb29-49"><a href="adm-units.html#cb29-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-50"><a href="adm-units.html#cb29-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of the study area (merge the parishes in one polygon):</span></span>
+<span id="cb29-51"><a href="adm-units.html#cb29-51" aria-hidden="true" tabindex="-1"></a>  study_area <span class="ot">&lt;-</span> cph_parish <span class="sc">%&gt;%</span></span>
+<span id="cb29-52"><a href="adm-units.html#cb29-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb29-53"><a href="adm-units.html#cb29-53" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-54"><a href="adm-units.html#cb29-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="adm-units.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot parish </span></span>
+<span id="cb30-2"><a href="adm-units.html#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb30-3"><a href="adm-units.html#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="adm-units.html#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb30-5"><a href="adm-units.html#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb30-6"><a href="adm-units.html#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb30-7"><a href="adm-units.html#cb30-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.6</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb30-8"><a href="adm-units.html#cb30-8" aria-hidden="true" tabindex="-1"></a>                           <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb30-9"><a href="adm-units.html#cb30-9" aria-hidden="true" tabindex="-1"></a>                           <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb30-10"><a href="adm-units.html#cb30-10" aria-hidden="true" tabindex="-1"></a>                           <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb30-11"><a href="adm-units.html#cb30-11" aria-hidden="true" tabindex="-1"></a>                           <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb30-12"><a href="adm-units.html#cb30-12" aria-hidden="true" tabindex="-1"></a>                           <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb30-13"><a href="adm-units.html#cb30-13" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-adm-units"></span>
 <img src="Housing_prices_book_files/figure-html/fig-adm-units-1.png" alt="Parishes in the study area" width="672" />
 <p class="caption">
@@ -1031,42 +1031,42 @@ Figure 4.1: Parishes in the study area
 </p>
 </div>
 <p>We have also created grid cells of 100m x 100m for aggregating some data at that scale (i.e. population density).</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="adm-units.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make grids</span></span>
-<span id="cb28-2"><a href="adm-units.html#cb28-2" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
-<span id="cb28-3"><a href="adm-units.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make regular grids (100m x 100m)</span></span>
-<span id="cb28-4"><a href="adm-units.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-5"><a href="adm-units.html#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb28-6"><a href="adm-units.html#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select grids only in the study area</span></span>
-<span id="cb28-7"><a href="adm-units.html#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., study_area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-8"><a href="adm-units.html#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb28-9"><a href="adm-units.html#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>int) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-10"><a href="adm-units.html#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
-<span id="cb28-11"><a href="adm-units.html#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>,</span>
-<span id="cb28-12"><a href="adm-units.html#cb28-12" aria-hidden="true" tabindex="-1"></a>                          stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span>
-<span id="cb28-13"><a href="adm-units.html#cb28-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-14"><a href="adm-units.html#cb28-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Points to estimate the potential (centroid of the grids of 100m x 100m) </span></span>
-<span id="cb28-15"><a href="adm-units.html#cb28-15" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span></span>
-<span id="cb28-16"><a href="adm-units.html#cb28-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nesting</span></span>
-<span id="cb28-17"><a href="adm-units.html#cb28-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data_poly =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span> </span>
-<span id="cb28-18"><a href="adm-units.html#cb28-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add centroids of the grids</span></span>
-<span id="cb28-19"><a href="adm-units.html#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="adm-units.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb29-2"><a href="adm-units.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb29-3"><a href="adm-units.html#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb29-4"><a href="adm-units.html#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> grids100m<span class="sc">$</span>data_poly[[<span class="dv">1</span>]],</span>
-<span id="cb29-5"><a href="adm-units.html#cb29-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="cn">NA</span>,</span>
-<span id="cb29-6"><a href="adm-units.html#cb29-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb29-7"><a href="adm-units.html#cb29-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
-<span id="cb29-8"><a href="adm-units.html#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
-<span id="cb29-9"><a href="adm-units.html#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb29-10"><a href="adm-units.html#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
-<span id="cb29-11"><a href="adm-units.html#cb29-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.6</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-12"><a href="adm-units.html#cb29-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-13"><a href="adm-units.html#cb29-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
-<span id="cb29-14"><a href="adm-units.html#cb29-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-15"><a href="adm-units.html#cb29-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
-<span id="cb29-16"><a href="adm-units.html#cb29-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb29-17"><a href="adm-units.html#cb29-17" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="adm-units.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make grids</span></span>
+<span id="cb31-2"><a href="adm-units.html#cb31-2" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> study_area <span class="sc">%&gt;%</span> </span>
+<span id="cb31-3"><a href="adm-units.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Make regular grids (100m x 100m)</span></span>
+<span id="cb31-4"><a href="adm-units.html#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_make_grid</span>(<span class="at">cellsize =</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-5"><a href="adm-units.html#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb31-6"><a href="adm-units.html#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select grids only in the study area</span></span>
+<span id="cb31-7"><a href="adm-units.html#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">int =</span> <span class="fu">st_intersects</span>(., study_area) <span class="sc">%&gt;%</span> lengths <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-8"><a href="adm-units.html#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(int <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-9"><a href="adm-units.html#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>int) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-10"><a href="adm-units.html#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Name grids as &quot;g001&quot;, &quot;g002&quot;, ...</span></span>
+<span id="cb31-11"><a href="adm-units.html#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">grid_ID =</span> <span class="fu">paste0</span>(<span class="st">&quot;g&quot;</span>,</span>
+<span id="cb31-12"><a href="adm-units.html#cb31-12" aria-hidden="true" tabindex="-1"></a>                          stringr<span class="sc">::</span><span class="fu">str_pad</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(.), <span class="dv">1</span>), <span class="dv">3</span>, <span class="at">pad =</span> <span class="st">&quot;0&quot;</span>)))</span>
+<span id="cb31-13"><a href="adm-units.html#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="adm-units.html#cb31-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Points to estimate the potential (centroid of the grids of 100m x 100m) </span></span>
+<span id="cb31-15"><a href="adm-units.html#cb31-15" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span></span>
+<span id="cb31-16"><a href="adm-units.html#cb31-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nesting</span></span>
+<span id="cb31-17"><a href="adm-units.html#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data_poly =</span> <span class="fu">everything</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb31-18"><a href="adm-units.html#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># add centroids of the grids</span></span>
+<span id="cb31-19"><a href="adm-units.html#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="adm-units.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb32-2"><a href="adm-units.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb32-3"><a href="adm-units.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="adm-units.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> grids100m<span class="sc">$</span>data_poly[[<span class="dv">1</span>]],</span>
+<span id="cb32-5"><a href="adm-units.html#cb32-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="cn">NA</span>,</span>
+<span id="cb32-6"><a href="adm-units.html#cb32-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">color =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb32-7"><a href="adm-units.html#cb32-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
+<span id="cb32-8"><a href="adm-units.html#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb32-9"><a href="adm-units.html#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="adm-units.html#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb32-11"><a href="adm-units.html#cb32-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="fl">1.6</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-12"><a href="adm-units.html#cb32-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-13"><a href="adm-units.html#cb32-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb32-14"><a href="adm-units.html#cb32-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-15"><a href="adm-units.html#cb32-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb32-16"><a href="adm-units.html#cb32-16" aria-hidden="true" tabindex="-1"></a>                         <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb32-17"><a href="adm-units.html#cb32-17" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-grids-100m"></span>
 <img src="Housing_prices_book_files/figure-html/fig-grids-100m-1.png" alt="Grid cells of 100m x 100m" width="672" />
 <p class="caption">

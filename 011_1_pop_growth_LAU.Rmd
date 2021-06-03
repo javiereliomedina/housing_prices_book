@@ -262,7 +262,9 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
            muni_name = KOMNAVN) %>% 
     group_by(muni_id, muni_name) %>%
     summarise(geometry = sf::st_union(geometry)) %>%
-    ungroup() 
+    ungroup() %>% 
+    # Calculate the area of each municipalitie (km2) 
+    mutate(area_km2 = as.numeric(units::set_units(st_area(.), km^2))) 
 
 # Big cities/urban areas
   big_cities <- c("København", "Aarhus", "Odense", "Aalborg")
@@ -270,8 +272,7 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
   
 ```
 
-```{r pop-ancestry-muni}
-
+```{r pop-ancestry}
 # Load population data by ancestry and municipalities 
 
   # Metadata table of interest (e.g. FOLK1C) 
@@ -343,7 +344,7 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
                                         "Foreign",
                                         "Total"),
                              labels = c("Danish",
-                                        "Foreign (Immigrants + Descendant)",
+                                        "Foreign",
                                         "Total"))) %>% 
     # Population growth (inhabitant and percentage) using 2008-Q1 as baseline
     group_by(muni_name, ancestry) %>% 
@@ -351,12 +352,22 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
     mutate(pop_dif_2008 = pop - first(pop),
            pop_pct_2008 = (pop/first(pop) - 1) * 100) %>% 
     ungroup()
+  
+```
+
+```{r pop-ancestry-muni}
 
 # Link population and municipalities
-  dk_muni_pop <- dk_muni %>% 
-    left_join(pop_muni, by = "muni_name") %>% 
-    st_as_sf() %>% 
-    mutate(date = as.Date(date))
+dk_muni_pop <- dk_muni %>% 
+  left_join(pop_muni, by = "muni_name") %>% 
+  st_as_sf() %>% 
+  mutate(date = as.Date(date)) %>% 
+  # population density
+  mutate(pop_km2 = pop/area_km2)
+
+```
+
+```{r fig-pop-growth-total, fig.cap = "Population growth from 2008 to 2019"}
 
 # Transform Percentage of change to factor 
   pct_breaks <- c(floor(min(dk_muni_pop$pop_pct_2008)), -10, -5, 
@@ -365,14 +376,8 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
   
   dk_muni_pop <- dk_muni_pop %>% 
     mutate(pop_pct_2008_brk = cut(dk_muni_pop$pop_pct_2008,
-                                  breaks = pct_breaks)) %>% 
-    mutate(ancestry = factor(ancestry),
-           ancestry = fct_relevel(ancestry, "Total", after = 0))
+                                  breaks = pct_breaks)) 
   
-```
-
-```{r fig-pop-growth-total, fig.cap = "Population growth from 2008 to 2019"}
-
 # Plot total population 
   myPallette <- c(rev(brewer.pal(3, "YlOrRd")), brewer.pal(9, "Blues"))
   ggplot() +
@@ -443,7 +448,6 @@ Population change
 ```
 
 The total number of immigrants and their descendants living in Denmark at the first day of the four quarter of 2020 is 814.5k. From them, Copenhagen accounts for approximately 20% (164k), and then another 20% lives in Aarhus (60k), Odense (34k), Aalborg (24k), Frederiksberg (20k), and Vejle (15.7k). 
-
 
 ```{r pop-migr}
 
@@ -533,7 +537,7 @@ The total number of immigrants and their descendants living in Denmark at the fi
   
 ```
 
-```{r fig-pop-migr-top}
+```{r fig-pop-migr-top, fig.cap="Evolution of the immigration population from the top-10 countries of origin in 2019"}
 
 # Total
 p1 <- pop_migr_top10 %>% 
@@ -541,8 +545,7 @@ p1 <- pop_migr_top10 %>%
   ggplot() +
   geom_line(aes(x = date, y = pop/1000, colour = origin)) +
   theme_bw() +
-  labs(title = "Immigrants and descendants in Denmark", 
-       subtitle = "Top 10 countries of origin in 2020",
+  labs(subtitle = "Totan population",
        y = "Pop [x1000]",
        x = "") +
   scale_color_brewer(name = "Country of\norigin", palette = "Paired")  
@@ -556,7 +559,7 @@ p2 <- pop_migr_top10 %>%
     geom_line(aes(x = date, y = pop/1000, colour = origin)) +
     facet_grid(~ancestry) +
     theme_bw() +
-    labs(subtitle = "Divided by ancestry", 
+    labs(subtitle = "Divided by immigrants and their descendants", 
          y = "Pop [x1000]",
          x = "") +
     scale_color_brewer(name = "Country of\norigin", palette = "Paired") 
@@ -574,7 +577,6 @@ pop_migr_muni_2019Q1 <- dk_muni %>%
     st_as_sf() 
 
 ```
-
 
 ```{r fig-pop-migr-total, fig.cap="Spatial distribution of immigrants and their descendants (Date: 2019-01-01)"}
 

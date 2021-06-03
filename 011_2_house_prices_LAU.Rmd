@@ -11,10 +11,9 @@ We load all residences for year-round living (*ENH_ANVEND_KODE*) from the Buildi
 - 190           = Second building for year-round living.
 
 
-We selected from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*). Furthermore, we filtered those dwellings that are actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*). Dwelling with a size lower that 10 $m^2$ were removed from the analysis. Colleges were also excluded from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.
+We selected from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*). Furthermore, we filtered those dwellings that are actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*). Dwelling with a size lower that 10 $m^2$ were removed from the analysis. *Colleges* and *Residential building for residential institution*  were also excluded from the data analysis since they are a special type of buildings dedicated to students residences and housing for institutions, respectively, and they are mainly outside of the free marked.
 
-
-```{r res-units-codes}
+```{r res-units-DK}
 
 # Residential buildings for year round living
 res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
@@ -25,7 +24,8 @@ res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
                       130, "Semi-detached house",
                       131, "Semi-detached house",
                       132, "Semi-detached house",
-                      140, "Multi-storey") %>%
+                      140, "Multi-storey",
+                      190, "Second building") %>%
   # Convert type to factor
   mutate(type = factor(type)) %>%
   # Convert to data.table
@@ -52,7 +52,6 @@ f_average_price_muni <- function(.file) {
 }
 
 # Read in parallel 
-
 csv_files_path <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
                              pattern = "*.csv",
                              full.names = TRUE)
@@ -64,6 +63,17 @@ res_prices <- future_map_dfr(.x = csv_files_path,
   mutate.(KomKode = paste0("0", KomKode)) %>% 
   rename.(muni_id = KomKode)
 plan("default")
+
+```
+
+There are some unrealistic house prices in *Kerteminde* and *Ringsted* municipalities. In this sense, there are 499 houses with a value of 267000000 DKK in *Kerteminde* and 310 with a value of 375000000 DKK in *Ringsted*. We may expect few houses with very high prices in this areas but these numbers seem unlikely for small towns and oly for one year (2008 and 2011, respectively). Therefore, we have removed them from the datasets assuming there was a mistake in the data imputation and we do not have other criteria for assigning a realistic value. We also remove  properties with no value (*KONTANT_KOEBESUM* = 0; there were 18,801 of 1,494,495 data)
+
+```{r remove-unrealistic-values}
+
+res_prices <- res_prices %>%
+  filter(!(muni_id == "0440" & year == 2008 & KONTANT_KOEBESUM == 267000000)) %>%
+  filter(!(muni_id == "0329" & year == 2011 & KONTANT_KOEBESUM == 375000000)) %>% 
+  filter(KONTANT_KOEBESUM > 0)
 
 ```
 
@@ -108,6 +118,7 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
     kable_paper() %>% 
     scroll_box(width = "100%")
   
+  
 ```
 
 ```{r adj-price-DK}
@@ -127,39 +138,44 @@ res_prices <- res_prices %>%
   mutate.(price_2019_kDKK = (price_kDKK * index_2019 / index_value)) %>% 
   # Price per m2
   mutate(price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL)
-  
+ 
+ 
 ```
-
-
-
-
 
 Summary statistics of 2019 adjusted housing prices by municipalities 
-```{r}
+```{r median-prices-muni}
 
 res_prices_muni <- res_prices %>%
-    # Estimate mean and median values (house prices)
-    summarise.(n = n(), 
-               median_2019_kDKK_m2 = median(price_2019_kDKK_m2),
-               .by = c(muni_id, year)) 
-
-```
-
-Price change with 2008 as baseline (year we start to have data of population change).
-
-```{r}
-
-res_prices_muni <- res_prices_muni %>% 
+  # 2008  - year we start to have population data 
   filter.(year >= 2008) %>% 
+  # Estimate mean and median values (house prices)
+  summarise.(n = n(), 
+             median_2019_kDKK_m2 = median(price_2019_kDKK_m2),
+             .by = c(muni_id, year)) %>% 
+  # Price change with 2008 as baseline
   arrange.(muni_id, year) %>% 
   mutate.(
     median_2019_kDKK_m2_dif = 
       100 * (median_2019_kDKK_m2 - first(median_2019_kDKK_m2)) / first(median_2019_kDKK_m2),
-    .by = muni_id) 
+    .by = muni_id)
+  
+```
 
-# Add spatial information
-dk_muni_prices <- dk_muni %>% 
-  left_join.(res_prices_muni, by = "muni_id") %>% 
+Link house prices (at the first day of the year) with population.  
+
+```{r muni-prices-pop}
+
+dk_muni_prices <- dk_muni_pop %>% 
+  as_tibble() %>% 
+  # Population at the first day of the year
+  separate(date, c("year", "month", "day"), sep = "-") %>% 
+  filter(month == "01") %>%
+  mutate(year = as.numeric(year)) %>% 
+  # wide format
+  pivot_wider(names_from = ancestry,
+              values_from = c(pop, pop_dif_2008, pop_pct_2008, pop_km2)) %>% 
+  # Add spatial residential prices 
+  left_join(res_prices_muni, by = c("muni_id", "year")) %>% 
   st_sf()
 
 ```
@@ -193,8 +209,35 @@ ggplot() +
   scale_x_continuous(name = "",
                      breaks = seq(2008, 2019, 3))
 
+
 ```
 
+Relationship between population density and house prices (median values) at municipality level.
+
+```{r fig-prices-pop,  fig.height=7, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
+
+# Big cities/urban areas
+  lbls <- c("København", "Aarhus", "Odense", "Aalborg", "Frederiksberg")
+  dk_muni_prices_lbls <- dk_muni_prices %>% filter(muni_name %in% lbls)
+
+# Plot
+  ggplot(data = dk_muni_prices,
+         aes(x = pop_km2_Total,
+             y = median_2019_kDKK_m2)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_x_log10() +
+    labs(title = "",
+         x = "Population density [ppl/km2]",
+         y = "2019 adjusted median values [kDKK/m2]") +
+    ggrepel::geom_text_repel(data = dk_muni_prices_lbls, 
+                             aes(label = muni_name),
+                             nudge_y = 20,
+                             max.iter = 3e3) +
+    facet_wrap(~year) +
+    theme_bw()
+
+```
 
 Prices
 

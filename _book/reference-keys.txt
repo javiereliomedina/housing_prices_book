@@ -3,10 +3,12 @@ fig:fig-pop-pyramith
 fig:fig-pop-growth-total
 fig:fig-pop-growth-ancestry
 fig:fig-pop-change
+fig:fig-pop-migr-top
 fig:fig-pop-migr-total
 fig:fig-pop-migr-top10-countries
 tab:price-index-DK
 fig:fig-price-change-muni
+fig:fig-prices-pop
 fig:fig-prices-LAUs
 fig:fig-adm-units
 fig:fig-grids-100m
