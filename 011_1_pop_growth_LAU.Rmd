@@ -367,29 +367,20 @@ dk_muni_pop <- dk_muni %>%
 
 ```
 
-```{r fig-pop-growth-total, fig.cap = "Population growth from 2008 to 2019"}
+```{r fig-pop-growth-total, fig.cap = "Total population growth from 2008 to 2019"}
 
-# Transform Percentage of change to factor 
-  pct_breaks <- c(floor(min(dk_muni_pop$pop_pct_2008)), -10, -5, 
-                  0,
-                  5, 10, 20, 30, 50, 100, 200, max(dk_muni_pop$pop_pct_2008))
-  
-  dk_muni_pop <- dk_muni_pop %>% 
-    mutate(pop_pct_2008_brk = cut(dk_muni_pop$pop_pct_2008,
-                                  breaks = pct_breaks)) 
-  
-# Plot total population 
-  myPallette <- c(rev(brewer.pal(3, "YlOrRd")), brewer.pal(9, "Blues"))
-  ggplot() +
+ggplot() +
     geom_sf(data = filter(dk_muni_pop,
                           date == as.Date("2019-01-01"),
                           ancestry == "Total"),
-            aes(fill = pop_pct_2008_brk),
+            aes(fill = pop_pct_2008),
             color = "grey50",
             size = 0.05) +
-    scale_fill_manual(name = "Percentage", 
-                      values = myPallette,
-                      drop = FALSE) +
+    scale_fill_gradient2(name = "Change [%]",
+                         low = "blue",
+                         mid = "white",
+                         high = "red",
+                         midpoint = 0) +
     labs(x = "", 
          y = "") +
     theme_void() +
@@ -403,16 +394,27 @@ dk_muni_pop <- dk_muni %>%
 
 ```{r fig-pop-growth-ancestry, fig.cap = "Population growth from 2008 to 2019 by ancestry"}
 
+dk_muni_pop_2019 <- dk_muni_pop %>% 
+  filter(date == as.Date("2019-01-01"), ancestry != "Total")
+
+# Transform Percentage of change to factor 
+  pct_breaks <- c(floor(min(dk_muni_pop_2019$pop_pct_2008)), -10, -5, 
+                  0,
+                  5, 10, 20, 30, 50, 100, 150, max(dk_muni_pop_2019$pop_pct_2008))
+  
+  dk_muni_pop_2019 <- dk_muni_pop_2019 %>% 
+    mutate(pop_pct_2008_brk = cut(dk_muni_pop_2019$pop_pct_2008,
+                                  breaks = pct_breaks)) 
+# Colour palette
+  myPalette <- c(rev(brewer.pal(3, "Blues")), brewer.pal(9, "YlOrRd"))
+  
 # Plot by ancestry
 ggplot() +
-  geom_sf(data = filter(dk_muni_pop,
-                        date == as.Date("2019-01-01"),
-                        ancestry != "Total"),
+  geom_sf(data = dk_muni_pop_2019,
           aes(fill = pop_pct_2008_brk),
-          color = "grey50",
-          size = 0.05) +
+          color = NA) +
   scale_fill_manual(name = "Percentage", 
-                    values = myPallette,
+                    values = myPalette,
                     drop = FALSE) +
   labs(x = "", 
        y = "") +
