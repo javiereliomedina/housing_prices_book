@@ -242,12 +242,49 @@ ggplot(data = dk_muni_prices,
 
 Relationship between population density and house prices (median values) at municipality level.
 
-```{r fig-prices-pop,  fig.height=7, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
+```{r fig-prices-pop-a,  fig.height=8, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
+
+# Plot
+ggplot() +
+  geom_point(data = dk_muni_prices,
+             aes(x = pop_km2_Total,
+                 y = median_2019_kDKK_m2,
+                 colour = muni_name,
+                 shape = factor(year))) +
+  scale_shape_manual(values = 1:nlevels(factor(dk_muni_prices$year))) +
+  scale_x_log10() +
+  geom_mark_ellipse(data = dk_muni_prices_lbls,
+                    aes(x = pop_km2_Total,
+                        y = median_2019_kDKK_m2,
+                        colour = muni_name,
+                        label = muni_name),
+                    label.fill = NA) +
+  labs(title = "",
+       x = "Population density [ppl/km2]",
+       y = "2019 adjusted median values [kDKK/m2]",
+       colour = "Municipality",
+       shape = "Year") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  guides(shape = guide_legend(ncol = 2, title.position = "top"),
+         colour = guide_legend(ncol = 7, title.position = "top")) +
+  geom_smooth(data = dk_muni_prices,
+              aes(x = pop_km2_Total,
+                  y = median_2019_kDKK_m2),
+              method = "lm", 
+              se = F,
+              colour = "blue") 
+
+```
+
+```{r fig-prices-pop-b,  fig.height=10, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
 
 # Big cities/urban areas
-  lbls <- c("København", "Aarhus", "Odense", "Aalborg", "Frederiksberg")
-  dk_muni_prices_lbls <- dk_muni_prices %>% filter(muni_name %in% lbls)
-
+  lbls <- c("København", "Aarhus", "Odense", "Aalborg", "Frederiksberg",
+            "Tønder", "Læsø" )
+  dk_muni_prices_lbls <- dk_muni_prices %>% 
+    filter(muni_name %in% lbls) 
+  
 # Plot
   ggplot(data = dk_muni_prices,
          aes(x = pop_km2_Total,
@@ -266,6 +303,7 @@ Relationship between population density and house prices (median values) at muni
     theme_bw()
 
 ```
+
 
 
 

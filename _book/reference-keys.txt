@@ -7,9 +7,9 @@ fig:fig-pop-migr-top
 fig:fig-pop-migr-total
 fig:fig-pop-migr-top10-countries
 tab:price-index-DK
+fig:fig-prices-LAUs
 fig:fig-price-change-muni
 fig:fig-prices-pop
-fig:fig-prices-LAUs
 fig:fig-adm-units
 fig:fig-grids-100m
 fig:fig-sp-res-builds
@@ -45,3 +45,5 @@ dist-CBD
 noise
 EDA-house-prices
 residential-units-by-floor-level
+fig:fig-prices-pop-b
+fig:fig-prices-pop-a
