@@ -1186,153 +1186,149 @@ One-family houses
 <span id="cb4-13"><a href="house-prices-LAUs.html#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate.</span>(<span class="at">price_2019_kDKK =</span> (price_kDKK <span class="sc">*</span> index_2019 <span class="sc">/</span> index_value)) <span class="sc">%&gt;%</span> </span>
 <span id="cb4-14"><a href="house-prices-LAUs.html#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Price per m2</span></span>
 <span id="cb4-15"><a href="house-prices-LAUs.html#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">price_2019_kDKK_m2 =</span> price_2019_kDKK <span class="sc">/</span> BEBO_ARL)</span></code></pre></div>
-<p>Summary statistics of 2019 adjusted housing prices by municipalities</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="house-prices-LAUs.html#cb5-1" aria-hidden="true" tabindex="-1"></a>res_prices_muni <span class="ot">&lt;-</span> res_prices <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="house-prices-LAUs.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2008  - year we start to have population data </span></span>
-<span id="cb5-3"><a href="house-prices-LAUs.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter.</span>(year <span class="sc">&gt;=</span> <span class="dv">2008</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-4"><a href="house-prices-LAUs.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate mean and median values (house prices)</span></span>
-<span id="cb5-5"><a href="house-prices-LAUs.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise.</span>(<span class="at">num_res_units =</span> <span class="fu">n</span>(), </span>
-<span id="cb5-6"><a href="house-prices-LAUs.html#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">median_2019_kDKK_m2 =</span> <span class="fu">median</span>(price_2019_kDKK_m2),</span>
-<span id="cb5-7"><a href="house-prices-LAUs.html#cb5-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">.by =</span> <span class="fu">c</span>(muni_id, year)) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-8"><a href="house-prices-LAUs.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Price change with 2008 as baseline</span></span>
-<span id="cb5-9"><a href="house-prices-LAUs.html#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange.</span>(muni_id, year) <span class="sc">%&gt;%</span> </span>
-<span id="cb5-10"><a href="house-prices-LAUs.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate.</span>(</span>
-<span id="cb5-11"><a href="house-prices-LAUs.html#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_2019_kDKK_m2_dif =</span> </span>
-<span id="cb5-12"><a href="house-prices-LAUs.html#cb5-12" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> (median_2019_kDKK_m2 <span class="sc">-</span> <span class="fu">first</span>(median_2019_kDKK_m2)) <span class="sc">/</span> <span class="fu">first</span>(median_2019_kDKK_m2),</span>
-<span id="cb5-13"><a href="house-prices-LAUs.html#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> muni_id)</span></code></pre></div>
-<p>Link house prices (at the first day of the year) with population.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="house-prices-LAUs.html#cb6-1" aria-hidden="true" tabindex="-1"></a>dk_muni_prices <span class="ot">&lt;-</span> dk_muni_pop <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="house-prices-LAUs.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-3"><a href="house-prices-LAUs.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population at the first day of the year</span></span>
-<span id="cb6-4"><a href="house-prices-LAUs.html#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(date, <span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;day&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-5"><a href="house-prices-LAUs.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">==</span> <span class="st">&quot;01&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="house-prices-LAUs.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-7"><a href="house-prices-LAUs.html#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get only population data by inucipality</span></span>
-<span id="cb6-8"><a href="house-prices-LAUs.html#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(muni_id, muni_name, area_km2, year, ancestry, pop, pop_km2, geometry ) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-9"><a href="house-prices-LAUs.html#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># wide format</span></span>
-<span id="cb6-10"><a href="house-prices-LAUs.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> ancestry,</span>
-<span id="cb6-11"><a href="house-prices-LAUs.html#cb6-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="fu">c</span>(pop, pop_km2)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-12"><a href="house-prices-LAUs.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spatial residential prices </span></span>
-<span id="cb6-13"><a href="house-prices-LAUs.html#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(res_prices_muni, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;muni_id&quot;</span>, <span class="st">&quot;year&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-14"><a href="house-prices-LAUs.html#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb6-15"><a href="house-prices-LAUs.html#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove Christiansø (there is no residential houses)</span></span>
-<span id="cb6-16"><a href="house-prices-LAUs.html#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(muni_id <span class="sc">!=</span> <span class="st">&quot;0411&quot;</span>)</span></code></pre></div>
-<p>Prices change from 2008 to 2019.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="house-prices-LAUs.html#cb7-1" aria-hidden="true" tabindex="-1"></a>dk_muni_prices <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="house-prices-LAUs.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-3"><a href="house-prices-LAUs.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb7-4"><a href="house-prices-LAUs.html#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> median_2019_kDKK_m2_dif),</span>
-<span id="cb7-5"><a href="house-prices-LAUs.html#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb7-6"><a href="house-prices-LAUs.html#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient2</span>(<span class="at">name =</span> <span class="st">&quot;Change [%]&quot;</span>,</span>
-<span id="cb7-7"><a href="house-prices-LAUs.html#cb7-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">low =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb7-8"><a href="house-prices-LAUs.html#cb7-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb7-9"><a href="house-prices-LAUs.html#cb7-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb7-10"><a href="house-prices-LAUs.html#cb7-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
-<span id="cb7-11"><a href="house-prices-LAUs.html#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
+<p>Prices change (median) from 2008 to 2019.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="house-prices-LAUs.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics of 2019 adjusted housing prices by municipalities</span></span>
+<span id="cb5-2"><a href="house-prices-LAUs.html#cb5-2" aria-hidden="true" tabindex="-1"></a>res_prices_muni <span class="ot">&lt;-</span> res_prices <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="house-prices-LAUs.html#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 2008  - year we start to have population data </span></span>
+<span id="cb5-4"><a href="house-prices-LAUs.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter.</span>(year <span class="sc">&gt;=</span> <span class="dv">2008</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="house-prices-LAUs.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Estimate mean and median values (house prices)</span></span>
+<span id="cb5-6"><a href="house-prices-LAUs.html#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise.</span>(<span class="at">num_res_units =</span> <span class="fu">n</span>(), </span>
+<span id="cb5-7"><a href="house-prices-LAUs.html#cb5-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">median_2019_kDKK_m2 =</span> <span class="fu">median</span>(price_2019_kDKK_m2),</span>
+<span id="cb5-8"><a href="house-prices-LAUs.html#cb5-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">.by =</span> <span class="fu">c</span>(muni_id, year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="house-prices-LAUs.html#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Price change with 2008 as baseline</span></span>
+<span id="cb5-10"><a href="house-prices-LAUs.html#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange.</span>(muni_id, year) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-11"><a href="house-prices-LAUs.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate.</span>(</span>
+<span id="cb5-12"><a href="house-prices-LAUs.html#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_2019_kDKK_m2_dif =</span> </span>
+<span id="cb5-13"><a href="house-prices-LAUs.html#cb5-13" aria-hidden="true" tabindex="-1"></a>      <span class="dv">100</span> <span class="sc">*</span> (median_2019_kDKK_m2 <span class="sc">-</span> <span class="fu">first</span>(median_2019_kDKK_m2)) <span class="sc">/</span> <span class="fu">first</span>(median_2019_kDKK_m2),</span>
+<span id="cb5-14"><a href="house-prices-LAUs.html#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> muni_id)</span>
+<span id="cb5-15"><a href="house-prices-LAUs.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-16"><a href="house-prices-LAUs.html#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Link house prices (at the first day of the year) with population.  </span></span>
+<span id="cb5-17"><a href="house-prices-LAUs.html#cb5-17" aria-hidden="true" tabindex="-1"></a>dk_muni_prices <span class="ot">&lt;-</span> dk_muni_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb5-18"><a href="house-prices-LAUs.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-19"><a href="house-prices-LAUs.html#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population at the first day of the year</span></span>
+<span id="cb5-20"><a href="house-prices-LAUs.html#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(date, <span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;day&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-21"><a href="house-prices-LAUs.html#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">==</span> <span class="st">&quot;01&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-22"><a href="house-prices-LAUs.html#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-23"><a href="house-prices-LAUs.html#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># get only population data by municipality</span></span>
+<span id="cb5-24"><a href="house-prices-LAUs.html#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(muni_id, muni_name, area_km2, year, ancestry, pop, pop_km2, geometry) <span class="sc">%&gt;%</span></span>
+<span id="cb5-25"><a href="house-prices-LAUs.html#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># wide format</span></span>
+<span id="cb5-26"><a href="house-prices-LAUs.html#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> ancestry,</span>
+<span id="cb5-27"><a href="house-prices-LAUs.html#cb5-27" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="fu">c</span>(pop, pop_km2)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-28"><a href="house-prices-LAUs.html#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add spatial residential prices </span></span>
+<span id="cb5-29"><a href="house-prices-LAUs.html#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(res_prices_muni, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;muni_id&quot;</span>, <span class="st">&quot;year&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-30"><a href="house-prices-LAUs.html#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-31"><a href="house-prices-LAUs.html#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove Christiansø (there is no residential houses)</span></span>
+<span id="cb5-32"><a href="house-prices-LAUs.html#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(muni_id <span class="sc">!=</span> <span class="st">&quot;0411&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="house-prices-LAUs.html#cb6-1" aria-hidden="true" tabindex="-1"></a>dk_muni_prices <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="house-prices-LAUs.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="house-prices-LAUs.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb6-4"><a href="house-prices-LAUs.html#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> median_2019_kDKK_m2_dif),</span>
+<span id="cb6-5"><a href="house-prices-LAUs.html#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="house-prices-LAUs.html#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient2</span>(<span class="at">name =</span> <span class="st">&quot;Change [%]&quot;</span>,</span>
+<span id="cb6-7"><a href="house-prices-LAUs.html#cb6-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">low =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb6-8"><a href="house-prices-LAUs.html#cb6-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb6-9"><a href="house-prices-LAUs.html#cb6-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb6-10"><a href="house-prices-LAUs.html#cb6-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="house-prices-LAUs.html#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-prices-LAUs"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-LAUs-1.png" alt="Adjusted 2019 housing prices variation from 2008 to 2019" width="672" />
 <p class="caption">
 Figure 2.1: Adjusted 2019 housing prices variation from 2008 to 2019
 </p>
 </div>
-<p>Plots variation over time (adjusted prices). NOTE: Zoom up to 80% change</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="house-prices-LAUs.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Short municipalities b population (e.g same order than pop_muni)</span></span>
-<span id="cb8-2"><a href="house-prices-LAUs.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lvls &lt;- levels(pop_muni$muni_name)</span></span>
-<span id="cb8-3"><a href="house-prices-LAUs.html#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># dk_muni_prices &lt;- dk_muni_prices %&gt;% </span></span>
-<span id="cb8-4"><a href="house-prices-LAUs.html#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(muni_name = factor(muni_name, levels = lvls))</span></span>
-<span id="cb8-5"><a href="house-prices-LAUs.html#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="house-prices-LAUs.html#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># # Short municipalities by total population density in 2008-Q1</span></span>
-<span id="cb8-7"><a href="house-prices-LAUs.html#cb8-7" aria-hidden="true" tabindex="-1"></a>dk_muni_prices <span class="ot">&lt;-</span> dk_muni_prices <span class="sc">%&gt;%</span></span>
-<span id="cb8-8"><a href="house-prices-LAUs.html#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">muni_name =</span> <span class="fu">fct_reorder2</span>(muni_name, year, pop_km2_Total,</span>
-<span id="cb8-9"><a href="house-prices-LAUs.html#cb8-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">.fun =</span> last2))</span>
-<span id="cb8-10"><a href="house-prices-LAUs.html#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="house-prices-LAUs.html#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb8-12"><a href="house-prices-LAUs.html#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> dk_muni_prices,</span>
-<span id="cb8-13"><a href="house-prices-LAUs.html#cb8-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
-<span id="cb8-14"><a href="house-prices-LAUs.html#cb8-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> median_2019_kDKK_m2_dif)) <span class="sc">+</span></span>
-<span id="cb8-15"><a href="house-prices-LAUs.html#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb8-16"><a href="house-prices-LAUs.html#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>,</span>
-<span id="cb8-17"><a href="house-prices-LAUs.html#cb8-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> <span class="fl">0.75</span>,</span>
-<span id="cb8-18"><a href="house-prices-LAUs.html#cb8-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb8-19"><a href="house-prices-LAUs.html#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb8-20"><a href="house-prices-LAUs.html#cb8-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>muni_name, <span class="at">ncol =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb8-21"><a href="house-prices-LAUs.html#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb8-22"><a href="house-prices-LAUs.html#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb8-23"><a href="house-prices-LAUs.html#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
-<span id="cb8-24"><a href="house-prices-LAUs.html#cb8-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb8-25"><a href="house-prices-LAUs.html#cb8-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
-<span id="cb8-26"><a href="house-prices-LAUs.html#cb8-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb8-27"><a href="house-prices-LAUs.html#cb8-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
-<span id="cb8-28"><a href="house-prices-LAUs.html#cb8-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>)) <span class="sc">+</span></span>
-<span id="cb8-29"><a href="house-prices-LAUs.html#cb8-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">&quot;[%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb8-30"><a href="house-prices-LAUs.html#cb8-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">80</span>)) <span class="sc">+</span></span>
-<span id="cb8-31"><a href="house-prices-LAUs.html#cb8-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb8-32"><a href="house-prices-LAUs.html#cb8-32" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2008</span>, <span class="dv">2019</span>, <span class="dv">3</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-price-change-muni"></span>
-<img src="Housing_prices_book_files/figure-html/fig-price-change-muni-1.png" alt="Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)" width="960" />
-<p class="caption">
-Figure 2.2: Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)
-</p>
-</div>
 <p>Relationship between population density and house prices (median values) at municipality level.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="house-prices-LAUs.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb9-2"><a href="house-prices-LAUs.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb9-3"><a href="house-prices-LAUs.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> dk_muni_prices,</span>
-<span id="cb9-4"><a href="house-prices-LAUs.html#cb9-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
-<span id="cb9-5"><a href="house-prices-LAUs.html#cb9-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> median_2019_kDKK_m2,</span>
-<span id="cb9-6"><a href="house-prices-LAUs.html#cb9-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">colour =</span> muni_name,</span>
-<span id="cb9-7"><a href="house-prices-LAUs.html#cb9-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape =</span> <span class="fu">factor</span>(year))) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="house-prices-LAUs.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlevels</span>(<span class="fu">factor</span>(dk_muni_prices<span class="sc">$</span>year))) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="house-prices-LAUs.html#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb9-10"><a href="house-prices-LAUs.html#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_mark_ellipse</span>(<span class="at">data =</span> dk_muni_prices_lbls,</span>
-<span id="cb9-11"><a href="house-prices-LAUs.html#cb9-11" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
-<span id="cb9-12"><a href="house-prices-LAUs.html#cb9-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y =</span> median_2019_kDKK_m2,</span>
-<span id="cb9-13"><a href="house-prices-LAUs.html#cb9-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> muni_name,</span>
-<span id="cb9-14"><a href="house-prices-LAUs.html#cb9-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">label =</span> muni_name),</span>
-<span id="cb9-15"><a href="house-prices-LAUs.html#cb9-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">label.fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb9-16"><a href="house-prices-LAUs.html#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb9-17"><a href="house-prices-LAUs.html#cb9-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Population density [ppl/km2]&quot;</span>,</span>
-<span id="cb9-18"><a href="house-prices-LAUs.html#cb9-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;2019 adjusted median values [kDKK/m2]&quot;</span>,</span>
-<span id="cb9-19"><a href="house-prices-LAUs.html#cb9-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">&quot;Municipality&quot;</span>,</span>
-<span id="cb9-20"><a href="house-prices-LAUs.html#cb9-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">shape =</span> <span class="st">&quot;Year&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-21"><a href="house-prices-LAUs.html#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb9-22"><a href="house-prices-LAUs.html#cb9-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-23"><a href="house-prices-LAUs.html#cb9-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">shape =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">title.position =</span> <span class="st">&quot;top&quot;</span>),</span>
-<span id="cb9-24"><a href="house-prices-LAUs.html#cb9-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">7</span>, <span class="at">title.position =</span> <span class="st">&quot;top&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb9-25"><a href="house-prices-LAUs.html#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> dk_muni_prices,</span>
-<span id="cb9-26"><a href="house-prices-LAUs.html#cb9-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
-<span id="cb9-27"><a href="house-prices-LAUs.html#cb9-27" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> median_2019_kDKK_m2),</span>
-<span id="cb9-28"><a href="house-prices-LAUs.html#cb9-28" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
-<span id="cb9-29"><a href="house-prices-LAUs.html#cb9-29" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F,</span>
-<span id="cb9-30"><a href="house-prices-LAUs.html#cb9-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="house-prices-LAUs.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb7-2"><a href="house-prices-LAUs.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb7-3"><a href="house-prices-LAUs.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> dk_muni_prices,</span>
+<span id="cb7-4"><a href="house-prices-LAUs.html#cb7-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
+<span id="cb7-5"><a href="house-prices-LAUs.html#cb7-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> median_2019_kDKK_m2,</span>
+<span id="cb7-6"><a href="house-prices-LAUs.html#cb7-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">colour =</span> muni_name,</span>
+<span id="cb7-7"><a href="house-prices-LAUs.html#cb7-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape =</span> <span class="fu">factor</span>(year))) <span class="sc">+</span></span>
+<span id="cb7-8"><a href="house-prices-LAUs.html#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nlevels</span>(<span class="fu">factor</span>(dk_muni_prices<span class="sc">$</span>year))) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="house-prices-LAUs.html#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb7-10"><a href="house-prices-LAUs.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_mark_ellipse</span>(<span class="at">data =</span> dk_muni_prices_lbls,</span>
+<span id="cb7-11"><a href="house-prices-LAUs.html#cb7-11" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
+<span id="cb7-12"><a href="house-prices-LAUs.html#cb7-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">y =</span> median_2019_kDKK_m2,</span>
+<span id="cb7-13"><a href="house-prices-LAUs.html#cb7-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">colour =</span> muni_name,</span>
+<span id="cb7-14"><a href="house-prices-LAUs.html#cb7-14" aria-hidden="true" tabindex="-1"></a>                        <span class="at">label =</span> muni_name),</span>
+<span id="cb7-15"><a href="house-prices-LAUs.html#cb7-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">label.fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="house-prices-LAUs.html#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb7-17"><a href="house-prices-LAUs.html#cb7-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Population density [ppl/km2]&quot;</span>,</span>
+<span id="cb7-18"><a href="house-prices-LAUs.html#cb7-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;2019 adjusted median values [kDKK/m2]&quot;</span>,</span>
+<span id="cb7-19"><a href="house-prices-LAUs.html#cb7-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="st">&quot;Municipality&quot;</span>,</span>
+<span id="cb7-20"><a href="house-prices-LAUs.html#cb7-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">shape =</span> <span class="st">&quot;Year&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-21"><a href="house-prices-LAUs.html#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-22"><a href="house-prices-LAUs.html#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-23"><a href="house-prices-LAUs.html#cb7-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">shape =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">title.position =</span> <span class="st">&quot;top&quot;</span>),</span>
+<span id="cb7-24"><a href="house-prices-LAUs.html#cb7-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">colour =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">7</span>, <span class="at">title.position =</span> <span class="st">&quot;top&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb7-25"><a href="house-prices-LAUs.html#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> dk_muni_prices,</span>
+<span id="cb7-26"><a href="house-prices-LAUs.html#cb7-26" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
+<span id="cb7-27"><a href="house-prices-LAUs.html#cb7-27" aria-hidden="true" tabindex="-1"></a>                  <span class="at">y =</span> median_2019_kDKK_m2),</span>
+<span id="cb7-28"><a href="house-prices-LAUs.html#cb7-28" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
+<span id="cb7-29"><a href="house-prices-LAUs.html#cb7-29" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F,</span>
+<span id="cb7-30"><a href="house-prices-LAUs.html#cb7-30" aria-hidden="true" tabindex="-1"></a>              <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-prices-pop-a"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-pop-a-1.png" alt="Association between population density and median housing prices at municipality level" width="960" />
 <p class="caption">
-Figure 2.3: Association between population density and median housing prices at municipality level
+Figure 2.2: Association between population density and median housing prices at municipality level
 </p>
 </div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="house-prices-LAUs.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Big cities/urban areas</span></span>
-<span id="cb10-2"><a href="house-prices-LAUs.html#cb10-2" aria-hidden="true" tabindex="-1"></a>  lbls <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;København&quot;</span>, <span class="st">&quot;Aarhus&quot;</span>, <span class="st">&quot;Odense&quot;</span>, <span class="st">&quot;Aalborg&quot;</span>, <span class="st">&quot;Frederiksberg&quot;</span>,</span>
-<span id="cb10-3"><a href="house-prices-LAUs.html#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Tønder&quot;</span>, <span class="st">&quot;Læsø&quot;</span> )</span>
-<span id="cb10-4"><a href="house-prices-LAUs.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  dk_muni_prices_lbls <span class="ot">&lt;-</span> dk_muni_prices <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a href="house-prices-LAUs.html#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(muni_name <span class="sc">%in%</span> lbls) </span>
-<span id="cb10-6"><a href="house-prices-LAUs.html#cb10-6" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-7"><a href="house-prices-LAUs.html#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb10-8"><a href="house-prices-LAUs.html#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> dk_muni_prices,</span>
-<span id="cb10-9"><a href="house-prices-LAUs.html#cb10-9" aria-hidden="true" tabindex="-1"></a>         <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
-<span id="cb10-10"><a href="house-prices-LAUs.html#cb10-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> median_2019_kDKK_m2)) <span class="sc">+</span></span>
-<span id="cb10-11"><a href="house-prices-LAUs.html#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb10-12"><a href="house-prices-LAUs.html#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-13"><a href="house-prices-LAUs.html#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
-<span id="cb10-14"><a href="house-prices-LAUs.html#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb10-15"><a href="house-prices-LAUs.html#cb10-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Population density [ppl/km2]&quot;</span>,</span>
-<span id="cb10-16"><a href="house-prices-LAUs.html#cb10-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;2019 adjusted median values [kDKK/m2]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb10-17"><a href="house-prices-LAUs.html#cb10-17" aria-hidden="true" tabindex="-1"></a>    ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="at">data =</span> dk_muni_prices_lbls, </span>
-<span id="cb10-18"><a href="house-prices-LAUs.html#cb10-18" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">aes</span>(<span class="at">label =</span> muni_name),</span>
-<span id="cb10-19"><a href="house-prices-LAUs.html#cb10-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nudge_y =</span> <span class="dv">20</span>,</span>
-<span id="cb10-20"><a href="house-prices-LAUs.html#cb10-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max.iter =</span> <span class="fl">3e3</span>) <span class="sc">+</span></span>
-<span id="cb10-21"><a href="house-prices-LAUs.html#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
-<span id="cb10-22"><a href="house-prices-LAUs.html#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p>Plots variation over time (adjusted prices). NOTE: Zoom up to 80% change</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="house-prices-LAUs.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Short municipalities by total population density in 2008-Q1</span></span>
+<span id="cb8-2"><a href="house-prices-LAUs.html#cb8-2" aria-hidden="true" tabindex="-1"></a>dk_muni_prices <span class="ot">&lt;-</span> dk_muni_prices <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="house-prices-LAUs.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">muni_name =</span> <span class="fu">fct_reorder2</span>(muni_name, year, pop_km2_Total,</span>
+<span id="cb8-4"><a href="house-prices-LAUs.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">.fun =</span> last2))</span>
+<span id="cb8-5"><a href="house-prices-LAUs.html#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="house-prices-LAUs.html#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb8-7"><a href="house-prices-LAUs.html#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> dk_muni_prices,</span>
+<span id="cb8-8"><a href="house-prices-LAUs.html#cb8-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb8-9"><a href="house-prices-LAUs.html#cb8-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> median_2019_kDKK_m2_dif)) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="house-prices-LAUs.html#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-11"><a href="house-prices-LAUs.html#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>,</span>
+<span id="cb8-12"><a href="house-prices-LAUs.html#cb8-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> <span class="fl">0.75</span>,</span>
+<span id="cb8-13"><a href="house-prices-LAUs.html#cb8-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="house-prices-LAUs.html#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb8-15"><a href="house-prices-LAUs.html#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>muni_name, <span class="at">ncol =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb8-16"><a href="house-prices-LAUs.html#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb8-17"><a href="house-prices-LAUs.html#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb8-18"><a href="house-prices-LAUs.html#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb8-19"><a href="house-prices-LAUs.html#cb8-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb8-20"><a href="house-prices-LAUs.html#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb8-21"><a href="house-prices-LAUs.html#cb8-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb8-22"><a href="house-prices-LAUs.html#cb8-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb8-23"><a href="house-prices-LAUs.html#cb8-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>)) <span class="sc">+</span></span>
+<span id="cb8-24"><a href="house-prices-LAUs.html#cb8-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">&quot;[%]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-25"><a href="house-prices-LAUs.html#cb8-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">80</span>)) <span class="sc">+</span></span>
+<span id="cb8-26"><a href="house-prices-LAUs.html#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb8-27"><a href="house-prices-LAUs.html#cb8-27" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2008</span>, <span class="dv">2019</span>, <span class="dv">3</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-price-change-muni"></span>
+<img src="Housing_prices_book_files/figure-html/fig-price-change-muni-1.png" alt="Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)" width="960" />
+<p class="caption">
+Figure 2.3: Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)
+</p>
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="house-prices-LAUs.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Big cities/urban areas</span></span>
+<span id="cb9-2"><a href="house-prices-LAUs.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  lbls <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;København&quot;</span>, <span class="st">&quot;Aarhus&quot;</span>, <span class="st">&quot;Odense&quot;</span>, <span class="st">&quot;Aalborg&quot;</span>, <span class="st">&quot;Frederiksberg&quot;</span>,</span>
+<span id="cb9-3"><a href="house-prices-LAUs.html#cb9-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;Tønder&quot;</span>, <span class="st">&quot;Læsø&quot;</span> )</span>
+<span id="cb9-4"><a href="house-prices-LAUs.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  dk_muni_prices_lbls <span class="ot">&lt;-</span> dk_muni_prices <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="house-prices-LAUs.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(muni_name <span class="sc">%in%</span> lbls) </span>
+<span id="cb9-6"><a href="house-prices-LAUs.html#cb9-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-7"><a href="house-prices-LAUs.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb9-8"><a href="house-prices-LAUs.html#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">data =</span> dk_muni_prices,</span>
+<span id="cb9-9"><a href="house-prices-LAUs.html#cb9-9" aria-hidden="true" tabindex="-1"></a>         <span class="fu">aes</span>(<span class="at">x =</span> pop_km2_Total,</span>
+<span id="cb9-10"><a href="house-prices-LAUs.html#cb9-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> median_2019_kDKK_m2)) <span class="sc">+</span></span>
+<span id="cb9-11"><a href="house-prices-LAUs.html#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb9-12"><a href="house-prices-LAUs.html#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-13"><a href="house-prices-LAUs.html#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb9-14"><a href="house-prices-LAUs.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb9-15"><a href="house-prices-LAUs.html#cb9-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Population density [ppl/km2]&quot;</span>,</span>
+<span id="cb9-16"><a href="house-prices-LAUs.html#cb9-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;2019 adjusted median values [kDKK/m2]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-17"><a href="house-prices-LAUs.html#cb9-17" aria-hidden="true" tabindex="-1"></a>    ggrepel<span class="sc">::</span><span class="fu">geom_text_repel</span>(<span class="at">data =</span> dk_muni_prices_lbls, </span>
+<span id="cb9-18"><a href="house-prices-LAUs.html#cb9-18" aria-hidden="true" tabindex="-1"></a>                             <span class="fu">aes</span>(<span class="at">label =</span> muni_name),</span>
+<span id="cb9-19"><a href="house-prices-LAUs.html#cb9-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">nudge_y =</span> <span class="dv">20</span>,</span>
+<span id="cb9-20"><a href="house-prices-LAUs.html#cb9-20" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max.iter =</span> <span class="fl">3e3</span>) <span class="sc">+</span></span>
+<span id="cb9-21"><a href="house-prices-LAUs.html#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
+<span id="cb9-22"><a href="house-prices-LAUs.html#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-prices-pop-b"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-pop-b-1.png" alt="Association between population density and median housing prices at municipality level" width="960" />
 <p class="caption">
