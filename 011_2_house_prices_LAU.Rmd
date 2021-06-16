@@ -57,7 +57,7 @@ csv_files_path <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
                              full.names = TRUE)
 
 plan(multisession, workers = 7)
-res_prices <- future_map_dfr(.x = csv_files_path,
+res_prices_read <- future_map_dfr(.x = csv_files_path,
                              .f = f_average_price_muni) %>% 
   # rename KomKode
   mutate.(KomKode = paste0("0", KomKode)) %>% 
@@ -70,7 +70,7 @@ There are some unrealistic house prices in *Kerteminde* and *Ringsted* municipal
 
 ```{r remove-unrealistic-values}
 
-res_prices <- res_prices %>%
+res_prices <- res_prices_read %>%
   filter(!(muni_id == "0440" & year == 2008 & KONTANT_KOEBESUM == 267000000)) %>%
   filter(!(muni_id == "0329" & year == 2011 & KONTANT_KOEBESUM == 375000000)) %>% 
   filter(KONTANT_KOEBESUM > 0)
@@ -118,7 +118,6 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
     kable_paper() %>% 
     scroll_box(width = "100%")
   
-  
 ```
 
 ```{r adj-price-DK}
@@ -139,7 +138,6 @@ res_prices <- res_prices %>%
   # Price per m2
   mutate(price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL)
  
- 
 ```
 
 Summary statistics of 2019 adjusted housing prices by municipalities 
@@ -149,7 +147,7 @@ res_prices_muni <- res_prices %>%
   # 2008  - year we start to have population data 
   filter.(year >= 2008) %>% 
   # Estimate mean and median values (house prices)
-  summarise.(n = n(), 
+  summarise.(num_res_units = n(), 
              median_2019_kDKK_m2 = median(price_2019_kDKK_m2),
              .by = c(muni_id, year)) %>% 
   # Price change with 2008 as baseline
@@ -171,30 +169,59 @@ dk_muni_prices <- dk_muni_pop %>%
   separate(date, c("year", "month", "day"), sep = "-") %>% 
   filter(month == "01") %>%
   mutate(year = as.numeric(year)) %>% 
+  # get only population data by inucipality
+  select(muni_id, muni_name, area_km2, year, ancestry, pop, pop_km2, geometry ) %>% 
   # wide format
   pivot_wider(names_from = ancestry,
-              values_from = c(pop, pop_dif_2008, pop_pct_2008, pop_km2)) %>% 
+              values_from = c(pop, pop_km2)) %>% 
   # Add spatial residential prices 
   left_join(res_prices_muni, by = c("muni_id", "year")) %>% 
-  st_sf()
+  st_sf() %>% 
+  # Remove Christiansø (there is no residential houses)
+  filter(muni_id != "0411")
 
 ```
 
-Plots variation over time (adjusted prices)
+Prices change from 2008 to 2019.
 
-```{r fig-price-change-muni, fig.height=25, fig.width=10, fig.cap = "Adjusted median house price (kDKK/m2) change from 2008"}
+```{r fig-prices-LAUs, fig.cap = "Adjusted 2019 housing prices variation from 2008 to 2019"}
 
-# Short municipalities b population (e.g same order than pop_muni)
-lvls <- levels(pop_muni$muni_name)
-dk_muni_prices <- dk_muni_prices %>% 
-  mutate(muni_name = factor(muni_name, levels = lvls))
+dk_muni_prices %>% 
+  filter(year == 2019) %>% 
+  ggplot() +
+    geom_sf(aes(fill = median_2019_kDKK_m2_dif),
+            color = "grey", size = 0.05) +
+    scale_fill_gradient2(name = "Change [%]",
+                         low = "blue",
+                         mid = "white",
+                         high = "red",
+                         midpoint = 0) +
+    theme_void()
+
+```
+
+Plots variation over time (adjusted prices). NOTE: Zoom up to 80% change
+
+```{r fig-price-change-muni, fig.height=25, fig.width=10, fig.cap = "Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)"}
+
+# # Short municipalities b population (e.g same order than pop_muni)
+# lvls <- levels(pop_muni$muni_name)
+# dk_muni_prices <- dk_muni_prices %>% 
+#   mutate(muni_name = factor(muni_name, levels = lvls))
+
+# # Short municipalities by total population density in 2008-Q1
+dk_muni_prices <- dk_muni_prices %>%
+  mutate(muni_name = fct_reorder2(muni_name, year, pop_km2_Total,
+                                  .fun = last2))
 
 # Plot
 ggplot(data = dk_muni_prices,
             aes(x = year,
                 y = median_2019_kDKK_m2_dif)) +
   geom_point() +
-  geom_smooth(method = "gam", se = FALSE) +
+  geom_smooth(method = "loess",
+              span = 0.75,
+              se = FALSE) +
   geom_hline(yintercept = 0, linetype="dashed", color = "grey", size = 0.5) +
   facet_wrap(~muni_name, ncol = 6) +
   theme_bw() +
@@ -240,49 +267,5 @@ Relationship between population density and house prices (median values) at muni
 
 ```
 
-Prices
 
-```{r fig-prices-LAUs, animation.hook="gifski", fig.cap = "Adjusted 2019 housing prices variation (baseline 2008)"}
-
-# Make intervals
-brks <- dk_muni_prices$median_2019_kDKK_m2_dif %>% quantile(seq(0,1,0.1),na.rm = T)
-dk_muni_prices <- dk_muni_prices %>% 
-  mutate(median_2019_kDKK_m2_dif_brk = cut(dk_muni_prices$median_2019_kDKK_m2_dif,
-                                           breaks = brks,
-                                           include.lowest = TRUE))
-
-# Aux. function for plotting
-f_plot <- function(df) {
-  ggplot() +
-    geom_sf(data = df,
-            aes(fill = median_2019_kDKK_m2_dif_brk),
-            color = "grey", size = 0.05) +
-    # scale_fill_gradient2(name = "Change [%]",
-    #                      low = "blue",
-    #                      mid = "white",
-    #                      high = "red",
-    #                      midpoint = 0,
-    #                      limits = c(-100, 300)) +
-    scale_fill_brewer(name = "Change [%]",
-                      palette = "RdYlBu",
-                      direction = -1,
-                      drop = FALSE) +
-    my_theme_map() +
-    labs(subtitle = paste("Date", df$year, sep = ": "),
-         x = "",
-         y = "")
-}
-
-# Plot each year
-plan(multisession, workers = 7)
-plts <- dk_muni_prices %>% 
-  filter(muni_id != "0411") %>% 
-  group_split(year) %>%  
-  future_map(., .f = f_plot, .options = furrr_options(seed = 123))
-plan("default")
-
-# Animation
-for(i in seq_along(plts)) { print(plts[[i]]) }
-
-```
 
