@@ -3,8 +3,13 @@ fig:fig-pop-pyramith
 fig:fig-pop-growth-total
 fig:fig-pop-growth-ancestry
 fig:fig-pop-change
+fig:fig-pop-migr-top
 fig:fig-pop-migr-total
 fig:fig-pop-migr-top10-countries
+tab:price-index-DK
+fig:fig-prices-LAUs
+fig:fig-price-change-muni
+fig:fig-prices-pop
 fig:fig-adm-units
 fig:fig-grids-100m
 fig:fig-sp-res-builds
@@ -23,6 +28,7 @@ fig:fig-roads-noise
 fig:fig-train-noise
 fig:fig-runits-floor
 pop-growth
+house-prices-LAUs
 hedonic-price-model
 house-characteristics
 location-characteristics
@@ -39,3 +45,5 @@ dist-CBD
 noise
 EDA-house-prices
 residential-units-by-floor-level
+fig:fig-prices-pop-b
+fig:fig-prices-pop-a
