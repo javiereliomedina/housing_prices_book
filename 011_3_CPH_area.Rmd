@@ -315,7 +315,7 @@ options(future.globals.maxSize = 500 * 1024^2)
 
 ```
 
-```{r fig-pop-density-cph, animation.hook="gifski", fig.cap = "Dasymetric map"}
+```{r fig-pop-density-cph, animation.hook="gifski", fig.cap = "Population density by grid cells of 100m x 100m"}
 
 # Add breaks
 brks <- c(min(pop_g100m$pop_total_km2),
@@ -324,28 +324,25 @@ brks <- c(min(pop_g100m$pop_total_km2),
 
 pop_g100m <- pop_g100m %>%
   mutate(pop_total_km2_cut = cut(pop_total_km2,
-                         breaks = brks,
-                         include.lowest = TRUE))  
+                                 breaks = brks,
+                                 include.lowest = TRUE))  
 
 # Aux. function for plotting
 f_plot <- function(df) {
   ggplot() +
     geom_sf(data = study_area, fill = "grey") +
     geom_sf(data = df, 
-            aes(fill = pop_total_km2_cut,
-                group = interaction(pop_total_km2_cut, date)),
+            aes(fill = pop_total_km2),
             color = NA) +
-    geom_sf(data = cph_muni, fill = NA, color = "grey50", size = 0.1) +
-    scale_fill_brewer(
-      name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
-      palette = "RdYlBu",
-      direction = -1,
-      drop = FALSE)  +
+    # geom_sf(data = cph_muni, fill = NA, color = "grey50", size = 0.1) +
+    scale_fill_viridis(name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
+                       option = "turbo",
+                       limits = c(0.2, 174),
+                       trans = "log10") +
     my_theme_map() +
     labs(x = "",
          y = "",
-         title = "Population density by grid cells of 100m x 100m",
-         subtitle = paste("Date", df$date, sep = ": "))
+         caption = paste("Date", df$date, sep = ": "))
 }
 
 # Plot each year
@@ -360,4 +357,20 @@ for(i in seq_along(years_pd)) { print(plts[[i]]) }
 
 ```
 
+```{r fig-pop-density-cph-b, fig.cap = "Population density by grid cells of 100m x 100m"}
+
+ggplot() +
+  geom_sf(data = study_area, fill = "grey") +
+  geom_sf(data = pop_g100m, 
+          aes(fill = pop_total_km2),
+          color = NA) +
+  scale_fill_viridis(name = TeX("$\\overset{\\textbf{Population}}{(x1000/km^2)}$"),
+                     option = "turbo",
+                     trans = "log10") +
+  my_theme_map() +
+  labs(x = "",
+       y = "") +
+  facet_wrap(~date)
+
+```
 
