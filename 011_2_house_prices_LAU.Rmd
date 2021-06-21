@@ -125,7 +125,6 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
 # Adjust housing prices
 price_index_2019 <- price_index %>% 
   filter(index_year == 2019) %>% 
-  rename(index_2019 = index_value)
 
 # Add adjusted prices 
 res_prices <- res_prices %>% 

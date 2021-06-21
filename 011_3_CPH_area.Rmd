@@ -93,7 +93,7 @@ p1 + p2
 
 ```
 
-## Population density
+## Population density by grid cells of 100m x 100m
 
 We disaggregate therefore population data at municipality level to the grid cells of 100m x 100m (i.e. `r nrow(grids100m$data_points[[1]])` grid cells in the study area) using all residences for year-round living (*ENH_ANVEND_KODE*) (i.e. from the Building and Dwelling Register  - [BBR](https://teknik.bbr.dk/forside) as ancillary data. We also removed from the dataset those dwellings that are not actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*) and dwellings with a size lower than that 10 $m^2$. 
 
@@ -218,7 +218,7 @@ The procedure for disaggregating the population data is therefore as follow:
 
 1. Population density: $$PD_{i} = \frac{pop_{i}}{A_{i}}$$
 
-We can therefore estimate the population density at the first day of the year by grid cells of 100m x 100m (figure \@ref(fig:fig-pop-density)).
+We can therefore estimate the population density at the first day of the year by grid cells of 100m x 100m (figure \@ref(fig:fig-pop-density-cph)).
 
 ```{r fig-pop-density-aux-function}
 
@@ -374,3 +374,136 @@ ggplot() +
 
 ```
 
+## House prices by grid cells of 100m x 100m
+
+However, for housing prices we focus our analysis to the main building types in the City of Copenhagen (Figure \@ref(fig:fig-sp-runits-cph)), which are in this order: i) multi-storey residential buildings (code 140), ii) detached single-family houses (codes 120, 121, 122), iii) colleges (code 150), and iv) semi-detached houses (codes 130, 131, 132).
+
+```{r, fig-sp-runits-cph, fig.width = 9, fig.height = 7, fig.cap = "2D kernel density map"}
+
+# Aux. function for plotting 2D kernel density maps:
+  f <- function(.data) {
+    .data %>% 
+      st_coordinates() %>%
+      as_tibble() %>%
+      ggplot() +
+      geom_sf(data = cph_parish, fill = "grey", color = "grey50", size = 0.05) +
+      geom_point(aes(X, Y), size = 0.02, shape = 16) +
+      stat_density_2d(aes(X, Y, fill = ..level..),
+                      alpha = 0.5,
+                      h = 700,
+                      geom = "polygon") +
+      scale_fill_distiller(palette = "Spectral")  +
+      theme_void() + 
+      theme(legend.position = "none") +
+      labs(title = .data$type,
+           x = "",
+           y = "") 
+  }
+
+# Plots  
+  p <- res_units_sf %>% 
+    filter(year == 2019) %>%  
+    # Reorder type factors by the frequency they appear 
+    mutate(type = fct_infreq(type)) %>% 
+    # Split by house type
+    group_split(type) %>%
+    map( ~ f(.))
+  
+  wrap_plots(p) +
+    annotation_scale(location = "br", text_cex = 1) +
+    annotation_north_arrow(location = "br",
+                           pad_x = unit(0.70, "cm"),
+                           pad_y = unit(0.65, "cm"),
+                           which_north = "true",
+                           height = unit(0.5, "cm"),
+                           width = unit(0.5, "cm"),
+                           style = north_arrow_orienteering(text_col = "white",
+                                                            text_size = 1)) +
+    plot_annotation(title = "Residential units in 2019",
+                    theme = theme(plot.title = element_text(size = 14,
+                                                            colour = "darkblue",
+                                                            face = "bold"),
+                                  plot.caption = element_text(size = 9,
+                                                              colour = "grey25")
+                    )
+    ) 
+  
+```
+
+Then, we selected from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*). Colleges were also excluded  from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices and the size of the dwelling (*BEBO_ARL*). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.    
+
+```{r runits-clean-cph}
+
+  selected_res_units <- c("Multi-storey",
+                          "Single-family house",
+                          "Semi-detached house")
+
+  res_units_oft <- res_units %>%
+    # Convert to tibble
+    as_tibble() %>% 
+    # Select main residential units in the area
+    filter(type %in% selected_res_units) %>% 
+    # ordinary free trade or auction
+    filter(OVERDRAGELSES_KODE == "1" | OVERDRAGELSES_KODE == "3") %>% 
+    # Drop unused factors levels
+    droplevels() %>% 
+    # 2019 adjusted house prices 
+    left_join(price_index, by = c("year" = "index_year")) %>% 
+    mutate(index_2019 = price_index_2019$index_2019, 
+           price_2019_kDKK = (price_kDKK * index_2019 / index_value),
+           price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL) %>% 
+    # Remove prices > 0 kDKK
+    filter(price_2019_kDKK > 0)
+    
+```
+
+The total number of residential units used for the analysis is therefore `r nrow(res_units_oft)` (Table \@ref(tab:tbl-runits-clean-cph)).
+```{r tbl-runits-clean-cph}
+
+# Table with Number of residential units
+  res_units_oft %>%
+    # Summarize by type or residency and year
+    group_by(type, year) %>% 
+    summarise(n = n()) %>% 
+    ungroup() %>%
+    # Arrange and add row with totals
+    arrange(year, desc(n)) %>%
+    # Pivot
+    pivot_wider(names_from = year, values_from = n) %>% 
+    adorn_totals("row") %>%
+    kbl(caption = "Number of residential dwellings in the free trade by year") %>% 
+    kable_paper() %>% 
+    row_spec(4, bold = TRUE) %>% 
+    scroll_box(width = "100%")
+
+```
+
+The summary descriptive statistics of the housing prices are:
+```{r tbl-summary-cph}
+
+# Table theme
+theme_gtsummary_compact()
+
+# Create variable labels of the variables to be printed in the table
+labelled::var_label(res_units_oft$price_2019_kDKK)    <- "Adjusted prices (kDKK)"
+labelled::var_label(res_units_oft$BEBO_ARL)           <- "Dwelling size (m2)"
+labelled::var_label(res_units_oft$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
+
+# Summary table
+res_units_oft %>% 
+  # Select variables of interest
+  select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
+  # Summary values
+  tbl_summary(by = type,
+              type = all_continuous() ~ "continuous2",
+              statistic = all_continuous() ~ c("{mean}",
+                                               "{median}",
+                                               "{p25} - {p75}", 
+                                               "{min} - {max}"),
+              missing = "no") %>% 
+  add_overall() %>% 
+  modify_spanning_header(c("stat_1", "stat_2", "stat_3") ~ "**House type**") %>% 
+  modify_footnote(update = everything() ~ NA) %>% 
+  bold_labels() 
+
+```
