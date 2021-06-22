@@ -16,7 +16,7 @@ NOTES:
 ```{r}
 
 res_units_oft %>% 
-  ggplot(aes(sample = log10(price2019_kDKK),  colour = factor(BBR_year))) +
+  ggplot(aes(sample = log10(price_2019_kDKK),  colour = factor(year))) +
   geom_qq() +
   #geom_qq_line() +
   facet_grid(~type) +

@@ -249,6 +249,10 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
 
 ```{r DK-municipalities}
 
+# Download DAGI (scale 1:10000)
+  dangeo_get_data(ftp_folder = "landinddelinger/dagi/SHAPE",
+                  zip_name   = "DAGIREF_SHAPE_UTM32-EUREF89.zip")
+
 # Municipalities (get from DAGI)
   muni_link <- paste(loc_dir,
                         "DAGIREF_SHAPE_UTM32-EUREF89/ADM",
