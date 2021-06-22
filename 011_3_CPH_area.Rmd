@@ -476,6 +476,7 @@ The total number of residential units used for the analysis is therefore `r nrow
 
 ```
 
+
 The summary descriptive statistics of the housing prices are:
 ```{r tbl-summary-cph}
 
@@ -506,8 +507,26 @@ res_units_oft %>%
 
 ```
 
-```{r runits-prices-grid}
+House prices by type:
+```{r pop-price-runits, fig.height=6, fig.width=10}
 
+ggplot(data = filter(res_units_oft, price_2019_kDKK_m2 >= 10),
+       aes(y = price_2019_kDKK_m2,
+           x = factor(year),
+           fill = type
+           )
+       ) +
+  geom_boxplot(show.legend = FALSE) +
+  scale_y_log10() +
+  labs(x = "",
+       y = "kDKK/m2") +
+  facet_wrap( ~ type) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+
+```
+
+```{r runits-prices-grid}
 # Detect to what grid belongs a house
 plan(multisession, workers = 7)
 res_units_oft_g100m <- res_units_oft %>%
@@ -518,21 +537,28 @@ res_units_oft_g100m <- res_units_oft %>%
   future_map_dfr(., ~st_intersection(., grids100m$data_poly[[1]])) 
 plan("default")
 
+# Add population data of the grid cells
+res_units_oft_g100m <- res_units_oft_g100m %>% 
+  as_tibble() %>% 
+  left_join(pop_g100m %>% rename(year = date), by = c("year", "grid_ID"))
+
+```
+
+```{r runits-prices-grid-sum}
+
 # Summary house prices by grid cells of 100m x 100m 
 sum_runits_prices <- res_units_oft_g100m %>% 
-  st_drop_geometry() %>% 
-  group_by(year, grid_ID) %>% 
+  group_by(year, grid_ID, pop_total_km2, n_units) %>% 
   summarise(n_runits_oft = n(), 
             mean_2019_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
             median_2019_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE)) %>% 
   ungroup()
 
 # Link with population data by grids of 100m x 100m 
-prices_g100m <- pop_g100m %>% 
-  select(-pop_total_km2_cut) %>% 
-  rename(year = date) %>% 
-  right_join(sum_runits_prices, by = c("year", "grid_ID"))
-
+prices_g100m <- sum_runits_prices %>% 
+  left_join(grids100m$data_poly[[1]], by = "grid_ID") %>% 
+  st_sf()
+ 
 ```
 
 ```{r fig-prices-runits-grid-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
@@ -607,8 +633,7 @@ ggplot(data = filter(prices_g100m,
   
 ```
 
-Bivariate map
-
+Bivariate map:
 ```{r bivariate-map, animation.hook="gifski", fig.cap = "Population density and house prices in the ordinary free trade"}
 
 # Aux. function for plotting bivariate map for each year
@@ -630,7 +655,7 @@ f_bi_map <- function(df) {
             size = 0.1, 
             show.legend = FALSE) +
     bi_scale_fill(pal = "DkBlue", dim = 3) +
-    labs(title = df$year) +
+    labs(title = paste("Date", df$year, sep = ": ")) +
     bi_theme() +
     theme(plot.title = element_text(size = 10,
                                     hjust = 0,
@@ -696,7 +721,6 @@ p_legend <- bi_legend(pal = "DkBlue",
 
 # Plot
 layout <- "
-AAAAAA#
 AAAAAA#
 AAAAAA#
 AAAAAA#
