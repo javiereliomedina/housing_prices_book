@@ -508,32 +508,30 @@ res_units_oft %>%
 
 ```{r runits-prices-grid}
 
+# Detect to what grid belongs a house
 plan(multisession, workers = 7)
-
 res_units_oft_g100m <- res_units_oft %>%
-  select.(year, 
-          price_2019_kDKK_m2,
-          etrs89koordinat_ost,
-          etrs89koordinat_nord) %>% 
   st_as_sf(coords = c("etrs89koordinat_ost", 
                       "etrs89koordinat_nord"),
            crs = 25832) %>%  
   group_split(year) %>%  
-  future_map_dfr(., ~st_intersection(., grids100m$data_poly[[1]])) %>% 
+  future_map_dfr(., ~st_intersection(., grids100m$data_poly[[1]])) 
+plan("default")
+
+# Summary house prices by grid cells of 100m x 100m 
+sum_runits_prices <- res_units_oft_g100m %>% 
   st_drop_geometry() %>% 
   group_by(year, grid_ID) %>% 
-  summarise(n_runits = n(), 
-            mean_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
-            median_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE)) %>% 
+  summarise(n_runits_oft = n(), 
+            mean_2019_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
+            median_2019_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE)) %>% 
   ungroup()
-
-plan("default")
 
 # Link with population data by grids of 100m x 100m 
 prices_g100m <- pop_g100m %>% 
   select(-pop_total_km2_cut) %>% 
   rename(year = date) %>% 
-  right_join(res_units_oft_g100m, by = c("year", "grid_ID"))
+  right_join(sum_runits_prices, by = c("year", "grid_ID"))
 
 ```
 
@@ -545,8 +543,8 @@ f_plot <- function(df) {
   ggplot() +
     geom_sf(data = study_area, fill = "grey") +
     geom_sf(data = df, 
-            aes(fill = cut(median_kDKK_m2,
-                           breaks = quantile(prices_g100m$median_kDKK_m2,
+            aes(fill = cut(median_2019_kDKK_m2,
+                           breaks = quantile(prices_g100m$median_2019_kDKK_m2,
                                              seq(0, 1, 0.1)), 
                            include.lowest = TRUE, 
                            right = TRUE, 
@@ -578,7 +576,7 @@ for(i in seq_along(years_pd)) { print(plts[[i]]) }
 ggplot() +
   geom_sf(data = study_area, fill = "grey") +
   geom_sf(data = prices_g100m, 
-          aes(fill = cut_number(median_kDKK_m2,
+          aes(fill = cut_number(median_2019_kDKK_m2,
                                 n = 10,
                                 ordered_result = TRUE,
                                 dig.lab = 0)),
@@ -589,6 +587,124 @@ ggplot() +
   labs(x = "",
        y = "") +
   facet_wrap( ~year)
+
+```
+
+## Population density and house prices
+
+```{r pop-prices-g100}
+
+ggplot(data = filter(prices_g100m, 
+                     n_runits_oft >= 5,
+                     median_2019_kDKK_m2 > 1),
+       aes(x = pop_total_km2,
+           y = median_2019_kDKK_m2,
+           colour = factor(year))) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  theme_bw() 
+  
+```
+
+Bivariate map
+
+```{r bivariate-map, animation.hook="gifski", fig.cap = "Population density and house prices in the ordinary free trade"}
+
+# Aux. function for plotting bivariate map for each year
+f_bi_map <- function(df) {
+  
+  # create classes
+  bi_data <- bi_class(df,
+                 x = pop_total_km2,
+                 y = median_2019_kDKK_m2,
+                 style = "quantile",
+                 dim = 3)
+  
+  # create map
+  p_map <- ggplot() +
+    geom_sf(data = study_area, fill = "grey") +
+    geom_sf(data = bi_data,
+            mapping = aes(fill = bi_class),
+            color = NA,
+            size = 0.1, 
+            show.legend = FALSE) +
+    bi_scale_fill(pal = "DkBlue", dim = 3) +
+    labs(title = df$year) +
+    bi_theme() +
+    theme(plot.title = element_text(size = 10,
+                                    hjust = 0,
+                                    colour = "grey25"))
+  
+  # Create legend
+  p_legend <- bi_legend(pal = "DkBlue",
+                        dim = 3,
+                        xlab = "ppl/km2",
+                        ylab = "kDKK/m2",
+                        size = 8)
+  # combine map with legend
+  p_map +
+    inset_element(p_legend,
+                  left = 0,
+                  bottom = 0,
+                  right = 0.25,
+                  top = 0.25, 
+                  align_to = 'full')
+}
+
+# Plot each year
+plan(multisession, workers = 7)
+plts <- prices_g100m %>% 
+  group_split(year) %>%  
+  future_map(., .f = f_bi_map)
+plan("default")
+
+# Animation
+for(i in seq_along(years_pd)) { print(plts[[i]]) }
+
+```
+
+```{r bivariate-map-b, fig.height=10, fig.width=10, fig.cap = "Population density and house prices in the ordinary free trade"}
+
+# Create classes
+bi_data <- prices_g100m %>% 
+  group_by(year) %>% 
+  bi_class(x = pop_total_km2,
+           y = median_2019_kDKK_m2,
+           style = "quantile",
+           dim = 3) %>% 
+  ungroup()
+
+# Create map
+p1 <- ggplot() +
+  geom_sf(data = study_area, fill = "grey") +
+  geom_sf(data = bi_data,
+          mapping = aes(fill = bi_class),
+          color = NA,
+          size = 0.1, 
+          show.legend = FALSE) +
+  bi_scale_fill(pal = "DkBlue", dim = 3) +
+  my_theme_map() +
+  facet_wrap(~year) 
+
+# Create legend
+p_legend <- bi_legend(pal = "DkBlue",
+                        dim = 3,
+                        xlab = "ppl/km2",
+                        ylab = "kDKK/m2",
+                        size = 8)
+
+# Plot
+layout <- "
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAAB
+"
+
+p1 + p_legend + plot_layout(design = layout)
 
 ```
 
