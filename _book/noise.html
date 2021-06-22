@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Noise | Housing prices Copenhagen</title>
+  <title>Chapter 7 Noise | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Noise | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 7 Noise | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Noise | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 7 Noise | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-06-16" />
+<meta name="date" content="2021-06-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -906,32 +906,33 @@ div.csl-indent {
 <li class="part"><span><b>I Population growth in Denmark and housing prices</b></span></li>
 <li class="chapter" data-level="1" data-path="pop-growth.html"><a href="pop-growth.html"><i class="fa fa-check"></i><b>1</b> Population growth</a></li>
 <li class="chapter" data-level="2" data-path="house-prices-LAUs.html"><a href="house-prices-LAUs.html"><i class="fa fa-check"></i><b>2</b> Housing prices at municipality level</a></li>
+<li class="chapter" data-level="3" data-path="study-area.html"><a href="study-area.html"><i class="fa fa-check"></i><b>3</b> Copenhagen region</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="study-area.html"><a href="study-area.html#population-density-by-grid-cells-of-100m-x-100m"><i class="fa fa-check"></i><b>3.1</b> Population density by grid cells of 100m x 100m</a></li>
+<li class="chapter" data-level="3.2" data-path="study-area.html"><a href="study-area.html#house-prices-by-grid-cells-of-100m-x-100m"><i class="fa fa-check"></i><b>3.2</b> House prices by grid cells of 100m x 100m</a></li>
+</ul></li>
 <li class="part"><span><b>II Hedonic price model</b></span></li>
-<li class="chapter" data-level="3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>3</b> Hedonic model</a>
+<li class="chapter" data-level="4" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>4</b> Hedonic model</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>3.1</b> House characteristics</a></li>
-<li class="chapter" data-level="3.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>3.2</b> Location characteristics</a></li>
-<li class="chapter" data-level="3.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>3.3</b> Neighbourhood characteristics</a></li>
+<li class="chapter" data-level="4.1" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#house-characteristics"><i class="fa fa-check"></i><b>4.1</b> House characteristics</a></li>
+<li class="chapter" data-level="4.2" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#location-characteristics"><i class="fa fa-check"></i><b>4.2</b> Location characteristics</a></li>
+<li class="chapter" data-level="4.3" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html#neighbourhood-characteristics"><i class="fa fa-check"></i><b>4.3</b> Neighbourhood characteristics</a></li>
 </ul></li>
-<li class="part"><span><b>III Load data</b></span></li>
-<li class="chapter" data-level="4" data-path="adm-units.html"><a href="adm-units.html"><i class="fa fa-check"></i><b>4</b> Administrative units</a></li>
-<li class="chapter" data-level="5" data-path="BBR-data.html"><a href="BBR-data.html"><i class="fa fa-check"></i><b>5</b> Housing data</a></li>
-<li class="chapter" data-level="6" data-path="pop-DST.html"><a href="pop-DST.html"><i class="fa fa-check"></i><b>6</b> Population density</a></li>
-<li class="chapter" data-level="7" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>7</b> Open Street Map</a>
+<li class="chapter" data-level="5" data-path="OSM-features.html"><a href="OSM-features.html"><i class="fa fa-check"></i><b>5</b> Open Street Map</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>7.1</b> Features</a>
+<li class="chapter" data-level="5.1" data-path="OSM-features.html"><a href="OSM-features.html#features"><i class="fa fa-check"></i><b>5.1</b> Features</a>
 <ul>
-<li class="chapter" data-level="7.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>7.1.1</b> Areal features</a></li>
-<li class="chapter" data-level="7.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>7.1.2</b> Point features</a></li>
+<li class="chapter" data-level="5.1.1" data-path="OSM-features.html"><a href="OSM-features.html#areal-features"><i class="fa fa-check"></i><b>5.1.1</b> Areal features</a></li>
+<li class="chapter" data-level="5.1.2" data-path="OSM-features.html"><a href="OSM-features.html#point-features"><i class="fa fa-check"></i><b>5.1.2</b> Point features</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>7.2</b> Potential model</a></li>
+<li class="chapter" data-level="5.2" data-path="OSM-features.html"><a href="OSM-features.html#potential-model"><i class="fa fa-check"></i><b>5.2</b> Potential model</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>8</b> Distance to Central Business District</a></li>
-<li class="chapter" data-level="9" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>9</b> Noise</a></li>
-<li class="part"><span><b>IV Data analysis</b></span></li>
-<li class="chapter" data-level="10" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>10</b> Residential units saled as free scale</a>
+<li class="chapter" data-level="6" data-path="dist-CBD.html"><a href="dist-CBD.html"><i class="fa fa-check"></i><b>6</b> Distance to Central Business District</a></li>
+<li class="chapter" data-level="7" data-path="noise.html"><a href="noise.html"><i class="fa fa-check"></i><b>7</b> Noise</a></li>
+<li class="part"><span><b>III Data analysis</b></span></li>
+<li class="chapter" data-level="8" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html"><i class="fa fa-check"></i><b>8</b> Residential units saled as free scale</a>
 <ul>
-<li class="chapter" data-level="10.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>10.1</b> Residential units by floor level</a></li>
+<li class="chapter" data-level="8.1" data-path="EDA-house-prices.html"><a href="EDA-house-prices.html#residential-units-by-floor-level"><i class="fa fa-check"></i><b>8.1</b> Residential units by floor level</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -954,135 +955,135 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="noise" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Noise</h1>
+<div id="noise" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Noise</h1>
 <p>Denmark maps the noise levels from roads, railways, and aircraft in accordance with the guidelines in the Danish <a href="https://www.retsinformation.dk/eli/lta/2011/1309">Noise Executive Order</a>. The agency responsible for the measurements and the implementation of noise regulation is the Environmental Protection Agency, which display the maps in its website (<a href="https://mst.dk/luft-stoej/stoej/kortlaegning-af-stoej-og-handlingsplaner/stoejkortet/">link</a>). The noise level are divided in six categories from 50 dB to more than 75 dB, and they represent a weighted mean value of the noise (<span class="math inline">\(L_{den}\)</span>) or the night noise (<span class="math inline">\(L_{night}\)</span>) both at 1.5 and 4 meters. We have used the last version of the noise map (i.e. 2017), which we have downloaded from the Danish Environmental Protection Agency (<a href="https://SIT-FTP.Statens-it.dk">ftp server</a>; file: <em>Noise - Stoej2018_ArcGIS.zip</em>).</p>
-<p>The main hypothesis is that high noise levels would have a negative impact on the prices. Furthermore, nigh noise would be more annoying and it may have a higher impact on housing prices. Therefore, we use both the average noise during a day (<span class="math inline">\(L_{den}\)</span>) and the noise in the night (<span class="math inline">\(L_{night}\)</span>) in our analysis. The perception of the noise is also different for roads and railways and they will therefore be analysed separately. However, aircraft noise is not significant in the area and we did not take it into account. From the two measurements heights (i.e. 1.5 and 4 meters) we select the last one for the study (Figure <a href="noise.html#fig:fig-roads-noise">9.1</a> and (Figure <a href="noise.html#fig:fig-train-noise">9.2</a>)).</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="noise.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large file (3.5 GB)</span></span>
-<span id="cb66-2"><a href="noise.html#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
-<span id="cb66-3"><a href="noise.html#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Stoej2018_link &lt;- &quot;https://sit-ftp.statens-it.dk/main.html?download&amp;weblink=6433b7b2af7578629f752343ad0d8e22&amp;realfilename=Stoej2018_ArcGIS.zip&quot;</span></span>
-<span id="cb66-4"><a href="noise.html#cb66-4" aria-hidden="true" tabindex="-1"></a><span class="co"># # options(timeout = max(300, getOption(&quot;timeout&quot;)))</span></span>
-<span id="cb66-5"><a href="noise.html#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="co"># # download.file(Stoej2018_link, destfile = &quot;data/Stoej2018_ArcGIS.zip&quot;)</span></span>
-<span id="cb66-6"><a href="noise.html#cb66-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb66-7"><a href="noise.html#cb66-7" aria-hidden="true" tabindex="-1"></a><span class="co"># httr::GET(Stoej2018_link,</span></span>
-<span id="cb66-8"><a href="noise.html#cb66-8" aria-hidden="true" tabindex="-1"></a><span class="co">#           httr::write_disk(&quot;data/Stoej2018_ArcGIS.zip&quot;),</span></span>
-<span id="cb66-9"><a href="noise.html#cb66-9" aria-hidden="true" tabindex="-1"></a><span class="co">#           httr::progress())</span></span>
-<span id="cb66-10"><a href="noise.html#cb66-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb66-11"><a href="noise.html#cb66-11" aria-hidden="true" tabindex="-1"></a><span class="co"># system2(&quot;unzip&quot;,</span></span>
-<span id="cb66-12"><a href="noise.html#cb66-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         args = c(&quot;-o&quot;,</span></span>
-<span id="cb66-13"><a href="noise.html#cb66-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                  &quot;data/Stoej2018_ArcGIS.zip&quot;,</span></span>
-<span id="cb66-14"><a href="noise.html#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="co">#                  paste0(&quot;-d &quot;, &quot;data/Stoej2018_ArcGIS&quot;)),</span></span>
-<span id="cb66-15"><a href="noise.html#cb66-15" aria-hidden="true" tabindex="-1"></a><span class="co">#         stdout = TRUE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="noise.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for loading road noise data </span></span>
-<span id="cb67-2"><a href="noise.html#cb67-2" aria-hidden="true" tabindex="-1"></a>f_roads <span class="ot">&lt;-</span> <span class="cf">function</span>(df) { </span>
-<span id="cb67-3"><a href="noise.html#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_sf</span>(df, <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb67-4"><a href="noise.html#cb67-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb67-5"><a href="noise.html#cb67-5" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb67-6"><a href="noise.html#cb67-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_valid</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb67-7"><a href="noise.html#cb67-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(org, noise_cl, noise_in, date) <span class="sc">%&gt;%</span></span>
-<span id="cb67-8"><a href="noise.html#cb67-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(org, noise_cl, noise_in, date) <span class="sc">%&gt;%</span></span>
-<span id="cb67-9"><a href="noise.html#cb67-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb67-10"><a href="noise.html#cb67-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb67-11"><a href="noise.html#cb67-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_type =</span> <span class="fu">case_when</span>(noise_cl <span class="sc">==</span> <span class="st">&quot;B1&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (1.5 m)&quot;</span>,</span>
-<span id="cb67-12"><a href="noise.html#cb67-12" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;B2&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (4.0 m)&quot;</span>,</span>
-<span id="cb67-13"><a href="noise.html#cb67-13" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;B3&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (1.5 m)&quot;</span>,</span>
-<span id="cb67-14"><a href="noise.html#cb67-14" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;B4&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (4.0 m)&quot;</span>),</span>
-<span id="cb67-15"><a href="noise.html#cb67-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_type =</span> <span class="fu">factor</span>(noise_type)) <span class="sc">%&gt;%</span> </span>
-<span id="cb67-16"><a href="noise.html#cb67-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_level =</span> <span class="fu">case_when</span>(noise_in <span class="sc">==</span> <span class="st">&quot;1&quot;</span> <span class="sc">~</span> <span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
-<span id="cb67-17"><a href="noise.html#cb67-17" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;2&quot;</span> <span class="sc">~</span> <span class="st">&quot;70-74 dB&quot;</span>,</span>
-<span id="cb67-18"><a href="noise.html#cb67-18" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;3&quot;</span> <span class="sc">~</span> <span class="st">&quot;65-69 dB&quot;</span>,</span>
-<span id="cb67-19"><a href="noise.html#cb67-19" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;4&quot;</span> <span class="sc">~</span> <span class="st">&quot;60-64 dB&quot;</span>,</span>
-<span id="cb67-20"><a href="noise.html#cb67-20" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;5&quot;</span> <span class="sc">~</span> <span class="st">&quot;55-59 dB&quot;</span>,</span>
-<span id="cb67-21"><a href="noise.html#cb67-21" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;6&quot;</span> <span class="sc">~</span> <span class="st">&quot;50-54 dB&quot;</span>),</span>
-<span id="cb67-22"><a href="noise.html#cb67-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_level =</span> <span class="fu">factor</span>(noise_level,</span>
-<span id="cb67-23"><a href="noise.html#cb67-23" aria-hidden="true" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
-<span id="cb67-24"><a href="noise.html#cb67-24" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;70-74 dB&quot;</span>,</span>
-<span id="cb67-25"><a href="noise.html#cb67-25" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;65-69 dB&quot;</span>,</span>
-<span id="cb67-26"><a href="noise.html#cb67-26" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;60-64 dB&quot;</span>,</span>
-<span id="cb67-27"><a href="noise.html#cb67-27" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;55-59 dB&quot;</span>,</span>
-<span id="cb67-28"><a href="noise.html#cb67-28" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;50-54 dB&quot;</span>),</span>
-<span id="cb67-29"><a href="noise.html#cb67-29" aria-hidden="true" tabindex="-1"></a>                                <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb67-30"><a href="noise.html#cb67-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date))</span>
-<span id="cb67-31"><a href="noise.html#cb67-31" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb67-32"><a href="noise.html#cb67-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-33"><a href="noise.html#cb67-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Files</span></span>
-<span id="cb67-34"><a href="noise.html#cb67-34" aria-hidden="true" tabindex="-1"></a>noise_files_path <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;data/Stoej2018_ArcGIS/b2_101_agg_road_lden_4m_region.shp&quot;</span>,</span>
-<span id="cb67-35"><a href="noise.html#cb67-35" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/b2_147_agg_road_lden_4m.shp&quot;</span>,</span>
-<span id="cb67-36"><a href="noise.html#cb67-36" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/b4_101_agg_road_lnight_4m.shp&quot;</span>,</span>
-<span id="cb67-37"><a href="noise.html#cb67-37" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/b4_147_agg_road_lnight_4m.shp&quot;</span>)</span>
-<span id="cb67-38"><a href="noise.html#cb67-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-39"><a href="noise.html#cb67-39" aria-hidden="true" tabindex="-1"></a>noise_roads <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="at">.x =</span> noise_files_path, <span class="at">.f =</span> f_roads)</span>
-<span id="cb67-40"><a href="noise.html#cb67-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-41"><a href="noise.html#cb67-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb67-42"><a href="noise.html#cb67-42" aria-hidden="true" tabindex="-1"></a>mypal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#0065FD&quot;</span>, <span class="st">&quot;#9833C9&quot;</span>, <span class="st">&quot;#FD3300&quot;</span>, <span class="st">&quot;#FD9800&quot;</span> , <span class="st">&quot;#FDFD00&quot;</span>, <span class="st">&quot;#90ee90&quot;</span>)</span>
-<span id="cb67-43"><a href="noise.html#cb67-43" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb67-44"><a href="noise.html#cb67-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> study_area, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb67-45"><a href="noise.html#cb67-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> noise_roads, <span class="fu">aes</span>(<span class="at">fill =</span> noise_level), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb67-46"><a href="noise.html#cb67-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Category&quot;</span>, <span class="at">values =</span> mypal) <span class="sc">+</span></span>
-<span id="cb67-47"><a href="noise.html#cb67-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb67-48"><a href="noise.html#cb67-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>noise_type)</span></code></pre></div>
+<p>The main hypothesis is that high noise levels would have a negative impact on the prices. Furthermore, nigh noise would be more annoying and it may have a higher impact on housing prices. Therefore, we use both the average noise during a day (<span class="math inline">\(L_{den}\)</span>) and the noise in the night (<span class="math inline">\(L_{night}\)</span>) in our analysis. The perception of the noise is also different for roads and railways and they will therefore be analysed separately. However, aircraft noise is not significant in the area and we did not take it into account. From the two measurements heights (i.e. 1.5 and 4 meters) we select the last one for the study (Figure <a href="noise.html#fig:fig-roads-noise">7.1</a> and (Figure <a href="noise.html#fig:fig-train-noise">7.2</a>)).</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="noise.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large file (3.5 GB)</span></span>
+<span id="cb65-2"><a href="noise.html#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb65-3"><a href="noise.html#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Stoej2018_link &lt;- &quot;https://sit-ftp.statens-it.dk/main.html?download&amp;weblink=6433b7b2af7578629f752343ad0d8e22&amp;realfilename=Stoej2018_ArcGIS.zip&quot;</span></span>
+<span id="cb65-4"><a href="noise.html#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="co"># # options(timeout = max(300, getOption(&quot;timeout&quot;)))</span></span>
+<span id="cb65-5"><a href="noise.html#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co"># # download.file(Stoej2018_link, destfile = &quot;data/Stoej2018_ArcGIS.zip&quot;)</span></span>
+<span id="cb65-6"><a href="noise.html#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb65-7"><a href="noise.html#cb65-7" aria-hidden="true" tabindex="-1"></a><span class="co"># httr::GET(Stoej2018_link,</span></span>
+<span id="cb65-8"><a href="noise.html#cb65-8" aria-hidden="true" tabindex="-1"></a><span class="co">#           httr::write_disk(&quot;data/Stoej2018_ArcGIS.zip&quot;),</span></span>
+<span id="cb65-9"><a href="noise.html#cb65-9" aria-hidden="true" tabindex="-1"></a><span class="co">#           httr::progress())</span></span>
+<span id="cb65-10"><a href="noise.html#cb65-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb65-11"><a href="noise.html#cb65-11" aria-hidden="true" tabindex="-1"></a><span class="co"># system2(&quot;unzip&quot;,</span></span>
+<span id="cb65-12"><a href="noise.html#cb65-12" aria-hidden="true" tabindex="-1"></a><span class="co">#         args = c(&quot;-o&quot;,</span></span>
+<span id="cb65-13"><a href="noise.html#cb65-13" aria-hidden="true" tabindex="-1"></a><span class="co">#                  &quot;data/Stoej2018_ArcGIS.zip&quot;,</span></span>
+<span id="cb65-14"><a href="noise.html#cb65-14" aria-hidden="true" tabindex="-1"></a><span class="co">#                  paste0(&quot;-d &quot;, &quot;data/Stoej2018_ArcGIS&quot;)),</span></span>
+<span id="cb65-15"><a href="noise.html#cb65-15" aria-hidden="true" tabindex="-1"></a><span class="co">#         stdout = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="noise.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for loading road noise data </span></span>
+<span id="cb66-2"><a href="noise.html#cb66-2" aria-hidden="true" tabindex="-1"></a>f_roads <span class="ot">&lt;-</span> <span class="cf">function</span>(df) { </span>
+<span id="cb66-3"><a href="noise.html#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_sf</span>(df, <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb66-4"><a href="noise.html#cb66-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb66-5"><a href="noise.html#cb66-5" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb66-6"><a href="noise.html#cb66-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_make_valid</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb66-7"><a href="noise.html#cb66-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(org, noise_cl, noise_in, date) <span class="sc">%&gt;%</span></span>
+<span id="cb66-8"><a href="noise.html#cb66-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(org, noise_cl, noise_in, date) <span class="sc">%&gt;%</span></span>
+<span id="cb66-9"><a href="noise.html#cb66-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb66-10"><a href="noise.html#cb66-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb66-11"><a href="noise.html#cb66-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_type =</span> <span class="fu">case_when</span>(noise_cl <span class="sc">==</span> <span class="st">&quot;B1&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (1.5 m)&quot;</span>,</span>
+<span id="cb66-12"><a href="noise.html#cb66-12" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;B2&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (4.0 m)&quot;</span>,</span>
+<span id="cb66-13"><a href="noise.html#cb66-13" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;B3&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (1.5 m)&quot;</span>,</span>
+<span id="cb66-14"><a href="noise.html#cb66-14" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;B4&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (4.0 m)&quot;</span>),</span>
+<span id="cb66-15"><a href="noise.html#cb66-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_type =</span> <span class="fu">factor</span>(noise_type)) <span class="sc">%&gt;%</span> </span>
+<span id="cb66-16"><a href="noise.html#cb66-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_level =</span> <span class="fu">case_when</span>(noise_in <span class="sc">==</span> <span class="st">&quot;1&quot;</span> <span class="sc">~</span> <span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
+<span id="cb66-17"><a href="noise.html#cb66-17" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;2&quot;</span> <span class="sc">~</span> <span class="st">&quot;70-74 dB&quot;</span>,</span>
+<span id="cb66-18"><a href="noise.html#cb66-18" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;3&quot;</span> <span class="sc">~</span> <span class="st">&quot;65-69 dB&quot;</span>,</span>
+<span id="cb66-19"><a href="noise.html#cb66-19" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;4&quot;</span> <span class="sc">~</span> <span class="st">&quot;60-64 dB&quot;</span>,</span>
+<span id="cb66-20"><a href="noise.html#cb66-20" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;5&quot;</span> <span class="sc">~</span> <span class="st">&quot;55-59 dB&quot;</span>,</span>
+<span id="cb66-21"><a href="noise.html#cb66-21" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;6&quot;</span> <span class="sc">~</span> <span class="st">&quot;50-54 dB&quot;</span>),</span>
+<span id="cb66-22"><a href="noise.html#cb66-22" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_level =</span> <span class="fu">factor</span>(noise_level,</span>
+<span id="cb66-23"><a href="noise.html#cb66-23" aria-hidden="true" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
+<span id="cb66-24"><a href="noise.html#cb66-24" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;70-74 dB&quot;</span>,</span>
+<span id="cb66-25"><a href="noise.html#cb66-25" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;65-69 dB&quot;</span>,</span>
+<span id="cb66-26"><a href="noise.html#cb66-26" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;60-64 dB&quot;</span>,</span>
+<span id="cb66-27"><a href="noise.html#cb66-27" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;55-59 dB&quot;</span>,</span>
+<span id="cb66-28"><a href="noise.html#cb66-28" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;50-54 dB&quot;</span>),</span>
+<span id="cb66-29"><a href="noise.html#cb66-29" aria-hidden="true" tabindex="-1"></a>                                <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb66-30"><a href="noise.html#cb66-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date))</span>
+<span id="cb66-31"><a href="noise.html#cb66-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb66-32"><a href="noise.html#cb66-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-33"><a href="noise.html#cb66-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Files</span></span>
+<span id="cb66-34"><a href="noise.html#cb66-34" aria-hidden="true" tabindex="-1"></a>noise_files_path <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;data/Stoej2018_ArcGIS/b2_101_agg_road_lden_4m_region.shp&quot;</span>,</span>
+<span id="cb66-35"><a href="noise.html#cb66-35" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/b2_147_agg_road_lden_4m.shp&quot;</span>,</span>
+<span id="cb66-36"><a href="noise.html#cb66-36" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/b4_101_agg_road_lnight_4m.shp&quot;</span>,</span>
+<span id="cb66-37"><a href="noise.html#cb66-37" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/b4_147_agg_road_lnight_4m.shp&quot;</span>)</span>
+<span id="cb66-38"><a href="noise.html#cb66-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-39"><a href="noise.html#cb66-39" aria-hidden="true" tabindex="-1"></a>noise_roads <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="at">.x =</span> noise_files_path, <span class="at">.f =</span> f_roads)</span>
+<span id="cb66-40"><a href="noise.html#cb66-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-41"><a href="noise.html#cb66-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb66-42"><a href="noise.html#cb66-42" aria-hidden="true" tabindex="-1"></a>mypal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#0065FD&quot;</span>, <span class="st">&quot;#9833C9&quot;</span>, <span class="st">&quot;#FD3300&quot;</span>, <span class="st">&quot;#FD9800&quot;</span> , <span class="st">&quot;#FDFD00&quot;</span>, <span class="st">&quot;#90ee90&quot;</span>)</span>
+<span id="cb66-43"><a href="noise.html#cb66-43" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb66-44"><a href="noise.html#cb66-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> study_area, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb66-45"><a href="noise.html#cb66-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> noise_roads, <span class="fu">aes</span>(<span class="at">fill =</span> noise_level), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb66-46"><a href="noise.html#cb66-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Category&quot;</span>, <span class="at">values =</span> mypal) <span class="sc">+</span></span>
+<span id="cb66-47"><a href="noise.html#cb66-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb66-48"><a href="noise.html#cb66-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>noise_type)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-roads-noise"></span>
 <img src="Housing_prices_book_files/figure-html/fig-roads-noise-1.png" alt="Road noise" width="672" />
 <p class="caption">
-Figure 9.1: Road noise
+Figure 7.1: Road noise
 </p>
 </div>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="noise.html#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for loading train noise data </span></span>
-<span id="cb68-2"><a href="noise.html#cb68-2" aria-hidden="true" tabindex="-1"></a>f_train <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb68-3"><a href="noise.html#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_sf</span>(df, <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb68-4"><a href="noise.html#cb68-4" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb68-5"><a href="noise.html#cb68-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersection</span>(study_area) <span class="sc">%&gt;%</span></span>
-<span id="cb68-6"><a href="noise.html#cb68-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge polygons with the same noise category</span></span>
-<span id="cb68-7"><a href="noise.html#cb68-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(org, noise_cl, noise_in, date) <span class="sc">%&gt;%</span></span>
-<span id="cb68-8"><a href="noise.html#cb68-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb68-9"><a href="noise.html#cb68-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb68-10"><a href="noise.html#cb68-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Polygons of lower noise level overlap other categories (get difference)  </span></span>
-<span id="cb68-11"><a href="noise.html#cb68-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_difference</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb68-12"><a href="noise.html#cb68-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Filter valid polygons</span></span>
-<span id="cb68-13"><a href="noise.html#cb68-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">st_is</span>(. , <span class="fu">c</span>(<span class="st">&quot;MULTILINESTRING&quot;</span>, <span class="st">&quot;LINESTRING&quot;</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb68-14"><a href="noise.html#cb68-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format variables </span></span>
-<span id="cb68-15"><a href="noise.html#cb68-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_type =</span> <span class="fu">case_when</span>(noise_cl <span class="sc">==</span> <span class="st">&quot;C1&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (1.5 m)&quot;</span>,</span>
-<span id="cb68-16"><a href="noise.html#cb68-16" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;C2&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (4.0 m)&quot;</span>,</span>
-<span id="cb68-17"><a href="noise.html#cb68-17" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;C3&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (1.5 m)&quot;</span>,</span>
-<span id="cb68-18"><a href="noise.html#cb68-18" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;C4&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (4.0 m)&quot;</span>),</span>
-<span id="cb68-19"><a href="noise.html#cb68-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_type =</span> <span class="fu">factor</span>(noise_type)) <span class="sc">%&gt;%</span> </span>
-<span id="cb68-20"><a href="noise.html#cb68-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_level =</span> <span class="fu">case_when</span>(noise_in <span class="sc">==</span> <span class="st">&quot;1&quot;</span> <span class="sc">~</span> <span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
-<span id="cb68-21"><a href="noise.html#cb68-21" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;2&quot;</span> <span class="sc">~</span> <span class="st">&quot;70-74 dB&quot;</span>,</span>
-<span id="cb68-22"><a href="noise.html#cb68-22" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;3&quot;</span> <span class="sc">~</span> <span class="st">&quot;65-69 dB&quot;</span>,</span>
-<span id="cb68-23"><a href="noise.html#cb68-23" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;4&quot;</span> <span class="sc">~</span> <span class="st">&quot;60-64 dB&quot;</span>,</span>
-<span id="cb68-24"><a href="noise.html#cb68-24" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;5&quot;</span> <span class="sc">~</span> <span class="st">&quot;55-59 dB&quot;</span>,</span>
-<span id="cb68-25"><a href="noise.html#cb68-25" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;6&quot;</span> <span class="sc">~</span> <span class="st">&quot;50-54 dB&quot;</span>),</span>
-<span id="cb68-26"><a href="noise.html#cb68-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_level =</span> <span class="fu">factor</span>(noise_level,</span>
-<span id="cb68-27"><a href="noise.html#cb68-27" aria-hidden="true" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
-<span id="cb68-28"><a href="noise.html#cb68-28" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;70-74 dB&quot;</span>,</span>
-<span id="cb68-29"><a href="noise.html#cb68-29" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;65-69 dB&quot;</span>,</span>
-<span id="cb68-30"><a href="noise.html#cb68-30" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;60-64 dB&quot;</span>,</span>
-<span id="cb68-31"><a href="noise.html#cb68-31" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;55-59 dB&quot;</span>,</span>
-<span id="cb68-32"><a href="noise.html#cb68-32" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;50-54 dB&quot;</span>),</span>
-<span id="cb68-33"><a href="noise.html#cb68-33" aria-hidden="true" tabindex="-1"></a>                                <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb68-34"><a href="noise.html#cb68-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date))</span>
-<span id="cb68-35"><a href="noise.html#cb68-35" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb68-36"><a href="noise.html#cb68-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-37"><a href="noise.html#cb68-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Read files</span></span>
-<span id="cb68-38"><a href="noise.html#cb68-38" aria-hidden="true" tabindex="-1"></a>noise_files_path <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;data/Stoej2018_ArcGIS/c2_bdk_mrail_lden_4m.shp&quot;</span>,</span>
-<span id="cb68-39"><a href="noise.html#cb68-39" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/c2_ores_mrail_lden_4m.shp&quot;</span>,</span>
-<span id="cb68-40"><a href="noise.html#cb68-40" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/c4_bdk_mrail_lnight_4m.shp&quot;</span>,</span>
-<span id="cb68-41"><a href="noise.html#cb68-41" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/c4_ores_mrail_lnight_4m.shp&quot;</span>)</span>
-<span id="cb68-42"><a href="noise.html#cb68-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-43"><a href="noise.html#cb68-43" aria-hidden="true" tabindex="-1"></a>noise_train <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="at">.x =</span> noise_files_path, <span class="at">.f =</span> f_train)</span>
-<span id="cb68-44"><a href="noise.html#cb68-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb68-45"><a href="noise.html#cb68-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
-<span id="cb68-46"><a href="noise.html#cb68-46" aria-hidden="true" tabindex="-1"></a>mypal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#0065FD&quot;</span>, <span class="st">&quot;#9833C9&quot;</span>, <span class="st">&quot;#FD3300&quot;</span>, <span class="st">&quot;#FD9800&quot;</span> , <span class="st">&quot;#FDFD00&quot;</span>, <span class="st">&quot;#90ee90&quot;</span>)</span>
-<span id="cb68-47"><a href="noise.html#cb68-47" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb68-48"><a href="noise.html#cb68-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> study_area, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb68-49"><a href="noise.html#cb68-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> noise_train, <span class="fu">aes</span>(<span class="at">fill =</span> noise_level), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb68-50"><a href="noise.html#cb68-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Category&quot;</span>, <span class="at">values =</span> mypal) <span class="sc">+</span></span>
-<span id="cb68-51"><a href="noise.html#cb68-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb68-52"><a href="noise.html#cb68-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>noise_type)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="noise.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for loading train noise data </span></span>
+<span id="cb67-2"><a href="noise.html#cb67-2" aria-hidden="true" tabindex="-1"></a>f_train <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb67-3"><a href="noise.html#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_sf</span>(df, <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb67-4"><a href="noise.html#cb67-4" aria-hidden="true" tabindex="-1"></a>    janitor<span class="sc">::</span><span class="fu">clean_names</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb67-5"><a href="noise.html#cb67-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_intersection</span>(study_area) <span class="sc">%&gt;%</span></span>
+<span id="cb67-6"><a href="noise.html#cb67-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge polygons with the same noise category</span></span>
+<span id="cb67-7"><a href="noise.html#cb67-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(org, noise_cl, noise_in, date) <span class="sc">%&gt;%</span></span>
+<span id="cb67-8"><a href="noise.html#cb67-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb67-9"><a href="noise.html#cb67-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb67-10"><a href="noise.html#cb67-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Polygons of lower noise level overlap other categories (get difference)  </span></span>
+<span id="cb67-11"><a href="noise.html#cb67-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_difference</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb67-12"><a href="noise.html#cb67-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Filter valid polygons</span></span>
+<span id="cb67-13"><a href="noise.html#cb67-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">st_is</span>(. , <span class="fu">c</span>(<span class="st">&quot;MULTILINESTRING&quot;</span>, <span class="st">&quot;LINESTRING&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb67-14"><a href="noise.html#cb67-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format variables </span></span>
+<span id="cb67-15"><a href="noise.html#cb67-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_type =</span> <span class="fu">case_when</span>(noise_cl <span class="sc">==</span> <span class="st">&quot;C1&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (1.5 m)&quot;</span>,</span>
+<span id="cb67-16"><a href="noise.html#cb67-16" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;C2&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lden (4.0 m)&quot;</span>,</span>
+<span id="cb67-17"><a href="noise.html#cb67-17" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;C3&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (1.5 m)&quot;</span>,</span>
+<span id="cb67-18"><a href="noise.html#cb67-18" aria-hidden="true" tabindex="-1"></a>                                  noise_cl <span class="sc">==</span> <span class="st">&quot;C4&quot;</span> <span class="sc">~</span> <span class="st">&quot;Lnight (4.0 m)&quot;</span>),</span>
+<span id="cb67-19"><a href="noise.html#cb67-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_type =</span> <span class="fu">factor</span>(noise_type)) <span class="sc">%&gt;%</span> </span>
+<span id="cb67-20"><a href="noise.html#cb67-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">noise_level =</span> <span class="fu">case_when</span>(noise_in <span class="sc">==</span> <span class="st">&quot;1&quot;</span> <span class="sc">~</span> <span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
+<span id="cb67-21"><a href="noise.html#cb67-21" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;2&quot;</span> <span class="sc">~</span> <span class="st">&quot;70-74 dB&quot;</span>,</span>
+<span id="cb67-22"><a href="noise.html#cb67-22" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;3&quot;</span> <span class="sc">~</span> <span class="st">&quot;65-69 dB&quot;</span>,</span>
+<span id="cb67-23"><a href="noise.html#cb67-23" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;4&quot;</span> <span class="sc">~</span> <span class="st">&quot;60-64 dB&quot;</span>,</span>
+<span id="cb67-24"><a href="noise.html#cb67-24" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;5&quot;</span> <span class="sc">~</span> <span class="st">&quot;55-59 dB&quot;</span>,</span>
+<span id="cb67-25"><a href="noise.html#cb67-25" aria-hidden="true" tabindex="-1"></a>                                   noise_in <span class="sc">==</span> <span class="st">&quot;6&quot;</span> <span class="sc">~</span> <span class="st">&quot;50-54 dB&quot;</span>),</span>
+<span id="cb67-26"><a href="noise.html#cb67-26" aria-hidden="true" tabindex="-1"></a>           <span class="at">noise_level =</span> <span class="fu">factor</span>(noise_level,</span>
+<span id="cb67-27"><a href="noise.html#cb67-27" aria-hidden="true" tabindex="-1"></a>                                <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;&gt; 75 dB&quot;</span>,</span>
+<span id="cb67-28"><a href="noise.html#cb67-28" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;70-74 dB&quot;</span>,</span>
+<span id="cb67-29"><a href="noise.html#cb67-29" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;65-69 dB&quot;</span>,</span>
+<span id="cb67-30"><a href="noise.html#cb67-30" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;60-64 dB&quot;</span>,</span>
+<span id="cb67-31"><a href="noise.html#cb67-31" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;55-59 dB&quot;</span>,</span>
+<span id="cb67-32"><a href="noise.html#cb67-32" aria-hidden="true" tabindex="-1"></a>                                           <span class="st">&quot;50-54 dB&quot;</span>),</span>
+<span id="cb67-33"><a href="noise.html#cb67-33" aria-hidden="true" tabindex="-1"></a>                                <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb67-34"><a href="noise.html#cb67-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date))</span>
+<span id="cb67-35"><a href="noise.html#cb67-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb67-36"><a href="noise.html#cb67-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-37"><a href="noise.html#cb67-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Read files</span></span>
+<span id="cb67-38"><a href="noise.html#cb67-38" aria-hidden="true" tabindex="-1"></a>noise_files_path <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;data/Stoej2018_ArcGIS/c2_bdk_mrail_lden_4m.shp&quot;</span>,</span>
+<span id="cb67-39"><a href="noise.html#cb67-39" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/c2_ores_mrail_lden_4m.shp&quot;</span>,</span>
+<span id="cb67-40"><a href="noise.html#cb67-40" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/c4_bdk_mrail_lnight_4m.shp&quot;</span>,</span>
+<span id="cb67-41"><a href="noise.html#cb67-41" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;data/Stoej2018_ArcGIS/c4_ores_mrail_lnight_4m.shp&quot;</span>)</span>
+<span id="cb67-42"><a href="noise.html#cb67-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-43"><a href="noise.html#cb67-43" aria-hidden="true" tabindex="-1"></a>noise_train <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(<span class="at">.x =</span> noise_files_path, <span class="at">.f =</span> f_train)</span>
+<span id="cb67-44"><a href="noise.html#cb67-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-45"><a href="noise.html#cb67-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb67-46"><a href="noise.html#cb67-46" aria-hidden="true" tabindex="-1"></a>mypal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#0065FD&quot;</span>, <span class="st">&quot;#9833C9&quot;</span>, <span class="st">&quot;#FD3300&quot;</span>, <span class="st">&quot;#FD9800&quot;</span> , <span class="st">&quot;#FDFD00&quot;</span>, <span class="st">&quot;#90ee90&quot;</span>)</span>
+<span id="cb67-47"><a href="noise.html#cb67-47" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb67-48"><a href="noise.html#cb67-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> study_area, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb67-49"><a href="noise.html#cb67-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> noise_train, <span class="fu">aes</span>(<span class="at">fill =</span> noise_level), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb67-50"><a href="noise.html#cb67-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;Category&quot;</span>, <span class="at">values =</span> mypal) <span class="sc">+</span></span>
+<span id="cb67-51"><a href="noise.html#cb67-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb67-52"><a href="noise.html#cb67-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>noise_type)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-train-noise"></span>
 <img src="Housing_prices_book_files/figure-html/fig-train-noise-1.png" alt="Railway noise" width="672" />
 <p class="caption">
-Figure 9.2: Railway noise
+Figure 7.2: Railway noise
 </p>
 </div>
 

@@ -439,21 +439,19 @@ Then, we selected from the main residential buildings those that are on the ordi
                           "Semi-detached house")
 
   res_units_oft <- res_units %>%
-    # Convert to tibble
-    as_tibble() %>% 
     # Select main residential units in the area
-    filter(type %in% selected_res_units) %>% 
+    filter.(type %in% selected_res_units) %>% 
     # ordinary free trade or auction
-    filter(OVERDRAGELSES_KODE == "1" | OVERDRAGELSES_KODE == "3") %>% 
+    filter.(OVERDRAGELSES_KODE == "1" | OVERDRAGELSES_KODE == "3") %>% 
     # Drop unused factors levels
     droplevels() %>% 
     # 2019 adjusted house prices 
-    left_join(price_index, by = c("year" = "index_year")) %>% 
-    mutate(index_2019 = price_index_2019$index_2019, 
+    left_join.(price_index, by = c("year" = "index_year")) %>% 
+    mutate.(index_2019 = price_index_2019$index_year, 
            price_2019_kDKK = (price_kDKK * index_2019 / index_value),
            price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL) %>% 
     # Remove prices > 0 kDKK
-    filter(price_2019_kDKK > 0)
+    filter.(price_2019_kDKK > 0)
     
 ```
 
@@ -507,3 +505,90 @@ res_units_oft %>%
   bold_labels() 
 
 ```
+
+```{r runits-prices-grid}
+
+plan(multisession, workers = 7)
+
+res_units_oft_g100m <- res_units_oft %>%
+  select.(year, 
+          price_2019_kDKK_m2,
+          etrs89koordinat_ost,
+          etrs89koordinat_nord) %>% 
+  st_as_sf(coords = c("etrs89koordinat_ost", 
+                      "etrs89koordinat_nord"),
+           crs = 25832) %>%  
+  group_split(year) %>%  
+  future_map_dfr(., ~st_intersection(., grids100m$data_poly[[1]])) %>% 
+  st_drop_geometry() %>% 
+  group_by(year, grid_ID) %>% 
+  summarise(n_runits = n(), 
+            mean_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
+            median_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE)) %>% 
+  ungroup()
+
+plan("default")
+
+# Link with population data by grids of 100m x 100m 
+prices_g100m <- pop_g100m %>% 
+  select(-pop_total_km2_cut) %>% 
+  rename(year = date) %>% 
+  right_join(res_units_oft_g100m, by = c("year", "grid_ID"))
+
+```
+
+```{r fig-prices-runits-grid-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+
+
+# Aux. function for plotting
+f_plot <- function(df) {
+  ggplot() +
+    geom_sf(data = study_area, fill = "grey") +
+    geom_sf(data = df, 
+            aes(fill = cut(median_kDKK_m2,
+                           breaks = quantile(prices_g100m$median_kDKK_m2,
+                                             seq(0, 1, 0.1)), 
+                           include.lowest = TRUE, 
+                           right = TRUE, 
+                           dig.lab = 0,
+                           ordered_result = TRUE)),
+            color = NA) +
+    scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
+                       option = "turbo") +
+    my_theme_map() +
+    labs(x = "",
+         y = "",
+         caption = paste("Date", df$year, sep = ": "))
+}
+
+# Plot each year
+plan(multisession, workers = 7)
+plts <- prices_g100m %>% 
+  group_split(year) %>%  
+  future_map(., .f = f_plot, .options = furrr_options(seed = 123))
+plan("default")
+
+# Animation
+for(i in seq_along(years_pd)) { print(plts[[i]]) }
+
+```
+
+```{r fig-prices-runits-grid-b, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+
+ggplot() +
+  geom_sf(data = study_area, fill = "grey") +
+  geom_sf(data = prices_g100m, 
+          aes(fill = cut_number(median_kDKK_m2,
+                                n = 10,
+                                ordered_result = TRUE,
+                                dig.lab = 0)),
+          color = NA) +
+  scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
+                     option = "turbo") +
+  my_theme_map() +
+  labs(x = "",
+       y = "") +
+  facet_wrap( ~year)
+
+```
+
