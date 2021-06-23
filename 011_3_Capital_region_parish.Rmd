@@ -1,0 +1,81 @@
+# Capital region {#level-parish}
+
+```{r adm-unitscapital, fig.cap="Parishes in the study area"}
+
+# Communes polygons of Denmark, and select those in the study area
+  dk_country <- st_union(dk_muni)
+  
+# Codes of the communes under study
+  capital_region_muni <- c("København",
+                           "Frederiksberg",
+                           "Albertslund",
+                           "Ballerup",
+                           "Brøndby",
+                           "Dragør",
+                           "Gentofte",
+                           "Gladsaxe",
+                           "Glostrup",
+                           "Herlev",
+                           "Høje-Taastrup",
+                           "Hvidovre",
+                           "Ishøj",
+                           "Lyngby-Taarbæk",
+                           "Rødovre",
+                           "Tårnby",
+                           "Vallensbæk")
+
+# Select municipalities under study  
+ capital_muni <- dk_muni %>% filter(muni_name %in% capital_region_muni) 
+  
+# Parishes polygons of Denmark, and select those in the study area 
+  parish_link <- paste(loc_dir,
+                       "DAGIREF_SHAPE_UTM32-EUREF89/ADM",
+                       "SOGN.shp",
+                       sep = "/")
+  dk_parish  <- read_sf(parish_link) %>%
+    st_zm() %>% 
+    st_transform(crs = "EPSG:25832")
+
+# Select those where the centroid is in the capital region
+  dk_parish_cent <- st_centroid(dk_parish)
+  capital_parish_cent <- st_intersection(dk_parish_cent, capital_muni)
+
+  capital_parish <- dk_parish %>% 
+    # Get parishes in the capital region
+    filter(SOGNEKODE %in% capital_parish_cent$SOGNEKODE) %>% 
+    # Combine several parish features geometries into one polygon
+    group_by(SOGNEKODE, SOGNENAVN) %>% 
+    summarise(geometry = st_union(geometry)) %>% 
+    ungroup() %>% 
+    # add area of the parish (in km2)
+    mutate(prsh_area_km2 = as.numeric(units::set_units(st_area(.), km^2)))
+
+# Contour of the capital region (merge the parishes in one polygon):
+  capital_area <- capital_parish %>%
+    st_union() %>%
+    st_sf() %>% 
+    st_transform(crs = "EPSG:25832")
+  
+```
+
+```{r fig-capital-region, fig.cap = "Parishes in the Capital region"}
+
+ggplot() + 
+  geom_sf(data = capital_parish, fill = "grey", color = "grey50", size = 0.05) +
+  geom_sf(data = capital_muni, fill = NA, color = "black", size = 0.5) +
+  my_theme_map() +
+  annotation_scale(location = "br", text_cex = 1) +
+  annotation_north_arrow(location = "br",
+                         pad_x = unit(2, "cm"),
+                         pad_y = unit(0.65, "cm"),
+                         which_north = "true",
+                         height = unit(0.5, "cm"),
+                         width = unit(0.5, "cm"),
+                         style = north_arrow_orienteering(text_col = "white",
+                                                          text_size = 1))
+
+```
+
+## Population density
+
+

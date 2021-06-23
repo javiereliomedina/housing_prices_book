@@ -1,12 +1,9 @@
-# Copenhagen region {#study-area}
+# Copenhagen city {#level-grids100m}
 
 We focus the study on Copenhagen (*muni_id = 0101*) and Frederiksberg (*muni_id = 0147*) municipalities (Figure \@ref(fig:fig-CPH-region)A), and we make the analysis at a scale of grid cells of 100m x 100m (Figure \@ref(fig:fig-CPH-region)B). 
 
 ```{r adm-units, fig.cap="Parishes in the study area"}
 
-# Communes polygons of Denmark, and select those in the study area
-  dk_country <- st_union(dk_muni)
-  
 # Codes of the communes under study (KOMKODE)
   study_area_codes <- c("0101", "0147")
 

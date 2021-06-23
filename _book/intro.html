@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Residential units saled as free scale | Housing prices Copenhagen</title>
+  <title>Chapter 1 Population growth, migration and house prices | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 1 Population growth, migration and house prices | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Residential units saled as free scale | Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 1 Population growth, migration and house prices | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="noise.html"/>
-<link rel="next" href="references.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="level-muni.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -961,64 +961,36 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="EDA-house-prices" class="section level1" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Residential units saled as free scale</h1>
-<p>We focused our study in residential dwellings on the ordinary free trade (Table <a href="#tab:tbl-runits-clean"><strong>??</strong></a>).</p>
-<p>NOTES:</p>
+<div id="intro" class="section level1" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Population growth, migration and house prices</h1>
+<p>Migration and housing prices are closely related with profound implications on urban planning. In this sense, there is a two-way causal relationship between migration and house prices (e.g. <span class="citation"><a href="#ref-Lin2018" role="doc-biblioref">Lin et al.</a> (<a href="#ref-Lin2018" role="doc-biblioref">2018</a>)</span>, <span class="citation"><a href="#ref-Jeanty2010" role="doc-biblioref">Jeanty, Partridge, and Irwin</a> (<a href="#ref-Jeanty2010" role="doc-biblioref">2010</a>)</span>). On the one hand, a rise on house prices will increase household’s housing equity and, therefore, homeowners would have a higher financial flexibility for purchasing a new house. On the other hand, high housing prices can make the house unaffordable. Prices differences between the region where migrants live and regions where they intend to move may also affect in- and out- migration rates. Finally, the expectation of future house prices also plays an important role in the decision to move (<span class="citation"><a href="#ref-Peng2019" role="doc-biblioref">Peng and Tsai</a> (<a href="#ref-Peng2019" role="doc-biblioref">2019</a>)</span>). Furthermore, migration increases the housing demand and, as a consequence, the prices (<span class="citation"><a href="#ref-Wang2017a" role="doc-biblioref">Wang, Hui, and Sun</a> (<a href="#ref-Wang2017a" role="doc-biblioref">2017</a>)</span>). An example of this effect has been found in Sweden where “a 1% increase in the foreign-born population results in a 0.8% increase in house prices, which increases to 1.2% if internal migration is also accounted for” (<span class="citation"><a href="#ref-Tyrcha2019" role="doc-biblioref">Tyrcha and Abreu</a> (<a href="#ref-Tyrcha2019" role="doc-biblioref">2019</a>)</span>).
+We analyse therefore housing prices, population and migration patterns in Denmark, evaluating the influence of housing prices on migration (and vice versa). Specific questions we will respond are, among others:</p>
 <ul>
-<li>There are large differences in the number of residential units between years, why??</li>
-<li>Study only one year for the moment (e.g. 2019)??</li>
-<li>Housing prices in different years -&gt; adjust to 2019 prices (what index; Table <a href="#tab:price-index"><strong>??</strong></a>)?</li>
-<li><strong>KONTANT_KOEBESUM</strong> = cash purchase price? Analyse it?? What about <strong>KOEBESUM_BELOEB</strong> = The purchase price agreed upon the sale of the property???</li>
-<li><strong>KONTANT_KOEBESUM</strong> = 0 or (&lt; 100000 DKK)?</li>
-<li><strong>SKOEDE_DATO</strong> = “The date on which the deed was signed” -&gt; use as sale date?? Should we use this date (i.e. for the price index)? …<br />
-</li>
-<li>What about housing prices = 0?</li>
-<li>Dwelling Area &lt;= 0?</li>
+<li><p>How have housing prices changed over time in Denmark?</p></li>
+<li><p>How does it affect mobility and the population of a region?</p></li>
+<li><p>What is the effect of immigration on housing prices?</p></li>
+<li><p>What is the percentage of immigrants that own/rent a property?</p></li>
+<li><p>Is there racial segregation of immigrants? How does it affect mobility?</p></li>
 </ul>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="EDA-house-prices.html#cb73-1" aria-hidden="true" tabindex="-1"></a>res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb73-2"><a href="EDA-house-prices.html#cb73-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> <span class="fu">log10</span>(price_2019_kDKK),  <span class="at">colour =</span> <span class="fu">factor</span>(year))) <span class="sc">+</span></span>
-<span id="cb73-3"><a href="EDA-house-prices.html#cb73-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>() <span class="sc">+</span></span>
-<span id="cb73-4"><a href="EDA-house-prices.html#cb73-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_qq_line() +</span></span>
-<span id="cb73-5"><a href="EDA-house-prices.html#cb73-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>type) <span class="sc">+</span></span>
-<span id="cb73-6"><a href="EDA-house-prices.html#cb73-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="residential-units-by-floor-level" class="section level2" number="9.1">
-<h2><span class="header-section-number">9.1</span> Residential units by floor level</h2>
-<ul>
-<li>KL - basement</li>
-<li>ST - ground floor</li>
-<li>1 - 1st floor</li>
-<li>2 - 2nd floor</li>
-<li>3 - 3rd floor</li>
-<li>4 - 4th floor</li>
-<li>5 or more = etc.</li>
-</ul>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="EDA-house-prices.html#cb74-1" aria-hidden="true" tabindex="-1"></a>  res_units_oft <span class="sc">%&gt;%</span> </span>
-<span id="cb74-2"><a href="EDA-house-prices.html#cb74-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(floor_level, type) <span class="sc">%&gt;%</span> </span>
-<span id="cb74-3"><a href="EDA-house-prices.html#cb74-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb74-4"><a href="EDA-house-prices.html#cb74-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb74-5"><a href="EDA-house-prices.html#cb74-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># in percentage [%]   </span></span>
-<span id="cb74-6"><a href="EDA-house-prices.html#cb74-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">perc =</span> <span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">%&gt;%</span> </span>
-<span id="cb74-7"><a href="EDA-house-prices.html#cb74-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reorder type levels for plotting multi-storey first</span></span>
-<span id="cb74-8"><a href="EDA-house-prices.html#cb74-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
-<span id="cb74-9"><a href="EDA-house-prices.html#cb74-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb74-10"><a href="EDA-house-prices.html#cb74-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> floor_level, <span class="at">x =</span> perc, <span class="at">fill =</span> type), <span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>) <span class="sc">+</span></span>
-<span id="cb74-11"><a href="EDA-house-prices.html#cb74-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, </span>
-<span id="cb74-12"><a href="EDA-house-prices.html#cb74-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage [%]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb74-13"><a href="EDA-house-prices.html#cb74-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
-<span id="cb74-14"><a href="EDA-house-prices.html#cb74-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb74-15"><a href="EDA-house-prices.html#cb74-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="sc">+</span></span>
-<span id="cb74-16"><a href="EDA-house-prices.html#cb74-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">ncol =</span> <span class="dv">2</span>)) <span class="sc">+</span></span>
-<span id="cb74-17"><a href="EDA-house-prices.html#cb74-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>comma) <span class="sc">+</span></span>
-<span id="cb74-18"><a href="EDA-house-prices.html#cb74-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#CC79A7&quot;</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-runits-floor"></span>
-<img src="Housing_prices_book_files/figure-html/fig-runits-floor-1.png" alt="Residential units distribution by floor level" width="672" />
-<p class="caption">
-Figure 9.1: Residential units distribution by floor level
-</p>
-</div>
+<p>Do the developments of housing prices in areas with significantly higher (or lower) representation of immigrants differ from the developments in nearby areas? If there is an effect, does it differ depending on the immigrants’ country of origin?</p>
 
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Jeanty2010" class="csl-entry">
+Jeanty, P. Wilner, Mark Partridge, and Elena Irwin. 2010. <span>“<span class="nocase">Estimation of a spatial simultaneous equation model of population migration and housing price dynamics</span>.”</span> <em>Regional Science and Urban Economics</em> 40 (5): 343–52. <a href="https://doi.org/10.1016/j.regsciurbeco.2010.01.002">https://doi.org/10.1016/j.regsciurbeco.2010.01.002</a>.
+</div>
+<div id="ref-Lin2018" class="csl-entry">
+Lin, Yingchao, Zhili Ma, Ke Zhao, Weiyan Hu, and Jing Wei. 2018. <span>“<span class="nocase">The Impact of Population Migration on Urban Housing Prices: Evidence from China’s Major Cities</span>.”</span> <em>Sustainability</em> 10 (9): 3169. <a href="https://doi.org/10.3390/su10093169">https://doi.org/10.3390/su10093169</a>.
+</div>
+<div id="ref-Peng2019" class="csl-entry">
+Peng, Chien-Wen, and I-Chun Tsai. 2019. <span>“<span class="nocase">The long- and short-run influences of housing prices on migration</span>.”</span> <em>Cities</em> 93 (May): 253–62. <a href="https://doi.org/10.1016/j.cities.2019.05.011">https://doi.org/10.1016/j.cities.2019.05.011</a>.
+</div>
+<div id="ref-Tyrcha2019" class="csl-entry">
+Tyrcha, Adam, and Maria Abreu. 2019. <span>“<span class="nocase">Migration Diversity and House Prices - Evidence from Sweden</span>.”</span> <em>SSRN Electronic Journal</em>, 1–36. <a href="https://doi.org/10.2139/ssrn.3394234">https://doi.org/10.2139/ssrn.3394234</a>.
+</div>
+<div id="ref-Wang2017a" class="csl-entry">
+Wang, Xin-Rui, Eddie Chi-Man Hui, and Jiu-Xia Sun. 2017. <span>“<span class="nocase">Population migration, urbanization and housing prices: Evidence from the cities in China</span>.”</span> <em>Habitat International</em> 66 (August): 49–56. <a href="https://doi.org/10.1016/j.habitatint.2017.05.010">https://doi.org/10.1016/j.habitatint.2017.05.010</a>.
 </div>
 </div>
             </section>
@@ -1026,8 +998,8 @@ Figure 9.1: Residential units distribution by floor level
           </div>
         </div>
       </div>
-<a href="noise.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="level-muni.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1059,7 +1031,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/031_EDA.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/011_1_Intro.Rmd",
 "text": "Edit"
 },
 "history": {

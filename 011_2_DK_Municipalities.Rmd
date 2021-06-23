@@ -1,22 +1,6 @@
-# (PART) Population growth in Denmark and housing prices {-}
+# Analysis at national level (municipalities) {#level-muni}
 
-# Population growth {#pop-growth}
-
-Migration and housing prices are closely related with profound implications on urban planning. In this sense, there is  a two-way causal relationship between migration and house prices (e.g. @Lin2018, @Jeanty2010). On the one hand, a rise on house prices will increase household’s housing equity and, therefore, homeowners would have a higher financial flexibility for purchasing a new house. On the other hand, high housing prices can make the house unaffordable. Prices differences between the region where migrants live and regions where they intend to move may also affect in- and out- migration rates. Finally, the expectation of future house prices also plays an important role in the decision to move (@Peng2019). Furthermore, migration increases the housing demand and, as a consequence, the prices (@Wang2017a). An example of this effect has been found in Sweden where “a 1% increase in the foreign-born population results in a 0.8% increase in house prices, which increases to 1.2% if internal migration is also accounted for” (@Tyrcha2019). 
-
-We analyse therefore housing prices, population and migration patterns in Denmark, evaluating the influence of housing prices on migration (and vice versa). Specific questions we will respond are, among others:    
-
-- How have housing prices changed over time in Denmark?  
-
-- How does it affect mobility and the population of a region?  
-
-- What is the effect of immigration on housing prices?  
-
-- What is the percentage of immigrants that own/rent a property? 
-
-- Is there racial segregation of immigrants? How does it affect mobility? 
-
-Do the developments of housing prices in areas with significantly higher (or lower) representation of immigrants differ from the developments in nearby areas? If there is an effect, does it differ depending on the immigrants’ country of origin? 
+## Population growth {#pop-growth-muni}
 
 Danish population has growth over the last decade from 5.47 million (2008-Q1) to 5.82 million (2020-Q3). However, this increase is mainly due to foreign population. In this sense, the foreigners have raised from 0.30 million to 0.53 million (80%) while Danish citizens has growth from 5.18 million to 5.29 million (2.5%). Therefore, from the increase of almost 350,000 inhabitants over the last decade approximately 66% are immigrants. The population is also getting older with an increase of both the mean and median age of the population. However, there is a significant difference between the mean and median ages of Danish and Foreign citizens, with these values around 40-42 years and 32-34 years respectively. Furthermore, these values have raised for the Danish population but not for foreigners. Another consideration is that the mean age for Danish citizens is less than the median, which indicates that the distribution is skewed to the left (i.e. more elderly people), However, for the foreign population it is the other way around (i.e. the majority are young people). 
 
@@ -629,7 +613,6 @@ Spatial distribution:
   - Are they supporting newcomers from these countries? Do they have support groups (religion,…) in this municipalities, so newcomers prefer to stay in these cities? Links with country of origin?  
 
 - Polish, Romanian, and Syrian citizens settled all over Denmark, without a clear pattern. 
-
 - German citizens: in the big cities but the population is also important in the border region with Germany.
 
 ```{r pop-migr-top10-countries}
@@ -713,3 +696,296 @@ When no parents are known, the country of origin is defined from the persons own
 When only one parent is known, the country of origin is defined as the country of birth of the parent. If this is Denmark, the country of citizenship is used. 
 
 When both parents are known, the country of origin is defined as the country of birth of the mother respectively country of citizenship. 
+
+## Housing prices level {#house-prices-muni}
+
+We load all residences for year-round living (*ENH_ANVEND_KODE*) from the Building and Dwelling Register ([BBR](https://teknik.bbr.dk/forside)), and then we estimate the mean and median prices in each municipality. 
+
+- 110           = Farmhouse for agricultural property.  
+- 120, 121, 122 = Detached single-family house (detached house). 
+- 130, 131, 132 = Townhouse, chain, or semi-detached house (vertical separation between the units).
+- 140           = Multi-storey residential building (multi-family house, including two-family house (horizontal separation between the units).
+- 150           = College.
+- 160           = Residential building for residential institution.
+- 190           = Second building for year-round living.
+
+We selected from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*). Furthermore, we filtered those dwellings that are actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*). Dwelling with a size lower that 10 $m^2$ were removed from the analysis. *Colleges* and *Residential building for residential institution*  were also excluded from the data analysis since they are a special type of buildings dedicated to students residences and housing for institutions, respectively, and they are mainly outside of the free marked.
+
+```{r res-units-DK}
+
+# Residential buildings for year round living
+res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
+                      110, "Farmhouse",
+                      120, "Single-family house",
+                      121, "Single-family house",
+                      122, "Single-family house",
+                      130, "Semi-detached house",
+                      131, "Semi-detached house",
+                      132, "Semi-detached house",
+                      140, "Multi-storey",
+                      190, "Second building") %>%
+  # Convert type to factor
+  mutate(type = factor(type)) %>%
+  # Convert to data.table
+  as.data.table()
+
+# Aux. function
+f_average_price_muni <- function(.file) {
+  fread(.file) %>% 
+    # Select only Residential houses - Buildings for year-round living
+    filter.(ENH_ANVEND_KODE %in% res_codes$ENH_ANVEND_KODE) %>%
+    # ordinary free trade or auction
+    filter.(OVERDRAGELSES_KODE == "1" | OVERDRAGELSES_KODE == "3") %>% 
+    # Remove residential units not used for for residential purpose
+    filter.(BOLIGTYPE_KODE != "E" | BOLIGTYPE_KODE != "5") %>% 
+    # Remove tiny dwellings (area < 10 m2)
+    filter.(BEBO_ARL >= 10) %>%
+    # Add year of the BBR dataset 
+    mutate.(year = parse_number(stringr::str_extract(.file, "_[0-9]+_"))) %>% 
+    # Convert house price (KONTANT_KOEBESUM) to numeric and kDKK
+    mutate.(price_kDKK = KONTANT_KOEBESUM / 1000,
+            price_kDKK = as.numeric(price_kDKK)) %>% 
+    # Drop unused factors levels
+    droplevels()
+}
+
+# Read in parallel 
+csv_files_path <- list.files(path = Sys.getenv("OneDrive_BBR_path"),
+                             pattern = "*.csv",
+                             full.names = TRUE)
+
+plan(multisession, workers = 7)
+res_prices_read <- future_map_dfr(.x = csv_files_path,
+                             .f = f_average_price_muni) %>% 
+  # rename KomKode
+  mutate.(KomKode = paste0("0", KomKode)) %>% 
+  rename.(muni_id = KomKode)
+plan("default")
+
+```
+
+There are some unrealistic house prices in *Kerteminde* and *Ringsted* municipalities. In this sense, there are 499 houses with a value of 267000000 DKK in *Kerteminde* and 310 with a value of 375000000 DKK in *Ringsted*. We may expect few houses with very high prices in this areas but these numbers seem unlikely for small towns and oly for one year (2008 and 2011, respectively). Therefore, we have removed them from the datasets assuming there was a mistake in the data imputation and we do not have other criteria for assigning a realistic value. We also remove  properties with no value (*KONTANT_KOEBESUM* = 0; there were 18,801 of 1,494,495 data)
+
+```{r remove-unrealistic-values}
+
+res_prices <- res_prices_read %>%
+  filter(!(muni_id == "0440" & year == 2008 & KONTANT_KOEBESUM == 267000000)) %>%
+  filter(!(muni_id == "0329" & year == 2011 & KONTANT_KOEBESUM == 375000000)) %>% 
+  filter(KONTANT_KOEBESUM > 0)
+
+```
+
+We adjusted the housing prices to 2019 prices. In this regard, we take into  account the inflation and, therefore, prices from different years can be compared (@Valtersdorf2020). The adjusted price is obtained as follow:
+
+$$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
+
+Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the price of the respective year $i$, and $Index_{i}$ and $Index_{2019}$ are the price indexes for the origin year ${i}$ and $2019$, respectively. The indexes have been obtained from Statistic Denmark; i.e. table [EJ6: Price index for sales property (2006=100) by category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ6&PLanguage=1&PXSId=0&wsid=cftree) (Table \@ref(tab:price-index-DK)). 
+
+```{r price-index-DK}
+
+# DST table (PRIS112 - Consumer price index (2015=100) by main figures and time)
+  id_table <- "EJ6"
+  dat_meta <- get_table_metadata(table_id = id_table, variables_only = TRUE)
+  
+# Values to retrieve
+  variables <- list(
+    # Category of real property (i.e. One-family houses)
+    list(code = "EJENDOMSKATE", values = "0111"),
+    # Index
+    list(code = "TAL", values = "100"),
+    # From 2004 to 2019
+    list(code = "Tid", values = seq(2004, 2019, 1))
+    )
+
+# Get index
+  price_index <- get_data("EJ6", variables) %>% 
+    select(-TAL) %>% 
+    # Translate into English 
+    rename(index_desc = EJENDOMSKATE,
+           index_year = TID, 
+           index_value = INDHOLD) %>% 
+    # Convert index tu numeric
+    mutate(index_value = index_value/10) 
+    
+# Print price index table  
+  price_index %>% 
+    # Wide format
+    pivot_wider(names_from = index_year, 
+                values_from = index_value) %>% 
+    kbl(caption = "Price index for sale properties in Denmark") %>% 
+    kable_paper() %>% 
+    scroll_box(width = "100%")
+  
+```
+
+```{r adj-price-DK}
+
+# Adjust housing prices
+price_index_2019 <- price_index %>% 
+  filter(index_year == 2019)
+
+# Add adjusted prices 
+res_prices <- res_prices %>% 
+  # Add price index by year and category
+  left_join.(price_index, by = c("year" = "index_year")) %>% 
+  # Add columns with index_2019
+  mutate.(index_2019 = price_index_2019$index_year) %>% 
+  # Calculate prices 2019
+  mutate.(price_2019_kDKK = (price_kDKK * index_2019 / index_value)) %>% 
+  # Price per m2
+  mutate(price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL)
+ 
+```
+
+Prices change (median) from 2008 to 2019.
+```{r median-prices-muni}
+
+# Summary statistics of 2019 adjusted housing prices by municipalities
+res_prices_muni <- res_prices %>%
+  # 2008  - year we start to have population data 
+  filter.(year >= 2008) %>% 
+  # Estimate mean and median values (house prices)
+  summarise.(num_res_units = n(), 
+             median_2019_kDKK_m2 = median(price_2019_kDKK_m2),
+             .by = c(muni_id, year)) %>% 
+  # Price change with 2008 as baseline
+  arrange.(muni_id, year) %>% 
+  mutate.(
+    median_2019_kDKK_m2_dif = 
+      100 * (median_2019_kDKK_m2 - first(median_2019_kDKK_m2)) / first(median_2019_kDKK_m2),
+    .by = muni_id)
+  
+# Link house prices (at the first day of the year) with population.  
+dk_muni_prices <- dk_muni_pop %>% 
+  as_tibble() %>% 
+  # Population at the first day of the year
+  separate(date, c("year", "month", "day"), sep = "-") %>% 
+  filter(month == "01") %>%
+  mutate(year = as.numeric(year)) %>% 
+  # get only population data by municipality
+  select(muni_id, muni_name, area_km2, year, ancestry, pop, pop_km2, geometry) %>%
+  # wide format
+  pivot_wider(names_from = ancestry,
+              values_from = c(pop, pop_km2)) %>% 
+  # Add spatial residential prices 
+  left_join(res_prices_muni, by = c("muni_id", "year")) %>% 
+  st_sf() %>% 
+  # Remove Christiansø (there is no residential houses)
+  filter(muni_id != "0411")
+
+```
+
+```{r fig-prices-LAUs, fig.cap = "Adjusted 2019 housing prices variation from 2008 to 2019"}
+
+dk_muni_prices %>% 
+  filter(year == 2019) %>% 
+  ggplot() +
+    geom_sf(aes(fill = median_2019_kDKK_m2_dif),
+            color = "grey", size = 0.05) +
+    scale_fill_gradient2(name = "Change [%]",
+                         low = "blue",
+                         mid = "white",
+                         high = "red",
+                         midpoint = 0) +
+    theme_void()
+
+```
+
+Relationship between population density and house prices (median values) at municipality level.
+
+```{r fig-prices-pop-a,  fig.height=8, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
+
+# Plot
+ggplot() +
+  geom_point(data = dk_muni_prices,
+             aes(x = pop_km2_Total,
+                 y = median_2019_kDKK_m2,
+                 colour = muni_name,
+                 shape = factor(year))) +
+  scale_shape_manual(values = 1:nlevels(factor(dk_muni_prices$year))) +
+  scale_x_log10() +
+  geom_mark_ellipse(data = dk_muni_prices_lbls,
+                    aes(x = pop_km2_Total,
+                        y = median_2019_kDKK_m2,
+                        colour = muni_name,
+                        label = muni_name),
+                    label.fill = NA) +
+  labs(title = "",
+       x = "Population density [ppl/km2]",
+       y = "2019 adjusted median values [kDKK/m2]",
+       colour = "Municipality",
+       shape = "Year") +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  guides(shape = guide_legend(ncol = 2, title.position = "top"),
+         colour = guide_legend(ncol = 7, title.position = "top")) +
+  geom_smooth(data = dk_muni_prices,
+              aes(x = pop_km2_Total,
+                  y = median_2019_kDKK_m2),
+              method = "lm", 
+              se = F,
+              colour = "blue") 
+
+```
+
+Plots variation over time (adjusted prices). NOTE: Zoom up to 80% change
+
+```{r fig-price-change-muni, fig.height=25, fig.width=10, fig.cap = "Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)"}
+
+# Short municipalities by total population density in 2008-Q1
+dk_muni_prices <- dk_muni_prices %>%
+  mutate(muni_name = fct_reorder2(muni_name, year, pop_km2_Total,
+                                  .fun = last2))
+
+# Plot
+ggplot(data = dk_muni_prices,
+            aes(x = year,
+                y = median_2019_kDKK_m2_dif)) +
+  geom_point() +
+  geom_smooth(method = "loess",
+              span = 0.75,
+              se = FALSE) +
+  geom_hline(yintercept = 0, linetype="dashed", color = "grey", size = 0.5) +
+  facet_wrap(~muni_name, ncol = 6) +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        axis.text = element_text(size = 10),
+        axis.title = element_text(size = 14),
+        legend.text = element_text(size = 14),
+        legend.title = element_text(size = 14, face = "bold"),
+        plot.title = element_text(size = 14, face = "bold"),
+        title = element_text(size = 14)) +
+  scale_y_continuous(name = "[%]") +
+  coord_cartesian(ylim = c(-80, 80)) +
+  scale_x_continuous(name = "",
+                     breaks = seq(2008, 2019, 3))
+
+
+```
+
+```{r fig-prices-pop-b,  fig.height=10, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
+
+# Big cities/urban areas
+  lbls <- c("København", "Aarhus", "Odense", "Aalborg", "Frederiksberg",
+            "Tønder", "Læsø" )
+  dk_muni_prices_lbls <- dk_muni_prices %>% 
+    filter(muni_name %in% lbls) 
+  
+# Plot
+  ggplot(data = dk_muni_prices,
+         aes(x = pop_km2_Total,
+             y = median_2019_kDKK_m2)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    scale_x_log10() +
+    labs(title = "",
+         x = "Population density [ppl/km2]",
+         y = "2019 adjusted median values [kDKK/m2]") +
+    ggrepel::geom_text_repel(data = dk_muni_prices_lbls, 
+                             aes(label = muni_name),
+                             nudge_y = 20,
+                             max.iter = 3e3) +
+    facet_wrap(~year) +
+    theme_bw()
+
+```

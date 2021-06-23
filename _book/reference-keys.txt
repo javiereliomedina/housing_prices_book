@@ -31,9 +31,12 @@ fig:fig-travel-times
 fig:fig-roads-noise
 fig:fig-train-noise
 fig:fig-runits-floor
-pop-growth
-house-prices-LAUs
-study-area
+intro
+level-muni
+pop-growth-muni
+house-prices-muni
+level-parish
+level-grids100m
 population-density-by-grid-cells-of-100m-x-100m
 house-prices-by-grid-cells-of-100m-x-100m
 population-density-and-house-prices
