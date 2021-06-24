@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-06-23" />
+<meta name="date" content="2021-06-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="level-muni.html"/>
-<link rel="next" href="level-grids100m.html"/>
+<link rel="next" href="level-CPH.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -53,10 +53,6 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -910,12 +906,16 @@ div.csl-indent {
 <li class="chapter" data-level="2.1" data-path="level-muni.html"><a href="level-muni.html#pop-growth-muni"><i class="fa fa-check"></i><b>2.1</b> Population growth</a></li>
 <li class="chapter" data-level="2.2" data-path="level-muni.html"><a href="level-muni.html#house-prices-muni"><i class="fa fa-check"></i><b>2.2</b> Housing prices level</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="level-parish.html"><a href="level-parish.html"><i class="fa fa-check"></i><b>3</b> Capital region</a></li>
-<li class="chapter" data-level="4" data-path="level-grids100m.html"><a href="level-grids100m.html"><i class="fa fa-check"></i><b>4</b> Copenhagen city</a>
+<li class="chapter" data-level="3" data-path="level-parish.html"><a href="level-parish.html"><i class="fa fa-check"></i><b>3</b> Capital region</a>
 <ul>
-<li class="chapter" data-level="4.1" data-path="level-grids100m.html"><a href="level-grids100m.html#population-density-by-grid-cells-of-100m-x-100m"><i class="fa fa-check"></i><b>4.1</b> Population density by grid cells of 100m x 100m</a></li>
-<li class="chapter" data-level="4.2" data-path="level-grids100m.html"><a href="level-grids100m.html#house-prices-by-grid-cells-of-100m-x-100m"><i class="fa fa-check"></i><b>4.2</b> House prices by grid cells of 100m x 100m</a></li>
-<li class="chapter" data-level="4.3" data-path="level-grids100m.html"><a href="level-grids100m.html#population-density-and-house-prices"><i class="fa fa-check"></i><b>4.3</b> Population density and house prices</a></li>
+<li class="chapter" data-level="3.1" data-path="level-parish.html"><a href="level-parish.html#population-data"><i class="fa fa-check"></i><b>3.1</b> Population data</a></li>
+<li class="chapter" data-level="3.2" data-path="level-parish.html"><a href="level-parish.html#house-prices-at-parish-level"><i class="fa fa-check"></i><b>3.2</b> House prices at parish level</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="level-CPH.html"><a href="level-CPH.html"><i class="fa fa-check"></i><b>4</b> Copenhagen city</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="level-CPH.html"><a href="level-CPH.html#population-density-by-grid-cells-of-100m-x-100m"><i class="fa fa-check"></i><b>4.1</b> Population density by grid cells of 100m x 100m</a></li>
+<li class="chapter" data-level="4.2" data-path="level-CPH.html"><a href="level-CPH.html#house-prices-by-grid-cells-of-100m-x-100m"><i class="fa fa-check"></i><b>4.2</b> House prices by grid cells of 100m x 100m</a></li>
+<li class="chapter" data-level="4.3" data-path="level-CPH.html"><a href="level-CPH.html#population-density-and-house-prices"><i class="fa fa-check"></i><b>4.3</b> Population density and house prices</a></li>
 </ul></li>
 <li class="part"><span><b>II Hedonic price model</b></span></li>
 <li class="chapter" data-level="5" data-path="hedonic-price-model.html"><a href="hedonic-price-model.html"><i class="fa fa-check"></i><b>5</b> Hedonic model</a>
@@ -963,7 +963,355 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="level-parish" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Capital region</h1>
+<p>Migration in the capital region. Spatial patterns (<span class="citation">(<a href="#ref-Georgati2021" role="doc-biblioref"><strong>Georgati2021?</strong></a>)</span>) and links with house prices.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="level-parish.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Communes polygons of Denmark, and select those in the study area</span></span>
+<span id="cb1-2"><a href="level-parish.html#cb1-2" aria-hidden="true" tabindex="-1"></a>  dk_country <span class="ot">&lt;-</span> <span class="fu">st_union</span>(dk_muni)</span>
+<span id="cb1-3"><a href="level-parish.html#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-4"><a href="level-parish.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Codes of the communes under study</span></span>
+<span id="cb1-5"><a href="level-parish.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  capital_region_muni <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;København&quot;</span>,</span>
+<span id="cb1-6"><a href="level-parish.html#cb1-6" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Frederiksberg&quot;</span>,</span>
+<span id="cb1-7"><a href="level-parish.html#cb1-7" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Albertslund&quot;</span>,</span>
+<span id="cb1-8"><a href="level-parish.html#cb1-8" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Ballerup&quot;</span>,</span>
+<span id="cb1-9"><a href="level-parish.html#cb1-9" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Brøndby&quot;</span>,</span>
+<span id="cb1-10"><a href="level-parish.html#cb1-10" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Dragør&quot;</span>,</span>
+<span id="cb1-11"><a href="level-parish.html#cb1-11" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Gentofte&quot;</span>,</span>
+<span id="cb1-12"><a href="level-parish.html#cb1-12" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Gladsaxe&quot;</span>,</span>
+<span id="cb1-13"><a href="level-parish.html#cb1-13" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Glostrup&quot;</span>,</span>
+<span id="cb1-14"><a href="level-parish.html#cb1-14" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Herlev&quot;</span>,</span>
+<span id="cb1-15"><a href="level-parish.html#cb1-15" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Høje-Taastrup&quot;</span>,</span>
+<span id="cb1-16"><a href="level-parish.html#cb1-16" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Hvidovre&quot;</span>,</span>
+<span id="cb1-17"><a href="level-parish.html#cb1-17" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Ishøj&quot;</span>,</span>
+<span id="cb1-18"><a href="level-parish.html#cb1-18" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Lyngby-Taarbæk&quot;</span>,</span>
+<span id="cb1-19"><a href="level-parish.html#cb1-19" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Rødovre&quot;</span>,</span>
+<span id="cb1-20"><a href="level-parish.html#cb1-20" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Tårnby&quot;</span>,</span>
+<span id="cb1-21"><a href="level-parish.html#cb1-21" aria-hidden="true" tabindex="-1"></a>                           <span class="st">&quot;Vallensbæk&quot;</span>)</span>
+<span id="cb1-22"><a href="level-parish.html#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="level-parish.html#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Select municipalities under study  </span></span>
+<span id="cb1-24"><a href="level-parish.html#cb1-24" aria-hidden="true" tabindex="-1"></a> capital_muni <span class="ot">&lt;-</span> dk_muni <span class="sc">%&gt;%</span> <span class="fu">filter</span>(muni_name <span class="sc">%in%</span> capital_region_muni) </span>
+<span id="cb1-25"><a href="level-parish.html#cb1-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-26"><a href="level-parish.html#cb1-26" aria-hidden="true" tabindex="-1"></a> dk_country_crop <span class="ot">&lt;-</span> <span class="fu">st_crop</span>(dk_country, capital_muni)</span>
+<span id="cb1-27"><a href="level-parish.html#cb1-27" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb1-28"><a href="level-parish.html#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Parishes polygons of Denmark, and select those in the study area </span></span>
+<span id="cb1-29"><a href="level-parish.html#cb1-29" aria-hidden="true" tabindex="-1"></a>  prsh_link <span class="ot">&lt;-</span> <span class="fu">paste</span>(loc_dir,</span>
+<span id="cb1-30"><a href="level-parish.html#cb1-30" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;DAGIREF_SHAPE_UTM32-EUREF89/ADM&quot;</span>,</span>
+<span id="cb1-31"><a href="level-parish.html#cb1-31" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;SOGN.shp&quot;</span>,</span>
+<span id="cb1-32"><a href="level-parish.html#cb1-32" aria-hidden="true" tabindex="-1"></a>                       <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb1-33"><a href="level-parish.html#cb1-33" aria-hidden="true" tabindex="-1"></a>  dk_prsh  <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(prsh_link) <span class="sc">%&gt;%</span></span>
+<span id="cb1-34"><a href="level-parish.html#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_zm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb1-35"><a href="level-parish.html#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span>
+<span id="cb1-36"><a href="level-parish.html#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="level-parish.html#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Select those where the centroid is in the capital region</span></span>
+<span id="cb1-38"><a href="level-parish.html#cb1-38" aria-hidden="true" tabindex="-1"></a>  dk_prsh_cent <span class="ot">&lt;-</span> <span class="fu">st_centroid</span>(dk_prsh)</span>
+<span id="cb1-39"><a href="level-parish.html#cb1-39" aria-hidden="true" tabindex="-1"></a>  capital_prsh_cent <span class="ot">&lt;-</span> <span class="fu">st_intersection</span>(dk_prsh_cent, capital_muni)</span>
+<span id="cb1-40"><a href="level-parish.html#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="level-parish.html#cb1-41" aria-hidden="true" tabindex="-1"></a>  capital_prsh <span class="ot">&lt;-</span> dk_prsh <span class="sc">%&gt;%</span> </span>
+<span id="cb1-42"><a href="level-parish.html#cb1-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get parishes in the capital region</span></span>
+<span id="cb1-43"><a href="level-parish.html#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(SOGNEKODE <span class="sc">%in%</span> capital_prsh_cent<span class="sc">$</span>SOGNEKODE) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-44"><a href="level-parish.html#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Combine several parish features geometries into one polygon</span></span>
+<span id="cb1-45"><a href="level-parish.html#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(SOGNEKODE, SOGNENAVN) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-46"><a href="level-parish.html#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">geometry =</span> <span class="fu">st_union</span>(geometry)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-47"><a href="level-parish.html#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb1-48"><a href="level-parish.html#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="co"># add area of the parish (in km2)</span></span>
+<span id="cb1-49"><a href="level-parish.html#cb1-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">prsh_area_km2 =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), km<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-50"><a href="level-parish.html#cb1-50" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate column names</span></span>
+<span id="cb1-51"><a href="level-parish.html#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">prsh_id =</span> SOGNEKODE,</span>
+<span id="cb1-52"><a href="level-parish.html#cb1-52" aria-hidden="true" tabindex="-1"></a>           <span class="at">prsh_name =</span> SOGNENAVN) </span>
+<span id="cb1-53"><a href="level-parish.html#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="level-parish.html#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Contour of the capital region (merge the parishes in one polygon):</span></span>
+<span id="cb1-55"><a href="level-parish.html#cb1-55" aria-hidden="true" tabindex="-1"></a>  capital_area <span class="ot">&lt;-</span> capital_prsh <span class="sc">%&gt;%</span></span>
+<span id="cb1-56"><a href="level-parish.html#cb1-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_union</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-57"><a href="level-parish.html#cb1-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb1-58"><a href="level-parish.html#cb1-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="level-parish.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb2-2"><a href="level-parish.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> capital_prsh, <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb2-3"><a href="level-parish.html#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> capital_muni, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb2-4"><a href="level-parish.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb2-5"><a href="level-parish.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_scale</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>, <span class="at">text_cex =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="level-parish.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotation_north_arrow</span>(<span class="at">location =</span> <span class="st">&quot;br&quot;</span>,</span>
+<span id="cb2-7"><a href="level-parish.html#cb2-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pad_x =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-8"><a href="level-parish.html#cb2-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">pad_y =</span> <span class="fu">unit</span>(<span class="fl">0.65</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-9"><a href="level-parish.html#cb2-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">which_north =</span> <span class="st">&quot;true&quot;</span>,</span>
+<span id="cb2-10"><a href="level-parish.html#cb2-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">height =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-11"><a href="level-parish.html#cb2-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
+<span id="cb2-12"><a href="level-parish.html#cb2-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb2-13"><a href="level-parish.html#cb2-13" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-capital-region"></span>
+<img src="Housing_prices_book_files/figure-html/fig-capital-region-1.png" alt="Parishes in the Capital region" width="672" />
+<p class="caption">
+Figure 3.1: Parishes in the Capital region
+</p>
+</div>
+<div id="population-data" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Population data</h2>
+<p>Population data at parish level was uploaded from Denmark Statistics: Tables:</p>
+<ul>
+<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">KMSTA001: Population 1. January by parish, ancestry and National Church</a>.</li>
+<li><a href="https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&amp;PLanguage=1&amp;PXSId=0&amp;wsid=cftree">KMSTA003: Summary vital statistics by parish and movements</a>.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="level-parish.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Auxiliary functions for reading the data with the package *danstat*</span></span>
+<span id="cb3-2"><a href="level-parish.html#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="level-parish.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop by year for getting DST data </span></span>
+<span id="cb3-4"><a href="level-parish.html#cb3-4" aria-hidden="true" tabindex="-1"></a>  steps <span class="ot">&lt;-</span> <span class="cf">function</span>(year){</span>
+<span id="cb3-5"><a href="level-parish.html#cb3-5" aria-hidden="true" tabindex="-1"></a>    var_values <span class="ot">&lt;-</span> <span class="fu">list</span>(id_region, id_ancestry, year)</span>
+<span id="cb3-6"><a href="level-parish.html#cb3-6" aria-hidden="true" tabindex="-1"></a>    var_input <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map2</span>(<span class="at">.x =</span> var_codes,</span>
+<span id="cb3-7"><a href="level-parish.html#cb3-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">.y =</span> var_values,</span>
+<span id="cb3-8"><a href="level-parish.html#cb3-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">.f =</span> <span class="sc">~</span><span class="fu">list</span>(<span class="at">code =</span> .x, <span class="at">values =</span> .y))</span>
+<span id="cb3-9"><a href="level-parish.html#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">get_data</span>(id_table, <span class="at">variables =</span> var_input)</span>
+<span id="cb3-10"><a href="level-parish.html#cb3-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-11"><a href="level-parish.html#cb3-11" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-12"><a href="level-parish.html#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for removing punctuation, lowercase, stem, stopwords, and collapse strings</span></span>
+<span id="cb3-13"><a href="level-parish.html#cb3-13" aria-hidden="true" tabindex="-1"></a>  rm_words <span class="ot">&lt;-</span> <span class="cf">function</span>(x, stopwords) { x <span class="sc">%&gt;%</span> </span>
+<span id="cb3-14"><a href="level-parish.html#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">strsplit</span>(<span class="st">&quot; &quot;</span>, <span class="at">fixed =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-15"><a href="level-parish.html#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">lapply</span>(tm<span class="sc">::</span>removePunctuation) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-16"><a href="level-parish.html#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">lapply</span>(tolower) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-17"><a href="level-parish.html#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">lapply</span>(SnowballC<span class="sc">::</span>wordStem) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-18"><a href="level-parish.html#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">lapply</span>(<span class="cf">function</span>(x) x[<span class="sc">!</span>x <span class="sc">%in%</span> stopwords]) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-19"><a href="level-parish.html#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">vapply</span>(<span class="cf">function</span>(x) <span class="fu">paste</span>(x , <span class="at">collapse =</span> <span class="st">&quot;_&quot;</span>), <span class="fu">character</span>(<span class="dv">1</span>))</span>
+<span id="cb3-20"><a href="level-parish.html#cb3-20" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="level-parish.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Read and clean table KMSTA001</span></span>
+<span id="cb4-2"><a href="level-parish.html#cb4-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb4-3"><a href="level-parish.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Table </span></span>
+<span id="cb4-4"><a href="level-parish.html#cb4-4" aria-hidden="true" tabindex="-1"></a>  id_table <span class="ot">&lt;-</span> <span class="st">&quot;KMSTA001&quot;</span></span>
+<span id="cb4-5"><a href="level-parish.html#cb4-5" aria-hidden="true" tabindex="-1"></a>  var_pop <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-6"><a href="level-parish.html#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="level-parish.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Codes for var_input</span></span>
+<span id="cb4-8"><a href="level-parish.html#cb4-8" aria-hidden="true" tabindex="-1"></a>  var_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SOGN&quot;</span>, <span class="st">&quot;HERKOMST&quot;</span>, <span class="st">&quot;Tid&quot;</span>)</span>
+<span id="cb4-9"><a href="level-parish.html#cb4-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-10"><a href="level-parish.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Values for var_input</span></span>
+<span id="cb4-11"><a href="level-parish.html#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Region: parishes of the study area (i.e. capital_parish)</span></span>
+<span id="cb4-12"><a href="level-parish.html#cb4-12" aria-hidden="true" tabindex="-1"></a>  id_region <span class="ot">&lt;-</span> capital_prsh<span class="sc">$</span>prsh_id </span>
+<span id="cb4-13"><a href="level-parish.html#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ancestry</span></span>
+<span id="cb4-14"><a href="level-parish.html#cb4-14" aria-hidden="true" tabindex="-1"></a>  id_ancestry <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb4-15"><a href="level-parish.html#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Quarters</span></span>
+<span id="cb4-16"><a href="level-parish.html#cb4-16" aria-hidden="true" tabindex="-1"></a>  id_year <span class="ot">&lt;-</span> var_pop<span class="sc">$</span>values[[<span class="dv">4</span>]]<span class="sc">$</span>id[<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]   <span class="co"># Select 2008-2019</span></span>
+<span id="cb4-17"><a href="level-parish.html#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="level-parish.html#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Read data (n parallel) </span></span>
+<span id="cb4-19"><a href="level-parish.html#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
+<span id="cb4-20"><a href="level-parish.html#cb4-20" aria-hidden="true" tabindex="-1"></a>  capital_prsh_ancestry_read <span class="ot">&lt;-</span> id_year <span class="sc">%&gt;%</span></span>
+<span id="cb4-21"><a href="level-parish.html#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">future_map_dfr</span>(steps)  </span>
+<span id="cb4-22"><a href="level-parish.html#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
+<span id="cb4-23"><a href="level-parish.html#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="level-parish.html#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean data </span></span>
+<span id="cb4-25"><a href="level-parish.html#cb4-25" aria-hidden="true" tabindex="-1"></a>  capital_prsh_ancestry <span class="ot">&lt;-</span> capital_prsh_ancestry_read <span class="sc">%&gt;%</span> </span>
+<span id="cb4-26"><a href="level-parish.html#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate column names into English</span></span>
+<span id="cb4-27"><a href="level-parish.html#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">parish =</span> SOGN,</span>
+<span id="cb4-28"><a href="level-parish.html#cb4-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">ancestry =</span> HERKOMST,</span>
+<span id="cb4-29"><a href="level-parish.html#cb4-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">year =</span> TID, </span>
+<span id="cb4-30"><a href="level-parish.html#cb4-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">value =</span> INDHOLD) <span class="sc">%&gt;%</span></span>
+<span id="cb4-31"><a href="level-parish.html#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get parish codes, names, and municipality names</span></span>
+<span id="cb4-32"><a href="level-parish.html#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate</span>(parish,</span>
+<span id="cb4-33"><a href="level-parish.html#cb4-33" aria-hidden="true" tabindex="-1"></a>             <span class="fu">c</span>(<span class="st">&quot;prsh_id&quot;</span>, <span class="st">&quot;prsh_name&quot;</span>, <span class="st">&quot;muni_name&quot;</span>),</span>
+<span id="cb4-34"><a href="level-parish.html#cb4-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">sep =</span> <span class="st">&quot; &quot;</span>,</span>
+<span id="cb4-35"><a href="level-parish.html#cb4-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">extra =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-36"><a href="level-parish.html#cb4-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">muni_name =</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">(&quot;</span>, <span class="st">&quot;&quot;</span>, muni_name)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-37"><a href="level-parish.html#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make shorter names in ancestry</span></span>
+<span id="cb4-38"><a href="level-parish.html#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">ancestry =</span> <span class="fu">case_when</span>(</span>
+<span id="cb4-39"><a href="level-parish.html#cb4-39" aria-hidden="true" tabindex="-1"></a>      ancestry <span class="sc">==</span> <span class="st">&quot;Persons of Danish origin&quot;</span> <span class="sc">~</span> <span class="st">&quot;pop_dan&quot;</span>,</span>
+<span id="cb4-40"><a href="level-parish.html#cb4-40" aria-hidden="true" tabindex="-1"></a>      ancestry <span class="sc">==</span> <span class="st">&quot;Immigrants from western countries&quot;</span> <span class="sc">~</span> <span class="st">&quot;pop_mi_wst&quot;</span>,</span>
+<span id="cb4-41"><a href="level-parish.html#cb4-41" aria-hidden="true" tabindex="-1"></a>      ancestry <span class="sc">==</span> <span class="st">&quot;Immigrants from non-western countries&quot;</span> <span class="sc">~</span> <span class="st">&quot;pop_mi_nwst&quot;</span>,</span>
+<span id="cb4-42"><a href="level-parish.html#cb4-42" aria-hidden="true" tabindex="-1"></a>      ancestry <span class="sc">==</span> <span class="st">&quot;Descendants from western countries&quot;</span> <span class="sc">~</span> <span class="st">&quot;pop_de_wst&quot;</span>,</span>
+<span id="cb4-43"><a href="level-parish.html#cb4-43" aria-hidden="true" tabindex="-1"></a>      ancestry <span class="sc">==</span> <span class="st">&quot;Descendants from non-western countries&quot;</span> <span class="sc">~</span> <span class="st">&quot;pop_de_nwst&quot;</span>), </span>
+<span id="cb4-44"><a href="level-parish.html#cb4-44" aria-hidden="true" tabindex="-1"></a>      <span class="at">ancestry =</span> <span class="fu">factor</span>(ancestry)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-45"><a href="level-parish.html#cb4-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pivot (one row for peach parish and year)</span></span>
+<span id="cb4-46"><a href="level-parish.html#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> ancestry, <span class="at">values_from =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-47"><a href="level-parish.html#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Merge immigrants and their descendants (i.e. foreigners) </span></span>
+<span id="cb4-48"><a href="level-parish.html#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">pop_frgn_wst =</span> pop_mi_wst <span class="sc">+</span> pop_de_wst, </span>
+<span id="cb4-49"><a href="level-parish.html#cb4-49" aria-hidden="true" tabindex="-1"></a>           <span class="at">pop_frgn_nwst =</span> pop_mi_nwst <span class="sc">+</span> pop_de_nwst) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-50"><a href="level-parish.html#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(pop_mi_wst, pop_de_wst, pop_mi_nwst, pop_de_nwst)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-51"><a href="level-parish.html#cb4-51" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add column with total population</span></span>
+<span id="cb4-52"><a href="level-parish.html#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">pop_total =</span> <span class="fu">select</span>(., <span class="fu">starts_with</span>(<span class="st">&quot;pop_&quot;</span>)) <span class="sc">%&gt;%</span> <span class="fu">rowSums</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-53"><a href="level-parish.html#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Put NA when pop_* is 0</span></span>
+<span id="cb4-54"><a href="level-parish.html#cb4-54" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span><span class="fu">ifelse</span>(.x <span class="sc">==</span> <span class="dv">0</span>, <span class="cn">NA</span>, .x)))</span>
+<span id="cb4-55"><a href="level-parish.html#cb4-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-56"><a href="level-parish.html#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add the spatial information:</span></span>
+<span id="cb4-57"><a href="level-parish.html#cb4-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-58"><a href="level-parish.html#cb4-58" aria-hidden="true" tabindex="-1"></a>capital_prsh_ancestry_sf <span class="ot">&lt;-</span> capital_prsh <span class="sc">%&gt;%</span></span>
+<span id="cb4-59"><a href="level-parish.html#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prsh_id, prsh_area_km2) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-60"><a href="level-parish.html#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(capital_prsh_ancestry, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;prsh_id&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-61"><a href="level-parish.html#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Population density</span></span>
+<span id="cb4-62"><a href="level-parish.html#cb4-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;pop&quot;</span>), <span class="sc">~</span>.x<span class="sc">/</span>prsh_area_km2, <span class="at">.names =</span> <span class="st">&quot;{.col}_km2&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="level-parish.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Read and clean table KMSTA003</span></span>
+<span id="cb5-2"><a href="level-parish.html#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="level-parish.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Table </span></span>
+<span id="cb5-4"><a href="level-parish.html#cb5-4" aria-hidden="true" tabindex="-1"></a>  id_table <span class="ot">&lt;-</span> <span class="st">&quot;KMSTA003&quot;</span></span>
+<span id="cb5-5"><a href="level-parish.html#cb5-5" aria-hidden="true" tabindex="-1"></a>  var_pop <span class="ot">&lt;-</span> <span class="fu">get_table_metadata</span>(<span class="at">table_id =</span> id_table, <span class="at">variables_only =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-6"><a href="level-parish.html#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="level-parish.html#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Codes for var_input</span></span>
+<span id="cb5-8"><a href="level-parish.html#cb5-8" aria-hidden="true" tabindex="-1"></a>  var_codes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;SOGN&quot;</span>, <span class="st">&quot;KIRKEBEV&quot;</span>, <span class="st">&quot;Tid&quot;</span>)</span>
+<span id="cb5-9"><a href="level-parish.html#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="level-parish.html#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Values for var_input</span></span>
+<span id="cb5-11"><a href="level-parish.html#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Region: all parish</span></span>
+<span id="cb5-12"><a href="level-parish.html#cb5-12" aria-hidden="true" tabindex="-1"></a>  id_region <span class="ot">&lt;-</span> capital_prsh<span class="sc">$</span>prsh_id </span>
+<span id="cb5-13"><a href="level-parish.html#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ancestry</span></span>
+<span id="cb5-14"><a href="level-parish.html#cb5-14" aria-hidden="true" tabindex="-1"></a>  id_movements <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb5-15"><a href="level-parish.html#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Quarters</span></span>
+<span id="cb5-16"><a href="level-parish.html#cb5-16" aria-hidden="true" tabindex="-1"></a>  id_year <span class="ot">&lt;-</span> var_pop<span class="sc">$</span>values[[<span class="dv">3</span>]]<span class="sc">$</span>id[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]   <span class="co"># data from 2015 to 2019</span></span>
+<span id="cb5-17"><a href="level-parish.html#cb5-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-18"><a href="level-parish.html#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Read data</span></span>
+<span id="cb5-19"><a href="level-parish.html#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>) </span>
+<span id="cb5-20"><a href="level-parish.html#cb5-20" aria-hidden="true" tabindex="-1"></a>  capital_prsh_stats_read <span class="ot">&lt;-</span> id_year <span class="sc">%&gt;%</span></span>
+<span id="cb5-21"><a href="level-parish.html#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">future_map_dfr</span>(steps)</span>
+<span id="cb5-22"><a href="level-parish.html#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
+<span id="cb5-23"><a href="level-parish.html#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="level-parish.html#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean data </span></span>
+<span id="cb5-25"><a href="level-parish.html#cb5-25" aria-hidden="true" tabindex="-1"></a>  capital_prsh_stats <span class="ot">&lt;-</span> capital_prsh_stats_read <span class="sc">%&gt;%</span></span>
+<span id="cb5-26"><a href="level-parish.html#cb5-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Translate column names into English</span></span>
+<span id="cb5-27"><a href="level-parish.html#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">parish =</span> SOGN,</span>
+<span id="cb5-28"><a href="level-parish.html#cb5-28" aria-hidden="true" tabindex="-1"></a>           <span class="at">movements =</span> KIRKEBEV,</span>
+<span id="cb5-29"><a href="level-parish.html#cb5-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">year =</span> TID, </span>
+<span id="cb5-30"><a href="level-parish.html#cb5-30" aria-hidden="true" tabindex="-1"></a>           <span class="at">value =</span> INDHOLD) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-31"><a href="level-parish.html#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Get parish codes, names, and municipality names</span></span>
+<span id="cb5-32"><a href="level-parish.html#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">separate</span>(parish,</span>
+<span id="cb5-33"><a href="level-parish.html#cb5-33" aria-hidden="true" tabindex="-1"></a>             <span class="fu">c</span>(<span class="st">&quot;prsh_id&quot;</span>, <span class="st">&quot;prsh_name&quot;</span>, <span class="st">&quot;muni_name&quot;</span>),</span>
+<span id="cb5-34"><a href="level-parish.html#cb5-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">sep =</span> <span class="st">&quot; &quot;</span>,</span>
+<span id="cb5-35"><a href="level-parish.html#cb5-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">extra =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-36"><a href="level-parish.html#cb5-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">muni_name =</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">(&quot;</span>, <span class="st">&quot;&quot;</span>, muni_name)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-37"><a href="level-parish.html#cb5-37" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clean arguments in movements (remove punctuation, stop-words, stem, and collapse)</span></span>
+<span id="cb5-38"><a href="level-parish.html#cb5-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">movements =</span> <span class="fu">rm_words</span>(movements, <span class="fu">c</span>(<span class="st">&quot;in&quot;</span>, <span class="st">&quot;the&quot;</span>, <span class="st">&quot;of&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb5-39"><a href="level-parish.html#cb5-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pivot (one row for each parish and year) </span></span>
+<span id="cb5-40"><a href="level-parish.html#cb5-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> movements, <span class="at">values_from =</span> value)</span>
+<span id="cb5-41"><a href="level-parish.html#cb5-41" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb5-42"><a href="level-parish.html#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="do">## Merge both datasets in one</span></span>
+<span id="cb5-43"><a href="level-parish.html#cb5-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-44"><a href="level-parish.html#cb5-44" aria-hidden="true" tabindex="-1"></a>capital_prsh_pop <span class="ot">&lt;-</span> capital_prsh_ancestry <span class="sc">%&gt;%</span>  </span>
+<span id="cb5-45"><a href="level-parish.html#cb5-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(capital_prsh_stats) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-46"><a href="level-parish.html#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove rows with NAs</span></span>
+<span id="cb5-47"><a href="level-parish.html#cb5-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb5-48"><a href="level-parish.html#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="level-parish.html#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="do">## Add the spatial information:</span></span>
+<span id="cb5-50"><a href="level-parish.html#cb5-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-51"><a href="level-parish.html#cb5-51" aria-hidden="true" tabindex="-1"></a>capital_prsh_pop_sf <span class="ot">&lt;-</span> capital_prsh <span class="sc">%&gt;%</span></span>
+<span id="cb5-52"><a href="level-parish.html#cb5-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prsh_id, prsh_area_km2) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-53"><a href="level-parish.html#cb5-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(capital_prsh_pop, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;prsh_id&quot;</span>)) </span></code></pre></div>
+<p>Population density by parish from 2008 to 2019.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="level-parish.html#cb6-1" aria-hidden="true" tabindex="-1"></a>capital_prsh_ancestry_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="level-parish.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb6-3"><a href="level-parish.html#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> dk_country_crop,</span>
+<span id="cb6-4"><a href="level-parish.html#cb6-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-5"><a href="level-parish.html#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_total_km2)) <span class="sc">+</span></span>
+<span id="cb6-6"><a href="level-parish.html#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>(<span class="at">name =</span> <span class="st">&quot;ppl/km2&quot;</span>,</span>
+<span id="cb6-7"><a href="level-parish.html#cb6-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">option =</span> <span class="st">&quot;magma&quot;</span>,</span>
+<span id="cb6-8"><a href="level-parish.html#cb6-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, </span>
+<span id="cb6-9"><a href="level-parish.html#cb6-9" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-10"><a href="level-parish.html#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> capital_muni, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="level-parish.html#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb6-12"><a href="level-parish.html#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span>year, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-pop-parish"></span>
+<img src="Housing_prices_book_files/figure-html/fig-pop-parish-1.png" alt="Population density" width="960" />
+<p class="caption">
+Figure 3.2: Population density
+</p>
+</div>
+<p>There are missing data form some parishes (i.e. mainly in Copenhagen City and from 2011-2015; Figure <a href="level-parish.html#fig:fig-pop-parish">3.2</a>). (TRYE to estimate values in this parishes?? e.g. base on the population at municipality and the total number of residential dwellings in each parish…..??)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="level-parish.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># population at municipality level (at the first day of the year)</span></span>
+<span id="cb7-2"><a href="level-parish.html#cb7-2" aria-hidden="true" tabindex="-1"></a>capital_muni_pop_sf <span class="ot">&lt;-</span> dk_muni_pop <span class="sc">%&gt;%</span>  </span>
+<span id="cb7-3"><a href="level-parish.html#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get population at the first day of the year</span></span>
+<span id="cb7-4"><a href="level-parish.html#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(muni_name <span class="sc">%in%</span> capital_region_muni) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="level-parish.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(date, <span class="fu">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;day&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="level-parish.html#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">==</span> <span class="st">&quot;01&quot;</span>)</span>
+<span id="cb7-7"><a href="level-parish.html#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="level-parish.html#cb7-8" aria-hidden="true" tabindex="-1"></a>capital_muni_pop_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb7-9"><a href="level-parish.html#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ancestry <span class="sc">==</span> <span class="st">&quot;Total&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="level-parish.html#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb7-11"><a href="level-parish.html#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> dk_country_crop,</span>
+<span id="cb7-12"><a href="level-parish.html#cb7-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">fill =</span> <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="level-parish.html#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> pop_km2)) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="level-parish.html#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis</span>(<span class="at">name =</span> <span class="st">&quot;ppl/km2&quot;</span>,</span>
+<span id="cb7-15"><a href="level-parish.html#cb7-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">option =</span> <span class="st">&quot;magma&quot;</span>,</span>
+<span id="cb7-16"><a href="level-parish.html#cb7-16" aria-hidden="true" tabindex="-1"></a>                     <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, </span>
+<span id="cb7-17"><a href="level-parish.html#cb7-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="level-parish.html#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> capital_muni, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="level-parish.html#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
+<span id="cb7-20"><a href="level-parish.html#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span>year, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-pop-muni"></span>
+<img src="Housing_prices_book_files/figure-html/fig-pop-muni-1.png" alt="Population density at municipality level" width="960" />
+<p class="caption">
+Figure 3.3: Population density at municipality level
+</p>
+</div>
+</div>
+<div id="house-prices-at-parish-level" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> House prices at parish level</h2>
+<p>W have used all residences for year-round living (<em>ENH_ANVEND_KODE</em>) (i.e. from the Building and Dwelling Register - <a href="https://teknik.bbr.dk/forside">BBR</a>. We remove from the dataset, however, those dwellings that are not actually used for residential purpose (i.e. <em>BOLIGTYPE_KODE <span class="math inline">\(\neq\)</span> E - Andet (bl.a. institutioner og erhverv)</em> or <em>BOLIGTYPE_KODE <span class="math inline">\(\neq\)</span> 5 - Sommer-/fritidsbolig</em>) and dwellings with a size lower than that 10 <span class="math inline">\(m^2\)</span>. We also focus our analysis to the main building types in the City of Copenhagen, which are in this order: i) multi-storey residential buildings (code 140), ii) detached single-family houses (codes 120, 121, 122), and iii) semi-detached houses (codes 130, 131, 132). Colleges were excluded from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.</p>
+<p>We also select from the main residential buildings those that are on the ordinary free trade (<em>OVERDRAGELSES_KODE == 1 - Almindelig frit salg</em>) or public sales (<em>OVERDRAGELSES_KODE == 3 - Auktion</em>), since these values represent what people are willing to pay for own a property. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter (<span class="math inline">\(kDDK/m^2\)</span>) by dividing the 2019 adjusted prices and the size of the dwelling (<em>BEBO_ARL</em>). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="level-parish.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Buildings for year round living</span></span>
+<span id="cb8-2"><a href="level-parish.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  res_codes <span class="ot">&lt;-</span> <span class="fu">tribble</span> (<span class="sc">~</span>ENH_ANVEND_KODE, <span class="sc">~</span>type,</span>
+<span id="cb8-3"><a href="level-parish.html#cb8-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">120</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb8-4"><a href="level-parish.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">121</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb8-5"><a href="level-parish.html#cb8-5" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">122</span>, <span class="st">&quot;Single-family house&quot;</span>,</span>
+<span id="cb8-6"><a href="level-parish.html#cb8-6" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">130</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
+<span id="cb8-7"><a href="level-parish.html#cb8-7" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">131</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
+<span id="cb8-8"><a href="level-parish.html#cb8-8" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">132</span>, <span class="st">&quot;Semi-detached house&quot;</span>,</span>
+<span id="cb8-9"><a href="level-parish.html#cb8-9" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">140</span>, <span class="st">&quot;Multi-storey&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="level-parish.html#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert type to factor</span></span>
+<span id="cb8-11"><a href="level-parish.html#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">type =</span> <span class="fu">factor</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-12"><a href="level-parish.html#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to data.table</span></span>
+<span id="cb8-13"><a href="level-parish.html#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.data.table</span>()</span>
+<span id="cb8-14"><a href="level-parish.html#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="level-parish.html#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Function for reading residential units in the study area from a BBR files (.csv):</span></span>
+<span id="cb8-16"><a href="level-parish.html#cb8-16" aria-hidden="true" tabindex="-1"></a>f_runits_oft_capital <span class="ot">&lt;-</span> <span class="cf">function</span>(.file, <span class="at">.muni =</span> study_area_codes) {</span>
+<span id="cb8-17"><a href="level-parish.html#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fread</span>(.file) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-18"><a href="level-parish.html#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select only Residential houses - Buildings for year-round living</span></span>
+<span id="cb8-19"><a href="level-parish.html#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter.</span>(ENH_ANVEND_KODE <span class="sc">%in%</span> res_codes<span class="sc">$</span>ENH_ANVEND_KODE) <span class="sc">%&gt;%</span></span>
+<span id="cb8-20"><a href="level-parish.html#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format KomKode and select municipalities of the study area</span></span>
+<span id="cb8-21"><a href="level-parish.html#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">KomKode =</span> <span class="fu">paste0</span>(<span class="st">&quot;0&quot;</span>, KomKode)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-22"><a href="level-parish.html#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter.</span>(KomKode <span class="sc">%in%</span> .muni) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-23"><a href="level-parish.html#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove residential units not used for for residential purpose</span></span>
+<span id="cb8-24"><a href="level-parish.html#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter.</span>(BOLIGTYPE_KODE <span class="sc">!=</span> <span class="st">&quot;E&quot;</span> <span class="sc">|</span> BOLIGTYPE_KODE <span class="sc">!=</span> <span class="st">&quot;5&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-25"><a href="level-parish.html#cb8-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove tiny dwellings (area &lt; 10 m2)</span></span>
+<span id="cb8-26"><a href="level-parish.html#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter.</span>(BEBO_ARL <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-27"><a href="level-parish.html#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add year of the BBR dataset </span></span>
+<span id="cb8-28"><a href="level-parish.html#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">year =</span> <span class="fu">parse_number</span>(stringr<span class="sc">::</span><span class="fu">str_extract</span>(.file, <span class="st">&quot;_[0-9]+_&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-29"><a href="level-parish.html#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert house price (KONTANT_KOEBESUM) to numeric and kDKK</span></span>
+<span id="cb8-30"><a href="level-parish.html#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">price_kDKK =</span> KONTANT_KOEBESUM <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb8-31"><a href="level-parish.html#cb8-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">price_kDKK =</span> <span class="fu">as.numeric</span>(price_kDKK)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-32"><a href="level-parish.html#cb8-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Drop unused factors levels</span></span>
+<span id="cb8-33"><a href="level-parish.html#cb8-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">droplevels</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb8-34"><a href="level-parish.html#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ordinary free trade or auction</span></span>
+<span id="cb8-35"><a href="level-parish.html#cb8-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter.</span>(OVERDRAGELSES_KODE <span class="sc">==</span> <span class="st">&quot;1&quot;</span> <span class="sc">|</span> OVERDRAGELSES_KODE <span class="sc">==</span> <span class="st">&quot;3&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-36"><a href="level-parish.html#cb8-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Remove prices &gt; 0 kDKK</span></span>
+<span id="cb8-37"><a href="level-parish.html#cb8-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter.</span>(price_kDKK <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-38"><a href="level-parish.html#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2019 adjusted house prices</span></span>
+<span id="cb8-39"><a href="level-parish.html#cb8-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join.</span>(price_index, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;year&quot;</span> <span class="ot">=</span> <span class="st">&quot;index_year&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-40"><a href="level-parish.html#cb8-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">index_2019 =</span> price_index_2019<span class="sc">$</span>index_value,</span>
+<span id="cb8-41"><a href="level-parish.html#cb8-41" aria-hidden="true" tabindex="-1"></a>           <span class="at">price_2019_kDKK =</span> (price_kDKK <span class="sc">*</span> index_2019 <span class="sc">/</span> index_value),</span>
+<span id="cb8-42"><a href="level-parish.html#cb8-42" aria-hidden="true" tabindex="-1"></a>           <span class="at">price_2019_kDKK_m2 =</span> price_2019_kDKK <span class="sc">/</span> BEBO_ARL)</span>
+<span id="cb8-43"><a href="level-parish.html#cb8-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-44"><a href="level-parish.html#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-45"><a href="level-parish.html#cb8-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Load residential units (from .csv files)</span></span>
+<span id="cb8-46"><a href="level-parish.html#cb8-46" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: you may need to change the path to your file on &quot;OneDrive - Aalborg Universitet&quot; </span></span>
+<span id="cb8-47"><a href="level-parish.html#cb8-47" aria-hidden="true" tabindex="-1"></a>  csv_files_path <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> <span class="fu">Sys.getenv</span>(<span class="st">&quot;OneDrive_BBR_path&quot;</span>),</span>
+<span id="cb8-48"><a href="level-parish.html#cb8-48" aria-hidden="true" tabindex="-1"></a>                               <span class="at">pattern =</span> <span class="st">&quot;*.csv&quot;</span>,</span>
+<span id="cb8-49"><a href="level-parish.html#cb8-49" aria-hidden="true" tabindex="-1"></a>                               <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-50"><a href="level-parish.html#cb8-50" aria-hidden="true" tabindex="-1"></a>  study_area_codes <span class="ot">&lt;-</span> capital_muni<span class="sc">$</span>muni_id</span>
+<span id="cb8-51"><a href="level-parish.html#cb8-51" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-52"><a href="level-parish.html#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
+<span id="cb8-53"><a href="level-parish.html#cb8-53" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital_read <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_path, <span class="at">.f =</span> f_res_units)</span>
+<span id="cb8-54"><a href="level-parish.html#cb8-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="level-parish.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean dataset</span></span>
+<span id="cb9-2"><a href="level-parish.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital <span class="ot">&lt;-</span> runits_oft_capital_read <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="level-parish.html#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
+<span id="cb9-4"><a href="level-parish.html#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">Etagebetegn =</span> <span class="fu">fifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="level-parish.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Etagebetegn as ordered factor</span></span>
+<span id="cb9-6"><a href="level-parish.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">Etagebetegn =</span> <span class="fu">factor</span>(Etagebetegn,</span>
+<span id="cb9-7"><a href="level-parish.html#cb9-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)),</span>
+<span id="cb9-8"><a href="level-parish.html#cb9-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-9"><a href="level-parish.html#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Group floor levels with 5 or more</span></span>
+<span id="cb9-10"><a href="level-parish.html#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">floor_level =</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
+<span id="cb9-11"><a href="level-parish.html#cb9-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
+<span id="cb9-12"><a href="level-parish.html#cb9-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-13"><a href="level-parish.html#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add residential description (type) into the dataset</span></span>
+<span id="cb9-14"><a href="level-parish.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join.</span>(res_codes, <span class="at">by =</span> <span class="st">&quot;ENH_ANVEND_KODE&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-15"><a href="level-parish.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert columns with codes (*_KODE) to character</span></span>
+<span id="cb9-16"><a href="level-parish.html#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="fu">across.</span>(<span class="fu">ends_with</span>(<span class="st">&quot;KODE&quot;</span>), <span class="sc">~</span><span class="fu">as.character</span>(.))) </span>
+<span id="cb9-17"><a href="level-parish.html#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="level-parish.html#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to sf objects </span></span>
+<span id="cb9-19"><a href="level-parish.html#cb9-19" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital_sf <span class="ot">&lt;-</span> runits_oft_capital <span class="sc">%&gt;%</span> </span>
+<span id="cb9-20"><a href="level-parish.html#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>,</span>
+<span id="cb9-21"><a href="level-parish.html#cb9-21" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
+<span id="cb9-22"><a href="level-parish.html#cb9-22" aria-hidden="true" tabindex="-1"></a>             <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
 
+</div>
 </div>
             </section>
 
@@ -971,7 +1319,7 @@ div.csl-indent {
         </div>
       </div>
 <a href="level-muni.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="level-grids100m.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="level-CPH.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -829,7 +829,7 @@ res_prices <- res_prices %>%
   # Add price index by year and category
   left_join.(price_index, by = c("year" = "index_year")) %>% 
   # Add columns with index_2019
-  mutate.(index_2019 = price_index_2019$index_year) %>% 
+  mutate.(index_2019 = price_index_2019$index_value) %>% 
   # Calculate prices 2019
   mutate.(price_2019_kDKK = (price_kDKK * index_2019 / index_value)) %>% 
   # Price per m2
@@ -893,8 +893,14 @@ dk_muni_prices %>%
 
 Relationship between population density and house prices (median values) at municipality level.
 
-```{r fig-prices-pop-a,  fig.height=8, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
+```{r fig-prices-pop,  fig.height=8, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
 
+# Big cities/urban areas
+  lbls <- c("København", "Aarhus", "Odense", "Aalborg", "Frederiksberg",
+            "Tønder", "Læsø" )
+  dk_muni_prices_lbls <- dk_muni_prices %>% 
+    filter(muni_name %in% lbls) 
+  
 # Plot
 ggplot() +
   geom_point(data = dk_muni_prices,
@@ -965,12 +971,6 @@ ggplot(data = dk_muni_prices,
 
 ```{r fig-prices-pop-b,  fig.height=10, fig.width=10, fig.cap = "Association between population density and median housing prices at municipality level"}
 
-# Big cities/urban areas
-  lbls <- c("København", "Aarhus", "Odense", "Aalborg", "Frederiksberg",
-            "Tønder", "Læsø" )
-  dk_muni_prices_lbls <- dk_muni_prices %>% 
-    filter(muni_name %in% lbls) 
-  
 # Plot
   ggplot(data = dk_muni_prices,
          aes(x = pop_km2_Total,

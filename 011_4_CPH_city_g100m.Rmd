@@ -1,4 +1,4 @@
-# Copenhagen city {#level-grids100m}
+# Copenhagen city {#level-CPH}
 
 We focus the study on Copenhagen (*muni_id = 0101*) and Frederiksberg (*muni_id = 0147*) municipalities (Figure \@ref(fig:fig-CPH-region)A), and we make the analysis at a scale of grid cells of 100m x 100m (Figure \@ref(fig:fig-CPH-region)B). 
 
@@ -444,7 +444,7 @@ Then, we selected from the main residential buildings those that are on the ordi
     droplevels() %>% 
     # 2019 adjusted house prices 
     left_join.(price_index, by = c("year" = "index_year")) %>% 
-    mutate.(index_2019 = price_index_2019$index_year, 
+    mutate.(index_2019 = price_index_2019$index_value, 
            price_2019_kDKK = (price_kDKK * index_2019 / index_value),
            price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL) %>% 
     # Remove prices > 0 kDKK
