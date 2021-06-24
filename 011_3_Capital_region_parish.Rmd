@@ -293,6 +293,7 @@ W have used all residences for year-round living (*ENH_ANVEND_KODE*) (i.e. from 
 We also select from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*), since these values represent what people are willing to pay for own a property. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices and the size of the dwelling (*BEBO_ARL*). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.   
 
 ```{r load-BBR-capital}
+
 # Buildings for year round living
   res_codes <- tribble (~ENH_ANVEND_KODE, ~type,
                         120, "Single-family house",
@@ -348,10 +349,6 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
   runits_oft_capital_read <- future_map_dfr(.x = csv_files_path, .f = f_res_units)
   plan("default")
   
-```
-
-```{r clean-BBR-capital}
-
 # Clean dataset
   runits_oft_capital <- runits_oft_capital_read %>% 
     # Input empty cells (buildings with only one floor) in Etagebetegn as "st"
@@ -377,3 +374,71 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
    
 ```
 
+The total number of residential units used for the analysis is therefore `r nrow(runits_oft_capital)` (Table \@ref(tab:tbl-runits-oft-capital)).
+```{r tbl-runits-oft-capital}
+
+# Table with Number of residential units
+  runits_oft_capital %>%
+    # Summarize by type or residency and year
+    group_by(type, year) %>% 
+    summarise(n = n()) %>% 
+    ungroup() %>%
+    # Arrange and add row with totals
+    arrange(year, desc(n)) %>%
+    # Pivot
+    pivot_wider(names_from = year, values_from = n) %>% 
+    adorn_totals("row") %>%
+    kbl(caption = "Number of residential dwellings in the free trade by year") %>% 
+    kable_paper() %>% 
+    row_spec(4, bold = TRUE) %>% 
+    scroll_box(width = "100%")
+
+```
+
+The summary descriptive statistics of the housing prices are:
+```{r tbl-summary-runits-oft-capital}
+
+# Table theme
+theme_gtsummary_compact()
+
+# Create variable labels of the variables to be printed in the table
+labelled::var_label(runits_oft_capital$price_2019_kDKK) <- "Adjusted prices (kDKK)"
+labelled::var_label(runits_oft_capital$BEBO_ARL)           <- "Dwelling size (m2)"
+labelled::var_label(runits_oft_capital$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
+
+# Summary table
+runits_oft_capital %>% 
+  # Select variables of interest
+  select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
+  # Summary values
+  tbl_summary(by = type,
+              type = all_continuous() ~ "continuous2",
+              statistic = all_continuous() ~ c("{mean}",
+                                               "{median}",
+                                               "{p25} - {p75}", 
+                                               "{min} - {max}"),
+              missing = "no") %>% 
+  add_overall() %>% 
+  modify_spanning_header(c("stat_1", "stat_2", "stat_3") ~ "**House type**") %>% 
+  modify_footnote(update = everything() ~ NA) %>% 
+  bold_labels() 
+
+```
+
+House prices by type (removing very low prices; i.e. <1 kDKK/m2, n = `r nrow(filter(runits_oft_capital, price_2019_kDKK_m2 < 1))`).
+
+```{r fig-runits-oft-type, fig.height=6, fig.width=10, fig.cap="Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices >1 kDkk/m2)"}
+
+ggplot(data = filter(runits_oft_capital, price_2019_kDKK_m2 > 1),
+       aes(y = price_2019_kDKK_m2,
+           x = factor(year),
+           fill = type)) +
+  geom_boxplot(show.legend = FALSE) +
+  scale_y_log10() +
+  labs(x = "",
+       y = "kDKK/m2") +
+  facet_wrap( ~ type) + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+
+```

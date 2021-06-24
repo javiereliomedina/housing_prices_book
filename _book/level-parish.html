@@ -53,6 +53,10 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script>
 /* ========================================================================
  * Bootstrap: transition.js v3.3.7
@@ -1287,29 +1291,800 @@ Figure 3.3: Population density at municipality level
 <span id="cb8-51"><a href="level-parish.html#cb8-51" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb8-52"><a href="level-parish.html#cb8-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(multisession, <span class="at">workers =</span> <span class="dv">7</span>)</span>
 <span id="cb8-53"><a href="level-parish.html#cb8-53" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital_read <span class="ot">&lt;-</span> <span class="fu">future_map_dfr</span>(<span class="at">.x =</span> csv_files_path, <span class="at">.f =</span> f_res_units)</span>
-<span id="cb8-54"><a href="level-parish.html#cb8-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="level-parish.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean dataset</span></span>
-<span id="cb9-2"><a href="level-parish.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital <span class="ot">&lt;-</span> runits_oft_capital_read <span class="sc">%&gt;%</span> </span>
-<span id="cb9-3"><a href="level-parish.html#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
-<span id="cb9-4"><a href="level-parish.html#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">Etagebetegn =</span> <span class="fu">fifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="level-parish.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Etagebetegn as ordered factor</span></span>
-<span id="cb9-6"><a href="level-parish.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">Etagebetegn =</span> <span class="fu">factor</span>(Etagebetegn,</span>
-<span id="cb9-7"><a href="level-parish.html#cb9-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)),</span>
-<span id="cb9-8"><a href="level-parish.html#cb9-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-9"><a href="level-parish.html#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Group floor levels with 5 or more</span></span>
-<span id="cb9-10"><a href="level-parish.html#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">floor_level =</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
-<span id="cb9-11"><a href="level-parish.html#cb9-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
-<span id="cb9-12"><a href="level-parish.html#cb9-12" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-13"><a href="level-parish.html#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add residential description (type) into the dataset</span></span>
-<span id="cb9-14"><a href="level-parish.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join.</span>(res_codes, <span class="at">by =</span> <span class="st">&quot;ENH_ANVEND_KODE&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-15"><a href="level-parish.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert columns with codes (*_KODE) to character</span></span>
-<span id="cb9-16"><a href="level-parish.html#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="fu">across.</span>(<span class="fu">ends_with</span>(<span class="st">&quot;KODE&quot;</span>), <span class="sc">~</span><span class="fu">as.character</span>(.))) </span>
-<span id="cb9-17"><a href="level-parish.html#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-18"><a href="level-parish.html#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to sf objects </span></span>
-<span id="cb9-19"><a href="level-parish.html#cb9-19" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital_sf <span class="ot">&lt;-</span> runits_oft_capital <span class="sc">%&gt;%</span> </span>
-<span id="cb9-20"><a href="level-parish.html#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>,</span>
-<span id="cb9-21"><a href="level-parish.html#cb9-21" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
-<span id="cb9-22"><a href="level-parish.html#cb9-22" aria-hidden="true" tabindex="-1"></a>             <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
+<span id="cb8-54"><a href="level-parish.html#cb8-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plan</span>(<span class="st">&quot;default&quot;</span>)</span>
+<span id="cb8-55"><a href="level-parish.html#cb8-55" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-56"><a href="level-parish.html#cb8-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean dataset</span></span>
+<span id="cb8-57"><a href="level-parish.html#cb8-57" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital <span class="ot">&lt;-</span> runits_oft_capital_read <span class="sc">%&gt;%</span> </span>
+<span id="cb8-58"><a href="level-parish.html#cb8-58" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input empty cells (buildings with only one floor) in Etagebetegn as &quot;st&quot;</span></span>
+<span id="cb8-59"><a href="level-parish.html#cb8-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">Etagebetegn =</span> <span class="fu">fifelse</span>(Etagebetegn <span class="sc">==</span> <span class="st">&quot;&quot;</span>, <span class="st">&quot;st&quot;</span>, Etagebetegn)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-60"><a href="level-parish.html#cb8-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Etagebetegn as ordered factor</span></span>
+<span id="cb8-61"><a href="level-parish.html#cb8-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">Etagebetegn =</span> <span class="fu">factor</span>(Etagebetegn,</span>
+<span id="cb8-62"><a href="level-parish.html#cb8-62" aria-hidden="true" tabindex="-1"></a>                                 <span class="fu">c</span>(<span class="st">&quot;k2&quot;</span>, <span class="st">&quot;kl&quot;</span>, <span class="st">&quot;st&quot;</span>, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">36</span>, <span class="dv">1</span>)),</span>
+<span id="cb8-63"><a href="level-parish.html#cb8-63" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">ordered =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-64"><a href="level-parish.html#cb8-64" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Group floor levels with 5 or more</span></span>
+<span id="cb8-65"><a href="level-parish.html#cb8-65" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="at">floor_level =</span> <span class="fu">fct_other</span>(Etagebetegn,</span>
+<span id="cb8-66"><a href="level-parish.html#cb8-66" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">drop =</span> <span class="fu">factor</span>(<span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">36</span>)),</span>
+<span id="cb8-67"><a href="level-parish.html#cb8-67" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">other_level =</span> <span class="st">&quot;5 or more&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-68"><a href="level-parish.html#cb8-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add residential description (type) into the dataset</span></span>
+<span id="cb8-69"><a href="level-parish.html#cb8-69" aria-hidden="true" tabindex="-1"></a>    <span class="fu">left_join.</span>(res_codes, <span class="at">by =</span> <span class="st">&quot;ENH_ANVEND_KODE&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-70"><a href="level-parish.html#cb8-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert columns with codes (*_KODE) to character</span></span>
+<span id="cb8-71"><a href="level-parish.html#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate.</span>(<span class="fu">across.</span>(<span class="fu">ends_with</span>(<span class="st">&quot;KODE&quot;</span>), <span class="sc">~</span><span class="fu">as.character</span>(.))) </span>
+<span id="cb8-72"><a href="level-parish.html#cb8-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-73"><a href="level-parish.html#cb8-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to sf objects </span></span>
+<span id="cb8-74"><a href="level-parish.html#cb8-74" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital_sf <span class="ot">&lt;-</span> runits_oft_capital <span class="sc">%&gt;%</span> </span>
+<span id="cb8-75"><a href="level-parish.html#cb8-75" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;etrs89koordinat_ost&quot;</span>,</span>
+<span id="cb8-76"><a href="level-parish.html#cb8-76" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;etrs89koordinat_nord&quot;</span>),</span>
+<span id="cb8-77"><a href="level-parish.html#cb8-77" aria-hidden="true" tabindex="-1"></a>             <span class="at">crs =</span> <span class="st">&quot;EPSG:25832&quot;</span>)</span></code></pre></div>
+<p>The total number of residential units used for the analysis is therefore 323463 (Table <a href="level-parish.html#tab:tbl-runits-oft-capital">3.1</a>).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="level-parish.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table with Number of residential units</span></span>
+<span id="cb9-2"><a href="level-parish.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  runits_oft_capital <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="level-parish.html#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Summarize by type or residency and year</span></span>
+<span id="cb9-4"><a href="level-parish.html#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(type, year) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-5"><a href="level-parish.html#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-6"><a href="level-parish.html#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="level-parish.html#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Arrange and add row with totals</span></span>
+<span id="cb9-8"><a href="level-parish.html#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(year, <span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-9"><a href="level-parish.html#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pivot</span></span>
+<span id="cb9-10"><a href="level-parish.html#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> year, <span class="at">values_from =</span> n) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-11"><a href="level-parish.html#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">adorn_totals</span>(<span class="st">&quot;row&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-12"><a href="level-parish.html#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Number of residential dwellings in the free trade by year&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-13"><a href="level-parish.html#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable_paper</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb9-14"><a href="level-parish.html#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">row_spec</span>(<span class="dv">4</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-15"><a href="level-parish.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scroll_box</span>(<span class="at">width =</span> <span class="st">&quot;100%&quot;</span>)</span></code></pre></div>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
+<table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:tbl-runits-oft-capital">Table 3.1: </span>Number of residential dwellings in the free trade by year
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+type
+</th>
+<th style="text-align:right;">
+2004
+</th>
+<th style="text-align:right;">
+2005
+</th>
+<th style="text-align:right;">
+2006
+</th>
+<th style="text-align:right;">
+2007
+</th>
+<th style="text-align:right;">
+2008
+</th>
+<th style="text-align:right;">
+2009
+</th>
+<th style="text-align:right;">
+2010
+</th>
+<th style="text-align:right;">
+2011
+</th>
+<th style="text-align:right;">
+2012
+</th>
+<th style="text-align:right;">
+2013
+</th>
+<th style="text-align:right;">
+2014
+</th>
+<th style="text-align:right;">
+2015
+</th>
+<th style="text-align:right;">
+2016
+</th>
+<th style="text-align:right;">
+2017
+</th>
+<th style="text-align:right;">
+2018
+</th>
+<th style="text-align:right;">
+2019
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Multi-storey
+</td>
+<td style="text-align:right;">
+16314
+</td>
+<td style="text-align:right;">
+19448
+</td>
+<td style="text-align:right;">
+17940
+</td>
+<td style="text-align:right;">
+15528
+</td>
+<td style="text-align:right;">
+9168
+</td>
+<td style="text-align:right;">
+6634
+</td>
+<td style="text-align:right;">
+18887
+</td>
+<td style="text-align:right;">
+11025
+</td>
+<td style="text-align:right;">
+13820
+</td>
+<td style="text-align:right;">
+13146
+</td>
+<td style="text-align:right;">
+15475
+</td>
+<td style="text-align:right;">
+17109
+</td>
+<td style="text-align:right;">
+15330
+</td>
+<td style="text-align:right;">
+16754
+</td>
+<td style="text-align:right;">
+15720
+</td>
+<td style="text-align:right;">
+16328
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Single-family house
+</td>
+<td style="text-align:right;">
+3687
+</td>
+<td style="text-align:right;">
+3672
+</td>
+<td style="text-align:right;">
+2758
+</td>
+<td style="text-align:right;">
+2818
+</td>
+<td style="text-align:right;">
+2423
+</td>
+<td style="text-align:right;">
+2138
+</td>
+<td style="text-align:right;">
+3944
+</td>
+<td style="text-align:right;">
+2735
+</td>
+<td style="text-align:right;">
+3240
+</td>
+<td style="text-align:right;">
+3191
+</td>
+<td style="text-align:right;">
+3499
+</td>
+<td style="text-align:right;">
+3958
+</td>
+<td style="text-align:right;">
+3605
+</td>
+<td style="text-align:right;">
+4000
+</td>
+<td style="text-align:right;">
+3700
+</td>
+<td style="text-align:right;">
+3780
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Semi-detached house
+</td>
+<td style="text-align:right;">
+1658
+</td>
+<td style="text-align:right;">
+1786
+</td>
+<td style="text-align:right;">
+1957
+</td>
+<td style="text-align:right;">
+1784
+</td>
+<td style="text-align:right;">
+1465
+</td>
+<td style="text-align:right;">
+1019
+</td>
+<td style="text-align:right;">
+2064
+</td>
+<td style="text-align:right;">
+1567
+</td>
+<td style="text-align:right;">
+1672
+</td>
+<td style="text-align:right;">
+1695
+</td>
+<td style="text-align:right;">
+1862
+</td>
+<td style="text-align:right;">
+2318
+</td>
+<td style="text-align:right;">
+2837
+</td>
+<td style="text-align:right;">
+2921
+</td>
+<td style="text-align:right;">
+2944
+</td>
+<td style="text-align:right;">
+2140
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;">
+Total
+</td>
+<td style="text-align:right;font-weight: bold;">
+21659
+</td>
+<td style="text-align:right;font-weight: bold;">
+24906
+</td>
+<td style="text-align:right;font-weight: bold;">
+22655
+</td>
+<td style="text-align:right;font-weight: bold;">
+20130
+</td>
+<td style="text-align:right;font-weight: bold;">
+13056
+</td>
+<td style="text-align:right;font-weight: bold;">
+9791
+</td>
+<td style="text-align:right;font-weight: bold;">
+24895
+</td>
+<td style="text-align:right;font-weight: bold;">
+15327
+</td>
+<td style="text-align:right;font-weight: bold;">
+18732
+</td>
+<td style="text-align:right;font-weight: bold;">
+18032
+</td>
+<td style="text-align:right;font-weight: bold;">
+20836
+</td>
+<td style="text-align:right;font-weight: bold;">
+23385
+</td>
+<td style="text-align:right;font-weight: bold;">
+21772
+</td>
+<td style="text-align:right;font-weight: bold;">
+23675
+</td>
+<td style="text-align:right;font-weight: bold;">
+22364
+</td>
+<td style="text-align:right;font-weight: bold;">
+22248
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The summary descriptive statistics of the housing prices are:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="level-parish.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Table theme</span></span>
+<span id="cb10-2"><a href="level-parish.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_gtsummary_compact</span>()</span>
+<span id="cb10-3"><a href="level-parish.html#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="level-parish.html#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create variable labels of the variables to be printed in the table</span></span>
+<span id="cb10-5"><a href="level-parish.html#cb10-5" aria-hidden="true" tabindex="-1"></a>labelled<span class="sc">::</span><span class="fu">var_label</span>(runits_oft_capital<span class="sc">$</span>price_2019_kDKK) <span class="ot">&lt;-</span> <span class="st">&quot;Adjusted prices (kDKK)&quot;</span></span>
+<span id="cb10-6"><a href="level-parish.html#cb10-6" aria-hidden="true" tabindex="-1"></a>labelled<span class="sc">::</span><span class="fu">var_label</span>(runits_oft_capital<span class="sc">$</span>BEBO_ARL)           <span class="ot">&lt;-</span> <span class="st">&quot;Dwelling size (m2)&quot;</span></span>
+<span id="cb10-7"><a href="level-parish.html#cb10-7" aria-hidden="true" tabindex="-1"></a>labelled<span class="sc">::</span><span class="fu">var_label</span>(runits_oft_capital<span class="sc">$</span>price_2019_kDKK_m2) <span class="ot">&lt;-</span> <span class="st">&quot;Adjusted prices per square meter (kDKK/m2)&quot;</span></span>
+<span id="cb10-8"><a href="level-parish.html#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="level-parish.html#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary table</span></span>
+<span id="cb10-10"><a href="level-parish.html#cb10-10" aria-hidden="true" tabindex="-1"></a>runits_oft_capital <span class="sc">%&gt;%</span> </span>
+<span id="cb10-11"><a href="level-parish.html#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select variables of interest</span></span>
+<span id="cb10-12"><a href="level-parish.html#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) <span class="sc">%&gt;%</span></span>
+<span id="cb10-13"><a href="level-parish.html#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Summary values</span></span>
+<span id="cb10-14"><a href="level-parish.html#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> type,</span>
+<span id="cb10-15"><a href="level-parish.html#cb10-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">type =</span> <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">&quot;continuous2&quot;</span>,</span>
+<span id="cb10-16"><a href="level-parish.html#cb10-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">statistic =</span> <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="fu">c</span>(<span class="st">&quot;{mean}&quot;</span>,</span>
+<span id="cb10-17"><a href="level-parish.html#cb10-17" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;{median}&quot;</span>,</span>
+<span id="cb10-18"><a href="level-parish.html#cb10-18" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;{p25} - {p75}&quot;</span>, </span>
+<span id="cb10-19"><a href="level-parish.html#cb10-19" aria-hidden="true" tabindex="-1"></a>                                               <span class="st">&quot;{min} - {max}&quot;</span>),</span>
+<span id="cb10-20"><a href="level-parish.html#cb10-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">missing =</span> <span class="st">&quot;no&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-21"><a href="level-parish.html#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_overall</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-22"><a href="level-parish.html#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_spanning_header</span>(<span class="fu">c</span>(<span class="st">&quot;stat_1&quot;</span>, <span class="st">&quot;stat_2&quot;</span>, <span class="st">&quot;stat_3&quot;</span>) <span class="sc">~</span> <span class="st">&quot;**House type**&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-23"><a href="level-parish.html#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_footnote</span>(<span class="at">update =</span> <span class="fu">everything</span>() <span class="sc">~</span> <span class="cn">NA</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-24"><a href="level-parish.html#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bold_labels</span>() </span></code></pre></div>
+<div id="mwlefoodfi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#mwlefoodfi .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: small;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mwlefoodfi .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 4px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mwlefoodfi .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mwlefoodfi .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mwlefoodfi .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mwlefoodfi .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mwlefoodfi .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mwlefoodfi .gt_group_heading {
+  padding: 1px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mwlefoodfi .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mwlefoodfi .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mwlefoodfi .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mwlefoodfi .gt_row {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mwlefoodfi .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#mwlefoodfi .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mwlefoodfi .gt_first_summary_row {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mwlefoodfi .gt_first_grand_summary_row {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mwlefoodfi .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 1px;
+}
+
+#mwlefoodfi .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mwlefoodfi .gt_sourcenote {
+  font-size: 90%;
+  padding: 1px;
+}
+
+#mwlefoodfi .gt_left {
+  text-align: left;
+}
+
+#mwlefoodfi .gt_center {
+  text-align: center;
+}
+
+#mwlefoodfi .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mwlefoodfi .gt_font_normal {
+  font-weight: normal;
+}
+
+#mwlefoodfi .gt_font_bold {
+  font-weight: bold;
+}
+
+#mwlefoodfi .gt_font_italic {
+  font-style: italic;
+}
+
+#mwlefoodfi .gt_super {
+  font-size: 65%;
+}
+
+#mwlefoodfi .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="2" colspan="1"><strong>Overall</strong>, N = 323,463</th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3">
+        <span class="gt_column_spanner"><strong>House type</strong></span>
+      </th>
+    </tr>
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Multi-storey</strong>, N = 238,626</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Semi-detached house</strong>, N = 31,689</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>Single-family house</strong>, N = 53,148</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">Adjusted prices (kDKK)</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
+<td class="gt_row gt_center">27,550</td>
+<td class="gt_row gt_center">35,513</td>
+<td class="gt_row gt_center">5,443</td>
+<td class="gt_row gt_center">4,979</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
+<td class="gt_row gt_center">3,342</td>
+<td class="gt_row gt_center">3,155</td>
+<td class="gt_row gt_center">3,283</td>
+<td class="gt_row gt_center">3,750</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
+<td class="gt_row gt_center">2,075 - 6,539</td>
+<td class="gt_row gt_center">1,838 - 10,637</td>
+<td class="gt_row gt_center">2,548 - 4,300</td>
+<td class="gt_row gt_center">2,957 - 5,147</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
+<td class="gt_row gt_center">0 - 1,807,452</td>
+<td class="gt_row gt_center">0 - 1,807,452</td>
+<td class="gt_row gt_center">0 - 324,363</td>
+<td class="gt_row gt_center">0 - 240,251</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">Dwelling size (m2)</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
+<td class="gt_row gt_center">96</td>
+<td class="gt_row gt_center">83</td>
+<td class="gt_row gt_center">116</td>
+<td class="gt_row gt_center">143</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
+<td class="gt_row gt_center">88</td>
+<td class="gt_row gt_center">76</td>
+<td class="gt_row gt_center">113</td>
+<td class="gt_row gt_center">137</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
+<td class="gt_row gt_center">64 - 118</td>
+<td class="gt_row gt_center">58 - 99</td>
+<td class="gt_row gt_center">96 - 130</td>
+<td class="gt_row gt_center">112 - 165</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
+<td class="gt_row gt_center">10 - 6,100</td>
+<td class="gt_row gt_center">10 - 6,100</td>
+<td class="gt_row gt_center">12 - 442</td>
+<td class="gt_row gt_center">10 - 1,205</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">Adjusted prices per square meter (kDKK/m2)</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Mean</td>
+<td class="gt_row gt_center">373</td>
+<td class="gt_row gt_center">490</td>
+<td class="gt_row gt_center">49</td>
+<td class="gt_row gt_center">42</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Median</td>
+<td class="gt_row gt_center">34</td>
+<td class="gt_row gt_center">37</td>
+<td class="gt_row gt_center">29</td>
+<td class="gt_row gt_center">29</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">IQR</td>
+<td class="gt_row gt_center">26 - 52</td>
+<td class="gt_row gt_center">27 - 135</td>
+<td class="gt_row gt_center">24 - 38</td>
+<td class="gt_row gt_center">23 - 38</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Range</td>
+<td class="gt_row gt_center">0 - 37,655</td>
+<td class="gt_row gt_center">0 - 37,655</td>
+<td class="gt_row gt_center">0 - 12,038</td>
+<td class="gt_row gt_center">0 - 14,445</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+<p>House prices by type (removing very low prices; i.e. &lt;1 kDKK/m2, n = 1232).</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="level-parish.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">filter</span>(runits_oft_capital, price_2019_kDKK_m2 <span class="sc">&gt;</span> <span class="dv">1</span>),</span>
+<span id="cb11-2"><a href="level-parish.html#cb11-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">y =</span> price_2019_kDKK_m2,</span>
+<span id="cb11-3"><a href="level-parish.html#cb11-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="fu">factor</span>(year),</span>
+<span id="cb11-4"><a href="level-parish.html#cb11-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> type)) <span class="sc">+</span></span>
+<span id="cb11-5"><a href="level-parish.html#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="level-parish.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb11-7"><a href="level-parish.html#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb11-8"><a href="level-parish.html#cb11-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;kDKK/m2&quot;</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="level-parish.html#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> type) <span class="sc">+</span> </span>
+<span id="cb11-10"><a href="level-parish.html#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb11-11"><a href="level-parish.html#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:fig-runits-oft-type"></span>
+<img src="Housing_prices_book_files/figure-html/fig-runits-oft-type-1.png" alt="Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices &gt;1 kDkk/m2)" width="960" />
+<p class="caption">
+Figure 3.4: Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices &gt;1 kDkk/m2)
+</p>
+</div>
 
 </div>
 </div>

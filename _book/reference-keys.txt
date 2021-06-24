@@ -64,3 +64,5 @@ merge-both-datasets-in-one
 add-the-spatial-information
 level-CPH
 house-prices-at-parish-level
+tab:tbl-runits-oft-capital
+fig:fig-runits-oft-type
