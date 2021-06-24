@@ -87,9 +87,9 @@ ggplot() +
 
 Population data at parish level was uploaded from Denmark Statistics: Tables:
 
-- [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree).
-- [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree).
- 
+-   [KMSTA001: Population 1. January by parish, ancestry and National Church](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA001&PLanguage=1&PXSId=0&wsid=cftree).
+-   [KMSTA003: Summary vital statistics by parish and movements](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?MainTable=KMSTA003&PLanguage=1&PXSId=0&wsid=cftree).
+
 ```{r aux-functions}
 
 ## Auxiliary functions for reading the data with the package *danstat*
@@ -239,8 +239,8 @@ capital_prsh_pop_sf <- capital_prsh %>%
   left_join(capital_prsh_pop, by = c("prsh_id")) 
 
 ```
- 
-Population density by parish from 2008 to 2019. 
+
+Population density by parish from 2008 to 2019.
 
 ```{r fig-pop-parish, fig.height=10, fig.width=10, fig.cap = "Population density"}
 
@@ -286,11 +286,11 @@ capital_muni_pop_sf %>%
 
 ```
 
-## House prices at parish level 
+## House prices at parish level
 
-W have used all residences for year-round living (*ENH_ANVEND_KODE*) (i.e. from the Building and Dwelling Register  - [BBR](https://teknik.bbr.dk/forside). We remove from the dataset, however, those dwellings that are not actually used for residential purpose (i.e. *BOLIGTYPE_KODE $\neq$ E - Andet (bl.a. institutioner og erhverv)* or *BOLIGTYPE_KODE $\neq$ 5 - Sommer-/fritidsbolig*) and dwellings with a size lower than that 10 $m^2$. We also focus our analysis to the main building types in the City of Copenhagen, which are in this order: i) multi-storey residential buildings (code 140), ii) detached single-family houses (codes 120, 121, 122), and iii) semi-detached houses (codes 130, 131, 132). Colleges were excluded  from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked. 
+W have used all residences for year-round living (*ENH_ANVEND_KODE*) (i.e. from the Building and Dwelling Register - [BBR](https://teknik.bbr.dk/forside). We remove from the dataset, however, those dwellings that are not actually used for residential purpose (i.e. *BOLIGTYPE_KODE* $\neq$ E - Andet (bl.a. institutioner og erhverv) or *BOLIGTYPE_KODE* $\neq$ 5 - Sommer-/fritidsbolig) and dwellings with a size lower than that 10 $m^2$. We also focus our analysis to the main building types in the City of Copenhagen, which are in this order: i) multi-storey residential buildings (code 140), ii) detached single-family houses (codes 120, 121, 122), and iii) semi-detached houses (codes 130, 131, 132). Colleges were excluded from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.
 
-We also select from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales  (*OVERDRAGELSES_KODE == 3 - Auktion*), since these values represent what people are willing to pay for own a property. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices and the size of the dwelling (*BEBO_ARL*). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.   
+We also select from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales (*OVERDRAGELSES_KODE == 3 - Auktion*), since these values represent what people are willing to pay for own a property. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices and the size of the dwelling (*BEBO_ARL*). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.
 
 ```{r load-BBR-capital}
 
@@ -346,9 +346,14 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
   study_area_codes <- capital_muni$muni_id
     
   plan(multisession, workers = 7)
-  runits_oft_capital_read <- future_map_dfr(.x = csv_files_path, .f = f_res_units)
+  runits_oft_capital_read <- future_map_dfr(.x = csv_files_path,
+                                            .f = f_runits_oft_capital)
   plan("default")
   
+```
+
+```{r clean-BBR-capital}
+
 # Clean dataset
   runits_oft_capital <- runits_oft_capital_read %>% 
     # Input empty cells (buildings with only one floor) in Etagebetegn as "st"
@@ -366,48 +371,60 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
     # Convert columns with codes (*_KODE) to character
     mutate.(across.(ends_with("KODE"), ~as.character(.))) 
 
-# Convert to sf objects 
-  runits_oft_capital_sf <- runits_oft_capital %>% 
-    st_as_sf(coords = c("etrs89koordinat_ost",
-                        "etrs89koordinat_nord"),
-             crs = "EPSG:25832")
-   
+# Convert to sf objects and add population data by ancestry
+plan(multisession, workers = 7)
+
+runits_oft_capital_sf <- runits_oft_capital %>% 
+  st_as_sf(coords = c("etrs89koordinat_ost",
+                      "etrs89koordinat_nord"),
+           crs = "EPSG:25832") %>% 
+  # Detect to what parish belongs a house
+  group_split(year) %>%  
+  future_map_dfr(., ~st_intersection(., capital_prsh, tolerance	= 50),
+                 .options = furrr_options(seed = 123))
+
+plan("default")
+ 
 ```
 
-The total number of residential units used for the analysis is therefore `r nrow(runits_oft_capital)` (Table \@ref(tab:tbl-runits-oft-capital)).
+The total number of residential units used for the analysis is therefore `r nrow(runits_oft_capital_sf)` (Table \@ref(tab:tbl-runits-oft-capital)).
+
 ```{r tbl-runits-oft-capital}
 
 # Table with Number of residential units
-  runits_oft_capital %>%
-    # Summarize by type or residency and year
-    group_by(type, year) %>% 
-    summarise(n = n()) %>% 
-    ungroup() %>%
-    # Arrange and add row with totals
-    arrange(year, desc(n)) %>%
-    # Pivot
-    pivot_wider(names_from = year, values_from = n) %>% 
-    adorn_totals("row") %>%
-    kbl(caption = "Number of residential dwellings in the free trade by year") %>% 
-    kable_paper() %>% 
-    row_spec(4, bold = TRUE) %>% 
-    scroll_box(width = "100%")
+runits_oft_capital_sf %>%
+  as_tibble() %>% 
+  # Summarize by type or residency and year
+  group_by(type, year) %>% 
+  summarise(n = n()) %>% 
+  ungroup() %>%
+  # Arrange and add row with totals
+  arrange(year, desc(n)) %>%
+  # Pivot
+  pivot_wider(names_from = year, values_from = n) %>% 
+  adorn_totals("row") %>%
+  kbl(caption = "Number of residential dwellings in the free trade by year") %>% 
+  kable_paper() %>% 
+  row_spec(4, bold = TRUE) %>% 
+  scroll_box(width = "100%")
 
 ```
 
 The summary descriptive statistics of the housing prices are:
+
 ```{r tbl-summary-runits-oft-capital}
 
 # Table theme
 theme_gtsummary_compact()
 
 # Create variable labels of the variables to be printed in the table
-labelled::var_label(runits_oft_capital$price_2019_kDKK) <- "Adjusted prices (kDKK)"
-labelled::var_label(runits_oft_capital$BEBO_ARL)           <- "Dwelling size (m2)"
-labelled::var_label(runits_oft_capital$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
+labelled::var_label(runits_oft_capital_sf$price_2019_kDKK) <- "Adjusted prices (kDKK)"
+labelled::var_label(runits_oft_capital_sf$BEBO_ARL)           <- "Dwelling size (m2)"
+labelled::var_label(runits_oft_capital_sf$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
 
 # Summary table
-runits_oft_capital %>% 
+runits_oft_capital_sf %>%
+  as_tidytable() %>%
   # Select variables of interest
   select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
   # Summary values
@@ -425,11 +442,11 @@ runits_oft_capital %>%
 
 ```
 
-House prices by type (removing very low prices; i.e. <1 kDKK/m2, n = `r nrow(filter(runits_oft_capital, price_2019_kDKK_m2 < 1))`).
+House prices by type (removing very low prices; i.e. \<1 kDKK/m2, n = `r nrow(filter(runits_oft_capital_sf, price_2019_kDKK_m2 < 1))`).
 
 ```{r fig-runits-oft-type, fig.height=6, fig.width=10, fig.cap="Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices >1 kDkk/m2)"}
 
-ggplot(data = filter(runits_oft_capital, price_2019_kDKK_m2 > 1),
+ggplot(data = filter(runits_oft_capital_sf, price_2019_kDKK_m2 > 1),
        aes(y = price_2019_kDKK_m2,
            x = factor(year),
            fill = type)) +
@@ -440,5 +457,83 @@ ggplot(data = filter(runits_oft_capital, price_2019_kDKK_m2 > 1),
   facet_wrap( ~ type) + 
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+
+```
+
+House prices parish (spatial distribution)
+
+```{r runits-oft-prices-parish}
+
+# Summary house prices by parish 
+sum_runits_oft_prices <- runits_oft_capital_sf %>% 
+  as.data.table() %>% 
+  summarise.(n_runits_oft = n(), 
+            mean_2019_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
+            median_2019_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE),
+            .by = c(year, prsh_id)) %>% 
+  # Link with population data by ancestry 
+  left_join.(capital_prsh_ancestry_sf) %>% 
+  st_sf() %>% 
+  # Data from 2008
+  filter(year >= 2008)
+ 
+```
+
+```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+
+# Aux. function for plotting
+f_plot <- function(df) {
+  ggplot() +
+    geom_sf(data = dk_country_crop, fill = "grey") +
+    geom_sf(data = df, 
+            aes(fill = cut(median_2019_kDKK_m2,
+                           breaks = quantile(sum_runits_oft_prices$median_2019_kDKK_m2,
+                                             seq(0, 1, 0.1)), 
+                           include.lowest = TRUE, 
+                           right = TRUE, 
+                           dig.lab = 0,
+                           ordered_result = TRUE)),
+            color = NA) +
+    geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.05) +
+    scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
+                       option = "magma",
+                       direction = -1) +
+    my_theme_map() +
+    labs(x = "",
+         y = "",
+         caption = paste("Date", df$year, sep = ": "))
+}
+
+# Plot each year
+plan(multisession, workers = 7)
+plts <- sum_runits_oft_prices %>% 
+  group_split(year) %>%  
+  future_map(., .f = f_plot, .options = furrr_options(seed = 123))
+plan("default")
+
+# Animation
+years_pd <- seq(2008, 2019, 1) 
+for(i in seq_along(years_pd)) { print(plts[[i]]) }
+
+```
+
+```{r fig-prices-runits-parish-b,  fig.height=10, fig.width=10, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+
+ggplot() +
+  geom_sf(data = dk_country_crop, fill = "grey") +
+  geom_sf(data = sum_runits_oft_prices, 
+          aes(fill = cut_number(median_2019_kDKK_m2,
+                                n = 10,
+                                ordered_result = TRUE,
+                                dig.lab = 0)),
+          color = NA) +
+  geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.05) +
+  scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
+                     option = "magma",
+                     direction = -1) +
+  my_theme_map() +
+  labs(x = "",
+       y = "") +
+  facet_wrap( ~year, ncol = 3)
 
 ```

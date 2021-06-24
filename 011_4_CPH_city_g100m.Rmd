@@ -428,6 +428,10 @@ However, for housing prices we focus our analysis to the main building types in 
 ```
 
 ```{r runits-prices-grid}
+
+res_units_oft <- runits_oft_capital %>% 
+  filter(KomKode %in% study_area_codes)
+  
 # Detect to what grid belongs a house
 plan(multisession, workers = 7)
 res_units_oft_g100m <- res_units_oft %>%
