@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Housing prices Copenhagen</title>
+  <title>Chapter 1 Population growth, migration and house prices | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Housing prices Copenhagen" />
+  <meta property="og:title" content="Chapter 1 Population growth, migration and house prices | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="javiereliomedina/housing_prices_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Housing prices Copenhagen" />
+  <meta name="twitter:title" content="Chapter 1 Population growth, migration and house prices | Housing prices Copenhagen" />
   
   <meta name="twitter:description" content="Housing prices BBR data" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="intro.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="level-muni.html"/>
 <script src="libs/header-attrs-2.8/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -965,144 +965,45 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Housing prices Copenhagen</h1>
-<p class="author"><em>Javier Elío, Henning S. Hansen, Frederik S. Hass, Carsten Keßler</em></p>
-<p class="date" style="margin-top: 1.5em;"><em>2021-06-25</em></p>
-</div>
-<div id="prerequisite" class="section level1 unnumbered">
-<h1>Prerequisite</h1>
-<p>The data have been analysed with <strong>R</strong> (version 4.1.0) and <strong>Rstudio</strong> (version 1.4.1717), and the book has been created with <strong>bookdown</strong> package. The required packages are automatically checked and installed if needed from CRAN.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an auxiliary function for checking if a package is installed,</span></span>
-<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install it if it is not, and load the package</span></span>
-<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (based on https://gist.github.com/stevenworthington/3178163) </span></span>
-<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a> ipak <span class="ot">&lt;-</span> <span class="cf">function</span>(pkg){</span>
-<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a>    new_pkg <span class="ot">&lt;-</span> pkg[<span class="sc">!</span>(pkg <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[, <span class="st">&quot;Package&quot;</span>])]</span>
-<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(new_pkg)) </span>
-<span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">install.packages</span>(new_pkg,</span>
-<span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">dependencies =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">repos =</span> <span class="st">&quot;http://cran.us.r-project.org&quot;</span>)</span>
-<span id="cb1-11"><a href="index.html#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sapply</span>(pkg, require, <span class="at">character.only =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-12"><a href="index.html#cb1-12" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="index.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># List of packages </span></span>
-<span id="cb1-15"><a href="index.html#cb1-15" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;animation&quot;</span>,</span>
-<span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;biscale&quot;</span>, <span class="st">&quot;bit64&quot;</span>, <span class="st">&quot;bookdown&quot;</span>,</span>
-<span id="cb1-17"><a href="index.html#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;data.table&quot;</span>, <span class="st">&quot;danstat&quot;</span>, <span class="st">&quot;dint&quot;</span>,</span>
-<span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;forcats&quot;</span>, <span class="st">&quot;furrr&quot;</span>, </span>
-<span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggspatial&quot;</span>, <span class="st">&quot;giscoR&quot;</span>, <span class="st">&quot;gtsummary&quot;</span>, <span class="st">&quot;gganimate&quot;</span>, <span class="st">&quot;gifski&quot;</span>,</span>
-<span id="cb1-20"><a href="index.html#cb1-20" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;ggforce&quot;</span>,</span>
-<span id="cb1-21"><a href="index.html#cb1-21" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;janitor&quot;</span>,</span>
-<span id="cb1-22"><a href="index.html#cb1-22" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;kableExtra&quot;</span>, <span class="st">&quot;knitr&quot;</span>,</span>
-<span id="cb1-23"><a href="index.html#cb1-23" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;latex2exp&quot;</span>,</span>
-<span id="cb1-24"><a href="index.html#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;mapview&quot;</span>,</span>
-<span id="cb1-25"><a href="index.html#cb1-25" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;osmextract&quot;</span>, <span class="st">&quot;osrm&quot;</span>, <span class="st">&quot;opentripplanner&quot;</span>,</span>
-<span id="cb1-26"><a href="index.html#cb1-26" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;patchwork&quot;</span>, <span class="st">&quot;potential&quot;</span>,</span>
-<span id="cb1-27"><a href="index.html#cb1-27" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;rmarkdown&quot;</span>, <span class="st">&quot;remotes&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;rappdirs&quot;</span>,</span>
-<span id="cb1-28"><a href="index.html#cb1-28" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;SnowballC&quot;</span>, <span class="st">&quot;stars&quot;</span>,</span>
-<span id="cb1-29"><a href="index.html#cb1-29" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;units&quot;</span>,</span>
-<span id="cb1-30"><a href="index.html#cb1-30" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;viridis&quot;</span>,</span>
-<span id="cb1-31"><a href="index.html#cb1-31" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;table1&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;tidytext&quot;</span>, <span class="st">&quot;tidytable&quot;</span>, <span class="st">&quot;tm&quot;</span>, <span class="st">&quot;tools&quot;</span>)</span>
-<span id="cb1-32"><a href="index.html#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-33"><a href="index.html#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Check and install</span></span>
-<span id="cb1-34"><a href="index.html#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ipak</span>(pkg)</span></code></pre></div>
-<p>Furthermore, we have created our own package for downloading <a href="https://kortforsyningen.dk/">kortforsyningen</a> data to a local repository directly from R (i.e. <a href="https://github.com/javiereliomedina/dangeo.git">dangeo</a>). The package can be downloaded from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages from GitHub</span></span>
-<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;devtools&quot;</span>))  <span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
-<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="index.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;dangeo&quot;</span>))  remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/dangeo&quot;</span>)</span>
-<span id="cb2-5"><a href="index.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dangeo)</span>
-<span id="cb2-6"><a href="index.html#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="index.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;ggsflabel&quot;</span>)) devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;yutannihilation/ggsflabel&quot;</span>)</span>
-<span id="cb2-8"><a href="index.html#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggsflabel)</span>
-<span id="cb2-9"><a href="index.html#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="index.html#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;ggpyramid&quot;</span>)) remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;javiereliomedina/ggpyramid&quot;</span>)</span>
-<span id="cb2-11"><a href="index.html#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggpyramid)</span></code></pre></div>
-<p>Although the <em>kortforsyningen</em> data are free, we would need to create a <em>username</em> and a <em>password</em> for getting access to them (you can make it here: <a href="https://kortforsyningen.dk/indhold/min-side-0">“Opret ny bruger”</a>). By default <strong>dangeo</strong> looks for credentials on <code>.Renviron</code> as: <code>kortforsyningen_id = "username"</code> and <code>kortforsyningen_pwd = "password"</code>. You would need to save them with <code>usethis::edit_r_environ()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set username and password </span></span>
-<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># usethis::edit_r_environ() # Open .Renviron file, and save the username (kortforsyningen_id = &quot;your_username&quot;) and password (kortforsyningen_pwd = &quot;your_password&quot;)</span></span></code></pre></div>
-<p>You would also need to define with <code>dangeo_set_param()</code> the local directory where the data are downloaded (<code>loc_dir</code>). It is defined as <code>loc_dir = rappdirs::user_cache_dir()</code>, although it can be changed <code>loc_dir = “./your/local/path”</code>. The first time a file is downloaded with <code>dangeo_get_data()</code>, the process can be time consuming (there are some very big files). However, it will not be downloaded in subsequent calls if the files is already in the local directory (the dataset can be overwritten be setting <code>overwrite = TRUE</code> on <code>dangeo_get_data()</code>). Once we have our <em>username</em> and <em>password</em>, and we have define the local repository for the data, we can set them on our R-session:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="index.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set local repository and password to kortforsyningen</span></span>
-<span id="cb4-2"><a href="index.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dangeo_set_param</span>()</span></code></pre></div>
-<p>Finally, the BBR data are storage in a <em>OneDrive</em> folder. You would need to have access to that folder, and save the path on <code>.Renviron</code> with <code>usethis::edit_r_environ()</code>. It has to be saved as <code>OneDrive_BBR_path = "your/OneDrive/BBR/path"</code>.</p>
-<div id="acknowledgements" class="section level2 unnumbered">
-<h2>Acknowledgements</h2>
-<p>This work has been financed by Aalborg University - AAU (Project: <a href="https://www.flow.aau.dk/">Global flows of migrants and their impact on north European welfare states - FLOW</a>). The sole responsibility of this publication lies with the authors. AAU is not responsible for any use that may be made of the information contained therein.</p>
-</div>
-<div id="r-session" class="section level2 unnumbered">
-<h2>R session</h2>
-<pre><code># R version 4.1.0 (2021-05-18)
-# Platform: x86_64-w64-mingw32/x64 (64-bit)
-# Running under: Windows 10 x64 (build 19042)
-# 
-# Matrix products: default
-# 
-# locale:
-# [1] LC_COLLATE=English_United Kingdom.1252  LC_CTYPE=English_United Kingdom.1252   
-# [3] LC_MONETARY=English_United Kingdom.1252 LC_NUMERIC=C                           
-# [5] LC_TIME=English_United Kingdom.1252    
-# 
-# attached base packages:
-# [1] tools     stats     graphics  grDevices utils     datasets  methods   base     
-# 
-# other attached packages:
-#  [1] ggpyramid_0.0.0.9000  ggsflabel_0.0.1       dangeo_0.0.0.9000     devtools_2.4.1       
-#  [5] usethis_2.0.1         tm_0.7-8              NLP_0.2-1             tidytable_0.6.2      
-#  [9] tidytext_0.3.1        dplyr_1.0.6           purrr_0.3.4           readr_1.4.0          
-# [13] tidyr_1.1.3           tibble_3.1.2          tidyverse_1.3.1       table1_1.4.1         
-# [17] units_0.7-1           stars_0.5-2           abind_1.4-5           SnowballC_0.7.0      
-# [21] stringr_1.4.0         sf_0.9-8              rappdirs_0.3.3        RColorBrewer_1.1-2   
-# [25] remotes_2.3.0         rmarkdown_2.8         potential_0.1.0       patchwork_1.1.1      
-# [29] opentripplanner_0.3.1 osrm_3.4.1            osmextract_0.2.1      mapview_2.9.0        
-# [33] latex2exp_0.5.0       knitr_1.33            kableExtra_1.3.4      janitor_2.1.0        
-# [37] ggforce_0.3.3         gifski_1.4.3-1        gganimate_1.0.7       ggplot2_3.3.3        
-# [41] gtsummary_1.4.1       giscoR_0.2.4          ggspatial_1.1.5       furrr_0.2.2          
-# [45] future_1.21.0         forcats_0.5.1         dint_2.1.3            danstat_0.1.0        
-# [49] data.table_1.14.0     bookdown_0.22         bit64_4.0.5           bit_4.0.4            
-# [53] biscale_0.2.0         animation_2.6        
-# 
-# loaded via a namespace (and not attached):
-#   [1] readxl_1.3.1        backports_1.2.1     systemfonts_1.0.2   lwgeom_0.2-6       
-#   [5] sp_1.4-5            splines_4.1.0       crosstalk_1.1.1     listenv_0.8.0      
-#   [9] leaflet_2.0.4.1     digest_0.6.27       htmltools_0.5.1.1   fansi_0.5.0        
-#  [13] memoise_2.0.0       magrittr_2.0.1      globals_0.14.0      modelr_0.1.8       
-#  [17] svglite_2.0.0       prettyunits_1.1.1   colorspace_2.0-1    rvest_1.0.0        
-#  [21] haven_2.4.1         xfun_0.23           leafem_0.1.6        callr_3.7.0        
-#  [25] crayon_1.4.1        jsonlite_1.7.2      survival_3.2-11     glue_1.4.2         
-#  [29] polyclip_1.10-0     gtable_0.3.0        webshot_0.5.2       pkgbuild_1.2.0     
-#  [33] scales_1.1.1        DBI_1.1.1           Rcpp_1.0.6          isoband_0.2.4      
-#  [37] viridisLite_0.4.0   progress_1.2.2      proxy_0.4-25        Formula_1.2-4      
-#  [41] stats4_4.1.0        htmlwidgets_1.5.3   httr_1.4.2          ellipsis_0.3.2     
-#  [45] pkgconfig_2.0.3     farver_2.1.0        sass_0.4.0          dbplyr_2.1.1       
-#  [49] utf8_1.2.1          tidyselect_1.1.1    rlang_0.4.11        cachem_1.0.5       
-#  [53] munsell_0.5.0       cellranger_1.1.0    cli_2.5.0           generics_0.1.0     
-#  [57] broom_0.7.6         fastmap_1.1.0       evaluate_0.14       yaml_2.2.1         
-#  [61] processx_3.5.2      fs_1.5.0            satellite_1.0.2     slam_0.1-48        
-#  [65] xml2_1.3.2          tokenizers_0.2.1    compiler_4.1.0      rstudioapi_0.13    
-#  [69] png_0.1-7           testthat_3.0.2      e1071_1.7-7         gt_0.3.0           
-#  [73] reprex_2.0.0        broom.helpers_1.3.0 tweenr_1.0.2        bslib_0.2.5.1      
-#  [77] stringi_1.6.2       ps_1.6.0            desc_1.3.0          lattice_0.20-44    
-#  [81] Matrix_1.3-3        classInt_0.4-3      vctrs_0.3.8         pillar_1.6.1       
-#  [85] lifecycle_1.0.0     jquerylib_0.1.4     raster_3.4-10       R6_2.5.0           
-#  [89] KernSmooth_2.23-20  janeaustenr_0.1.5   parallelly_1.25.0   sessioninfo_1.1.1  
-#  [93] codetools_0.2-18    pkgload_1.2.1       MASS_7.3-54         assertthat_0.2.1   
-#  [97] rprojroot_2.0.2     withr_2.4.2         parallel_4.1.0      hms_1.1.0          
-# [101] grid_4.1.0          class_7.3-19        snakecase_0.11.0    lubridate_1.7.10   
-# [105] base64enc_0.1-3</code></pre>
+<div id="intro" class="section level1" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Population growth, migration and house prices</h1>
+<p>Migration and housing prices are closely related with profound implications on urban planning. In this sense, there is a two-way causal relationship between migration and house prices (e.g. <span class="citation"><a href="#ref-Lin2018" role="doc-biblioref">Lin et al.</a> (<a href="#ref-Lin2018" role="doc-biblioref">2018</a>)</span>, <span class="citation"><a href="#ref-Jeanty2010" role="doc-biblioref">Jeanty, Partridge, and Irwin</a> (<a href="#ref-Jeanty2010" role="doc-biblioref">2010</a>)</span>). On the one hand, a rise on house prices will increase household’s housing equity and, therefore, homeowners would have a higher financial flexibility for purchasing a new house. On the other hand, high housing prices can make the house unaffordable. Prices differences between the region where migrants live and regions where they intend to move may also affect in- and out- migration rates. Finally, the expectation of future house prices also plays an important role in the decision to move (<span class="citation"><a href="#ref-Peng2019" role="doc-biblioref">Peng and Tsai</a> (<a href="#ref-Peng2019" role="doc-biblioref">2019</a>)</span>). Furthermore, migration increases the housing demand and, as a consequence, the prices (<span class="citation"><a href="#ref-Wang2017a" role="doc-biblioref">Wang, Hui, and Sun</a> (<a href="#ref-Wang2017a" role="doc-biblioref">2017</a>)</span>). An example of this effect has been found in Sweden where “a 1% increase in the foreign-born population results in a 0.8% increase in house prices, which increases to 1.2% if internal migration is also accounted for” (<span class="citation"><a href="#ref-Tyrcha2019" role="doc-biblioref">Tyrcha and Abreu</a> (<a href="#ref-Tyrcha2019" role="doc-biblioref">2019</a>)</span>).
+We analyse therefore housing prices, population and migration patterns in Denmark, evaluating the influence of housing prices on migration (and vice versa). Specific questions we will respond are, among others:</p>
+<ul>
+<li><p>How have housing prices changed over time in Denmark?</p></li>
+<li><p>How does it affect mobility and the population of a region?</p></li>
+<li><p>What is the effect of immigration on housing prices?</p></li>
+<li><p>What is the percentage of immigrants that own/rent a property?</p></li>
+<li><p>Is there racial segregation of immigrants? How does it affect mobility?</p></li>
+</ul>
+<p>Do the developments of housing prices in areas with significantly higher (or lower) representation of immigrants differ from the developments in nearby areas? If there is an effect, does it differ depending on the immigrants’ country of origin?</p>
 
 </div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Jeanty2010" class="csl-entry">
+Jeanty, P. Wilner, Mark Partridge, and Elena Irwin. 2010. <span>“<span class="nocase">Estimation of a spatial simultaneous equation model of population migration and housing price dynamics</span>.”</span> <em>Regional Science and Urban Economics</em> 40 (5): 343–52. <a href="https://doi.org/10.1016/j.regsciurbeco.2010.01.002">https://doi.org/10.1016/j.regsciurbeco.2010.01.002</a>.
 </div>
-
-
-
+<div id="ref-Lin2018" class="csl-entry">
+Lin, Yingchao, Zhili Ma, Ke Zhao, Weiyan Hu, and Jing Wei. 2018. <span>“<span class="nocase">The Impact of Population Migration on Urban Housing Prices: Evidence from China’s Major Cities</span>.”</span> <em>Sustainability</em> 10 (9): 3169. <a href="https://doi.org/10.3390/su10093169">https://doi.org/10.3390/su10093169</a>.
+</div>
+<div id="ref-Peng2019" class="csl-entry">
+Peng, Chien-Wen, and I-Chun Tsai. 2019. <span>“<span class="nocase">The long- and short-run influences of housing prices on migration</span>.”</span> <em>Cities</em> 93 (May): 253–62. <a href="https://doi.org/10.1016/j.cities.2019.05.011">https://doi.org/10.1016/j.cities.2019.05.011</a>.
+</div>
+<div id="ref-Tyrcha2019" class="csl-entry">
+Tyrcha, Adam, and Maria Abreu. 2019. <span>“<span class="nocase">Migration Diversity and House Prices - Evidence from Sweden</span>.”</span> <em>SSRN Electronic Journal</em>, 1–36. <a href="https://doi.org/10.2139/ssrn.3394234">https://doi.org/10.2139/ssrn.3394234</a>.
+</div>
+<div id="ref-Wang2017a" class="csl-entry">
+Wang, Xin-Rui, Eddie Chi-Man Hui, and Jiu-Xia Sun. 2017. <span>“<span class="nocase">Population migration, urbanization and housing prices: Evidence from the cities in China</span>.”</span> <em>Habitat International</em> 66 (August): 49–56. <a href="https://doi.org/10.1016/j.habitatint.2017.05.010">https://doi.org/10.1016/j.habitatint.2017.05.010</a>.
+</div>
+</div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="level-muni.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -1134,7 +1035,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/index.Rmd",
+"link": "https://github.com/javiereliomedina/housing_prices_book/edit/master/011_1_Intro.Rmd",
 "text": "Edit"
 },
 "history": {
