@@ -13,6 +13,10 @@ fig:fig-price-change-muni
 fig:fig-prices-pop-b
 fig:fig-capital-region
 fig:fig-pop-parish
+fig:fig-pop-parish-dan
+fig:fig-pop-parish-nw
+fig:fig-pop-parish-w
+fig:bivariate-map-migr
 fig:fig-pop-muni
 tab:tbl-runits-oft-capital
 fig:fig-runits-oft-type

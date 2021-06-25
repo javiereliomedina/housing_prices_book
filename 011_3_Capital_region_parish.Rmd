@@ -240,22 +240,104 @@ capital_prsh_pop_sf <- capital_prsh %>%
 
 ```
 
-Population density by parish from 2008 to 2019.
 
-```{r fig-pop-parish, fig.height=10, fig.width=10, fig.cap = "Population density"}
+Where people live in the capital region (by parish), and their change from 2008 to 2019: 
 
-capital_prsh_ancestry_sf %>% 
-  ggplot() +
-  geom_sf(data = dk_country_crop,
-          fill = "grey") +
-  geom_sf(aes(fill = pop_total_km2)) +
-  scale_fill_viridis(name = "ppl/km2",
-                     option = "magma",
-                     direction = -1, 
-                     trans = "log10") +
-  geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.05) +
+
+```{r pop-parish-pct}
+
+# Estimate percentage over the total target pop (dan, nwst, wst) in a year 
+capital_prsh_ancestry_sf <- capital_prsh_ancestry_sf %>% 
+  group_by(year) %>% 
+  mutate(across(.cols = c(pop_dan, pop_frgn_wst, pop_frgn_nwst, pop_total),
+                .fns = ~ 100 * .x / sum(.x, na.rm = TRUE),
+                .names = "{.col}_pct")) %>% 
+  ungroup()
+
+```
+
+
+```{r fig-pop-parish, fig.height=10, fig.width=10, fig.cap = "Total population density"}
+
+# Aux. function for plotting
+plot_ppl_pct <- function(pop) { 
+  capital_prsh_ancestry_sf %>% 
+    ggplot() +
+    geom_sf(data = dk_country_crop, fill = "grey") +
+    geom_sf(aes(fill = {{ pop }} ), color = "grey", size = 0.05) +
+    scale_fill_viridis(name = "Percentage",
+                       option = "magma",
+                       direction = -1, 
+                       limits = c(0, 5.5)) +
+    geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1) +
+    my_theme_map() +
+    facet_wrap( ~year, ncol = 3)
+}
+
+plot_ppl_pct(pop_total_pct)
+
+```
+
+```{r fig-pop-parish-dan, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes"}
+
+plot_ppl_pct(pop_dan_pct)
+
+```
+
+```{r fig-pop-parish-nw, fig.height=10, fig.width=10, fig.cap = "Population distribution of non-Western residents"}
+
+plot_ppl_pct(pop_frgn_nwst_pct)
+
+```
+
+```{r fig-pop-parish-w, fig.height=10, fig.width=10, fig.cap = "Population distribution of Western residents"}
+
+plot_ppl_pct(pop_frgn_wst_pct)
+
+```
+
+```{r bivariate-map-migr, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes vs. Non-western residents"}
+
+# Create classes
+bi_data <- capital_prsh_ancestry_sf %>% 
+  drop_na() %>% 
+  group_by(year) %>% 
+  bi_class(x = pop_dan_pct,
+           y = pop_frgn_nwst_pct,
+           style = "quantile",
+           dim = 3) %>% 
+  ungroup() %>% 
+  st_sf()
+
+# Create map
+p1 <- ggplot() +
+  geom_sf(data = dk_country_crop, fill = "grey") +
+  geom_sf(data = bi_data,
+          mapping = aes(fill = bi_class),
+          size = 0.05, 
+          show.legend = FALSE) +
+  geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1)+
+  bi_scale_fill(pal = "DkBlue", dim = 3) +
   my_theme_map() +
-  facet_wrap( ~year, ncol = 3)
+  facet_wrap(~year, ncol= 3) 
+
+# Create legend
+p_legend <- bi_legend(pal = "DkBlue",
+                      dim = 3,
+                      xlab = "Danes\n(%)",
+                      ylab = "Non-wst\n(%)",
+                      size = 8)
+
+# Plot
+layout <- "
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAAB
+"
+
+p1 + p_legend + plot_layout(design = layout)
 
 ```
 
@@ -285,6 +367,10 @@ capital_muni_pop_sf %>%
   facet_wrap( ~year, ncol = 3)
 
 ```
+
+
+
+
 
 ## House prices at parish level
 
@@ -423,8 +509,10 @@ labelled::var_label(runits_oft_capital_sf$BEBO_ARL)           <- "Dwelling size 
 labelled::var_label(runits_oft_capital_sf$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
 
 # Summary table
-runits_oft_capital_sf %>%
-  as_tidytable() %>%
+temp <- runits_oft_capital_sf %>%
+  as_tidytable()
+
+temp %>%
   # Select variables of interest
   select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
   # Summary values
