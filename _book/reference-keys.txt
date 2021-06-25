@@ -65,3 +65,6 @@ dist-CBD
 noise
 EDA-house-prices
 residential-units-by-floor-level
+fig:bivariate-map-migr-danes-nwst
+fig:bivariate-map-migr-danes-wst
+fig:bivariate-map-migr-wst-nwst

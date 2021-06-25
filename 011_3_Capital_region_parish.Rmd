@@ -296,7 +296,7 @@ plot_ppl_pct(pop_frgn_wst_pct)
 
 ```
 
-```{r bivariate-map-migr, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes vs. Non-western residents"}
+```{r bivariate-map-migr-danes-nwst, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes vs. Non-western residents"}
 
 # Create classes
 bi_data <- capital_prsh_ancestry_sf %>% 
@@ -326,6 +326,96 @@ p_legend <- bi_legend(pal = "DkBlue",
                       dim = 3,
                       xlab = "Danes\n(%)",
                       ylab = "Non-wst\n(%)",
+                      size = 8)
+
+# Plot
+layout <- "
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAAB
+"
+
+p1 + p_legend + plot_layout(design = layout)
+
+```
+
+```{r bivariate-map-migr-danes-wst, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes vs. Western residents"}
+
+# Create classes
+bi_data <- capital_prsh_ancestry_sf %>% 
+  drop_na() %>% 
+  group_by(year) %>% 
+  bi_class(x = pop_dan_pct,
+           y = pop_frgn_wst_pct,
+           style = "quantile",
+           dim = 3) %>% 
+  ungroup() %>% 
+  st_sf()
+
+# Create map
+p1 <- ggplot() +
+  geom_sf(data = dk_country_crop, fill = "grey") +
+  geom_sf(data = bi_data,
+          mapping = aes(fill = bi_class),
+          size = 0.05, 
+          show.legend = FALSE) +
+  geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1)+
+  bi_scale_fill(pal = "DkBlue", dim = 3) +
+  my_theme_map() +
+  facet_wrap(~year, ncol= 3) 
+
+# Create legend
+p_legend <- bi_legend(pal = "DkBlue",
+                      dim = 3,
+                      xlab = "Danes\n(%)",
+                      ylab = "Wst\n(%)",
+                      size = 8)
+
+# Plot
+layout <- "
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAA#
+AAAAAAB
+"
+
+p1 + p_legend + plot_layout(design = layout)
+
+```
+
+```{r bivariate-map-migr-wst-nwst, fig.height=10, fig.width=10, fig.cap = "Population distribution of Non-Western vs. Western residents"}
+
+# Create classes
+bi_data <- capital_prsh_ancestry_sf %>% 
+  drop_na() %>% 
+  group_by(year) %>% 
+  bi_class(x = pop_frgn_nwst_pct,
+           y = pop_frgn_wst_pct,
+           style = "quantile",
+           dim = 3) %>% 
+  ungroup() %>% 
+  st_sf()
+
+# Create map
+p1 <- ggplot() +
+  geom_sf(data = dk_country_crop, fill = "grey") +
+  geom_sf(data = bi_data,
+          mapping = aes(fill = bi_class),
+          size = 0.05, 
+          show.legend = FALSE) +
+  geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1)+
+  bi_scale_fill(pal = "DkBlue", dim = 3) +
+  my_theme_map() +
+  facet_wrap(~year, ncol= 3) 
+
+# Create legend
+p_legend <- bi_legend(pal = "DkBlue",
+                      dim = 3,
+                      xlab = "Non-wst\n(%)",
+                      ylab = "Wst\n(%)",
                       size = 8)
 
 # Plot
