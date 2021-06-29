@@ -16,12 +16,17 @@ fig:fig-pop-parish
 fig:fig-pop-parish-dan
 fig:fig-pop-parish-nw
 fig:fig-pop-parish-w
-fig:bivariate-map-migr
+fig:bivariate-map-migr-danes-nwst
+fig:bivariate-map-migr-danes-wst
+fig:bivariate-map-migr-wst-nwst
 fig:fig-pop-muni
+fig:ternary-pop-year
+fig:ternary-pop-parish
 tab:tbl-runits-oft-capital
 fig:fig-runits-oft-type
 fig:fig-prices-runits-parish-a
 fig:fig-prices-runits-parish-b
+fig:fig-prices-runits-parish-2018
 fig:fig-CPH-region
 fig:fig-pop-density-cph
 fig:fig-pop-density-cph-b
@@ -65,6 +70,3 @@ dist-CBD
 noise
 EDA-house-prices
 residential-units-by-floor-level
-fig:bivariate-map-migr-danes-nwst
-fig:bivariate-map-migr-danes-wst
-fig:bivariate-map-migr-wst-nwst
