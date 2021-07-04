@@ -1438,7 +1438,7 @@ Figure 3.10: ternary plot by year
 Figure 3.11: Ternary plots by parish
 </p>
 </div>
-<p>Ternary maps: center over the compositional mean of each data.</p>
+<p>Ternary maps: center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="level-parish.html#cb17-1" aria-hidden="true" tabindex="-1"></a>f_tern_map <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
 <span id="cb17-2"><a href="level-parish.html#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="level-parish.html#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Make colours</span></span>
@@ -1447,8 +1447,8 @@ Figure 3.11: Ternary plots by parish
 <span id="cb17-6"><a href="level-parish.html#cb17-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p2 =</span> <span class="st">&quot;pop_frgn_wst&quot;</span>,</span>
 <span id="cb17-7"><a href="level-parish.html#cb17-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">p3 =</span> <span class="st">&quot;pop_frgn_nwst&quot;</span>,</span>
 <span id="cb17-8"><a href="level-parish.html#cb17-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">breaks =</span> <span class="cn">Inf</span>,</span>
-<span id="cb17-9"><a href="level-parish.html#cb17-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">show_data =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb17-10"><a href="level-parish.html#cb17-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">center =</span> <span class="cn">NA</span>,</span>
+<span id="cb17-9"><a href="level-parish.html#cb17-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">show_data =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb17-10"><a href="level-parish.html#cb17-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">center =</span> <span class="fu">c</span>(<span class="fl">0.803</span>, <span class="fl">0.074</span>, <span class="fl">0.123</span>),</span>
 <span id="cb17-11"><a href="level-parish.html#cb17-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">hue =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">12</span>,</span>
 <span id="cb17-12"><a href="level-parish.html#cb17-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">lightness =</span> <span class="dv">1</span>,</span>
 <span id="cb17-13"><a href="level-parish.html#cb17-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">chroma =</span> <span class="dv">1</span></span>

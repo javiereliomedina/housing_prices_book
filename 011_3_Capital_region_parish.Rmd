@@ -494,10 +494,9 @@ ggtern::ggtern(data = capital_prsh_ancestry_sf,
 
 ```
 
-Ternary maps: center over the compositional mean of each data.
+Ternary maps: center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).  
 
 ```{r tern-map, fig.height=20, fig.width=20, fig.cap="Population distribution"}
-
 
 f_tern_map <- function(df) {
 
@@ -507,8 +506,8 @@ tric <- tricolore::Tricolore(df,
                              p2 = "pop_frgn_wst",
                              p3 = "pop_frgn_nwst",
                              breaks = Inf,
-                             show_data = TRUE,
-                             center = NA,
+                             show_data = FALSE,
+                             center = c(0.803, 0.074, 0.123),
                              hue = 2/12,
                              lightness = 1,
                              chroma = 1
@@ -557,7 +556,6 @@ plts <- capital_prsh_ancestry_sf %>%
   map(. , .f = f_tern_map)
 
 wrap_plots(plts, ncol = 3)
-
 
 ```
 
