@@ -241,38 +241,23 @@ capital_prsh_pop_sf <- capital_prsh %>%
 ```
 
 
-Where people live in the capital region (percentage over the total population) and their change from 2008 to 2019: 
+Where people live in the capital region (by parish), and their change from 2008 to 2019: 
+
 
 ```{r pop-parish-pct}
 
-# Estimate percentage over the total population in a year 
+# Estimate percentage over the total target pop (dan, nwst, wst) in a year 
 capital_prsh_ancestry_sf <- capital_prsh_ancestry_sf %>% 
   group_by(year) %>% 
-  mutate(across(.cols = c(pop_dan, pop_frgn_wst, pop_frgn_nwst),
-                .fns = ~ 100 * .x / pop_total,
+  mutate(across(.cols = c(pop_dan, pop_frgn_wst, pop_frgn_nwst, pop_total),
+                .fns = ~ 100 * .x / sum(.x, na.rm = TRUE),
                 .names = "{.col}_pct")) %>% 
   ungroup()
 
 ```
 
-```{r fig-pop-parish, fig.height=10, fig.width=10, fig.cap = "Total population by parish"}
 
-  capital_prsh_ancestry_sf %>% 
-    ggplot() +
-    geom_sf(data = dk_country_crop, fill = "grey") +
-    geom_sf(aes(fill = pop_total ), color = "grey", size = 0.05) +
-    scale_fill_viridis(name = "Population",
-                       option = "magma",
-                       direction = -1, 
-                       trans = "log10"
-                       ) +
-    geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1) +
-    my_theme_map() +
-    facet_wrap( ~year, ncol = 3)
-
-```
-
-```{r fig-pop-parish-dan, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes"}
+```{r fig-pop-parish, fig.height=10, fig.width=10, fig.cap = "Total population density"}
 
 # Aux. function for plotting
 plot_ppl_pct <- function(pop) { 
@@ -283,12 +268,17 @@ plot_ppl_pct <- function(pop) {
     scale_fill_viridis(name = "Percentage",
                        option = "magma",
                        direction = -1, 
-                       limits = c(0, 100)
-                       ) +
+                       limits = c(0, 5.5)) +
     geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1) +
     my_theme_map() +
     facet_wrap( ~year, ncol = 3)
 }
+
+plot_ppl_pct(pop_total_pct)
+
+```
+
+```{r fig-pop-parish-dan, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes"}
 
 plot_ppl_pct(pop_dan_pct)
 
@@ -298,18 +288,13 @@ plot_ppl_pct(pop_dan_pct)
 
 plot_ppl_pct(pop_frgn_nwst_pct)
 
-
 ```
 
 ```{r fig-pop-parish-w, fig.height=10, fig.width=10, fig.cap = "Population distribution of Western residents"}
 
 plot_ppl_pct(pop_frgn_wst_pct)
 
-
 ```
-
-
-Bivariate maps:
 
 ```{r bivariate-map-migr-danes-nwst, fig.height=10, fig.width=10, fig.cap = "Population distribution of Danes vs. Non-western residents"}
 
@@ -353,7 +338,6 @@ AAAAAAB
 "
 
 p1 + p_legend + plot_layout(design = layout)
-
 
 ```
 
@@ -400,7 +384,6 @@ AAAAAAB
 
 p1 + p_legend + plot_layout(design = layout)
 
-
 ```
 
 ```{r bivariate-map-migr-wst-nwst, fig.height=10, fig.width=10, fig.cap = "Population distribution of Non-Western vs. Western residents"}
@@ -446,7 +429,6 @@ AAAAAAB
 
 p1 + p_legend + plot_layout(design = layout)
 
-
 ```
 
 There are missing data form some parishes (i.e. mainly in Copenhagen City and from 2011-2015; Figure \@ref(fig:fig-pop-parish)). (TRYE to estimate values in this parishes?? e.g. base on the population at municipality and the total number of residential dwellings in each parish.....??)
@@ -476,13 +458,13 @@ capital_muni_pop_sf %>%
 
 ```
 
-ternary plots:
+
+Ternary plots:
 
 ```{r ternary-pop-year, fig.height=10, fig.width=10, fig.cap = "ternary plot by year"}
 
-library(ggtern)
 
-ggtern(data = capital_prsh_ancestry_sf,
+ggtern::ggtern(data = capital_prsh_ancestry_sf,
        aes(x = pop_dan,
            y = pop_frgn_wst,
            z = pop_frgn_nwst,
@@ -491,62 +473,100 @@ ggtern(data = capital_prsh_ancestry_sf,
 ) +
   scale_color_viridis_d() +
   geom_point() +
-  theme_rgbw() +
-  theme_hidetitles()
+  ggtern::theme_rgbw() +
+  ggtern::theme_hidetitles()
 
 ```
 
+```{r ternary-pop-parish, fig.height=20, fig.width=10, fig.cap = "Ternary plots by parish"}
 
-```{r ternary-pop-parish, fig.height=20, fig.width=10, fig.cap = "ternary plot by parish (in 2019)"}
-
-ggtern(data = capital_prsh_ancestry_sf,
+ggtern::ggtern(data = capital_prsh_ancestry_sf,
        aes(x = pop_dan,
            y = pop_frgn_wst,
            z = pop_frgn_nwst,
-           colour = prsh_name 
-       )
-) +
+           colour = prsh_name)) +
   geom_point() +
   facet_wrap( ~year, ncol = 3) +
-  theme_rgbw() +
-  theme_hidetitles() +
+  ggtern::theme_rgbw() +
+  ggtern::theme_hidetitles() +
   theme(legend.position = "bottom") +
   guides(colour = guide_legend(title.position = "top")) 
 
 ```
 
-```{r}
+Ternary maps: center over the compositional mean of each data.
 
-library(tricolore)
+```{r tern-map, fig.height=20, fig.width=20, fig.cap="Population distribution"}
 
-ex <- capital_prsh_ancestry_sf %>%
-  filter(year == 2019) %>% 
-  select(pop_dan, pop_frgn_wst, pop_frgn_nwst)
-  
-tric <- Tricolore(ex,
-          p1 = "pop_dan",
-          p2 = "pop_frgn_wst",
-          p3 = "pop_frgn_nwst",
-          breaks = Inf)
 
-ex_map <- capital_prsh_ancestry_sf %>% 
-  filter(year == 2019) %>% 
+f_tern_map <- function(df) {
+
+# Make colours
+tric <- tricolore::Tricolore(df,
+                             p1 = "pop_dan",
+                             p2 = "pop_frgn_wst",
+                             p3 = "pop_frgn_nwst",
+                             breaks = Inf,
+                             show_data = TRUE,
+                             center = NA,
+                             hue = 2/12,
+                             lightness = 1,
+                             chroma = 1
+                             )
+
+# legend
+p_legend <- tric$key +
+  labs(L = "% Danes",
+       T = "% Wst",
+       R = "% Non-wst") +
+  theme(axis.title = element_text(size = 5, face = "bold"),
+        axis.text  = element_text(size = 5)) 
+
+# Add columns with colours
+df <- df %>% 
   mutate(pop_rgb = tric$rgb)
 
-p <- ggplot(ex_map) +
-  geom_sf(aes(fill = pop_rgb, geometry = geometry)) +
+# Map
+ggplot() +
+  geom_sf(data = dk_country_crop,
+          aes(geometry = geometry),
+          fill = "grey") +
+  geom_sf(data = df,
+          aes(fill = pop_rgb, geometry = geometry),
+          size = 0.05) +
   scale_fill_identity() +
-  my_theme_map() +
-  coord_sf(datum = NA)
+  geom_sf(data = capital_muni,
+          aes(geometry = geometry),
+          fill = NA,
+          color = "white", 
+          size = 0.5)+
+  labs(title = df$year) +
+  theme_void() + 
+  annotation_custom(
+    ggtern::ggplotGrob(p_legend) ,
+    xmin = 730000,
+    xmax = 742000,
+    ymin = 6178000,
+    ymax = 6190000
+  )
 
-p_legend <- tric$key
+}
 
-# Plot
+plts <- capital_prsh_ancestry_sf %>% 
+  group_split(year) %>% 
+  map(. , .f = f_tern_map)
 
-p 
-p_legend
+wrap_plots(plts, ncol = 3)
+
 
 ```
+
+```{r tern-map-2018, fig.height=10, fig.width=10, fig.cap="Population distribution in 2018"}
+
+plts[[11]]
+
+```
+
 
 ## House prices at parish level
 
@@ -676,9 +696,6 @@ The summary descriptive statistics of the housing prices are:
 
 ```{r tbl-summary-runits-oft-capital}
 
-# Table theme
-theme_gtsummary_compact()
-
 # Create variable labels of the variables to be printed in the table
 labelled::var_label(runits_oft_capital_sf$price_2019_kDKK) <- "Adjusted prices (kDKK)"
 labelled::var_label(runits_oft_capital_sf$BEBO_ARL)           <- "Dwelling size (m2)"
@@ -686,11 +703,11 @@ labelled::var_label(runits_oft_capital_sf$price_2019_kDKK_m2) <- "Adjusted price
 
 # Summary table
 temp <- runits_oft_capital_sf %>%
-  as_tidytable() %>%
-  # Select variables of interest
-  select(type, price_2019_kDKK, BEBO_ARL, price_2019_kDKK_m2)
+  as_tidytable()
 
 temp %>%
+  # Select variables of interest
+  select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
   # Summary values
   tbl_summary(by = type,
               type = all_continuous() ~ "continuous2",
@@ -743,7 +760,7 @@ sum_runits_oft_prices <- runits_oft_capital_sf %>%
  
 ```
 
-```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade"}
+```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
 
 # Aux. function for plotting
 f_plot <- function(df) {
@@ -761,8 +778,7 @@ f_plot <- function(df) {
     geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.05) +
     scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
                        option = "magma",
-                       direction = -1,
-                       guide = guide_legend(reverse = TRUE)) +
+                       direction = -1) +
     my_theme_map() +
     labs(x = "",
          y = "",
@@ -782,7 +798,7 @@ for(i in seq_along(years_pd)) { print(plts[[i]]) }
 
 ```
 
-```{r fig-prices-runits-parish-b,  fig.height=10, fig.width=10, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells"}
+```{r fig-prices-runits-parish-b,  fig.height=10, fig.width=10, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
 
 ggplot() +
   geom_sf(data = dk_country_crop, fill = "grey") +
@@ -795,36 +811,10 @@ ggplot() +
   geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.05) +
   scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
                      option = "magma",
-                     direction = -1,
-                     guide = guide_legend(reverse = TRUE)) +
+                     direction = -1) +
   my_theme_map() +
   labs(x = "",
        y = "") +
   facet_wrap( ~year, ncol = 3)
-
-```
-
-Median prices (kDKK/m2) in 2018
-```{r fig-prices-runits-parish-2018,  fig.height=10, fig.width=10, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade"}
-
-sum_runits_oft_prices %>% 
-  filter(year == 2018) %>% 
-  ggplot() +
-  geom_sf(data = dk_country_crop, fill = "grey") +
-  geom_sf(aes(fill = cut_number(median_2019_kDKK_m2,
-                                n = 10,
-                                ordered_result = TRUE,
-                                dig.lab = 0)),
-          color = "grey",
-          size = 0.05) +
-  geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.75) +
-  scale_fill_viridis_d(name = TeX("$\\overset{\\textbf{Percentiles}}{(kDKK/m^2)}$"),
-                       option = "magma",
-                       direction = -1,
-                       guide = guide_legend(reverse = TRUE) ) +
-  my_theme_map() +
-  labs(x = "",
-       y = "",
-       title = "Median housing prices in 2018") 
 
 ```

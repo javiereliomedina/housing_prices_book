@@ -22,6 +22,8 @@ fig:bivariate-map-migr-wst-nwst
 fig:fig-pop-muni
 fig:ternary-pop-year
 fig:ternary-pop-parish
+fig:tern-map
+fig:tern-map-2018
 tab:tbl-runits-oft-capital
 fig:fig-runits-oft-type
 fig:fig-prices-runits-parish-a
