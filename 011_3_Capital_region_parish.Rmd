@@ -692,18 +692,20 @@ runits_oft_capital_sf %>%
 
 The summary descriptive statistics of the housing prices are:
 
-```{r tbl-summary-runits-oft-capital}
+```{r tbl-summary-runits-oft-capital, cache=FALSE}
 
 # Create variable labels of the variables to be printed in the table
 labelled::var_label(runits_oft_capital_sf$price_2019_kDKK) <- "Adjusted prices (kDKK)"
 labelled::var_label(runits_oft_capital_sf$BEBO_ARL)           <- "Dwelling size (m2)"
 labelled::var_label(runits_oft_capital_sf$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
 
-# Summary table
-temp <- runits_oft_capital_sf %>%
-  as_tidytable()
+library(tidyverse)
+library(gtsummary)
 
-temp %>%
+# Summary table
+temp <-  as_tibble(runits_oft_capital_sf)
+
+temp  %>% 
   # Select variables of interest
   select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
   # Summary values
