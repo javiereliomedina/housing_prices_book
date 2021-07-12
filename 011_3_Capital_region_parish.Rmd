@@ -240,22 +240,19 @@ capital_prsh_pop_sf <- capital_prsh %>%
 
 ```
 
-
 Where people live in the capital region (by parish), and their change from 2008 to 2019: 
-
 
 ```{r pop-parish-pct}
 
-# Estimate percentage over the total target pop (dan, nwst, wst) in a year 
+# Estimate population in percentage   
 capital_prsh_ancestry_sf <- capital_prsh_ancestry_sf %>% 
   group_by(year) %>% 
   mutate(across(.cols = c(pop_dan, pop_frgn_wst, pop_frgn_nwst, pop_total),
-                .fns = ~ 100 * .x / sum(.x, na.rm = TRUE),
+                .fns = ~ 100 * .x / pop_total,
                 .names = "{.col}_pct")) %>% 
   ungroup()
 
 ```
-
 
 ```{r fig-pop-parish, fig.height=10, fig.width=10, fig.cap = "Total population density"}
 
@@ -268,13 +265,12 @@ plot_ppl_pct <- function(pop) {
     scale_fill_viridis(name = "Percentage",
                        option = "magma",
                        direction = -1, 
-                       limits = c(0, 5.5)) +
+                       limits = c(0, 100)
+                       ) +
     geom_sf(data = capital_muni, fill = NA, color = "white", size = 0.1) +
     my_theme_map() +
     facet_wrap( ~year, ncol = 3)
 }
-
-plot_ppl_pct(pop_total_pct)
 
 ```
 
@@ -459,112 +455,91 @@ capital_muni_pop_sf %>%
 ```
 
 
-Ternary plots:
+### Spatial autocorrelation (Moran I)
 
-```{r ternary-pop-year, fig.height=10, fig.width=10, fig.cap = "ternary plot by year"}
+Local spatial autocorrelation. Define neighbours polygons and weights:
 
+```{r MI-function}
 
-ggtern::ggtern(data = capital_prsh_ancestry_sf,
-       aes(x = pop_dan,
-           y = pop_frgn_wst,
-           z = pop_frgn_nwst,
-           colour = factor(year)
-       )
-) +
-  scale_color_viridis_d() +
-  geom_point() +
-  ggtern::theme_rgbw() +
-  ggtern::theme_hidetitles()
+# Based on:
+# https://mgimond.github.io/simple_moransI_example/
+# https://rpubs.com/quarcs-lab/spatial-autocorrelation
 
-```
+library(spdep)
 
-```{r ternary-pop-parish, fig.height=20, fig.width=10, fig.cap = "Ternary plots by parish"}
+# Local Moran index
 
-ggtern::ggtern(data = capital_prsh_ancestry_sf,
-       aes(x = pop_dan,
-           y = pop_frgn_wst,
-           z = pop_frgn_nwst,
-           colour = prsh_name)) +
-  geom_point() +
-  facet_wrap( ~year, ncol = 3) +
-  ggtern::theme_rgbw() +
-  ggtern::theme_hidetitles() +
-  theme(legend.position = "bottom") +
-  guides(colour = guide_legend(title.position = "top")) 
+f1 <- function(year, variable, signif = 0.2) { 
+  
+  # Polygons
+  s <- capital_prsh_ancestry_sf %>%
+    # Select
+    filter(year == {{ year }}) %>% 
+    drop_na() %>% 
+    st_sf() 
 
-```
+  # Variable
+  x <- s %>% 
+    # Variable
+    pull( {{ variable }}) 
+  
+  # Plot MI
+  x %>% 
+    # Local Index
+    localmoran_perm(listw = nb2listw(poly2nb(s, queen = TRUE),
+                                     style = "W",
+                                     zero.policy = TRUE),
+                    nsim = 999) %>% 
+    as_tibble() %>% 
+    rename(p.value = `Pr(z > 0)`) %>% 
+    # binds results to our polygon shapefile
+    cbind(s) %>% 
+    st_sf() %>% 
+    # center the variable of interest around its mean
+    mutate(m_qualification = x - mean( x ),
+           m_local = Ii - mean(Ii)) %>% 
+    # Build quadrant
+    mutate(quadrant = case_when(m_qualification > 0 & m_local > 0 ~ 4,
+                                m_qualification < 0 & m_local < 0 ~ 1,
+                                m_qualification < 0 & m_local > 0 ~ 2,
+                                m_qualification > 0 & m_local < 0 ~ 3),
+           quadrant = ifelse(p.value > signif, 0, quadrant)) %>% 
+    mutate(quadrant = factor(quadrant,
+                             levels = c(0, 1, 2, 3, 4), 
+                             labels =  c("Insignificant",
+                                         "Low-Low",
+                                         "Low-High",
+                                         "High-Low",
+                                         "High-High"))) %>% 
+    # Plot quadrants (LISA)
+    ggplot() +
+    geom_sf(data = capital_prsh, fill = "black") + 
+    geom_sf(aes(fill = quadrant), color = "grey", size = 0.05) +
+    scale_fill_manual(name = "Quadrant\n(p-value < 0.2)" ,
+                      values = c("lightgrey",
+                                 "#0000FF",
+                                 "#A2A2FF",
+                                 "#FFA2A2",
+                                 "#FF0000"),
+                      drop = FALSE) +
+    labs(title = {{ year }},
+         subtitle = {{ variable }}) +
+    my_theme_map()
 
-Ternary maps: center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).  
-
-```{r tern-map, fig.height=20, fig.width=20, fig.cap="Population distribution"}
-
-f_tern_map <- function(df) {
-
-# Make colours
-tric <- tricolore::Tricolore(df,
-                             p1 = "pop_dan",
-                             p2 = "pop_frgn_wst",
-                             p3 = "pop_frgn_nwst",
-                             breaks = Inf,
-                             show_data = FALSE,
-                             center = c(0.803, 0.074, 0.123),
-                             hue = 2/12,
-                             lightness = 1,
-                             chroma = 1
-                             )
-
-# legend
-p_legend <- tric$key +
-  labs(L = "% Danes",
-       T = "% Wst",
-       R = "% Non-wst") +
-  theme(axis.title = element_text(size = 5, face = "bold"),
-        axis.text  = element_text(size = 5)) 
-
-# Add columns with colours
-df <- df %>% 
-  mutate(pop_rgb = tric$rgb)
-
-# Map
-ggplot() +
-  geom_sf(data = dk_country_crop,
-          aes(geometry = geometry),
-          fill = "grey") +
-  geom_sf(data = df,
-          aes(fill = pop_rgb, geometry = geometry),
-          size = 0.05) +
-  scale_fill_identity() +
-  geom_sf(data = capital_muni,
-          aes(geometry = geometry),
-          fill = NA,
-          color = "white", 
-          size = 0.5)+
-  labs(title = df$year) +
-  theme_void() + 
-  annotation_custom(
-    ggtern::ggplotGrob(p_legend) ,
-    xmin = 730000,
-    xmax = 742000,
-    ymin = 6178000,
-    ymax = 6190000
-  )
-
-}
-
-plts <- capital_prsh_ancestry_sf %>% 
-  group_split(year) %>% 
-  map(. , .f = f_tern_map)
-
-wrap_plots(plts, ncol = 3)
+  }
 
 ```
 
-```{r tern-map-2018, fig.height=10, fig.width=10, fig.cap="Population distribution in 2018"}
+```{r fig-MI-nb, fig.height=25, fig.width=10, fig.cap="Local Moran index"}
 
-plts[[11]]
+p <- map2(.x = rep(2008:2019, times=1, each = 3),
+          .y = rep(c("pop_dan_pct", "pop_frgn_wst_pct", "pop_frgn_nwst_pct"),
+                   12),
+          ~f1(.x, .y))
+
+wrap_plots(p, ncol = 3) + plot_layout(guides = "collect")
 
 ```
-
 
 ## House prices at parish level
 
@@ -819,8 +794,6 @@ ggplot() +
   facet_wrap( ~year, ncol = 3)
 
 ```
-
-### Spatial autocorrelation (Moran I)
 
 
 
