@@ -596,7 +596,7 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
     # Format KomKode and select municipalities of the study area
     mutate.(KomKode = paste0("0", KomKode)) %>% 
     filter.(KomKode %in% .muni) %>% 
-    # Remove residential units not used for for residential purpose
+    # Remove residential units not used for residential purpose
     filter.(BOLIGTYPE_KODE != "E" | BOLIGTYPE_KODE != "5") %>% 
     # Remove tiny dwellings (area < 10 m2)
     filter.(BEBO_ARL >= 10) %>%
@@ -636,7 +636,7 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
 
 # Clean dataset
   runits_oft_capital <- runits_oft_capital_read %>% 
-    # Input empty cells (buildings with only one floor) in Etagebetegn as "st"
+    # Input empty cells in Etagebetegn (buildings with only one floor) as "st"
     mutate.(Etagebetegn = fifelse(Etagebetegn == "", "st", Etagebetegn)) %>% 
     # Etagebetegn as ordered factor
     mutate.(Etagebetegn = factor(Etagebetegn,
@@ -655,16 +655,17 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
 plan(multisession, workers = 7)
 
 runits_oft_capital_sf <- runits_oft_capital %>% 
+  # Convert to sf object
   st_as_sf(coords = c("etrs89koordinat_ost",
                       "etrs89koordinat_nord"),
            crs = "EPSG:25832") %>% 
   # Detect to what parish belongs a house
   group_split(year) %>%  
-  future_map_dfr(., ~st_intersection(., capital_prsh, tolerance	= 50),
+  future_map_dfr(., ~st_join(., capital_prsh, join = st_nearest_feature),
                  .options = furrr_options(seed = 123))
 
 plan("default")
- 
+
 ```
 
 The total number of residential units used for the analysis is therefore `r nrow(runits_oft_capital_sf)` (Table \@ref(tab:tbl-runits-oft-capital)).
@@ -818,3 +819,8 @@ ggplot() +
   facet_wrap( ~year, ncol = 3)
 
 ```
+
+### Spatial autocorrelation (Moran I)
+
+
+
