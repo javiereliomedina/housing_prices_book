@@ -240,6 +240,8 @@ capital_prsh_pop_sf <- capital_prsh %>%
 
 ```
 
+### Spatial distribution
+
 Where people live in the capital region (by parish), and their change from 2008 to 2019: 
 
 ```{r pop-parish-pct}
@@ -455,7 +457,7 @@ capital_muni_pop_sf %>%
 ```
 
 
-### Spatial autocorrelation (Moran I)
+### Autocorrelation (Moran I)
 
 Local spatial autocorrelation. Define neighbours polygons and weights:
 
@@ -538,6 +540,111 @@ p <- map2(.x = rep(2008:2019, times=1, each = 3),
           ~f1(.x, .y))
 
 wrap_plots(p, ncol = 3) + plot_layout(guides = "collect")
+
+```
+
+### Ternary plots
+
+```{r ternary-pop-year, fig.height=10, fig.width=10, fig.cap = "ternary plot by year"}
+
+ggtern::ggtern(data = capital_prsh_ancestry_sf,
+       aes(x = pop_dan,
+           y = pop_frgn_wst,
+           z = pop_frgn_nwst,
+           colour = factor(year)
+       )
+) +
+  scale_color_viridis_d() +
+  geom_point() +
+  ggtern::theme_rgbw() +
+  ggtern::theme_hidetitles()
+
+```
+
+```{r ternary-pop-parish, fig.height=20, fig.width=10, fig.cap = "Ternary plots by parish"}
+
+ggtern::ggtern(data = capital_prsh_ancestry_sf,
+       aes(x = pop_dan,
+           y = pop_frgn_wst,
+           z = pop_frgn_nwst,
+           colour = prsh_name)) +
+  geom_point() +
+  facet_wrap( ~year, ncol = 3) +
+  ggtern::theme_rgbw() +
+  ggtern::theme_hidetitles() +
+  theme(legend.position = "bottom") +
+  guides(colour = guide_legend(title.position = "top")) 
+
+```
+
+Ternary maps: center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).  
+
+```{r tern-map, fig.height=20, fig.width=20, fig.cap="Population distribution"}
+
+f_tern_map <- function(df) {
+
+# Make colours
+tric <- tricolore::Tricolore(df,
+                             p1 = "pop_dan",
+                             p2 = "pop_frgn_wst",
+                             p3 = "pop_frgn_nwst",
+                             breaks = Inf,
+                             show_data = FALSE,
+                             center = c(0.803, 0.074, 0.123),
+                             hue = 2/12,
+                             lightness = 1,
+                             chroma = 1
+                             )
+
+# legend
+p_legend <- tric$key +
+  labs(L = "% Danes",
+       T = "% Wst",
+       R = "% Non-wst") +
+  theme(axis.title = element_text(size = 5, face = "bold"),
+        axis.text  = element_text(size = 5)) 
+
+# Add columns with colours
+df <- df %>% 
+  mutate(pop_rgb = tric$rgb)
+
+# Map
+ggplot() +
+  geom_sf(data = dk_country_crop,
+          aes(geometry = geometry),
+          fill = "grey") +
+  geom_sf(data = df,
+          aes(fill = pop_rgb, geometry = geometry),
+          size = 0.05) +
+  scale_fill_identity() +
+  geom_sf(data = capital_muni,
+          aes(geometry = geometry),
+          fill = NA,
+          color = "white", 
+          size = 0.5)+
+  labs(title = df$year) +
+  theme_void() + 
+  annotation_custom(
+    ggtern::ggplotGrob(p_legend) ,
+    xmin = 730000,
+    xmax = 742000,
+    ymin = 6178000,
+    ymax = 6190000
+  )
+
+}
+
+plts <- capital_prsh_ancestry_sf %>% 
+  group_split(year) %>% 
+  map(. , .f = f_tern_map)
+
+wrap_plots(plts, ncol = 3)
+
+```
+
+```{r tern-map-2018, fig.height=10, fig.width=10, fig.cap="Population distribution in 2018"}
+
+plts[[11]]
 
 ```
 
