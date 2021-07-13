@@ -12,7 +12,6 @@ fig:fig-prices-pop
 fig:fig-price-change-muni
 fig:fig-prices-pop-b
 fig:fig-capital-region
-fig:fig-pop-parish
 fig:fig-pop-parish-dan
 fig:fig-pop-parish-nw
 fig:fig-pop-parish-w
@@ -20,6 +19,7 @@ fig:bivariate-map-migr-danes-nwst
 fig:bivariate-map-migr-danes-wst
 fig:bivariate-map-migr-wst-nwst
 fig:fig-pop-muni
+fig:fig-MI-nb
 fig:ternary-pop-year
 fig:ternary-pop-parish
 fig:tern-map
@@ -53,6 +53,9 @@ pop-growth-muni
 house-prices-muni
 level-parish
 population-data
+spatial-distribution
+autocorrelation-moran-i
+ternary-plots
 house-prices-at-parish-level
 level-CPH
 population-density-by-grid-cells-of-100m-x-100m
