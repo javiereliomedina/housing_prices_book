@@ -456,7 +456,6 @@ capital_muni_pop_sf %>%
 
 ```
 
-
 ### Autocorrelation (Moran I)
 
 Local spatial autocorrelation. Define neighbours polygons and weights:
@@ -471,7 +470,7 @@ library(spdep)
 
 # Local Moran index
 
-f1 <- function(year, variable, signif = 0.2) { 
+f1 <- function(year, variable, signif = 0.15) { 
   
   # Polygons
   s <- capital_prsh_ancestry_sf %>%
@@ -517,7 +516,7 @@ f1 <- function(year, variable, signif = 0.2) {
     ggplot() +
     geom_sf(data = capital_prsh, fill = "black") + 
     geom_sf(aes(fill = quadrant), color = "grey", size = 0.05) +
-    scale_fill_manual(name = "Quadrant\n(p-value < 0.2)" ,
+    scale_fill_manual(name = "Quadrant" ,
                       values = c("lightgrey",
                                  "#0000FF",
                                  "#A2A2FF",
@@ -532,13 +531,14 @@ f1 <- function(year, variable, signif = 0.2) {
 
 ```
 
-```{r fig-MI-nb, fig.height=25, fig.width=10, fig.cap="Local Moran index"}
+```{r fig-MI-nb, fig.height=25, fig.width=10, fig.cap="Local Moran index (p-value < 0.15)"}
 
 p <- map2(.x = rep(2008:2019, times=1, each = 3),
           .y = rep(c("pop_dan_pct", "pop_frgn_wst_pct", "pop_frgn_nwst_pct"),
                    12),
           ~f1(.x, .y))
 
+# Plots
 wrap_plots(p, ncol = 3) + plot_layout(guides = "collect")
 
 ```
