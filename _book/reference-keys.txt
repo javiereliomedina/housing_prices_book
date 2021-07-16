@@ -28,6 +28,8 @@ tab:tbl-runits-oft-capital
 fig:fig-runits-oft-type
 fig:fig-prices-runits-parish-a
 fig:fig-prices-runits-parish-b
+fig:fig-parish-tern-pop-price-all
+fig:fig-parish-tern-pop-price-year
 fig:fig-CPH-region
 fig:fig-pop-density-cph
 fig:fig-pop-density-cph-b

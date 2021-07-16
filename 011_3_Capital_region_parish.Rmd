@@ -902,5 +902,48 @@ ggplot() +
 
 ```
 
+remove one parish with non-western migrants up to 80% (NAME). There were not house prices in the ordinary free sale (only for one yesr); WHY?
 
 
+```{r fig-parish-tern-pop-price-all, fig.cap = "Median housing prices and popupation distribution by parish (all data)"}
+
+ggtern::ggtern(data = sum_runits_oft_prices,
+               aes(x = pop_dan,
+                   y = pop_frgn_wst,
+                   z = pop_frgn_nwst,
+                   colour = cut_number(median_2019_kDKK_m2,
+                                       n = 10,
+                                       dig.lab = 0))) +
+  viridis::scale_color_viridis(name = "Percentiles\n[kDkk/m2]",
+                               option = "turbo",
+                               discrete = TRUE) +
+  geom_point(size = 0.85) +
+  ggtern::theme_rgbw() +
+  ggtern::theme_hidetitles() +
+  ggtern::theme_zoom_L(0.6) +
+  guides(colour = guide_legend(reverse = TRUE,
+                               override.aes = list(size = 3)))  
+
+```
+
+```{r fig-parish-tern-pop-price-year, fig.height=10, fig.width=10, fig.cap = "Median housing prices and popupation distribution by parish and year"}
+
+ggtern::ggtern(data = sum_runits_oft_prices,
+               aes(x = pop_dan,
+                   y = pop_frgn_wst,
+                   z = pop_frgn_nwst,
+                   colour = cut_number(median_2019_kDKK_m2,
+                                       n = 10,
+                                       dig.lab = 0))) +
+  facet_wrap( ~ year, ncol = 3)+
+  viridis::scale_color_viridis(name = "Percentiles\n[kDkk/m2]",
+                               option = "turbo",
+                               discrete = TRUE) +
+  geom_point(size = 0.9) +
+  ggtern::theme_rgbw() +
+  ggtern::theme_hidetitles() +
+  ggtern::theme_zoom_L(0.6) +
+  guides(colour = guide_legend(reverse = TRUE,
+                               override.aes = list(size = 3))) 
+
+```
