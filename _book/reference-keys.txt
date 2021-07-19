@@ -59,6 +59,7 @@ spatial-distribution
 autocorrelation-moran-i
 ternary-plots
 house-prices-at-parish-level
+compositional-data-analysis
 level-CPH
 population-density-by-grid-cells-of-100m-x-100m
 house-prices-by-grid-cells-of-100m-x-100m

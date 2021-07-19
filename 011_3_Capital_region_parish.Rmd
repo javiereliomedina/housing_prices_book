@@ -492,7 +492,7 @@ f1 <- function(year, variable, signif = 0.15) {
                                      zero.policy = TRUE),
                     nsim = 999) %>% 
     as_tibble() %>% 
-    rename(p.value = `Pr(z > 0)`) %>% 
+    dplyr::rename(p.value = `Pr(z > 0)`) %>% 
     # binds results to our polygon shapefile
     cbind(s) %>% 
     st_sf() %>% 
@@ -840,7 +840,7 @@ sum_runits_oft_prices <- runits_oft_capital_sf %>%
   st_sf() %>% 
   # Data from 2008
   filter(year >= 2008)
- 
+
 ```
 
 ```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
@@ -947,3 +947,199 @@ ggtern::ggtern(data = sum_runits_oft_prices,
                                override.aes = list(size = 3))) 
 
 ```
+
+
+## Compositional data analysis 
+
+```{r prsh-CoDa}
+library(compositions)
+
+# install.packages("ggplot2", version = "3.3.3")
+
+# CoDa (2019)
+x <- capital_prsh_ancestry_sf %>%
+  filter(year == 2019) %>% 
+  select(prsh_id, pop_dan, pop_frgn_nwst, pop_frgn_wst) %>%
+  as_tibble() %>%
+  drop_na() %>% 
+  select(-geometry) 
+
+xc <- x %>% 
+  clo(parts = c("pop_dan", "pop_frgn_nwst", "pop_frgn_wst"),
+      total = 100) %>% 
+  acomp()
+```
+
+PCA of clr transformations
+```{r prsh-CoDa-PCA}
+# PCA
+pc <- princomp(xc)
+summary(pc)
+coloredBiplot(x = pc,
+              pc.biplot = T,
+              xlabs.pc = c(1, 2, 3),
+              xlabs.col = 2:4,
+              col = "black"
+              )
+```
+
+
+```{r prsh-CoDa-dendogram}
+# Dendrogram balances
+signary <- t(matrix( c(1, -1,  1,
+                       1,  0, -1),
+                     ncol = 3,
+                     nrow = 2,
+                     byrow = TRUE))
+CoDaDendrogram(X = xc,
+               signary = signary,
+               col = "black",
+               range = c(-8,8),
+               type = "l"
+)
+
+
+bal <- balance(xc, ~pop_dan/pop_frgn_wst/pop_frgn_nwst)
+
+bal_sf <- capital_prsh_ancestry_sf %>%
+  filter(year == 2019) %>% 
+  mutate(b1 = sqrt(2/3) * log( ((pop_dan * pop_frgn_wst)^0.5) / (pop_frgn_nwst)),
+         b2 = sqrt(1/2) * log(pop_dan / pop_frgn_wst))
+```
+
+Spatian autocorrelation
+```{r prsh-CoDa-moran}
+# Moran
+
+nb <- poly2nb(bal_sf, queen = TRUE)
+wts <- nb2listw(nb, style = "W", zero.policy = TRUE)
+
+# Global index
+moran.test(bal_sf$b1, listw = wts)
+moran.test(bal_sf$b2, listw = wts)
+
+# Local index
+
+signif <- 0.1
+LM_b1 <- bal_sf %>% 
+  pull (b1) %>% 
+    # Local Index
+    localmoran_perm(listw = wts,
+                    nsim = 999) %>% 
+    as_tibble() %>% 
+    dplyr::rename(p.value = `Pr(z > 0)`) %>% 
+    # binds results to our polygon shapefile
+    cbind(bal_sf) %>% 
+    st_sf() %>% 
+    # center the variable of interest around its mean
+    mutate(m_qualification = b1 - mean( b1 ),
+           m_local = Ii - mean(Ii)) %>% 
+    # Build quadrant
+    mutate(quadrant = case_when(m_qualification > 0 & m_local > 0 ~ 4,
+                                m_qualification < 0 & m_local < 0 ~ 1,
+                                m_qualification < 0 & m_local > 0 ~ 2,
+                                m_qualification > 0 & m_local < 0 ~ 3),
+           quadrant = ifelse(p.value > signif, 0, quadrant)) %>% 
+    mutate(quadrant = factor(quadrant,
+                             levels = c(0, 1, 2, 3, 4), 
+                             labels =  c("Insignificant",
+                                         "Low-Low",
+                                         "Low-High",
+                                         "High-Low",
+                                         "High-High")))
+
+
+
+
+plot(LM_b1["quadrant"], main = "LISA (B1)")
+# plot(LM_b2["quadrant"], main = "LISA (B2)")
+```
+
+
+```{r prsh-CoDa-cluster}
+
+# Cluster
+TS.ilr <- bal
+# TS.ilr <- bal_sf$b1
+# TS.ilr <- bal_sf$b2
+
+
+D_TS.ilr <- dist(TS.ilr,
+                 method = "euclidean",
+                 diag = FALSE, 
+                 upper = FALSE,
+                 p = 2)
+CL_TS.ilr <- hclust(D_TS.ilr, method = "ward.D2")
+plot(CL_TS.ilr, hang = -1, labels=FALSE, xlab = "Observations")
+CL5 <- rect.hclust(CL_TS.ilr, k = 4, border = 2)
+
+CLUSTER <- as.data.frame(matrix(NA,length(bal_sf$prsh_name),1))
+names(CLUSTER) <- c("CL5")
+CLUSTER$CL5 <- 11
+CLUSTER[CL5[[1]],] <- "G1"
+CLUSTER[CL5[[2]],] <- "G2"
+CLUSTER[CL5[[3]],] <- "G3"
+CLUSTER[CL5[[4]],] <- "G4"
+# # CLUSTER[CL5[[5]],] <- "G5"
+      
+bal_sf$CL <- CLUSTER$CL5
+
+plot(bal_sf["CL"])
+
+bal_sf %>% 
+  group_by(CL) %>% 
+  summarise(across(.cols = ends_with("pct"),     .fns = median))
+
+
+bal_sf %>% 
+  select(CL, pop_dan_pct, pop_frgn_nwst_pct, pop_frgn_wst_pct) %>% 
+  as_tibble() %>% 
+  pivot_longer(!c(CL, geometry), names_to = "name", values_to = "value") %>% 
+  mutate(name = gsub("pop_", "", name),
+         name = gsub("_pct", "", name)) -> aa 
+  
+
+boxplot(value ~ name + CL, aa, notch = F)
+
+```
+
+
+```{r prsh-CoDa-house-prices}
+# Model prices
+
+# m1 <- lm(log10(median_2019_kDKK_m2) ~ b1 + b2, data = bal_sf)
+# summary(m1)
+# 
+# bal_sf$pred1 <- predict(m1) 
+# plot(log10(median_2019_kDKK_m2) ~ pred1, bal_sf)
+# abline(0, 1, col = "blue")
+# lmp1 <- lm(log10(median_2019_kDKK_m2) ~ pred1, bal_sf) 
+# abline(lmp1, col = "red")
+# summary(lmp1)
+# 
+# 
+# 
+# m2 <- lm(log10(median_2019_kDKK_m2) ~ log10(pop_total_km2) + b1 + b2, bal_sf)
+# summary(m2)
+# bal_sf$pred2 <- predict(m2) 
+# plot(log10(median_2019_kDKK_m2) ~ pred2, bal_sf)
+# abline(0, 1, col = "blue")
+# lmp2 <- lm(log10(median_2019_kDKK_m2) ~ pred2, bal_sf) 
+# abline(lmp2, col = "red")
+# # ANOVA unbalance datasets
+# car::Anova(m2, type="III")
+# 
+# m4 <- lm(log10(median_2019_kDKK_m2) ~ log10(pop_total_km2), bal_sf)
+# bal_sf$pred4 <- predict(m4) 
+# plot(log10(median_2019_kDKK_m2) ~ pred4, bal_sf)
+# abline(0, 1, col = "blue")
+# lmp4 <- lm(log10(median_2019_kDKK_m2) ~ pred4, bal_sf) 
+# abline(lmp4, col = "red")
+# summary(lmp4)
+# # ANOVA unbalance datasets
+# car::Anova(m4, type="III")
+
+```
+
+
+
