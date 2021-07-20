@@ -934,53 +934,74 @@ f_local_moran(df = bal_sf,
 
 
 
-Spatial clusters
-```{r prsh-CoDa-cluster}
-# Cluster
+Spatial clusters (k-means cluster) with balances: separate Non-western from Danes and Western citizens.
+```{r prsh-CoDa-cluster, fig.height=3}
+# based on https://www.tidymodels.org/learn/statistics/k-means/
 
-TS.ilr <- scale(bal_sf$b1)
-# TS.ilr <- bal_sf$b2
+# Select the optimal number of clusters
 
+dat_cluster <- bal_sf %>% 
+  select(b1, b2) %>% 
+  as_tibble() %>% 
+  select(-geometry)
 
-D_TS.ilr <- dist(TS.ilr,
-                 method = "euclidean",
-                 diag = FALSE, 
-                 upper = FALSE,
-                 p = 2)
-CL_TS.ilr <- hclust(D_TS.ilr, method = "ward.D2")
-plot(CL_TS.ilr, hang = -1, labels=FALSE, xlab = "Observations")
-CL5 <- rect.hclust(CL_TS.ilr, k = 4, border = 2)
+kclusts <- 
+  tibble(k = 1:9) %>%
+  mutate(
+    kclust = map(k, ~kmeans(dat_cluster, .x)),
+    tidied = map(kclust, tidy),
+    glanced = map(kclust, glance),
+    augmented = map(kclust, augment, bal_sf)
+  )
 
-CLUSTER <- as.data.frame(matrix(NA,length(bal_sf$prsh_name),1))
-names(CLUSTER) <- c("CL5")
-CLUSTER$CL5 <- 11
-CLUSTER[CL5[[1]],] <- "G1"
-CLUSTER[CL5[[2]],] <- "G2"
-CLUSTER[CL5[[3]],] <- "G3"
-CLUSTER[CL5[[4]],] <- "G4"
-# # CLUSTER[CL5[[5]],] <- "G5"
-      
-bal_sf$CL <- CLUSTER$CL5
+# Plot total within sum of squares
+clusterings <- kclusts %>%
+  unnest(cols = c(glanced))
 
-plot(bal_sf["CL"])
+ggplot(clusterings, aes(k, tot.withinss)) +
+  geom_line() +
+  geom_point() + 
+  theme_bw()
+
 ```
 
 
-```{r prsh-CoDa-cluster-tbl}
-bal_sf %>% 
-  group_by(CL) %>% 
+```{r prsh-CoDa-cluster-k4}
+
+assignments <- kclusts %>% 
+  unnest(cols = c(augmented)) %>% 
+  st_sf()
+
+# plot k = 4
+assignments %>% 
+  filter(k == 4) %>% 
+  ggplot() +
+  geom_sf(aes(fill = .cluster)) 
+  
+```
+
+
+```{r prsh-CoDa-cluster-k-tbl}
+
+assignments %>% 
+  filter(k == 4 ) %>% 
+  group_by(.cluster) %>% 
   summarise(across(.cols = ends_with("pct"), .fns = median)) %>% 
   as_tibble() %>% 
   select(-geometry)
+
 ```
 
 
-```{r prsh-CoDa-cluster-boxplot, fig.height=5, fig.width=7, fig.cap="Cluster characteristics"}
+```{r prsh-CoDa-cluster-boxplot, fig.height=3, fig.width=6, fig.cap="Cluster characteristics"}
 
-bal_sf %>% 
-  select(CL, pop_dan_pct, pop_frgn_nwst_pct, pop_frgn_wst_pct) %>%
+assignments %>% 
+  filter(k == 4 ) %>% 
+  select(.cluster, pop_dan_pct, pop_frgn_nwst_pct, pop_frgn_wst_pct) %>%
   as_tibble() %>%
-  pivot_longer(!c(CL, geometry), names_to = "name", values_to = "value") %>%
+  pivot_longer(!c(.cluster, geometry),
+               names_to = "name", 
+               values_to = "value") %>%
   mutate(name = gsub("pop_", "", name),
          name = gsub("_pct", "", name),
          name = gsub("frgn_", "", name))  %>%
@@ -988,7 +1009,7 @@ bal_sf %>%
   geom_boxplot(aes(y = value, x = name), fill = "red") +
   labs(x = "",
        y = "Percentage [%]")  +
-  facet_grid(~CL) +
+  facet_grid(~.cluster) +
   theme_bw()
 
 ```
