@@ -459,8 +459,7 @@ capital_muni_pop_sf %>%
 ### Autocorrelation (Moran I)
 
 Local spatial autocorrelation. Define neighbours polygons and weights:
-
-```{r MI-function}
+```{r fig-MI-local, fig.height=25, fig.width=10, fig.cap="Local Moran index (p-value < 0.15)"}
 
 # Based on:
 # https://mgimond.github.io/simple_moransI_example/
@@ -470,10 +469,13 @@ library(spdep)
 
 # Local Moran index
 
-f1 <- function(year, variable, signif = 0.15) { 
+f_local_moran <- function(year, 
+                          variable, 
+                          df = capital_prsh_ancestry_sf, 
+                          signif = 0.15) { 
   
   # Polygons
-  s <- capital_prsh_ancestry_sf %>%
+  s <- df %>%
     # Select
     filter(year == {{ year }}) %>% 
     drop_na() %>% 
@@ -485,7 +487,7 @@ f1 <- function(year, variable, signif = 0.15) {
     pull( {{ variable }}) 
   
   # Plot MI
-  x %>% 
+  xp <- x %>% 
     # Local Index
     localmoran_perm(listw = nb2listw(poly2nb(s, queen = TRUE),
                                      style = "W",
@@ -511,7 +513,9 @@ f1 <- function(year, variable, signif = 0.15) {
                                          "Low-Low",
                                          "Low-High",
                                          "High-Low",
-                                         "High-High"))) %>% 
+                                         "High-High"))) 
+  
+  xp %>% 
     # Plot quadrants (LISA)
     ggplot() +
     geom_sf(data = capital_prsh, fill = "black") + 
@@ -529,124 +533,17 @@ f1 <- function(year, variable, signif = 0.15) {
 
   }
 
-```
-
-```{r fig-MI-nb, fig.height=25, fig.width=10, fig.cap="Local Moran index (p-value < 0.15)"}
-
-p <- map2(.x = rep(2008:2019, times=1, each = 3),
-          .y = rep(c("pop_dan_pct", "pop_frgn_wst_pct", "pop_frgn_nwst_pct"),
-                   12),
-          ~f1(.x, .y))
-
-# Plots
+# Plot maps 
+p <- map2(.x = rep(2008:2019, times = 1, each = 3),
+          .y = rep(c("pop_dan_pct", "pop_frgn_wst_pct", "pop_frgn_nwst_pct"), 12),
+          ~f_local_moran(.x, .y))
 wrap_plots(p, ncol = 3) + plot_layout(guides = "collect")
 
 ```
 
 ### Ternary plots
 
-```{r ternary-pop-year, fig.height=10, fig.width=10, fig.cap = "ternary plot by year"}
-
-ggtern::ggtern(data = capital_prsh_ancestry_sf,
-       aes(x = pop_dan,
-           y = pop_frgn_wst,
-           z = pop_frgn_nwst,
-           colour = factor(year)
-       )
-) +
-  scale_color_viridis_d() +
-  geom_point() +
-  ggtern::theme_rgbw() +
-  ggtern::theme_hidetitles()
-
-```
-
-```{r ternary-pop-parish, fig.height=20, fig.width=10, fig.cap = "Ternary plots by parish"}
-
-ggtern::ggtern(data = capital_prsh_ancestry_sf,
-       aes(x = pop_dan,
-           y = pop_frgn_wst,
-           z = pop_frgn_nwst,
-           colour = prsh_name)) +
-  geom_point() +
-  facet_wrap( ~year, ncol = 3) +
-  ggtern::theme_rgbw() +
-  ggtern::theme_hidetitles() +
-  theme(legend.position = "bottom") +
-  guides(colour = guide_legend(title.position = "top")) 
-
-```
-
-Ternary maps: center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).  
-
-```{r tern-map, fig.height=20, fig.width=20, fig.cap="Population distribution"}
-
-f_tern_map <- function(df) {
-
-# Make colours
-tric <- tricolore::Tricolore(df,
-                             p1 = "pop_dan",
-                             p2 = "pop_frgn_wst",
-                             p3 = "pop_frgn_nwst",
-                             breaks = Inf,
-                             show_data = FALSE,
-                             center = c(0.803, 0.074, 0.123),
-                             hue = 2/12,
-                             lightness = 1,
-                             chroma = 1
-                             )
-
-# legend
-p_legend <- tric$key +
-  labs(L = "% Danes",
-       T = "% Wst",
-       R = "% Non-wst") +
-  theme(axis.title = element_text(size = 5, face = "bold"),
-        axis.text  = element_text(size = 5)) 
-
-# Add columns with colours
-df <- df %>% 
-  mutate(pop_rgb = tric$rgb)
-
-# Map
-ggplot() +
-  geom_sf(data = dk_country_crop,
-          aes(geometry = geometry),
-          fill = "grey") +
-  geom_sf(data = df,
-          aes(fill = pop_rgb, geometry = geometry),
-          size = 0.05) +
-  scale_fill_identity() +
-  geom_sf(data = capital_muni,
-          aes(geometry = geometry),
-          fill = NA,
-          color = "white", 
-          size = 0.5)+
-  labs(title = df$year) +
-  theme_void() + 
-  annotation_custom(
-    ggtern::ggplotGrob(p_legend) ,
-    xmin = 730000,
-    xmax = 742000,
-    ymin = 6178000,
-    ymax = 6190000
-  )
-
-}
-
-plts <- capital_prsh_ancestry_sf %>% 
-  group_split(year) %>% 
-  map(. , .f = f_tern_map)
-
-wrap_plots(plts, ncol = 3)
-
-```
-
-```{r tern-map-2018, fig.height=10, fig.width=10, fig.cap="Population distribution in 2018"}
-
-plts[[11]]
-
-```
+PROBLEMS WITH GGTERN (ggtern is´not compatible with the new version of ggplot2) - Plot in another project and put here the results 
 
 ## House prices at parish level
 
@@ -822,13 +719,15 @@ ggplot(data = filter(runits_oft_capital_sf, price_2019_kDKK_m2 > 1),
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
 
+
 ```
 
 House prices parish (spatial distribution)
 
 ```{r runits-oft-prices-parish}
 
-# Summary house prices by parish 
+# Summary house prices by parish
+
 sum_runits_oft_prices <- runits_oft_capital_sf %>% 
   as.data.table() %>% 
   summarise.(n_runits_oft = n(), 
@@ -846,13 +745,15 @@ sum_runits_oft_prices <- runits_oft_capital_sf %>%
 ```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
 
 # Aux. function for plotting
+
 f_plot <- function(df) {
   ggplot() +
     geom_sf(data = dk_country_crop, fill = "grey") +
     geom_sf(data = df, 
             aes(fill = cut(median_2019_kDKK_m2,
                            breaks = quantile(sum_runits_oft_prices$median_2019_kDKK_m2,
-                                             seq(0, 1, 0.1)), 
+                                             seq(0, 1, 0.1),
+                                             na.rm = TRUE), 
                            include.lowest = TRUE, 
                            right = TRUE, 
                            dig.lab = 0,
@@ -900,91 +801,55 @@ ggplot() +
        y = "") +
   facet_wrap( ~year, ncol = 3)
 
-```
-
-remove one parish with non-western migrants up to 80% (NAME). There were not house prices in the ordinary free sale (only for one yesr); WHY?
-
-
-```{r fig-parish-tern-pop-price-all, fig.cap = "Median housing prices and popupation distribution by parish (all data)"}
-
-ggtern::ggtern(data = sum_runits_oft_prices,
-               aes(x = pop_dan,
-                   y = pop_frgn_wst,
-                   z = pop_frgn_nwst,
-                   colour = cut_number(median_2019_kDKK_m2,
-                                       n = 10,
-                                       dig.lab = 0))) +
-  viridis::scale_color_viridis(name = "Percentiles\n[kDkk/m2]",
-                               option = "turbo",
-                               discrete = TRUE) +
-  geom_point(size = 0.85) +
-  ggtern::theme_rgbw() +
-  ggtern::theme_hidetitles() +
-  ggtern::theme_zoom_L(0.6) +
-  guides(colour = guide_legend(reverse = TRUE,
-                               override.aes = list(size = 3)))  
 
 ```
 
-```{r fig-parish-tern-pop-price-year, fig.height=10, fig.width=10, fig.cap = "Median housing prices and popupation distribution by parish and year"}
-
-ggtern::ggtern(data = sum_runits_oft_prices,
-               aes(x = pop_dan,
-                   y = pop_frgn_wst,
-                   z = pop_frgn_nwst,
-                   colour = cut_number(median_2019_kDKK_m2,
-                                       n = 10,
-                                       dig.lab = 0))) +
-  facet_wrap( ~ year, ncol = 3)+
-  viridis::scale_color_viridis(name = "Percentiles\n[kDkk/m2]",
-                               option = "turbo",
-                               discrete = TRUE) +
-  geom_point(size = 0.9) +
-  ggtern::theme_rgbw() +
-  ggtern::theme_hidetitles() +
-  ggtern::theme_zoom_L(0.6) +
-  guides(colour = guide_legend(reverse = TRUE,
-                               override.aes = list(size = 3))) 
-
-```
-
+remove one parish with non-western migrants up to 80% (NAME). There were not house prices in the ordinary free sale (only for one year); WHY?
 
 ## Compositional data analysis 
 
-```{r prsh-CoDa}
-library(compositions)
+Migration data usually reflected a percentage over the total population, which make them close data. We need to applu therefore CoDa framework.... Types of transformation worr working with these data (i.e. alr, clr, ilr). We can use standart statistics over these lorg-rations, mainly with ilr transformations (@Lloyd2012) 
 
-# install.packages("ggplot2", version = "3.3.3")
+balances - concept and aplications. How to obtain the best transformation (based on expert knowlegde of the data- PCA).
+```{r prsh-CoDa}
+
+library(compositions)
 
 # CoDa (2019)
 x <- capital_prsh_ancestry_sf %>%
   filter(year == 2019) %>% 
   select(prsh_id, pop_dan, pop_frgn_nwst, pop_frgn_wst) %>%
+  rename(dan = pop_dan, 
+         nwst = pop_frgn_nwst,
+         wst = pop_frgn_wst) %>% 
   as_tibble() %>%
   drop_na() %>% 
   select(-geometry) 
 
 xc <- x %>% 
-  clo(parts = c("pop_dan", "pop_frgn_nwst", "pop_frgn_wst"),
+  clo(parts = c("dan", "nwst", "wst"),
       total = 100) %>% 
   acomp()
+
 ```
 
-PCA of clr transformations
-```{r prsh-CoDa-PCA}
+PCA (with clr transformations). Helps to identifythe variables taht most accoutn for the variability of the results and chose the balance. .... 
+
+```{r prsh-CoDa-PCA, fig.height=5, fig.width=9, fig.cap="Biplot of clr transfomation and balance dendrogram"}
+
+par(mfrow = c(1, 2))
+
 # PCA
 pc <- princomp(xc)
-summary(pc)
+# summary(pc)
 coloredBiplot(x = pc,
               pc.biplot = T,
               xlabs.pc = c(1, 2, 3),
               xlabs.col = 2:4,
-              col = "black"
-              )
-```
+              col = "black",
+              xlab = "Comp. 1 (73%)",
+              ylab = "Comp. 1 (27%)")
 
-
-```{r prsh-CoDa-dendogram}
 # Dendrogram balances
 signary <- t(matrix( c(1, -1,  1,
                        1,  0, -1),
@@ -995,72 +860,85 @@ CoDaDendrogram(X = xc,
                signary = signary,
                col = "black",
                range = c(-8,8),
-               type = "l"
-)
+               # type = "l",
+               main = "CoDa Dendrogram")
 
+```
 
-bal <- balance(xc, ~pop_dan/pop_frgn_wst/pop_frgn_nwst)
+In our cases, with only three variables, our balances are:
+
+$$ b_1 = \sqrt{\frac{2}{3}} * ln(\frac{x_1 x_2}{x_3^2}) $$
+$$ b_2 = \sqrt{\frac{1}{2}} * ln(\frac{x_1}{x_2}) $$
+Where $x_1$, $x_2$, $x_3$ are the Danes, Western, and Non-wester population in the parish. 
+
+```{r prsh-CoDa-balances}
+
+# bal <- balance(xc, ~pop_dan/pop_frgn_wst/pop_frgn_nwst)
 
 bal_sf <- capital_prsh_ancestry_sf %>%
   filter(year == 2019) %>% 
   mutate(b1 = sqrt(2/3) * log( ((pop_dan * pop_frgn_wst)^0.5) / (pop_frgn_nwst)),
          b2 = sqrt(1/2) * log(pop_dan / pop_frgn_wst))
+
 ```
 
-Spatian autocorrelation
-```{r prsh-CoDa-moran}
+We can therefore analyse the spatial autocorrelation of the balances: 
+
+```{r prsh-CoDa-moran-global}
 # Moran
 
 nb <- poly2nb(bal_sf, queen = TRUE)
 wts <- nb2listw(nb, style = "W", zero.policy = TRUE)
 
 # Global index
-moran.test(bal_sf$b1, listw = wts)
-moran.test(bal_sf$b2, listw = wts)
+GMI_b1 <- moran.test(bal_sf$b1, listw = wts) %>%
+  tidy() %>% 
+  mutate(balance = "b1") %>% 
+  select(balance, everything()) %>% 
+  rename(moran_I  = estimate1,
+         expectation = estimate2,
+         variance = estimate3)
 
-# Local index
+GMI_b2 <- moran.test(bal_sf$b2, listw = wts) %>%
+  tidy() %>% 
+  mutate(balance = "b2") %>% 
+  select(balance, everything()) %>% 
+  rename(moran_I  = estimate1,
+         expectation = estimate2,
+         variance = estimate3)
 
-signif <- 0.1
-LM_b1 <- bal_sf %>% 
-  pull (b1) %>% 
-    # Local Index
-    localmoran_perm(listw = wts,
-                    nsim = 999) %>% 
-    as_tibble() %>% 
-    dplyr::rename(p.value = `Pr(z > 0)`) %>% 
-    # binds results to our polygon shapefile
-    cbind(bal_sf) %>% 
-    st_sf() %>% 
-    # center the variable of interest around its mean
-    mutate(m_qualification = b1 - mean( b1 ),
-           m_local = Ii - mean(Ii)) %>% 
-    # Build quadrant
-    mutate(quadrant = case_when(m_qualification > 0 & m_local > 0 ~ 4,
-                                m_qualification < 0 & m_local < 0 ~ 1,
-                                m_qualification < 0 & m_local > 0 ~ 2,
-                                m_qualification > 0 & m_local < 0 ~ 3),
-           quadrant = ifelse(p.value > signif, 0, quadrant)) %>% 
-    mutate(quadrant = factor(quadrant,
-                             levels = c(0, 1, 2, 3, 4), 
-                             labels =  c("Insignificant",
-                                         "Low-Low",
-                                         "Low-High",
-                                         "High-Low",
-                                         "High-High")))
+GMI <- bind_rows(GMI_b1, GMI_b2) %>%
+  print()
 
-
-
-
-plot(LM_b1["quadrant"], main = "LISA (B1)")
-# plot(LM_b2["quadrant"], main = "LISA (B2)")
 ```
 
 
-```{r prsh-CoDa-cluster}
+```{r prsh-CoDa-moran-local-b1}
 
+f_local_moran(df = bal_sf,
+              year = 2019, 
+              variable = "b1", 
+              signif = 0.1)
+
+```
+
+
+```{r prsh-CoDa-moran-local-b2}
+
+f_local_moran(df = bal_sf,
+              year = 2019, 
+              variable = "b2", 
+              signif = 0.1)
+
+```
+
+
+
+Spatial clusters
+```{r prsh-CoDa-cluster}
 # Cluster
-TS.ilr <- bal
-# TS.ilr <- bal_sf$b1
+
+TS.ilr <- scale(bal_sf$b1)
 # TS.ilr <- bal_sf$b2
 
 
@@ -1085,26 +963,39 @@ CLUSTER[CL5[[4]],] <- "G4"
 bal_sf$CL <- CLUSTER$CL5
 
 plot(bal_sf["CL"])
+```
 
+
+```{r prsh-CoDa-cluster-tbl}
 bal_sf %>% 
   group_by(CL) %>% 
-  summarise(across(.cols = ends_with("pct"),     .fns = median))
+  summarise(across(.cols = ends_with("pct"), .fns = median)) %>% 
+  as_tibble() %>% 
+  select(-geometry)
+```
 
+
+```{r prsh-CoDa-cluster-boxplot, fig.height=5, fig.width=7, fig.cap="Cluster characteristics"}
 
 bal_sf %>% 
-  select(CL, pop_dan_pct, pop_frgn_nwst_pct, pop_frgn_wst_pct) %>% 
-  as_tibble() %>% 
-  pivot_longer(!c(CL, geometry), names_to = "name", values_to = "value") %>% 
+  select(CL, pop_dan_pct, pop_frgn_nwst_pct, pop_frgn_wst_pct) %>%
+  as_tibble() %>%
+  pivot_longer(!c(CL, geometry), names_to = "name", values_to = "value") %>%
   mutate(name = gsub("pop_", "", name),
-         name = gsub("_pct", "", name)) -> aa 
-  
-
-boxplot(value ~ name + CL, aa, notch = F)
+         name = gsub("_pct", "", name),
+         name = gsub("frgn_", "", name))  %>%
+  ggplot() + 
+  geom_boxplot(aes(y = value, x = name), fill = "red") +
+  labs(x = "",
+       y = "Percentage [%]")  +
+  facet_grid(~CL) +
+  theme_bw()
 
 ```
 
 
 ```{r prsh-CoDa-house-prices}
+
 # Model prices
 
 # m1 <- lm(log10(median_2019_kDKK_m2) ~ b1 + b2, data = bal_sf)
@@ -1140,6 +1031,12 @@ boxplot(value ~ name + CL, aa, notch = F)
 # car::Anova(m4, type="III")
 
 ```
+
+
+
+
+
+
 
 
 

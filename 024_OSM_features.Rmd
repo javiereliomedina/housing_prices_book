@@ -70,9 +70,9 @@ osm_poly <- merge(osm_poly_list, osm_poly_dnld, by = c("key", "value")) %>%
   st_sf() %>% 
   # Transform CRS
   st_transform("EPSG:25832") %>% 
-  # Remove non-valid polygons (i.e. 2 polygons)
-  mutate(valid = st_is_valid(.)) %>% 
-  filter(!is.na(valid)) %>% 
+  # # Remove non-valid polygons (i.e. 2 polygons)
+  # mutate(valid = st_is_valid(.)) %>% 
+  # filter(!is.na(valid)) %>% 
   # From Meadow get only "Kalvebod Fælled" 
   filter(feature != "Meadow" |
          (key == "landuse" & value == "meadow" & name == "Kalvebod Fælled")) %>%
