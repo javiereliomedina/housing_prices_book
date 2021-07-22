@@ -4,19 +4,27 @@
 
 Danish population has growth over the last decade from 5.47 million (2008-Q1) to 5.82 million (2020-Q3). However, this increase is mainly due to foreign population. In this sense, the foreigners have raised from 0.30 million to 0.53 million (80%) while Danish citizens has growth from 5.18 million to 5.29 million (2.5%). Therefore, from the increase of almost 350,000 inhabitants over the last decade approximately 66% are immigrants. The population is also getting older with an increase of both the mean and median age of the population. However, there is a significant difference between the mean and median ages of Danish and Foreign citizens, with these values around 40-42 years and 32-34 years respectively. Furthermore, these values have raised for the Danish population but not for foreigners. Another consideration is that the mean age for Danish citizens is less than the median, which indicates that the distribution is skewed to the left (i.e. more elderly people), However, for the foreign population it is the other way around (i.e. the majority are young people). 
 
+```{r years}
+
+start_year <- 2004 # First year with BBR data 
+end_year   <- 2020 # Last year with BBR data
+
+```
+
 ```{r fig-DK-pop, fig.height=3.5, fig.width=10, fig.cap="Danish population from 2008-2020"}
 
-# Load population data by citizenship and age (208Q1 - 2019Q1)
+# Load population data by citizenship and age (208Q1 - [end_year]Q1)
 
   # Metadata table of interest (e.g. KMSTA001)
   var_pop <- get_table_metadata(table_id = "FOLK1D", variables_only = TRUE)
   
   # Variables we would like to get data
+  years_val <- paste0(rep(seq(2008, end_year, 1), each = 4), paste0("K", 1:4))
   var_input <- list(list(code = "OMRÅDE", values = "000"),
                     list(code = "KØN", values = c(1,2)),
                     list(code = "ALDER", values = seq(0, 125, 1)),
                     list(code = "STATSB", values = c("DANSK", "UDLAND")),
-                    list(code = "tid", values = var_pop$values[[5]]$id[1:45]))
+                    list(code = "tid", values = years_val))
 
   # Get data 
   pop_ctzn_age <- get_data("FOLK1D", variables = var_input) %>%
@@ -104,8 +112,7 @@ Danish population has growth over the last decade from 5.47 million (2008-Q1) to
 
 The population pyramid also confirms this tendency (figure \@ref(fig:fig-pop-pyramith)). We can see an increase of the percentage of the old dependency people (i.e. > 65 years old), while the percentages of young people (<18 years) has been reduced (lower birth rate with time). Foreign citizens have also increases, with the majority in the economically active region (i.e. 25-35 years old). The bulge in this region may indicate a period of immigration and/or a baby boom years before. The number of young people in this population has also increased, in comparison to the first day of 2008 (Is it due to a high birth rate among foreigner and/or because migrants came to Denmark with their family/children?). However, we see a narrow shape at the top of the curve, which indicate that low proportion of foreigners get older in Denmark. A narrow shape usually means high death rates in the population; however, it is not plausible in Denmark and it may be more reasonable to think that migrants return to their countries after retirement. 
 
-```{r fig-pop-pyramith, fig.height=4, fig.width=10, fig.cap = "Population pyramith of Denmark"}
-
+```{r pop-pyramith, fig.height=4, fig.width=10, fig.cap = "Population pyramith of Denmark"}
 # Load population data by ancestry and age (5 years) in DK
 
   # Metadata table of interest (e.g. FOLK1C)
@@ -142,7 +149,7 @@ The population pyramid also confirms this tendency (figure \@ref(fig:fig-pop-pyr
   id_citizen <- as.numeric(var_pop$values[[5]]$id)
   id_citizen <- id_citizen[id_citizen > 0]
   ## Quarters (e.g. 2008-Q1 and 2019-Q1)
-  id_quarter <- var_pop$values[[6]]$id[1:45]
+  id_quarter <- years_val
   
   # Get data (in parallel)
   plan(multisession, workers = 7)
@@ -180,13 +187,17 @@ The population pyramid also confirms this tendency (figure \@ref(fig:fig-pop-pyr
     ungroup()
     plan("default")
     
+```
+
+```{r fig-pop-pyramith, fig.height=4, fig.width=10, fig.cap = "Population pyramith of Denmark"}
+
 # Plot population pyramid 
   brks_y <- seq(-4, 4, 1)
   lmts_y = c(min(brks_y), max(brks_y))
   lbls_y <- paste0(as.character(abs(brks_y)), "%")
   
   pop_DK %>% 
-    filter(date == "2008-01-01" | date == "2019-01-01") %>%
+    filter(date == "2008-01-01" | date == last(pop_DK$date)) %>%
     ggpyramid(values = pop_per, fill = ancestry) +
     scale_fill_manual(name = "Ancestry",
                       values = c("#0072B2", "#F0E442", "#D55E00")) +
@@ -196,12 +207,12 @@ The population pyramid also confirms this tendency (figure \@ref(fig:fig-pop-pyr
                        limits = lmts_y) +
     labs(caption = "Source: Statistics Denmark") + 
     geom_segment(data = filter(pop_DK,
-                               date == "2008-01-01" | date == "2019-01-01"),
+                               date == "2008-01-01" | date == last(pop_DK$date)),
                  aes(x = 4, xend = 4,
                      y = -4, yend = 4),
                  linetype = "dashed") +
     geom_segment(data = filter(pop_DK,
-                               date == "2008-01-01" | date == "2019-01-01"),
+                               date == "2008-01-01" | date == last(pop_DK$date)),
                  aes(x = 13.5, xend = 13.5,
                      y = -4, yend = 4),
                  linetype = "dashed") +
@@ -288,7 +299,7 @@ Are these areas loosing population because low birth rates/high death? Low in-mi
   ## Ancestry
   id_ancestry <- NA
   ## Quarters
-  id_quarter <- var_pop$values[[6]]$id[1:45]   # Select all quarters
+  id_quarter <- years_val   # Select all quarters
   # Parallel process with {future}
   plan(multisession)  
   pop_muni <- id_quarter %>% future_map_dfr(steps)
@@ -355,11 +366,11 @@ dk_muni_pop <- dk_muni %>%
 
 ```
 
-```{r fig-pop-growth-total, fig.cap = "Total population growth from 2008 to 2019"}
+```{r fig-pop-growth-total, fig.cap = "Total population growth from 2008 to 2020"}
 
 ggplot() +
     geom_sf(data = filter(dk_muni_pop,
-                          date == as.Date("2019-01-01"),
+                          date == as.Date(last(dk_muni_pop$date)),
                           ancestry == "Total"),
             aes(fill = pop_pct_2008),
             color = "grey50",
@@ -382,23 +393,23 @@ ggplot() +
 
 ```{r fig-pop-growth-ancestry, fig.cap = "Population growth from 2008 to 2019 by ancestry"}
 
-dk_muni_pop_2019 <- dk_muni_pop %>% 
-  filter(date == as.Date("2019-01-01"), ancestry != "Total")
+dk_muni_pop_last <- dk_muni_pop %>% 
+  filter(date == as.Date(last(dk_muni_pop$date)), ancestry != "Total")
 
 # Transform Percentage of change to factor 
-  pct_breaks <- c(floor(min(dk_muni_pop_2019$pop_pct_2008)), -10, -5, 
+  pct_breaks <- c(floor(min(dk_muni_pop_last$pop_pct_2008)), -10, -5, 
                   0,
-                  5, 10, 20, 30, 50, 100, 150, max(dk_muni_pop_2019$pop_pct_2008))
+                  5, 10, 20, 30, 50, 100, 150, max(dk_muni_pop_last$pop_pct_2008))
   
-  dk_muni_pop_2019 <- dk_muni_pop_2019 %>% 
-    mutate(pop_pct_2008_brk = cut(dk_muni_pop_2019$pop_pct_2008,
+  dk_muni_pop_last <- dk_muni_pop_last %>% 
+    mutate(pop_pct_2008_brk = cut(dk_muni_pop_last$pop_pct_2008,
                                   breaks = pct_breaks)) 
 # Colour palette
   myPalette <- c(rev(brewer.pal(3, "Blues")), brewer.pal(9, "YlOrRd"))
   
 # Plot by ancestry
 ggplot() +
-  geom_sf(data = dk_muni_pop_2019,
+  geom_sf(data = dk_muni_pop_last,
           aes(fill = pop_pct_2008_brk),
           color = NA) +
   scale_fill_manual(name = "Percentage", 
@@ -413,14 +424,14 @@ ggplot() +
 
 Population change
 
-```{r fig-pop-change, fig.height=25, fig.width=10, fig.cap="Population change from 2008 (municipalitiess are shorted by the total population in 2019)"}
+```{r fig-pop-change, fig.height=25, fig.width=10, fig.cap="Population change from 2008 (municipalitiess are shorted by the total population in 2020)"}
 
   pop_muni %>% 
     ggplot(aes(x = date,
                y = pop_dif_2008/1000,
                colour = ancestry)) +
     geom_line( ) +
-    geom_hline(yintercept = 0, linetype="dashed", color = "grey", size = 0.5) +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "grey", size = 0.5) +
     facet_wrap(~muni_name, ncol = 6,  scale = "free") +
     theme_bw() +
     theme(legend.position = "bottom",
@@ -475,11 +486,10 @@ The total number of immigrants and their descendants living in Denmark at the fi
   id_citizen <- as.numeric(var_pop$values[[5]]$id)
   id_citizen <- id_citizen[id_citizen > 0]
   ## Quarters
-  id_quarter <- var_pop$values[[6]]$id[1:45]   # Select all quarters
+  id_quarter <- years_val   
   # Parallel process with {future}
   plan(multisession)  
-  pop_migr <- id_quarter %>% future_map(steps)
-  pop_migr <- bind_rows(pop_migr)
+  pop_migr <- id_quarter %>% future_map_dfr(steps)
   plan("default")
 
 # Clean column names and format some data
@@ -505,17 +515,17 @@ The total number of immigrants and their descendants living in Denmark at the fi
                  values_to = "pop",
                  names_to = "ancestry")  
 
-# Top 10 origin countries in Denmark (in 2019Q1)   
-  pop_migr_top10_2019 <- pop_migr %>%
+# Top 10 origin countries in Denmark (in 2020)   
+  pop_migr_top10_last <- pop_migr %>%
     filter(muni_name == "All Denmark",
-           date == as.Date("2019-01-01"),
+           date == as.Date(last(pop_migr$date)),
            ancestry == "Total") %>%
     slice_max(pop, n = 10) 
 
 # Evolution of the top 10 countries over the years (since 2008)
   pop_migr_top10 <- pop_migr %>%
     filter(muni_name == "All Denmark", 
-           origin %in% pop_migr_top10_2019$origin) %>% 
+           origin %in% pop_migr_top10_last$origin) %>% 
     # Reorder factors (shorted by Total population in 2019-q1)
     pivot_wider(c(origin, date), names_from = ancestry, values_from = pop) %>%
     mutate(origin = factor(origin),
@@ -527,7 +537,7 @@ The total number of immigrants and their descendants living in Denmark at the fi
   
 ```
 
-```{r fig-pop-migr-top, fig.cap="Evolution of the immigration population from the top-10 countries of origin in 2019"}
+```{r fig-pop-migr-top, fig.cap="Evolution of the immigration population from the top-10 countries of origin in 2020"}
 
 # Total
 p1 <- pop_migr_top10 %>% 
@@ -558,22 +568,25 @@ p2 <- pop_migr_top10 %>%
   
 ```
 
+
 ```{r pop-migr-spatial}
 
-# Plot spatial situation in 2019
-pop_migr_muni_2019Q1 <- dk_muni %>% 
-    left_join(filter(pop_migr, date == as.Date("2019-01-01"), ancestry == "Total"),
+# Plot spatial situation in 2020
+pop_migr_muni_last <- dk_muni %>% 
+    left_join(filter(pop_migr,
+                     date == as.Date(last(pop_migr$date)),
+                     ancestry == "Total"),
               by = "muni_name") %>% 
     st_as_sf() 
 
 ```
 
-```{r fig-pop-migr-total, fig.cap="Spatial distribution of immigrants and their descendants (Date: 2019-01-01)"}
+```{r fig-pop-migr-total, fig.cap="Spatial distribution of immigrants and their descendants (Date: 2020-10-01)"}
 
 # Total foreign population by muni (and percentage over the total migrants)
 # Binds represent the same percentage of population (~20%)
 cumsum__breaks <- c(0, 20, 40, 60, 80, 100)
-pop_migr_total <- pop_migr_muni_2019Q1 %>%
+pop_migr_total <- pop_migr_muni_last %>%
   group_by(muni_name) %>% 
   summarize(pop = sum(pop, na.rm = TRUE)) %>% 
   arrange(-pop) %>%
@@ -621,7 +634,7 @@ Spatial distribution:
   cumsum__breaks <- c(0, 20, 40.0, 60.0, 80.0, 100)
   top_migr_groups <- c("Turkey", "Poland", "Syria", "Germany", "Romania", "Iraq")
   
-  pop_migr_muni_2019Q1_top_groups <-  pop_migr_muni_2019Q1 %>% 
+  pop_migr_muni_last_top_groups <-  pop_migr_muni_last %>% 
     filter(origin %in% top_migr_groups) %>% 
     st_sf() %>% 
     group_by(origin) %>% 
@@ -633,7 +646,7 @@ Spatial distribution:
 
 # facet by top countries, adding the total number of immigrants/descendants
   sum_pop <- function(country) {
-    sum(pop_migr_muni_2019Q1_top_groups[pop_migr_muni_2019Q1_top_groups$origin == country, ]$pop,
+    sum(pop_migr_muni_last_top_groups[pop_migr_muni_last_top_groups$origin == country, ]$pop,
         na.rm = T)
   }
   levels <- top_migr_groups
@@ -662,15 +675,15 @@ Spatial distribution:
                     " inhabitants)",
                     sep = "") )
   
-  pop_migr_muni_2019Q1_top_groups <- pop_migr_muni_2019Q1_top_groups %>% 
+  pop_migr_muni_last_top_groups <- pop_migr_muni_last_top_groups %>% 
     mutate(origin_num = factor(origin, levels = levels, labels = labels))
   
 ```
 
 
-```{r fig-pop-migr-top10-countries, fig.width=7, fig.height=9, fig.cap = "Top countries of origin for immigrants and their descendants (Date: 2019-01-01)"}
+```{r fig-pop-migr-top10-countries, fig.width=7, fig.height=9, fig.cap = "Top countries of origin for immigrants and their descendants (Date: 2020-10-01)"}
 
-pop_migr_muni_2019Q1_top_groups %>% 
+pop_migr_muni_last_top_groups %>% 
   ggplot() +
     geom_sf(aes(fill = pop_pct_cum_brk), color = "grey", size = 0.05) +
     scale_fill_brewer(name = "Cumulative [%]",
@@ -775,11 +788,11 @@ res_prices <- res_prices_read %>%
 
 ```
 
-We adjusted the housing prices to 2019 prices. In this regard, we take into  account the inflation and, therefore, prices from different years can be compared (@Valtersdorf2020). The adjusted price is obtained as follow:
+We adjusted the housing prices to 2020 prices. In this regard, we take into  account the inflation and, therefore, prices from different years can be compared (@Valtersdorf2020). The adjusted price is obtained as follow:
 
-$$ Pice_{2019} = Price_{i} \cdot \frac{Index_{2019}}{Index_{i}}$$
+$$ Pice_{2020} = Price_{i} \cdot \frac{Index_{2020}}{Index_{i}}$$
 
-Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the price of the respective year $i$, and $Index_{i}$ and $Index_{2019}$ are the price indexes for the origin year ${i}$ and $2019$, respectively. The indexes have been obtained from Statistic Denmark; i.e. table [EJ6: Price index for sales property (2006=100) by category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ6&PLanguage=1&PXSId=0&wsid=cftree) (Table \@ref(tab:price-index-DK)). 
+Where, $Price_{2020}$ is the adjusted housing price for 2020, $Price_{i}$ is the price of the respective year $i$, and $Index_{i}$ and $Index_{2020}$ are the price indexes for the origin year ${i}$ and $2020$, respectively. The indexes have been obtained from Statistic Denmark; i.e. table [EJ6: Price index for sales property (2006=100) by category of real property and unit](https://www.statistikbanken.dk/statbank5a/SelectVarVal/Define.asp?MainTable=EJ6&PLanguage=1&PXSId=0&wsid=cftree) (Table \@ref(tab:price-index-DK)). 
 
 ```{r price-index-DK}
 
@@ -794,7 +807,7 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
     # Index
     list(code = "TAL", values = "100"),
     # From 2004 to 2019
-    list(code = "Tid", values = seq(2004, 2019, 1))
+    list(code = "Tid", values = seq(start_year, end_year, 1))
     )
 
 # Get index
@@ -821,38 +834,38 @@ Where, $Price_{2019}$ is the adjusted housing price for 2019, $Price_{i}$ is the
 ```{r adj-price-DK}
 
 # Adjust housing prices
-price_index_2019 <- price_index %>% 
-  filter(index_year == 2019)
+price_index_2020 <- price_index %>% 
+  filter(index_year == 2020)
 
 # Add adjusted prices 
 res_prices <- res_prices %>% 
   # Add price index by year and category
   left_join.(price_index, by = c("year" = "index_year")) %>% 
   # Add columns with index_2019
-  mutate.(index_2019 = price_index_2019$index_value) %>% 
+  mutate.(index_2020 = price_index_2020$index_value) %>% 
   # Calculate prices 2019
-  mutate.(price_2019_kDKK = (price_kDKK * index_2019 / index_value)) %>% 
+  mutate.(price_2020_kDKK = (price_kDKK * index_2020 / index_value)) %>% 
   # Price per m2
-  mutate(price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL)
+  mutate(price_2020_kDKK_m2 = price_2020_kDKK / BEBO_ARL)
  
 ```
 
-Prices change (median) from 2008 to 2019.
+Prices change (median) from 2004 to 2020.
 ```{r median-prices-muni}
 
-# Summary statistics of 2019 adjusted housing prices by municipalities
+# Summary statistics of 2020 adjusted housing prices by municipalities
 res_prices_muni <- res_prices %>%
-  # 2008  - year we start to have population data 
-  filter.(year >= 2008) %>% 
+  # 2008  - year we start to have population data
+  filter.(year >= 2008) %>%
   # Estimate mean and median values (house prices)
   summarise.(num_res_units = n(), 
-             median_2019_kDKK_m2 = median(price_2019_kDKK_m2),
+             median_2020_kDKK_m2 = median(price_2020_kDKK_m2),
              .by = c(muni_id, year)) %>% 
   # Price change with 2008 as baseline
   arrange.(muni_id, year) %>% 
   mutate.(
-    median_2019_kDKK_m2_dif = 
-      100 * (median_2019_kDKK_m2 - first(median_2019_kDKK_m2)) / first(median_2019_kDKK_m2),
+    median_2020_kDKK_m2_dif = 
+      100 * (median_2020_kDKK_m2 - first(median_2020_kDKK_m2)) / first(median_2020_kDKK_m2),
     .by = muni_id)
   
 # Link house prices (at the first day of the year) with population.  
@@ -875,12 +888,12 @@ dk_muni_prices <- dk_muni_pop %>%
 
 ```
 
-```{r fig-prices-LAUs, fig.cap = "Adjusted 2019 housing prices variation from 2008 to 2019"}
+```{r fig-prices-LAUs, fig.cap = "Adjusted 2020 housing prices variation from 2008 to 2020"}
 
 dk_muni_prices %>% 
-  filter(year == 2019) %>% 
+  filter(year == end_year) %>% 
   ggplot() +
-    geom_sf(aes(fill = median_2019_kDKK_m2_dif),
+    geom_sf(aes(fill = median_2020_kDKK_m2_dif),
             color = "grey", size = 0.05) +
     scale_fill_gradient2(name = "Change [%]",
                          low = "blue",
@@ -905,14 +918,14 @@ Relationship between population density and house prices (median values) at muni
 ggplot() +
   geom_point(data = dk_muni_prices,
              aes(x = pop_km2_Total,
-                 y = median_2019_kDKK_m2,
+                 y = median_2020_kDKK_m2,
                  colour = muni_name,
                  shape = factor(year))) +
   scale_shape_manual(values = 1:nlevels(factor(dk_muni_prices$year))) +
   scale_x_log10() +
   geom_mark_ellipse(data = dk_muni_prices_lbls,
                     aes(x = pop_km2_Total,
-                        y = median_2019_kDKK_m2,
+                        y = median_2020_kDKK_m2,
                         colour = muni_name,
                         label = muni_name),
                     label.fill = NA) +
@@ -927,7 +940,7 @@ ggplot() +
          colour = guide_legend(ncol = 7, title.position = "top")) +
   geom_smooth(data = dk_muni_prices,
               aes(x = pop_km2_Total,
-                  y = median_2019_kDKK_m2),
+                  y = median_2020_kDKK_m2),
               method = "lm", 
               se = F,
               colour = "blue") 
@@ -936,7 +949,7 @@ ggplot() +
 
 Plots variation over time (adjusted prices). NOTE: Zoom up to 80% change
 
-```{r fig-price-change-muni, fig.height=25, fig.width=10, fig.cap = "Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2019)"}
+```{r fig-price-change-muni, fig.height=25, fig.width=10, fig.cap = "Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2020)"}
 
 # Short municipalities by total population density in 2008-Q1
 dk_muni_prices <- dk_muni_prices %>%
@@ -946,7 +959,7 @@ dk_muni_prices <- dk_muni_prices %>%
 # Plot
 ggplot(data = dk_muni_prices,
             aes(x = year,
-                y = median_2019_kDKK_m2_dif)) +
+                y = median_2020_kDKK_m2_dif)) +
   geom_point() +
   geom_smooth(method = "loess",
               span = 0.75,
@@ -974,13 +987,13 @@ ggplot(data = dk_muni_prices,
 # Plot
   ggplot(data = dk_muni_prices,
          aes(x = pop_km2_Total,
-             y = median_2019_kDKK_m2)) +
+             y = median_2020_kDKK_m2)) +
     geom_point() +
     geom_smooth(method = "lm") +
     scale_x_log10() +
     labs(title = "",
          x = "Population density [ppl/km2]",
-         y = "2019 adjusted median values [kDKK/m2]") +
+         y = "2020 adjusted median values [kDKK/m2]") +
     ggrepel::geom_text_repel(data = dk_muni_prices_lbls, 
                              aes(label = muni_name),
                              nudge_y = 20,

@@ -5,8 +5,8 @@ We focused our study in residential dwellings on the ordinary free trade (Table 
 NOTES: 
 
 - There are large differences in the number of residential units between years, why??
-- Study only one year for the moment (e.g. 2019)??
-- Housing prices in different years -> adjust to 2019 prices (what index; Table \@ref(tab:price-index))?
+- Study only one year for the moment (e.g. 2020)??
+- Housing prices in different years -> adjust to 2020 prices (what index; Table \@ref(tab:price-index))?
 - **KONTANT_KOEBESUM** = cash purchase price? Analyse it?? What about **KOEBESUM_BELOEB** = The purchase price agreed upon the sale of the property???
 - **KONTANT_KOEBESUM** = 0 or (< 100000 DKK)? 
 - **SKOEDE_DATO** = "The date on which the deed was signed" -> use as sale date?? Should we use this date (i.e. for the price index)? ...   
@@ -16,7 +16,7 @@ NOTES:
 ```{r}
 
 res_units_oft %>% 
-  ggplot(aes(sample = log10(price_2019_kDKK),  colour = factor(year))) +
+  ggplot(aes(sample = log10(price_2020_kDKK),  colour = factor(year))) +
   geom_qq() +
   #geom_qq_line() +
   facet_grid(~type) +

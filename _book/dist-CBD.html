@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Marina Georgati, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-07-21" />
+<meta name="date" content="2021-07-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -974,171 +974,171 @@ div.csl-indent {
 <div id="dist-CBD" class="section level1" number="7">
 <h1><span class="header-section-number">Chapter 7</span> Distance to Central Business District</h1>
 <p>The distance between a house and the Central Business District (CBD) has an important role in its price (<span class="citation"><a href="#ref-Chen2008" role="doc-biblioref">Chen and Hao</a> (<a href="#ref-Chen2008" role="doc-biblioref">2008</a>)</span>). We add thereofre it as another feature in our model, with a possitive expected effec (i.e. the closer the house to the CBT, the higer the price). However, we do not measure the distance in km but the commuting time from the house to the CBD (i.e. “Indre By”). In this regard, we estimate the travel time (in public transport) from the centre of each grid cell of 100m x 100m to “Kongens Nytorv” (coordinates: 55.6805° N, 12.5860° E), and we associate the time to all dwellings at that grid. We have used used the open source <a href="https://www.opentripplanner.org/">OpenTripPlanner</a>, and the r-package <a href="https://github.com/ropensci/opentripplanner">opentripplanner</a> (<span class="citation"><a href="#ref-Morgan2019" role="doc-biblioref">Morgan et al.</a> (<a href="#ref-Morgan2019" role="doc-biblioref">2019</a>)</span>) for calculating the travel times by foot, bike, car, and public transport (Figure <a href="dist-CBD.html#fig:fig-travel-times">7.1</a>).</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="dist-CBD.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kongens Nytorv</span></span>
-<span id="cb100-2"><a href="dist-CBD.html#cb100-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-3"><a href="dist-CBD.html#cb100-3" aria-hidden="true" tabindex="-1"></a>KN <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">name =</span> <span class="st">&quot;Kongens Nytorv&quot;</span>, <span class="at">x =</span> <span class="fl">12.5860</span>, <span class="at">y =</span> <span class="fl">55.6805</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb100-4"><a href="dist-CBD.html#cb100-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb100-5"><a href="dist-CBD.html#cb100-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:4326&quot;</span>) </span></code></pre></div>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="dist-CBD.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NOT RUN (slow) uncomment if needed</span></span>
-<span id="cb101-2"><a href="dist-CBD.html#cb101-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb101-3"><a href="dist-CBD.html#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="co"># # OTP folder structure</span></span>
-<span id="cb101-4"><a href="dist-CBD.html#cb101-4" aria-hidden="true" tabindex="-1"></a><span class="co"># dir.create(&quot;otp&quot;)</span></span>
-<span id="cb101-5"><a href="dist-CBD.html#cb101-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dir.create(&quot;otp/graphs/default&quot;)</span></span>
-<span id="cb101-6"><a href="dist-CBD.html#cb101-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-7"><a href="dist-CBD.html#cb101-7" aria-hidden="true" tabindex="-1"></a><span class="co"># path_data &lt;- file.path(&quot;./otp&quot;)</span></span>
-<span id="cb101-8"><a href="dist-CBD.html#cb101-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-9"><a href="dist-CBD.html#cb101-9" aria-hidden="true" tabindex="-1"></a><span class="co"># # Data</span></span>
-<span id="cb101-10"><a href="dist-CBD.html#cb101-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-11"><a href="dist-CBD.html#cb101-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Download Denmark GTFS from dk_gtfs &lt;- &quot;http://www.rejseplanen.info/labs/GTFS.zip&quot;</span></span>
-<span id="cb101-12"><a href="dist-CBD.html#cb101-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ## and save as &quot;~./otp/graphs/default/gtfs.zip&quot;)</span></span>
-<span id="cb101-13"><a href="dist-CBD.html#cb101-13" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-14"><a href="dist-CBD.html#cb101-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Copenhagen pbf</span></span>
-<span id="cb101-15"><a href="dist-CBD.html#cb101-15" aria-hidden="true" tabindex="-1"></a><span class="co"># cph_match &lt;- oe_match(&quot;Copenhagen&quot;,</span></span>
-<span id="cb101-16"><a href="dist-CBD.html#cb101-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                       provider = &quot;bbbike&quot;,</span></span>
-<span id="cb101-17"><a href="dist-CBD.html#cb101-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                       quiet = TRUE)</span></span>
-<span id="cb101-18"><a href="dist-CBD.html#cb101-18" aria-hidden="true" tabindex="-1"></a><span class="co"># oe_download(cph_match$url,</span></span>
-<span id="cb101-19"><a href="dist-CBD.html#cb101-19" aria-hidden="true" tabindex="-1"></a><span class="co">#             provider = &quot;bbbike&quot;,</span></span>
-<span id="cb101-20"><a href="dist-CBD.html#cb101-20" aria-hidden="true" tabindex="-1"></a><span class="co">#             download_directory = &quot;./otp/graphs/default&quot;,</span></span>
-<span id="cb101-21"><a href="dist-CBD.html#cb101-21" aria-hidden="true" tabindex="-1"></a><span class="co">#             quiet = TRUE)</span></span>
-<span id="cb101-22"><a href="dist-CBD.html#cb101-22" aria-hidden="true" tabindex="-1"></a><span class="co"># file.rename(from = &quot;./otp/graphs/default/bbbike_Copenhagen.osm.pbf&quot;,</span></span>
-<span id="cb101-23"><a href="dist-CBD.html#cb101-23" aria-hidden="true" tabindex="-1"></a><span class="co">#             to = &quot;./otp/graphs/default/osm.pbf&quot;)</span></span>
-<span id="cb101-24"><a href="dist-CBD.html#cb101-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-25"><a href="dist-CBD.html#cb101-25" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Get DEM</span></span>
-<span id="cb101-26"><a href="dist-CBD.html#cb101-26" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-27"><a href="dist-CBD.html#cb101-27" aria-hidden="true" tabindex="-1"></a><span class="co"># # Download elevation model (10m resolution)</span></span>
-<span id="cb101-28"><a href="dist-CBD.html#cb101-28" aria-hidden="true" tabindex="-1"></a><span class="co"># zip_files &lt;- c(&quot;DTM10_616_71_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
-<span id="cb101-29"><a href="dist-CBD.html#cb101-29" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_616_72_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
-<span id="cb101-30"><a href="dist-CBD.html#cb101-30" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_617_71_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
-<span id="cb101-31"><a href="dist-CBD.html#cb101-31" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_617_72_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
-<span id="cb101-32"><a href="dist-CBD.html#cb101-32" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_618_71_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
-<span id="cb101-33"><a href="dist-CBD.html#cb101-33" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_618_72_ASC_UTM32-EUREF89.ZIP&quot;)</span></span>
-<span id="cb101-34"><a href="dist-CBD.html#cb101-34" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-35"><a href="dist-CBD.html#cb101-35" aria-hidden="true" tabindex="-1"></a><span class="co"># f1 &lt;- function(zip_file){ </span></span>
-<span id="cb101-36"><a href="dist-CBD.html#cb101-36" aria-hidden="true" tabindex="-1"></a><span class="co">#   dangeo_get_data(ftp_folder = &quot;dhm_danmarks_hoejdemodel/DHM-HISTORIK/DHM-2007/DTM_10M&quot;,</span></span>
-<span id="cb101-37"><a href="dist-CBD.html#cb101-37" aria-hidden="true" tabindex="-1"></a><span class="co">#                   zip_name   = zip_file)</span></span>
-<span id="cb101-38"><a href="dist-CBD.html#cb101-38" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
-<span id="cb101-39"><a href="dist-CBD.html#cb101-39" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-40"><a href="dist-CBD.html#cb101-40" aria-hidden="true" tabindex="-1"></a><span class="co"># map(zip_files, f1)</span></span>
-<span id="cb101-41"><a href="dist-CBD.html#cb101-41" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-42"><a href="dist-CBD.html#cb101-42" aria-hidden="true" tabindex="-1"></a><span class="co"># # Read files</span></span>
-<span id="cb101-43"><a href="dist-CBD.html#cb101-43" aria-hidden="true" tabindex="-1"></a><span class="co"># asc_files_path &lt;- list.files(path = loc_dir ,</span></span>
-<span id="cb101-44"><a href="dist-CBD.html#cb101-44" aria-hidden="true" tabindex="-1"></a><span class="co">#                              pattern = &quot;*.asc&quot;,</span></span>
-<span id="cb101-45"><a href="dist-CBD.html#cb101-45" aria-hidden="true" tabindex="-1"></a><span class="co">#                              full.names = TRUE, </span></span>
-<span id="cb101-46"><a href="dist-CBD.html#cb101-46" aria-hidden="true" tabindex="-1"></a><span class="co">#                              recursive = TRUE)</span></span>
-<span id="cb101-47"><a href="dist-CBD.html#cb101-47" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-48"><a href="dist-CBD.html#cb101-48" aria-hidden="true" tabindex="-1"></a><span class="co"># # Read blocks</span></span>
-<span id="cb101-49"><a href="dist-CBD.html#cb101-49" aria-hidden="true" tabindex="-1"></a><span class="co"># dtm10_blocks &lt;- map(.x = asc_files_path, .f = read_stars)</span></span>
-<span id="cb101-50"><a href="dist-CBD.html#cb101-50" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-51"><a href="dist-CBD.html#cb101-51" aria-hidden="true" tabindex="-1"></a><span class="co"># # Set crs (UTM32-ETRS89)</span></span>
-<span id="cb101-52"><a href="dist-CBD.html#cb101-52" aria-hidden="true" tabindex="-1"></a><span class="co"># dtm10_blocks &lt;- map(dtm10_blocks, ~st_set_crs(., st_crs(study_area)))</span></span>
-<span id="cb101-53"><a href="dist-CBD.html#cb101-53" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-54"><a href="dist-CBD.html#cb101-54" aria-hidden="true" tabindex="-1"></a><span class="co"># # Build a mosaic </span></span>
-<span id="cb101-55"><a href="dist-CBD.html#cb101-55" aria-hidden="true" tabindex="-1"></a><span class="co"># dtm10 &lt;- st_mosaic(dtm10_blocks[[1]],</span></span>
-<span id="cb101-56"><a href="dist-CBD.html#cb101-56" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[2]],</span></span>
-<span id="cb101-57"><a href="dist-CBD.html#cb101-57" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[3]],</span></span>
-<span id="cb101-58"><a href="dist-CBD.html#cb101-58" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[4]],</span></span>
-<span id="cb101-59"><a href="dist-CBD.html#cb101-59" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[5]],</span></span>
-<span id="cb101-60"><a href="dist-CBD.html#cb101-60" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[6]])</span></span>
-<span id="cb101-61"><a href="dist-CBD.html#cb101-61" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-62"><a href="dist-CBD.html#cb101-62" aria-hidden="true" tabindex="-1"></a><span class="co"># # Intersect with study area</span></span>
-<span id="cb101-63"><a href="dist-CBD.html#cb101-63" aria-hidden="true" tabindex="-1"></a><span class="co"># cph_dtm10 &lt;- st_crop(dtm10, study_area)</span></span>
-<span id="cb101-64"><a href="dist-CBD.html#cb101-64" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-65"><a href="dist-CBD.html#cb101-65" aria-hidden="true" tabindex="-1"></a><span class="co"># # Warping the raster</span></span>
-<span id="cb101-66"><a href="dist-CBD.html#cb101-66" aria-hidden="true" tabindex="-1"></a><span class="co"># newgrid &lt;- study_area %&gt;%</span></span>
-<span id="cb101-67"><a href="dist-CBD.html#cb101-67" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:4326&quot;) %&gt;%</span></span>
-<span id="cb101-68"><a href="dist-CBD.html#cb101-68" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_bbox() %&gt;%</span></span>
-<span id="cb101-69"><a href="dist-CBD.html#cb101-69" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_as_stars(dx = 0.000065, dy = 0.000065) # approx. 10m</span></span>
-<span id="cb101-70"><a href="dist-CBD.html#cb101-70" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-71"><a href="dist-CBD.html#cb101-71" aria-hidden="true" tabindex="-1"></a><span class="co"># cph_dtm10_WGS84 &lt;- cph_dtm10 %&gt;% st_warp(newgrid)</span></span>
-<span id="cb101-72"><a href="dist-CBD.html#cb101-72" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb101-73"><a href="dist-CBD.html#cb101-73" aria-hidden="true" tabindex="-1"></a><span class="co"># # Export to otp folder </span></span>
-<span id="cb101-74"><a href="dist-CBD.html#cb101-74" aria-hidden="true" tabindex="-1"></a><span class="co"># write_stars(cph_dtm10_WGS84, &quot;otp/graphs/default/dem.tif&quot;)</span></span></code></pre></div>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="dist-CBD.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Open Trip Planner</span></span>
-<span id="cb102-2"><a href="dist-CBD.html#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb102-3"><a href="dist-CBD.html#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Downloading OTP</span></span>
-<span id="cb102-4"><a href="dist-CBD.html#cb102-4" aria-hidden="true" tabindex="-1"></a><span class="co"># path_otp &lt;- otp_dl_jar()</span></span>
-<span id="cb102-5"><a href="dist-CBD.html#cb102-5" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb102-6"><a href="dist-CBD.html#cb102-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Building an OTP Graph</span></span>
-<span id="cb102-7"><a href="dist-CBD.html#cb102-7" aria-hidden="true" tabindex="-1"></a><span class="co"># log1 &lt;- otp_build_graph(otp = path_otp, dir = path_data, memory = 10240)</span></span>
-<span id="cb102-8"><a href="dist-CBD.html#cb102-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb102-9"><a href="dist-CBD.html#cb102-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Start OTP</span></span>
-<span id="cb102-10"><a href="dist-CBD.html#cb102-10" aria-hidden="true" tabindex="-1"></a><span class="co"># log2 &lt;- otp_setup(otp = path_otp, dir = path_data)</span></span>
-<span id="cb102-11"><a href="dist-CBD.html#cb102-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb102-12"><a href="dist-CBD.html#cb102-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Connect R to OTP</span></span>
-<span id="cb102-13"><a href="dist-CBD.html#cb102-13" aria-hidden="true" tabindex="-1"></a><span class="co"># otpcon &lt;- otp_connect()</span></span></code></pre></div>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="dist-CBD.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Origin points</span></span>
-<span id="cb103-2"><a href="dist-CBD.html#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="co"># op &lt;- grids100m$data_points[[1]] %&gt;%</span></span>
-<span id="cb103-3"><a href="dist-CBD.html#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:4326&quot;)</span></span>
-<span id="cb103-4"><a href="dist-CBD.html#cb103-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-5"><a href="dist-CBD.html#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="co"># # Calculate travel times (i.e. walk, bike, car, and public transport)</span></span>
-<span id="cb103-6"><a href="dist-CBD.html#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="co"># f_tt &lt;- function(feature){</span></span>
-<span id="cb103-7"><a href="dist-CBD.html#cb103-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   otp_plan(otpcon = otpcon,</span></span>
-<span id="cb103-8"><a href="dist-CBD.html#cb103-8" aria-hidden="true" tabindex="-1"></a><span class="co">#            fromPlace = op,</span></span>
-<span id="cb103-9"><a href="dist-CBD.html#cb103-9" aria-hidden="true" tabindex="-1"></a><span class="co">#            toPlace = c(12.5860, 55.6805),</span></span>
-<span id="cb103-10"><a href="dist-CBD.html#cb103-10" aria-hidden="true" tabindex="-1"></a><span class="co">#            get_geometry = FALSE,</span></span>
-<span id="cb103-11"><a href="dist-CBD.html#cb103-11" aria-hidden="true" tabindex="-1"></a><span class="co">#            mode = feature,</span></span>
-<span id="cb103-12"><a href="dist-CBD.html#cb103-12" aria-hidden="true" tabindex="-1"></a><span class="co">#            ncores = as.numeric(availableCores() - 1)) %&gt;% </span></span>
-<span id="cb103-13"><a href="dist-CBD.html#cb103-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     select(fromPlace, toPlace, duration)</span></span>
-<span id="cb103-14"><a href="dist-CBD.html#cb103-14" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
-<span id="cb103-15"><a href="dist-CBD.html#cb103-15" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-16"><a href="dist-CBD.html#cb103-16" aria-hidden="true" tabindex="-1"></a><span class="co"># dur_features &lt;- list(walk = &quot;WALK&quot;,</span></span>
-<span id="cb103-17"><a href="dist-CBD.html#cb103-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                      bike = &quot;BICYCLE&quot;,</span></span>
-<span id="cb103-18"><a href="dist-CBD.html#cb103-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                      car = &quot;CAR&quot;,</span></span>
-<span id="cb103-19"><a href="dist-CBD.html#cb103-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                      transit = c(&quot;WALK&quot;, &quot;TRANSIT&quot;))</span></span>
-<span id="cb103-20"><a href="dist-CBD.html#cb103-20" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-21"><a href="dist-CBD.html#cb103-21" aria-hidden="true" tabindex="-1"></a><span class="co"># tt &lt;- map(dur_features, f_tt)</span></span>
-<span id="cb103-22"><a href="dist-CBD.html#cb103-22" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-23"><a href="dist-CBD.html#cb103-23" aria-hidden="true" tabindex="-1"></a><span class="co"># # Intersect with grid cells of 100 x 100 m</span></span>
-<span id="cb103-24"><a href="dist-CBD.html#cb103-24" aria-hidden="true" tabindex="-1"></a><span class="co"># f1 &lt;- . %&gt;% </span></span>
-<span id="cb103-25"><a href="dist-CBD.html#cb103-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   as_tibble() %&gt;% </span></span>
-<span id="cb103-26"><a href="dist-CBD.html#cb103-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(duration = duration/60) %&gt;% </span></span>
-<span id="cb103-27"><a href="dist-CBD.html#cb103-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   separate(fromPlace, c(&quot;Y&quot;, &quot;X&quot;), sep = &quot;,&quot;) %&gt;% </span></span>
-<span id="cb103-28"><a href="dist-CBD.html#cb103-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_as_sf(coords = c(&quot;X&quot;, &quot;Y&quot;)) %&gt;% </span></span>
-<span id="cb103-29"><a href="dist-CBD.html#cb103-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_set_crs(&quot;EPSG:4326&quot;) %&gt;% </span></span>
-<span id="cb103-30"><a href="dist-CBD.html#cb103-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:25832&quot;) %&gt;% </span></span>
-<span id="cb103-31"><a href="dist-CBD.html#cb103-31" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_intersection(grids100m$data_poly[[1]])</span></span>
-<span id="cb103-32"><a href="dist-CBD.html#cb103-32" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-33"><a href="dist-CBD.html#cb103-33" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_grids_cent &lt;- tt %&gt;% map(~f1(.))</span></span>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="dist-CBD.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kongens Nytorv</span></span>
+<span id="cb102-2"><a href="dist-CBD.html#cb102-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-3"><a href="dist-CBD.html#cb102-3" aria-hidden="true" tabindex="-1"></a>KN <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">name =</span> <span class="st">&quot;Kongens Nytorv&quot;</span>, <span class="at">x =</span> <span class="fl">12.5860</span>, <span class="at">y =</span> <span class="fl">55.6805</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb102-4"><a href="dist-CBD.html#cb102-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb102-5"><a href="dist-CBD.html#cb102-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:4326&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="dist-CBD.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># NOT RUN (slow) uncomment if needed</span></span>
+<span id="cb103-2"><a href="dist-CBD.html#cb103-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-3"><a href="dist-CBD.html#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="co"># # OTP folder structure</span></span>
+<span id="cb103-4"><a href="dist-CBD.html#cb103-4" aria-hidden="true" tabindex="-1"></a><span class="co"># dir.create(&quot;otp&quot;)</span></span>
+<span id="cb103-5"><a href="dist-CBD.html#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="co"># dir.create(&quot;otp/graphs/default&quot;)</span></span>
+<span id="cb103-6"><a href="dist-CBD.html#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-7"><a href="dist-CBD.html#cb103-7" aria-hidden="true" tabindex="-1"></a><span class="co"># path_data &lt;- file.path(&quot;./otp&quot;)</span></span>
+<span id="cb103-8"><a href="dist-CBD.html#cb103-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-9"><a href="dist-CBD.html#cb103-9" aria-hidden="true" tabindex="-1"></a><span class="co"># # Data</span></span>
+<span id="cb103-10"><a href="dist-CBD.html#cb103-10" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-11"><a href="dist-CBD.html#cb103-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Download Denmark GTFS from dk_gtfs &lt;- &quot;http://www.rejseplanen.info/labs/GTFS.zip&quot;</span></span>
+<span id="cb103-12"><a href="dist-CBD.html#cb103-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ## and save as &quot;~./otp/graphs/default/gtfs.zip&quot;)</span></span>
+<span id="cb103-13"><a href="dist-CBD.html#cb103-13" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-14"><a href="dist-CBD.html#cb103-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Copenhagen pbf</span></span>
+<span id="cb103-15"><a href="dist-CBD.html#cb103-15" aria-hidden="true" tabindex="-1"></a><span class="co"># cph_match &lt;- oe_match(&quot;Copenhagen&quot;,</span></span>
+<span id="cb103-16"><a href="dist-CBD.html#cb103-16" aria-hidden="true" tabindex="-1"></a><span class="co">#                       provider = &quot;bbbike&quot;,</span></span>
+<span id="cb103-17"><a href="dist-CBD.html#cb103-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                       quiet = TRUE)</span></span>
+<span id="cb103-18"><a href="dist-CBD.html#cb103-18" aria-hidden="true" tabindex="-1"></a><span class="co"># oe_download(cph_match$url,</span></span>
+<span id="cb103-19"><a href="dist-CBD.html#cb103-19" aria-hidden="true" tabindex="-1"></a><span class="co">#             provider = &quot;bbbike&quot;,</span></span>
+<span id="cb103-20"><a href="dist-CBD.html#cb103-20" aria-hidden="true" tabindex="-1"></a><span class="co">#             download_directory = &quot;./otp/graphs/default&quot;,</span></span>
+<span id="cb103-21"><a href="dist-CBD.html#cb103-21" aria-hidden="true" tabindex="-1"></a><span class="co">#             quiet = TRUE)</span></span>
+<span id="cb103-22"><a href="dist-CBD.html#cb103-22" aria-hidden="true" tabindex="-1"></a><span class="co"># file.rename(from = &quot;./otp/graphs/default/bbbike_Copenhagen.osm.pbf&quot;,</span></span>
+<span id="cb103-23"><a href="dist-CBD.html#cb103-23" aria-hidden="true" tabindex="-1"></a><span class="co">#             to = &quot;./otp/graphs/default/osm.pbf&quot;)</span></span>
+<span id="cb103-24"><a href="dist-CBD.html#cb103-24" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-25"><a href="dist-CBD.html#cb103-25" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Get DEM</span></span>
+<span id="cb103-26"><a href="dist-CBD.html#cb103-26" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-27"><a href="dist-CBD.html#cb103-27" aria-hidden="true" tabindex="-1"></a><span class="co"># # Download elevation model (10m resolution)</span></span>
+<span id="cb103-28"><a href="dist-CBD.html#cb103-28" aria-hidden="true" tabindex="-1"></a><span class="co"># zip_files &lt;- c(&quot;DTM10_616_71_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
+<span id="cb103-29"><a href="dist-CBD.html#cb103-29" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_616_72_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
+<span id="cb103-30"><a href="dist-CBD.html#cb103-30" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_617_71_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
+<span id="cb103-31"><a href="dist-CBD.html#cb103-31" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_617_72_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
+<span id="cb103-32"><a href="dist-CBD.html#cb103-32" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_618_71_ASC_UTM32-EUREF89.ZIP&quot;,</span></span>
+<span id="cb103-33"><a href="dist-CBD.html#cb103-33" aria-hidden="true" tabindex="-1"></a><span class="co">#                &quot;DTM10_618_72_ASC_UTM32-EUREF89.ZIP&quot;)</span></span>
 <span id="cb103-34"><a href="dist-CBD.html#cb103-34" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-35"><a href="dist-CBD.html#cb103-35" aria-hidden="true" tabindex="-1"></a><span class="co"># # Add to grids polygons</span></span>
-<span id="cb103-36"><a href="dist-CBD.html#cb103-36" aria-hidden="true" tabindex="-1"></a><span class="co"># f2 &lt;- . %&gt;% </span></span>
-<span id="cb103-37"><a href="dist-CBD.html#cb103-37" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_drop_geometry() %&gt;% </span></span>
-<span id="cb103-38"><a href="dist-CBD.html#cb103-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   left_join(as_tibble(grids100m$data_poly[[1]]), by = &quot;grid_ID&quot;) %&gt;% </span></span>
-<span id="cb103-39"><a href="dist-CBD.html#cb103-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_sf()</span></span>
-<span id="cb103-40"><a href="dist-CBD.html#cb103-40" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-41"><a href="dist-CBD.html#cb103-41" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_grids_poly &lt;- tt_grids_cent %&gt;%  map(~f2(.))</span></span>
-<span id="cb103-42"><a href="dist-CBD.html#cb103-42" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-43"><a href="dist-CBD.html#cb103-43" aria-hidden="true" tabindex="-1"></a><span class="co"># f3 &lt;- function(feature){</span></span>
-<span id="cb103-44"><a href="dist-CBD.html#cb103-44" aria-hidden="true" tabindex="-1"></a><span class="co">#   tt_grids_poly %&gt;% </span></span>
-<span id="cb103-45"><a href="dist-CBD.html#cb103-45" aria-hidden="true" tabindex="-1"></a><span class="co">#     pluck(feature) %&gt;% </span></span>
-<span id="cb103-46"><a href="dist-CBD.html#cb103-46" aria-hidden="true" tabindex="-1"></a><span class="co">#     mutate(feature = feature)</span></span>
-<span id="cb103-47"><a href="dist-CBD.html#cb103-47" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
-<span id="cb103-48"><a href="dist-CBD.html#cb103-48" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-49"><a href="dist-CBD.html#cb103-49" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_grids_poly &lt;- names(tt_grids_poly) %&gt;% map(~f3(.))</span></span>
+<span id="cb103-35"><a href="dist-CBD.html#cb103-35" aria-hidden="true" tabindex="-1"></a><span class="co"># f1 &lt;- function(zip_file){ </span></span>
+<span id="cb103-36"><a href="dist-CBD.html#cb103-36" aria-hidden="true" tabindex="-1"></a><span class="co">#   dangeo_get_data(ftp_folder = &quot;dhm_danmarks_hoejdemodel/DHM-HISTORIK/DHM-2007/DTM_10M&quot;,</span></span>
+<span id="cb103-37"><a href="dist-CBD.html#cb103-37" aria-hidden="true" tabindex="-1"></a><span class="co">#                   zip_name   = zip_file)</span></span>
+<span id="cb103-38"><a href="dist-CBD.html#cb103-38" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb103-39"><a href="dist-CBD.html#cb103-39" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-40"><a href="dist-CBD.html#cb103-40" aria-hidden="true" tabindex="-1"></a><span class="co"># map(zip_files, f1)</span></span>
+<span id="cb103-41"><a href="dist-CBD.html#cb103-41" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-42"><a href="dist-CBD.html#cb103-42" aria-hidden="true" tabindex="-1"></a><span class="co"># # Read files</span></span>
+<span id="cb103-43"><a href="dist-CBD.html#cb103-43" aria-hidden="true" tabindex="-1"></a><span class="co"># asc_files_path &lt;- list.files(path = loc_dir ,</span></span>
+<span id="cb103-44"><a href="dist-CBD.html#cb103-44" aria-hidden="true" tabindex="-1"></a><span class="co">#                              pattern = &quot;*.asc&quot;,</span></span>
+<span id="cb103-45"><a href="dist-CBD.html#cb103-45" aria-hidden="true" tabindex="-1"></a><span class="co">#                              full.names = TRUE, </span></span>
+<span id="cb103-46"><a href="dist-CBD.html#cb103-46" aria-hidden="true" tabindex="-1"></a><span class="co">#                              recursive = TRUE)</span></span>
+<span id="cb103-47"><a href="dist-CBD.html#cb103-47" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-48"><a href="dist-CBD.html#cb103-48" aria-hidden="true" tabindex="-1"></a><span class="co"># # Read blocks</span></span>
+<span id="cb103-49"><a href="dist-CBD.html#cb103-49" aria-hidden="true" tabindex="-1"></a><span class="co"># dtm10_blocks &lt;- map(.x = asc_files_path, .f = read_stars)</span></span>
 <span id="cb103-50"><a href="dist-CBD.html#cb103-50" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-51"><a href="dist-CBD.html#cb103-51" aria-hidden="true" tabindex="-1"></a><span class="co"># # Merge grids</span></span>
-<span id="cb103-52"><a href="dist-CBD.html#cb103-52" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_cph_grids100m &lt;- bind_rows(tt_grids_poly) %&gt;% </span></span>
-<span id="cb103-53"><a href="dist-CBD.html#cb103-53" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(feature = factor(feature, levels = c(&quot;walk&quot;, &quot;bike&quot;, &quot;car&quot;, &quot;transit&quot;)))</span></span>
-<span id="cb103-54"><a href="dist-CBD.html#cb103-54" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
-<span id="cb103-55"><a href="dist-CBD.html#cb103-55" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(tt_cph_grids100m, file = &quot;travel_times_grids100m_otp.rds&quot;)</span></span></code></pre></div>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="dist-CBD.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Stop OTP</span></span>
-<span id="cb104-2"><a href="dist-CBD.html#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="co"># otp_stop(warn = FALSE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="dist-CBD.html#cb105-1" aria-hidden="true" tabindex="-1"></a>tt_cph_grids100m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;travel_times_grids100m_otp.rds&quot;</span>)</span>
-<span id="cb105-2"><a href="dist-CBD.html#cb105-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb105-3"><a href="dist-CBD.html#cb105-3" aria-hidden="true" tabindex="-1"></a>myPalette <span class="ot">&lt;-</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;RdYlBu&quot;</span>)</span>
-<span id="cb105-4"><a href="dist-CBD.html#cb105-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb105-5"><a href="dist-CBD.html#cb105-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb105-6"><a href="dist-CBD.html#cb105-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> tt_cph_grids100m, </span>
-<span id="cb105-7"><a href="dist-CBD.html#cb105-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(duration,</span>
-<span id="cb105-8"><a href="dist-CBD.html#cb105-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">120</span>,</span>
-<span id="cb105-9"><a href="dist-CBD.html#cb105-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">ceiling</span>(<span class="fu">max</span>(duration))),</span>
-<span id="cb105-10"><a href="dist-CBD.html#cb105-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb105-11"><a href="dist-CBD.html#cb105-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb105-12"><a href="dist-CBD.html#cb105-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;min&quot;</span>, <span class="at">values =</span> <span class="fu">rev</span>(myPalette)) <span class="sc">+</span></span>
-<span id="cb105-13"><a href="dist-CBD.html#cb105-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb105-14"><a href="dist-CBD.html#cb105-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> KN, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">shape =</span> <span class="dv">16</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
-<span id="cb105-15"><a href="dist-CBD.html#cb105-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb105-16"><a href="dist-CBD.html#cb105-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
+<span id="cb103-51"><a href="dist-CBD.html#cb103-51" aria-hidden="true" tabindex="-1"></a><span class="co"># # Set crs (UTM32-ETRS89)</span></span>
+<span id="cb103-52"><a href="dist-CBD.html#cb103-52" aria-hidden="true" tabindex="-1"></a><span class="co"># dtm10_blocks &lt;- map(dtm10_blocks, ~st_set_crs(., st_crs(study_area)))</span></span>
+<span id="cb103-53"><a href="dist-CBD.html#cb103-53" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-54"><a href="dist-CBD.html#cb103-54" aria-hidden="true" tabindex="-1"></a><span class="co"># # Build a mosaic </span></span>
+<span id="cb103-55"><a href="dist-CBD.html#cb103-55" aria-hidden="true" tabindex="-1"></a><span class="co"># dtm10 &lt;- st_mosaic(dtm10_blocks[[1]],</span></span>
+<span id="cb103-56"><a href="dist-CBD.html#cb103-56" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[2]],</span></span>
+<span id="cb103-57"><a href="dist-CBD.html#cb103-57" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[3]],</span></span>
+<span id="cb103-58"><a href="dist-CBD.html#cb103-58" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[4]],</span></span>
+<span id="cb103-59"><a href="dist-CBD.html#cb103-59" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[5]],</span></span>
+<span id="cb103-60"><a href="dist-CBD.html#cb103-60" aria-hidden="true" tabindex="-1"></a><span class="co">#                    dtm10_blocks[[6]])</span></span>
+<span id="cb103-61"><a href="dist-CBD.html#cb103-61" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-62"><a href="dist-CBD.html#cb103-62" aria-hidden="true" tabindex="-1"></a><span class="co"># # Intersect with study area</span></span>
+<span id="cb103-63"><a href="dist-CBD.html#cb103-63" aria-hidden="true" tabindex="-1"></a><span class="co"># cph_dtm10 &lt;- st_crop(dtm10, study_area)</span></span>
+<span id="cb103-64"><a href="dist-CBD.html#cb103-64" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-65"><a href="dist-CBD.html#cb103-65" aria-hidden="true" tabindex="-1"></a><span class="co"># # Warping the raster</span></span>
+<span id="cb103-66"><a href="dist-CBD.html#cb103-66" aria-hidden="true" tabindex="-1"></a><span class="co"># newgrid &lt;- study_area %&gt;%</span></span>
+<span id="cb103-67"><a href="dist-CBD.html#cb103-67" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:4326&quot;) %&gt;%</span></span>
+<span id="cb103-68"><a href="dist-CBD.html#cb103-68" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_bbox() %&gt;%</span></span>
+<span id="cb103-69"><a href="dist-CBD.html#cb103-69" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_as_stars(dx = 0.000065, dy = 0.000065) # approx. 10m</span></span>
+<span id="cb103-70"><a href="dist-CBD.html#cb103-70" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-71"><a href="dist-CBD.html#cb103-71" aria-hidden="true" tabindex="-1"></a><span class="co"># cph_dtm10_WGS84 &lt;- cph_dtm10 %&gt;% st_warp(newgrid)</span></span>
+<span id="cb103-72"><a href="dist-CBD.html#cb103-72" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb103-73"><a href="dist-CBD.html#cb103-73" aria-hidden="true" tabindex="-1"></a><span class="co"># # Export to otp folder </span></span>
+<span id="cb103-74"><a href="dist-CBD.html#cb103-74" aria-hidden="true" tabindex="-1"></a><span class="co"># write_stars(cph_dtm10_WGS84, &quot;otp/graphs/default/dem.tif&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="dist-CBD.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Open Trip Planner</span></span>
+<span id="cb104-2"><a href="dist-CBD.html#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb104-3"><a href="dist-CBD.html#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Downloading OTP</span></span>
+<span id="cb104-4"><a href="dist-CBD.html#cb104-4" aria-hidden="true" tabindex="-1"></a><span class="co"># path_otp &lt;- otp_dl_jar()</span></span>
+<span id="cb104-5"><a href="dist-CBD.html#cb104-5" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb104-6"><a href="dist-CBD.html#cb104-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Building an OTP Graph</span></span>
+<span id="cb104-7"><a href="dist-CBD.html#cb104-7" aria-hidden="true" tabindex="-1"></a><span class="co"># log1 &lt;- otp_build_graph(otp = path_otp, dir = path_data, memory = 10240)</span></span>
+<span id="cb104-8"><a href="dist-CBD.html#cb104-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb104-9"><a href="dist-CBD.html#cb104-9" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Start OTP</span></span>
+<span id="cb104-10"><a href="dist-CBD.html#cb104-10" aria-hidden="true" tabindex="-1"></a><span class="co"># log2 &lt;- otp_setup(otp = path_otp, dir = path_data)</span></span>
+<span id="cb104-11"><a href="dist-CBD.html#cb104-11" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb104-12"><a href="dist-CBD.html#cb104-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ## Connect R to OTP</span></span>
+<span id="cb104-13"><a href="dist-CBD.html#cb104-13" aria-hidden="true" tabindex="-1"></a><span class="co"># otpcon &lt;- otp_connect()</span></span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="dist-CBD.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Origin points</span></span>
+<span id="cb105-2"><a href="dist-CBD.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="co"># op &lt;- grids100m$data_points[[1]] %&gt;%</span></span>
+<span id="cb105-3"><a href="dist-CBD.html#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:4326&quot;)</span></span>
+<span id="cb105-4"><a href="dist-CBD.html#cb105-4" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-5"><a href="dist-CBD.html#cb105-5" aria-hidden="true" tabindex="-1"></a><span class="co"># # Calculate travel times (i.e. walk, bike, car, and public transport)</span></span>
+<span id="cb105-6"><a href="dist-CBD.html#cb105-6" aria-hidden="true" tabindex="-1"></a><span class="co"># f_tt &lt;- function(feature){</span></span>
+<span id="cb105-7"><a href="dist-CBD.html#cb105-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   otp_plan(otpcon = otpcon,</span></span>
+<span id="cb105-8"><a href="dist-CBD.html#cb105-8" aria-hidden="true" tabindex="-1"></a><span class="co">#            fromPlace = op,</span></span>
+<span id="cb105-9"><a href="dist-CBD.html#cb105-9" aria-hidden="true" tabindex="-1"></a><span class="co">#            toPlace = c(12.5860, 55.6805),</span></span>
+<span id="cb105-10"><a href="dist-CBD.html#cb105-10" aria-hidden="true" tabindex="-1"></a><span class="co">#            get_geometry = FALSE,</span></span>
+<span id="cb105-11"><a href="dist-CBD.html#cb105-11" aria-hidden="true" tabindex="-1"></a><span class="co">#            mode = feature,</span></span>
+<span id="cb105-12"><a href="dist-CBD.html#cb105-12" aria-hidden="true" tabindex="-1"></a><span class="co">#            ncores = as.numeric(availableCores() - 1)) %&gt;% </span></span>
+<span id="cb105-13"><a href="dist-CBD.html#cb105-13" aria-hidden="true" tabindex="-1"></a><span class="co">#     select(fromPlace, toPlace, duration)</span></span>
+<span id="cb105-14"><a href="dist-CBD.html#cb105-14" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb105-15"><a href="dist-CBD.html#cb105-15" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-16"><a href="dist-CBD.html#cb105-16" aria-hidden="true" tabindex="-1"></a><span class="co"># dur_features &lt;- list(walk = &quot;WALK&quot;,</span></span>
+<span id="cb105-17"><a href="dist-CBD.html#cb105-17" aria-hidden="true" tabindex="-1"></a><span class="co">#                      bike = &quot;BICYCLE&quot;,</span></span>
+<span id="cb105-18"><a href="dist-CBD.html#cb105-18" aria-hidden="true" tabindex="-1"></a><span class="co">#                      car = &quot;CAR&quot;,</span></span>
+<span id="cb105-19"><a href="dist-CBD.html#cb105-19" aria-hidden="true" tabindex="-1"></a><span class="co">#                      transit = c(&quot;WALK&quot;, &quot;TRANSIT&quot;))</span></span>
+<span id="cb105-20"><a href="dist-CBD.html#cb105-20" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-21"><a href="dist-CBD.html#cb105-21" aria-hidden="true" tabindex="-1"></a><span class="co"># tt &lt;- map(dur_features, f_tt)</span></span>
+<span id="cb105-22"><a href="dist-CBD.html#cb105-22" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-23"><a href="dist-CBD.html#cb105-23" aria-hidden="true" tabindex="-1"></a><span class="co"># # Intersect with grid cells of 100 x 100 m</span></span>
+<span id="cb105-24"><a href="dist-CBD.html#cb105-24" aria-hidden="true" tabindex="-1"></a><span class="co"># f1 &lt;- . %&gt;% </span></span>
+<span id="cb105-25"><a href="dist-CBD.html#cb105-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   as_tibble() %&gt;% </span></span>
+<span id="cb105-26"><a href="dist-CBD.html#cb105-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(duration = duration/60) %&gt;% </span></span>
+<span id="cb105-27"><a href="dist-CBD.html#cb105-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   separate(fromPlace, c(&quot;Y&quot;, &quot;X&quot;), sep = &quot;,&quot;) %&gt;% </span></span>
+<span id="cb105-28"><a href="dist-CBD.html#cb105-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_as_sf(coords = c(&quot;X&quot;, &quot;Y&quot;)) %&gt;% </span></span>
+<span id="cb105-29"><a href="dist-CBD.html#cb105-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_set_crs(&quot;EPSG:4326&quot;) %&gt;% </span></span>
+<span id="cb105-30"><a href="dist-CBD.html#cb105-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_transform(crs = &quot;EPSG:25832&quot;) %&gt;% </span></span>
+<span id="cb105-31"><a href="dist-CBD.html#cb105-31" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_intersection(grids100m$data_poly[[1]])</span></span>
+<span id="cb105-32"><a href="dist-CBD.html#cb105-32" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-33"><a href="dist-CBD.html#cb105-33" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_grids_cent &lt;- tt %&gt;% map(~f1(.))</span></span>
+<span id="cb105-34"><a href="dist-CBD.html#cb105-34" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-35"><a href="dist-CBD.html#cb105-35" aria-hidden="true" tabindex="-1"></a><span class="co"># # Add to grids polygons</span></span>
+<span id="cb105-36"><a href="dist-CBD.html#cb105-36" aria-hidden="true" tabindex="-1"></a><span class="co"># f2 &lt;- . %&gt;% </span></span>
+<span id="cb105-37"><a href="dist-CBD.html#cb105-37" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_drop_geometry() %&gt;% </span></span>
+<span id="cb105-38"><a href="dist-CBD.html#cb105-38" aria-hidden="true" tabindex="-1"></a><span class="co">#   left_join(as_tibble(grids100m$data_poly[[1]]), by = &quot;grid_ID&quot;) %&gt;% </span></span>
+<span id="cb105-39"><a href="dist-CBD.html#cb105-39" aria-hidden="true" tabindex="-1"></a><span class="co">#   st_sf()</span></span>
+<span id="cb105-40"><a href="dist-CBD.html#cb105-40" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-41"><a href="dist-CBD.html#cb105-41" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_grids_poly &lt;- tt_grids_cent %&gt;%  map(~f2(.))</span></span>
+<span id="cb105-42"><a href="dist-CBD.html#cb105-42" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-43"><a href="dist-CBD.html#cb105-43" aria-hidden="true" tabindex="-1"></a><span class="co"># f3 &lt;- function(feature){</span></span>
+<span id="cb105-44"><a href="dist-CBD.html#cb105-44" aria-hidden="true" tabindex="-1"></a><span class="co">#   tt_grids_poly %&gt;% </span></span>
+<span id="cb105-45"><a href="dist-CBD.html#cb105-45" aria-hidden="true" tabindex="-1"></a><span class="co">#     pluck(feature) %&gt;% </span></span>
+<span id="cb105-46"><a href="dist-CBD.html#cb105-46" aria-hidden="true" tabindex="-1"></a><span class="co">#     mutate(feature = feature)</span></span>
+<span id="cb105-47"><a href="dist-CBD.html#cb105-47" aria-hidden="true" tabindex="-1"></a><span class="co"># }</span></span>
+<span id="cb105-48"><a href="dist-CBD.html#cb105-48" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-49"><a href="dist-CBD.html#cb105-49" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_grids_poly &lt;- names(tt_grids_poly) %&gt;% map(~f3(.))</span></span>
+<span id="cb105-50"><a href="dist-CBD.html#cb105-50" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-51"><a href="dist-CBD.html#cb105-51" aria-hidden="true" tabindex="-1"></a><span class="co"># # Merge grids</span></span>
+<span id="cb105-52"><a href="dist-CBD.html#cb105-52" aria-hidden="true" tabindex="-1"></a><span class="co"># tt_cph_grids100m &lt;- bind_rows(tt_grids_poly) %&gt;% </span></span>
+<span id="cb105-53"><a href="dist-CBD.html#cb105-53" aria-hidden="true" tabindex="-1"></a><span class="co">#   mutate(feature = factor(feature, levels = c(&quot;walk&quot;, &quot;bike&quot;, &quot;car&quot;, &quot;transit&quot;)))</span></span>
+<span id="cb105-54"><a href="dist-CBD.html#cb105-54" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb105-55"><a href="dist-CBD.html#cb105-55" aria-hidden="true" tabindex="-1"></a><span class="co"># saveRDS(tt_cph_grids100m, file = &quot;travel_times_grids100m_otp.rds&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="dist-CBD.html#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># # Stop OTP</span></span>
+<span id="cb106-2"><a href="dist-CBD.html#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="co"># otp_stop(warn = FALSE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="dist-CBD.html#cb107-1" aria-hidden="true" tabindex="-1"></a>tt_cph_grids100m <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="at">file =</span> <span class="st">&quot;travel_times_grids100m_otp.rds&quot;</span>)</span>
+<span id="cb107-2"><a href="dist-CBD.html#cb107-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-3"><a href="dist-CBD.html#cb107-3" aria-hidden="true" tabindex="-1"></a>myPalette <span class="ot">&lt;-</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>, <span class="st">&quot;RdYlBu&quot;</span>)</span>
+<span id="cb107-4"><a href="dist-CBD.html#cb107-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="dist-CBD.html#cb107-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb107-6"><a href="dist-CBD.html#cb107-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> tt_cph_grids100m, </span>
+<span id="cb107-7"><a href="dist-CBD.html#cb107-7" aria-hidden="true" tabindex="-1"></a>          <span class="fu">aes</span>(<span class="at">fill =</span> <span class="fu">cut</span>(duration,</span>
+<span id="cb107-8"><a href="dist-CBD.html#cb107-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>, <span class="dv">60</span>, <span class="dv">120</span>,</span>
+<span id="cb107-9"><a href="dist-CBD.html#cb107-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">ceiling</span>(<span class="fu">max</span>(duration))),</span>
+<span id="cb107-10"><a href="dist-CBD.html#cb107-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb107-11"><a href="dist-CBD.html#cb107-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb107-12"><a href="dist-CBD.html#cb107-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">name =</span> <span class="st">&quot;min&quot;</span>, <span class="at">values =</span> <span class="fu">rev</span>(myPalette)) <span class="sc">+</span></span>
+<span id="cb107-13"><a href="dist-CBD.html#cb107-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb107-14"><a href="dist-CBD.html#cb107-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> KN, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">shape =</span> <span class="dv">16</span>, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb107-15"><a href="dist-CBD.html#cb107-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb107-16"><a href="dist-CBD.html#cb107-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:fig-travel-times"></span>
 <img src="Housing_prices_book_files/figure-html/fig-travel-times-1.png" alt="Travel times to Kongens Nytorv (black point)" width="672" />
 <p class="caption">

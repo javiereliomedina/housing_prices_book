@@ -132,8 +132,8 @@ Population data at parish level was uploaded from Denmark Statistics: Tables:
   # Ancestry
   id_ancestry <- NA
   # Quarters
-  id_year <- var_pop$values[[4]]$id[1:12]   # Select 2008-2019
-
+  id_year <- seq(2008, end_year, 1)   # Select 2008-2020 
+ 
 # Read data (n parallel) 
   plan(multisession, workers = 7)
   capital_prsh_ancestry_read <- id_year %>%
@@ -199,7 +199,7 @@ capital_prsh_ancestry_sf <- capital_prsh %>%
   # Ancestry
   id_movements <- NA
   # Quarters
-  id_year <- var_pop$values[[3]]$id[1:5]   # data from 2015 to 2019
+  id_year <- seq(2015, end_year, 1) # data from 2015   
   
 # Read data
   plan(multisession, workers = 7) 
@@ -242,7 +242,7 @@ capital_prsh_pop_sf <- capital_prsh %>%
 
 ### Spatial distribution
 
-Where people live in the capital region (by parish), and their change from 2008 to 2019: 
+Where people live in the capital region (by parish), and their change from 2008 to 2020: 
 
 ```{r pop-parish-pct}
 
@@ -534,8 +534,9 @@ f_local_moran <- function(year,
   }
 
 # Plot maps 
-p <- map2(.x = rep(2008:2019, times = 1, each = 3),
-          .y = rep(c("pop_dan_pct", "pop_frgn_wst_pct", "pop_frgn_nwst_pct"), 12),
+p <- map2(.x = rep(2008:end_year, times = 1, each = 3),
+          .y = rep(c("pop_dan_pct", "pop_frgn_wst_pct", "pop_frgn_nwst_pct"), 
+                   length(rep(2008:end_year, times = 1, each = 3))/3),
           ~f_local_moran(.x, .y))
 wrap_plots(p, ncol = 3) + plot_layout(guides = "collect")
 
@@ -598,7 +599,7 @@ knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw
 
 W have used all residences for year-round living (*ENH_ANVEND_KODE*) (i.e. from the Building and Dwelling Register - [BBR](https://teknik.bbr.dk/forside). We remove from the dataset, however, those dwellings that are not actually used for residential purpose (i.e. *BOLIGTYPE_KODE* $\neq$ E - Andet (bl.a. institutioner og erhverv) or *BOLIGTYPE_KODE* $\neq$ 5 - Sommer-/fritidsbolig) and dwellings with a size lower than that 10 $m^2$. We also focus our analysis to the main building types in the City of Copenhagen, which are in this order: i) multi-storey residential buildings (code 140), ii) detached single-family houses (codes 120, 121, 122), and iii) semi-detached houses (codes 130, 131, 132). Colleges were excluded from the data analysis since they are a special type of buildings dedicated to students residences mainly outside of the free marked.
 
-We also select from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales (*OVERDRAGELSES_KODE == 3 - Auktion*), since these values represent what people are willing to pay for own a property. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter ($kDDK/m^2$) by dividing the 2019 adjusted prices and the size of the dwelling (*BEBO_ARL*). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.
+We also select from the main residential buildings those that are on the ordinary free trade (*OVERDRAGELSES_KODE == 1 - Almindelig frit salg*) or public sales (*OVERDRAGELSES_KODE == 3 - Auktion*), since these values represent what people are willing to pay for own a property. Finally, we adjusted the housing prices to 2019 prices and estimated the price per square meter ($kDDK/m^2$) by dividing the 2020 adjusted prices and the size of the dwelling (*BEBO_ARL*). Inconsistent values have been removed; i.e. 2019 adjusted prices = 0 kDKK.
 
 ```{r load-BBR-capital}
 
@@ -639,11 +640,11 @@ f_runits_oft_capital <- function(.file, .muni = study_area_codes) {
     filter.(OVERDRAGELSES_KODE == "1" | OVERDRAGELSES_KODE == "3") %>% 
     # Remove prices > 0 kDKK
     filter.(price_kDKK > 0) %>% 
-    # 2019 adjusted house prices
+    # 2020 adjusted house prices
     left_join.(price_index, by = c("year" = "index_year")) %>%
-    mutate.(index_2019 = price_index_2019$index_value,
-           price_2019_kDKK = (price_kDKK * index_2019 / index_value),
-           price_2019_kDKK_m2 = price_2019_kDKK / BEBO_ARL)
+    mutate.(index_2020 = price_index_2020$index_value,
+           price_2020_kDKK = (price_kDKK * index_2020 / index_value),
+           price_2020_kDKK_m2 = price_2020_kDKK / BEBO_ARL)
 }
 
 # Load residential units (from .csv files)
@@ -724,9 +725,9 @@ The summary descriptive statistics of the housing prices are:
 ```{r tbl-summary-runits-oft-capital, cache=FALSE}
 
 # Create variable labels of the variables to be printed in the table
-labelled::var_label(runits_oft_capital_sf$price_2019_kDKK) <- "Adjusted prices (kDKK)"
+labelled::var_label(runits_oft_capital_sf$price_2020_kDKK) <- "Adjusted prices (kDKK)"
 labelled::var_label(runits_oft_capital_sf$BEBO_ARL)           <- "Dwelling size (m2)"
-labelled::var_label(runits_oft_capital_sf$price_2019_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
+labelled::var_label(runits_oft_capital_sf$price_2020_kDKK_m2) <- "Adjusted prices per square meter (kDKK/m2)"
 
 library(tidyverse)
 library(gtsummary)
@@ -736,7 +737,7 @@ temp <-  as_tibble(runits_oft_capital_sf)
 
 temp  %>% 
   # Select variables of interest
-  select(type, price_2019_kDKK,  BEBO_ARL, price_2019_kDKK_m2) %>%
+  select(type, price_2020_kDKK,  BEBO_ARL, price_2020_kDKK_m2) %>%
   # Summary values
   tbl_summary(by = type,
               type = all_continuous() ~ "continuous2",
@@ -752,12 +753,12 @@ temp  %>%
 
 ```
 
-House prices by type (removing very low prices; i.e. \<1 kDKK/m2, n = `r nrow(filter(runits_oft_capital_sf, price_2019_kDKK_m2 < 1))`).
+House prices by type (removing very low prices; i.e. \<1 kDKK/m2, n = `r nrow(filter(runits_oft_capital_sf, price_2020_kDKK_m2 < 1))`).
 
 ```{r fig-runits-oft-type, fig.height=6, fig.width=10, fig.cap="Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices >1 kDkk/m2)"}
 
-ggplot(data = filter(runits_oft_capital_sf, price_2019_kDKK_m2 > 1),
-       aes(y = price_2019_kDKK_m2,
+ggplot(data = filter(runits_oft_capital_sf, price_2020_kDKK_m2 > 1),
+       aes(y = price_2020_kDKK_m2,
            x = factor(year),
            fill = type)) +
   geom_boxplot(show.legend = FALSE) +
@@ -767,7 +768,6 @@ ggplot(data = filter(runits_oft_capital_sf, price_2019_kDKK_m2 > 1),
   facet_wrap( ~ type) + 
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
-
 
 ```
 
@@ -780,8 +780,8 @@ House prices parish (spatial distribution)
 sum_runits_oft_prices <- runits_oft_capital_sf %>% 
   as.data.table() %>% 
   summarise.(n_runits_oft = n(), 
-            mean_2019_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
-            median_2019_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE),
+            mean_2020_kDKK_m2   = mean(price_2020_kDKK_m2, na.rm = TRUE),
+            median_2020_kDKK_m2 = median(price_2020_kDKK_m2, na.rm = TRUE),
             .by = c(year, prsh_id)) %>% 
   # Link with population data by ancestry 
   left_join.(capital_prsh_ancestry_sf) %>% 
@@ -791,7 +791,7 @@ sum_runits_oft_prices <- runits_oft_capital_sf %>%
 
 ```
 
-```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+```{r fig-prices-runits-parish-a, animation.hook="gifski", fig.cap = "Median 2020-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
 
 # Aux. function for plotting
 
@@ -799,8 +799,8 @@ f_plot <- function(df) {
   ggplot() +
     geom_sf(data = dk_country_crop, fill = "grey") +
     geom_sf(data = df, 
-            aes(fill = cut(median_2019_kDKK_m2,
-                           breaks = quantile(sum_runits_oft_prices$median_2019_kDKK_m2,
+            aes(fill = cut(median_2020_kDKK_m2,
+                           breaks = quantile(sum_runits_oft_prices$median_2020_kDKK_m2,
                                              seq(0, 1, 0.1),
                                              na.rm = TRUE), 
                            include.lowest = TRUE, 
@@ -826,7 +826,7 @@ plts <- sum_runits_oft_prices %>%
 plan("default")
 
 # Animation
-years_pd <- seq(2008, 2019, 1) 
+years_pd <- seq(2008, end_year, 1) 
 for(i in seq_along(years_pd)) { print(plts[[i]]) }
 
 ```
@@ -836,7 +836,7 @@ for(i in seq_along(years_pd)) { print(plts[[i]]) }
 ggplot() +
   geom_sf(data = dk_country_crop, fill = "grey") +
   geom_sf(data = sum_runits_oft_prices, 
-          aes(fill = cut_number(median_2019_kDKK_m2,
+          aes(fill = cut_number(median_2020_kDKK_m2,
                                 n = 10,
                                 ordered_result = TRUE,
                                 dig.lab = 0)),
@@ -849,7 +849,6 @@ ggplot() +
   labs(x = "",
        y = "") +
   facet_wrap( ~year, ncol = 3)
-
 
 ```
 
@@ -864,9 +863,9 @@ balances - concept and aplications. How to obtain the best transformation (based
 
 library(compositions)
 
-# CoDa (2019)
+# CoDa (2020)
 x <- capital_prsh_ancestry_sf %>%
-  filter(year == 2019) %>% 
+  filter(year == 2020) %>% 
   select(prsh_id, pop_dan, pop_frgn_nwst, pop_frgn_wst) %>%
   rename(dan = pop_dan, 
          nwst = pop_frgn_nwst,
@@ -925,7 +924,7 @@ Where $x_1$, $x_2$, $x_3$ are the Danes, Western, and Non-wester population in t
 # bal <- balance(xc, ~pop_dan/pop_frgn_wst/pop_frgn_nwst)
 
 bal_sf <- capital_prsh_ancestry_sf %>%
-  filter(year == 2019) %>% 
+  filter(year == 2020) %>% 
   mutate(b1 = sqrt(2/3) * log( ((pop_dan * pop_frgn_wst)^0.5) / (pop_frgn_nwst)),
          b2 = sqrt(1/2) * log(pop_dan / pop_frgn_wst))
 
@@ -965,7 +964,7 @@ GMI <- bind_rows(GMI_b1, GMI_b2) %>%
 ```{r prsh-CoDa-moran-local-b1}
 
 f_local_moran(df = bal_sf,
-              year = 2019, 
+              year = 2020, 
               variable = "b1", 
               signif = 0.1)
 
@@ -975,7 +974,7 @@ f_local_moran(df = bal_sf,
 ```{r prsh-CoDa-moran-local-b2}
 
 f_local_moran(df = bal_sf,
-              year = 2019, 
+              year = 2020, 
               variable = "b2", 
               signif = 0.1)
 

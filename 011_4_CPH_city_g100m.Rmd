@@ -170,7 +170,7 @@ f_res_units <- function(.file, .muni = study_area_codes) {
    
 ```
 
-The population data at municipality level for the same period we have BBR data (2004-2019) have been retrieved from [Statistics Denmark](https://www.dst.dk/en). We have used the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html) and the table [FT: Population figures from the censuses](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?Maintable=FT&PLanguage=1).
+The population data at municipality level for the same period we have BBR data (2004-2020) have been retrieved from [Statistics Denmark](https://www.dst.dk/en). We have used the R-package [danstat](https://cran.r-project.org/web/packages/danstat/index.html) and the table [FT: Population figures from the censuses](https://www.statbank.dk/statbank5a/SelectVarVal/Define.asp?Maintable=FT&PLanguage=1).
 
 ```{r pop-data-cph}
 
@@ -182,8 +182,8 @@ dat_meta <- get_table_metadata(table_id = id_table,
   variables <- list(
     # Municipalities
     list(code = "HOVEDDELE", values = c("101","147")),
-    # Population at the first day of the year (from 2004 to 2019)
-    list(code = "Tid", values = seq(2004, 2019, 1))
+    # Population at the first day of the year (from 2004 to 2020)
+    list(code = "Tid", values = seq(start_year, end_year, 1))
     )
 
 # Get data 
@@ -220,7 +220,7 @@ We can therefore estimate the population density at the first day of the year by
 ```{r fig-pop-density-aux-function}
 
 #' Aux. function for calculate the population density in the grids created by f_grids 
-#' @param .year       Year of the analysis (e.g. 2019)
+#' @param .year       Year of the analysis (e.g. 2020)
 
 f_pd_grids <- function(.year) {
 
@@ -296,8 +296,8 @@ f_pd_grids <- function(.year) {
 
 ```{r pop-density-cph}
 
-# List of years with BBR data (2004-2019) and population data (2008-2019)
-years_pd <- seq(2004, 2019, 1) 
+# List of years with BBR data (2004-2020) and population data (2008-2020)
+years_pd <- seq(start_year, end_year, 1) 
 
 # Increase future maximum allowed size of global variables
 options(future.globals.maxSize = 8000 * 1024^2)
@@ -399,7 +399,7 @@ However, for housing prices we focus our analysis to the main building types in 
 
 # Plots  
   p <- res_units_sf %>% 
-    filter(year == 2019) %>%  
+    filter(year == 2020) %>%  
     # Reorder type factors by the frequency they appear 
     mutate(type = fct_infreq(type)) %>% 
     # Split by house type
@@ -416,7 +416,7 @@ However, for housing prices we focus our analysis to the main building types in 
                            width = unit(0.5, "cm"),
                            style = north_arrow_orienteering(text_col = "white",
                                                             text_size = 1)) +
-    plot_annotation(title = "Residential units in 2019",
+    plot_annotation(title = "Residential units in 2020",
                     theme = theme(plot.title = element_text(size = 14,
                                                             colour = "darkblue",
                                                             face = "bold"),
@@ -455,8 +455,8 @@ res_units_oft_g100m <- res_units_oft_g100m %>%
 sum_runits_prices <- res_units_oft_g100m %>% 
   group_by(year, grid_ID, pop_total_km2, n_units) %>% 
   summarise(n_runits_oft = n(), 
-            mean_2019_kDKK_m2   = mean(price_2019_kDKK_m2, na.rm = TRUE),
-            median_2019_kDKK_m2 = median(price_2019_kDKK_m2, na.rm = TRUE)) %>% 
+            mean_2020_kDKK_m2   = mean(price_2020_kDKK_m2, na.rm = TRUE),
+            median_2020_kDKK_m2 = median(price_2020_kDKK_m2, na.rm = TRUE)) %>% 
   ungroup()
 
 # Link with population data by grids of 100m x 100m 
@@ -466,16 +466,15 @@ prices_g100m <- sum_runits_prices %>%
  
 ```
 
-```{r fig-prices-runits-grid-a, animation.hook="gifski", fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
-
+```{r fig-prices-runits-grid-a, animation.hook="gifski", fig.cap = "Median 2020-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
 
 # Aux. function for plotting
 f_plot <- function(df) {
   ggplot() +
     geom_sf(data = study_area, fill = "grey") +
     geom_sf(data = df, 
-            aes(fill = cut(median_2019_kDKK_m2,
-                           breaks = quantile(prices_g100m$median_2019_kDKK_m2,
+            aes(fill = cut(median_2020_kDKK_m2,
+                           breaks = quantile(prices_g100m$median_2020_kDKK_m2,
                                              seq(0, 1, 0.1),
                                              na.rm = TRUE), 
                            include.lowest = TRUE, 
@@ -503,12 +502,12 @@ for(i in seq_along(years_pd)) { print(plts[[i]]) }
 
 ```
 
-```{r fig-prices-runits-grid-b, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+```{r fig-prices-runits-grid-b, fig.cap = "Median 2020-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
 
 ggplot() +
   geom_sf(data = study_area, fill = "grey") +
   geom_sf(data = prices_g100m, 
-          aes(fill = cut_number(median_2019_kDKK_m2,
+          aes(fill = cut_number(median_2020_kDKK_m2,
                                 n = 10,
                                 ordered_result = TRUE,
                                 dig.lab = 0)),
@@ -528,9 +527,9 @@ ggplot() +
 
 ggplot(data = filter(prices_g100m, 
                      n_runits_oft >= 5,
-                     median_2019_kDKK_m2 > 1),
+                     median_2020_kDKK_m2 > 1),
        aes(x = pop_total_km2,
-           y = median_2019_kDKK_m2,
+           y = median_2020_kDKK_m2,
            colour = factor(year))) +
   geom_point() +
   scale_x_log10() +
