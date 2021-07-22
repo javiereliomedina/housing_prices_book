@@ -543,7 +543,56 @@ wrap_plots(p, ncol = 3) + plot_layout(guides = "collect")
 
 ### Ternary plots
 
-PROBLEMS WITH GGTERN (ggtern is´not compatible with the new version of ggplot2) - Plot in another project and put here the results 
+There are some issues with *ggtern* and the new version of *ggplot2* (v. 3.3.5). Therefore, we have made the ternary plots with older versions in a separate project ([here](https://javiereliomedina.github.io/ternary_maps_DK/)), and here we have plotted the results. 
+
+Population structure by year, with all the data together in the same diagram.
+
+```{r fig-cap-reg-tern-pop-year, fig.cap = "Ternary plot by year"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-1.png")
+
+```
+
+Separate plots by year and add the parishes in the legend. 
+
+```{r fig-cap-reg-tern-pop-year-prsh, fig.height=20, fig.width=10, fig.cap = "Ternary plots by parish"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png")
+
+```
+
+Links with house prices (zoom the figure to the parishes with median values). 
+
+```{r fig-cap-reg-tern-pop-price-all, fig.cap = "Median housing prices and popupation distribution by parish (all data)"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-price-all-1.png")
+
+```
+
+```{r fig-cap-reg-tern-pop-price-year, fig.height=10, fig.width=10, fig.cap = "Median housing prices and popupation distribution by parish and year"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png")
+
+```
+
+maps
+
+Center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).  
+
+```{r fig-cap-reg-tern-map, fig.height=20, fig.width=20, fig.cap="Population distribution"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-map-1.png")
+
+```
+
+Only for 2020.
+
+```{r fig-cap-reg-tern-map-2020, fig.cap="Population distribution in 2020"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-map-2020-1.png")
+
+```
+
 
 ## House prices at parish level
 

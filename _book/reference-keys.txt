@@ -20,6 +20,12 @@ fig:bivariate-map-migr-danes-wst
 fig:bivariate-map-migr-wst-nwst
 fig:fig-pop-muni
 fig:fig-MI-local
+fig:fig-cap-reg-tern-pop-year
+fig:fig-cap-reg-tern-pop-year-prsh
+fig:fig-cap-reg-tern-pop-price-all
+fig:fig-cap-reg-tern-pop-price-year
+fig:fig-cap-reg-tern-map
+fig:fig-cap-reg-tern-map-2020
 tab:tbl-runits-oft-capital
 fig:fig-runits-oft-type
 fig:fig-prices-runits-parish-a
