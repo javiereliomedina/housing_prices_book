@@ -22,8 +22,6 @@ fig:fig-pop-muni
 fig:fig-MI-local
 fig:fig-cap-reg-tern-pop-year
 fig:fig-cap-reg-tern-pop-year-prsh
-fig:fig-cap-reg-tern-pop-price-all
-fig:fig-cap-reg-tern-pop-price-year
 fig:fig-cap-reg-tern-map
 fig:fig-cap-reg-tern-map-2020
 tab:tbl-runits-oft-capital
@@ -32,6 +30,8 @@ fig:fig-prices-runits-parish-a
 fig:fig-prices-runits-parish-b
 fig:prsh-CoDa-PCA
 fig:prsh-CoDa-cluster-boxplot
+fig:fig-cap-reg-tern-pop-price-all
+fig:fig-cap-reg-tern-pop-price-year
 fig:fig-CPH-region
 fig:fig-pop-density-cph
 fig:fig-pop-density-cph-b

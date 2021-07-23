@@ -562,19 +562,6 @@ knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw
 
 ```
 
-Links with house prices (zoom the figure to the parishes with median values). 
-
-```{r fig-cap-reg-tern-pop-price-all, fig.cap = "Median housing prices and popupation distribution by parish (all data)"}
-
-knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-price-all-1.png")
-
-```
-
-```{r fig-cap-reg-tern-pop-price-year, fig.height=10, fig.width=10, fig.cap = "Median housing prices and popupation distribution by parish and year"}
-
-knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png")
-
-```
 
 maps
 
@@ -881,7 +868,7 @@ xc <- x %>%
 
 ```
 
-PCA (with clr transformations). Helps to identifythe variables taht most accoutn for the variability of the results and chose the balance. .... 
+PCA (with clr transformations). Helps to identify the variables that account the most for the variability of the results and chose the balance. .... 
 
 ```{r prsh-CoDa-PCA, fig.height=5, fig.width=9, fig.cap="Biplot of clr transfomation and balance dendrogram"}
 
@@ -980,8 +967,6 @@ f_local_moran(df = bal_sf,
 
 ```
 
-
-
 Spatial clusters (k-means cluster) with balances: separate Non-western from Danes and Western citizens.
 ```{r prsh-CoDa-cluster, fig.height=3}
 # based on https://www.tidymodels.org/learn/statistics/k-means/
@@ -1062,42 +1047,52 @@ assignments %>%
 
 ```
 
+Links with house prices (zoom the figure to the parishes with median values). 
 
-```{r prsh-CoDa-house-prices}
+```{r fig-cap-reg-tern-pop-price-all, fig.cap = "Median housing prices and popupation distribution by parish (all data)"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-price-all-1.png")
+
+```
+
+```{r fig-cap-reg-tern-pop-price-year, fig.height=10, fig.width=10, fig.cap = "Median housing prices and popupation distribution by parish and year"}
+
+knitr::include_graphics("https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png")
+
+```
+
+Linear models with N > 5. 
+
+```{r prsh-CoDa-house-prices-lm}
+# Link median prices (sum_runits_oft_prices) with population (balances - bal_sf)
+
+bal_prices <- sum_runits_oft_prices %>% 
+  # Analyse only 2020 
+  filter(year == 2020) %>% 
+  # Remove parish with less that 6 data
+  filter(n_runits_oft > 5) %>% 
+  # Select variables of interest
+  select(prsh_id,
+         pop_dan,
+         pop_frgn_wst,
+         pop_frgn_nwst, 
+         pop_total_km2,
+         median_2020_kDKK_m2) %>% 
+  # Add balances
+  mutate(b1 = sqrt(2/3) * log( ((pop_dan * pop_frgn_wst)^0.5) / (pop_frgn_nwst)),
+         b2 = sqrt(1/2) * log(pop_dan / pop_frgn_wst))
 
 # Model prices
+m1 <- lm(log10(median_2020_kDKK_m2) ~ b1 + b2, data = bal_prices)
+summary(m1)
 
-# m1 <- lm(log10(median_2019_kDKK_m2) ~ b1 + b2, data = bal_sf)
-# summary(m1)
-# 
-# bal_sf$pred1 <- predict(m1) 
-# plot(log10(median_2019_kDKK_m2) ~ pred1, bal_sf)
-# abline(0, 1, col = "blue")
-# lmp1 <- lm(log10(median_2019_kDKK_m2) ~ pred1, bal_sf) 
-# abline(lmp1, col = "red")
-# summary(lmp1)
-# 
-# 
-# 
-# m2 <- lm(log10(median_2019_kDKK_m2) ~ log10(pop_total_km2) + b1 + b2, bal_sf)
-# summary(m2)
-# bal_sf$pred2 <- predict(m2) 
-# plot(log10(median_2019_kDKK_m2) ~ pred2, bal_sf)
-# abline(0, 1, col = "blue")
-# lmp2 <- lm(log10(median_2019_kDKK_m2) ~ pred2, bal_sf) 
-# abline(lmp2, col = "red")
-# # ANOVA unbalance datasets
-# car::Anova(m2, type="III")
-# 
-# m4 <- lm(log10(median_2019_kDKK_m2) ~ log10(pop_total_km2), bal_sf)
-# bal_sf$pred4 <- predict(m4) 
-# plot(log10(median_2019_kDKK_m2) ~ pred4, bal_sf)
-# abline(0, 1, col = "blue")
-# lmp4 <- lm(log10(median_2019_kDKK_m2) ~ pred4, bal_sf) 
-# abline(lmp4, col = "red")
-# summary(lmp4)
-# # ANOVA unbalance datasets
-# car::Anova(m4, type="III")
+```
+
+```{r prsh-CoDa-house-prices-lm-results}
+
+bal_prices$pred1 <- predict(m1)
+plot(log10(median_2020_kDKK_m2) ~ pred1, bal_prices)
+abline(0, 1, col = "red")
 
 ```
 
