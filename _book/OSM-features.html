@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Open Street Map | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Open Street Map | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Marina Georgati, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-07-23" />
+<meta name="date" content="2021-12-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="hedonic-price-model.html"/>
 <link rel="next" href="dist-CBD.html"/>
-<script src="libs/header-attrs-2.9/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -42,7 +43,6 @@
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
 
 
 
@@ -980,36 +980,36 @@ div.csl-indent {
 <h3><span class="header-section-number">6.1.1</span> Areal features</h3>
 <p>The selected features and their expected effect on housing prices are reported in Table <a href="OSM-features.html#tab:tbl-osm-poly">6.1</a>.</p>
 <p>Hospital, and Schools (e.g. schools) may create traffic and noise. Therefore, they may have a negative effect on housing prices (<span class="citation"><a href="#ref-Gultekin2006" role="doc-biblioref">Gultekin and Yamamura</a> (<a href="#ref-Gultekin2006" role="doc-biblioref">2006</a>)</span>).</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="OSM-features.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of OSM data</span></span>
-<span id="cb89-2"><a href="OSM-features.html#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Available features: https://wiki.openstreetmap.org/wiki/Map_features </span></span>
-<span id="cb89-3"><a href="OSM-features.html#cb89-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb89-4"><a href="OSM-features.html#cb89-4" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb89-5"><a href="OSM-features.html#cb89-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
-<span id="cb89-6"><a href="OSM-features.html#cb89-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transportation   </span></span>
-<span id="cb89-7"><a href="OSM-features.html#cb89-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Parking&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;parking&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb89-8"><a href="OSM-features.html#cb89-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Green areas</span></span>
-<span id="cb89-9"><a href="OSM-features.html#cb89-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Park&quot;</span>, <span class="st">&quot;leisure&quot;</span>,  <span class="fu">c</span>(<span class="st">&quot;park&quot;</span>, <span class="st">&quot;garden&quot;</span>, <span class="st">&quot;playground&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb89-10"><a href="OSM-features.html#cb89-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Allotment&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;allotments&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb89-11"><a href="OSM-features.html#cb89-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Meadow&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;meadow&quot;</span>, <span class="st">&quot;positive&quot;</span>, </span>
-<span id="cb89-12"><a href="OSM-features.html#cb89-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Recreation ground</span></span>
-<span id="cb89-13"><a href="OSM-features.html#cb89-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Recreation&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;recreation_ground&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb89-14"><a href="OSM-features.html#cb89-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Education</span></span>
-<span id="cb89-15"><a href="OSM-features.html#cb89-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;School&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;school&quot;</span>, <span class="st">&quot;kindergarten&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb89-16"><a href="OSM-features.html#cb89-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;University&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;university&quot;</span>, <span class="st">&quot;college&quot;</span>), <span class="st">&quot;positive&quot;</span>, </span>
-<span id="cb89-17"><a href="OSM-features.html#cb89-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
-<span id="cb89-18"><a href="OSM-features.html#cb89-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Hospital&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;hospital&quot;</span>), <span class="st">&quot;negative&quot;</span></span>
-<span id="cb89-19"><a href="OSM-features.html#cb89-19" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb89-20"><a href="OSM-features.html#cb89-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb89-21"><a href="OSM-features.html#cb89-21" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> osm_poly_list <span class="sc">%&gt;%</span></span>
-<span id="cb89-22"><a href="OSM-features.html#cb89-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
-<span id="cb89-23"><a href="OSM-features.html#cb89-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() </span>
-<span id="cb89-24"><a href="OSM-features.html#cb89-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb89-25"><a href="OSM-features.html#cb89-25" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="sc">%&gt;%</span></span>
-<span id="cb89-26"><a href="OSM-features.html#cb89-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature, key, exp_effect) <span class="sc">%&gt;%</span></span>
-<span id="cb89-27"><a href="OSM-features.html#cb89-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">paste</span>(value, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb89-28"><a href="OSM-features.html#cb89-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(value, <span class="at">.after =</span> key) <span class="sc">%&gt;%</span> </span>
-<span id="cb89-29"><a href="OSM-features.html#cb89-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Expeced effect of polygon features on housing prices&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb89-30"><a href="OSM-features.html#cb89-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="OSM-features.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of OSM data</span></span>
+<span id="cb90-2"><a href="OSM-features.html#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Available features: https://wiki.openstreetmap.org/wiki/Map_features </span></span>
+<span id="cb90-3"><a href="OSM-features.html#cb90-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-4"><a href="OSM-features.html#cb90-4" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb90-5"><a href="OSM-features.html#cb90-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
+<span id="cb90-6"><a href="OSM-features.html#cb90-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transportation   </span></span>
+<span id="cb90-7"><a href="OSM-features.html#cb90-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Parking&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;parking&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb90-8"><a href="OSM-features.html#cb90-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Green areas</span></span>
+<span id="cb90-9"><a href="OSM-features.html#cb90-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Park&quot;</span>, <span class="st">&quot;leisure&quot;</span>,  <span class="fu">c</span>(<span class="st">&quot;park&quot;</span>, <span class="st">&quot;garden&quot;</span>, <span class="st">&quot;playground&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb90-10"><a href="OSM-features.html#cb90-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Allotment&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;allotments&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb90-11"><a href="OSM-features.html#cb90-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Meadow&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;meadow&quot;</span>, <span class="st">&quot;positive&quot;</span>, </span>
+<span id="cb90-12"><a href="OSM-features.html#cb90-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Recreation ground</span></span>
+<span id="cb90-13"><a href="OSM-features.html#cb90-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Recreation&quot;</span>, <span class="st">&quot;landuse&quot;</span>, <span class="st">&quot;recreation_ground&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb90-14"><a href="OSM-features.html#cb90-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Education</span></span>
+<span id="cb90-15"><a href="OSM-features.html#cb90-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;School&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;school&quot;</span>, <span class="st">&quot;kindergarten&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb90-16"><a href="OSM-features.html#cb90-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;University&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;university&quot;</span>, <span class="st">&quot;college&quot;</span>), <span class="st">&quot;positive&quot;</span>, </span>
+<span id="cb90-17"><a href="OSM-features.html#cb90-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
+<span id="cb90-18"><a href="OSM-features.html#cb90-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Hospital&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;hospital&quot;</span>), <span class="st">&quot;negative&quot;</span></span>
+<span id="cb90-19"><a href="OSM-features.html#cb90-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb90-20"><a href="OSM-features.html#cb90-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-21"><a href="OSM-features.html#cb90-21" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="ot">&lt;-</span> osm_poly_list <span class="sc">%&gt;%</span></span>
+<span id="cb90-22"><a href="OSM-features.html#cb90-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
+<span id="cb90-23"><a href="OSM-features.html#cb90-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() </span>
+<span id="cb90-24"><a href="OSM-features.html#cb90-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-25"><a href="OSM-features.html#cb90-25" aria-hidden="true" tabindex="-1"></a>osm_poly_list <span class="sc">%&gt;%</span></span>
+<span id="cb90-26"><a href="OSM-features.html#cb90-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature, key, exp_effect) <span class="sc">%&gt;%</span></span>
+<span id="cb90-27"><a href="OSM-features.html#cb90-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">paste</span>(value, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb90-28"><a href="OSM-features.html#cb90-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(value, <span class="at">.after =</span> key) <span class="sc">%&gt;%</span> </span>
+<span id="cb90-29"><a href="OSM-features.html#cb90-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Expeced effect of polygon features on housing prices&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb90-30"><a href="OSM-features.html#cb90-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>()</span></code></pre></div>
 <table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:tbl-osm-poly">Table 6.1: </span>Expeced effect of polygon features on housing prices
@@ -1145,65 +1145,412 @@ positive
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="OSM-features.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding of the study area (approx. buffer of 2km)</span></span>
-<span id="cb90-2"><a href="OSM-features.html#cb90-2" aria-hidden="true" tabindex="-1"></a>box <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">714906</span>, <span class="at">xmax =</span> <span class="dv">733618</span>, <span class="at">ymin =</span> <span class="dv">6166579</span>, <span class="at">ymax =</span> <span class="dv">6184092</span>)</span>
-<span id="cb90-3"><a href="OSM-features.html#cb90-3" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(box)</span>
-<span id="cb90-4"><a href="OSM-features.html#cb90-4" aria-hidden="true" tabindex="-1"></a>bbox_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sfc</span>(bbox) <span class="sc">%&gt;%</span>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:25832&quot;</span>) </span>
-<span id="cb90-5"><a href="OSM-features.html#cb90-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb90-6"><a href="OSM-features.html#cb90-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get polygons </span></span>
-<span id="cb90-7"><a href="OSM-features.html#cb90-7" aria-hidden="true" tabindex="-1"></a>osm_poly_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>,</span>
-<span id="cb90-8"><a href="OSM-features.html#cb90-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">layer =</span> <span class="st">&quot;multipolygons&quot;</span>,</span>
-<span id="cb90-9"><a href="OSM-features.html#cb90-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">extra_tags =</span> <span class="fu">c</span>(<span class="st">&quot;building&quot;</span>, <span class="st">&quot;railway&quot;</span>),</span>
-<span id="cb90-10"><a href="OSM-features.html#cb90-10" aria-hidden="true" tabindex="-1"></a>                        <span class="at">provider =</span> <span class="st">&quot;bbbike&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb90-11"><a href="OSM-features.html#cb90-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
-<span id="cb90-12"><a href="OSM-features.html#cb90-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb90-13"><a href="OSM-features.html#cb90-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
-<span id="cb90-14"><a href="OSM-features.html#cb90-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;osm_way_id&quot;</span>, <span class="st">&quot;type&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
-<span id="cb90-15"><a href="OSM-features.html#cb90-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
-<span id="cb90-16"><a href="OSM-features.html#cb90-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
-<pre><code># Reading layer `multipolygons&#39; from data source `C:\OSM_data\bbbike_Copenhagen.gpkg&#39; using driver `GPKG&#39;
-# Simple feature collection with 377023 features and 26 fields
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="OSM-features.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding of the study area (approx. buffer of 2km)</span></span>
+<span id="cb91-2"><a href="OSM-features.html#cb91-2" aria-hidden="true" tabindex="-1"></a>box <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">xmin =</span> <span class="dv">714906</span>, <span class="at">xmax =</span> <span class="dv">733618</span>, <span class="at">ymin =</span> <span class="dv">6166579</span>, <span class="at">ymax =</span> <span class="dv">6184092</span>)</span>
+<span id="cb91-3"><a href="OSM-features.html#cb91-3" aria-hidden="true" tabindex="-1"></a>bbox <span class="ot">&lt;-</span> <span class="fu">st_bbox</span>(box)</span>
+<span id="cb91-4"><a href="OSM-features.html#cb91-4" aria-hidden="true" tabindex="-1"></a>bbox_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sfc</span>(bbox) <span class="sc">%&gt;%</span>  <span class="fu">st_set_crs</span>(<span class="st">&quot;EPSG:25832&quot;</span>) </span>
+<span id="cb91-5"><a href="OSM-features.html#cb91-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-6"><a href="OSM-features.html#cb91-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Get polygons </span></span>
+<span id="cb91-7"><a href="OSM-features.html#cb91-7" aria-hidden="true" tabindex="-1"></a>osm_poly_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>,</span>
+<span id="cb91-8"><a href="OSM-features.html#cb91-8" aria-hidden="true" tabindex="-1"></a>                        <span class="at">layer =</span> <span class="st">&quot;multipolygons&quot;</span>,</span>
+<span id="cb91-9"><a href="OSM-features.html#cb91-9" aria-hidden="true" tabindex="-1"></a>                        <span class="at">extra_tags =</span> <span class="fu">c</span>(<span class="st">&quot;building&quot;</span>, <span class="st">&quot;railway&quot;</span>),</span>
+<span id="cb91-10"><a href="OSM-features.html#cb91-10" aria-hidden="true" tabindex="-1"></a>                        <span class="at">provider =</span> <span class="st">&quot;bbbike&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb91-11"><a href="OSM-features.html#cb91-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
+<span id="cb91-12"><a href="OSM-features.html#cb91-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb91-13"><a href="OSM-features.html#cb91-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
+<span id="cb91-14"><a href="OSM-features.html#cb91-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;osm_way_id&quot;</span>, <span class="st">&quot;type&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
+<span id="cb91-15"><a href="OSM-features.html#cb91-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
+<span id="cb91-16"><a href="OSM-features.html#cb91-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
+<pre><code># 
+  |                                                                                                     
+  |                                                                                               |   0%
+  |                                                                                                     
+  |                                                                                               |   1%
+  |                                                                                                     
+  |=                                                                                              |   1%
+  |                                                                                                     
+  |==                                                                                             |   2%
+  |                                                                                                     
+  |==                                                                                             |   3%
+  |                                                                                                     
+  |===                                                                                            |   3%
+  |                                                                                                     
+  |===                                                                                            |   4%
+  |                                                                                                     
+  |====                                                                                           |   4%
+  |                                                                                                     
+  |====                                                                                           |   5%
+  |                                                                                                     
+  |=====                                                                                          |   5%
+  |                                                                                                     
+  |=====                                                                                          |   6%
+  |                                                                                                     
+  |======                                                                                         |   6%
+  |                                                                                                     
+  |======                                                                                         |   7%
+  |                                                                                                     
+  |=======                                                                                        |   7%
+  |                                                                                                     
+  |=======                                                                                        |   8%
+  |                                                                                                     
+  |========                                                                                       |   8%
+  |                                                                                                     
+  |========                                                                                       |   9%
+  |                                                                                                     
+  |=========                                                                                      |   9%
+  |                                                                                                     
+  |=========                                                                                      |  10%
+  |                                                                                                     
+  |==========                                                                                     |  10%
+  |                                                                                                     
+  |==========                                                                                     |  11%
+  |                                                                                                     
+  |===========                                                                                    |  11%
+  |                                                                                                     
+  |===========                                                                                    |  12%
+  |                                                                                                     
+  |============                                                                                   |  12%
+  |                                                                                                     
+  |============                                                                                   |  13%
+  |                                                                                                     
+  |=============                                                                                  |  13%
+  |                                                                                                     
+  |=============                                                                                  |  14%
+  |                                                                                                     
+  |==============                                                                                 |  14%
+  |                                                                                                     
+  |==============                                                                                 |  15%
+  |                                                                                                     
+  |===============                                                                                |  15%
+  |                                                                                                     
+  |===============                                                                                |  16%
+  |                                                                                                     
+  |================                                                                               |  16%
+  |                                                                                                     
+  |================                                                                               |  17%
+  |                                                                                                     
+  |=================                                                                              |  17%
+  |                                                                                                     
+  |=================                                                                              |  18%
+  |                                                                                                     
+  |==================                                                                             |  18%
+  |                                                                                                     
+  |==================                                                                             |  19%
+  |                                                                                                     
+  |===================                                                                            |  20%
+  |                                                                                                     
+  |====================                                                                           |  21%
+  |                                                                                                     
+  |=====================                                                                          |  22%
+  |                                                                                                     
+  |======================                                                                         |  23%
+  |                                                                                                     
+  |======================                                                                         |  24%
+  |                                                                                                     
+  |=======================                                                                        |  24%
+  |                                                                                                     
+  |=======================                                                                        |  25%
+  |                                                                                                     
+  |========================                                                                       |  25%
+  |                                                                                                     
+  |========================                                                                       |  26%
+  |                                                                                                     
+  |=========================                                                                      |  26%
+  |                                                                                                     
+  |=========================                                                                      |  27%
+  |                                                                                                     
+  |==========================                                                                     |  27%
+  |                                                                                                     
+  |==========================                                                                     |  28%
+  |                                                                                                     
+  |===========================                                                                    |  28%
+  |                                                                                                     
+  |===========================                                                                    |  29%
+  |                                                                                                     
+  |============================                                                                   |  29%
+  |                                                                                                     
+  |============================                                                                   |  30%
+  |                                                                                                     
+  |=============================                                                                  |  30%
+  |                                                                                                     
+  |=============================                                                                  |  31%
+  |                                                                                                     
+  |==============================                                                                 |  31%
+  |                                                                                                     
+  |==============================                                                                 |  32%
+  |                                                                                                     
+  |===============================                                                                |  32%
+  |                                                                                                     
+  |===============================                                                                |  33%
+  |                                                                                                     
+  |================================                                                               |  33%
+  |                                                                                                     
+  |================================                                                               |  34%
+  |                                                                                                     
+  |=================================                                                              |  35%
+  |                                                                                                     
+  |==================================                                                             |  36%
+  |                                                                                                     
+  |===================================                                                            |  36%
+  |                                                                                                     
+  |===================================                                                            |  37%
+  |                                                                                                     
+  |====================================                                                           |  37%
+  |                                                                                                     
+  |====================================                                                           |  38%
+  |                                                                                                     
+  |=====================================                                                          |  39%
+  |                                                                                                     
+  |======================================                                                         |  39%
+  |                                                                                                     
+  |======================================                                                         |  40%
+  |                                                                                                     
+  |======================================                                                         |  41%
+  |                                                                                                     
+  |=======================================                                                        |  41%
+  |                                                                                                     
+  |=======================================                                                        |  42%
+  |                                                                                                     
+  |========================================                                                       |  42%
+  |                                                                                                     
+  |========================================                                                       |  43%
+  |                                                                                                     
+  |=========================================                                                      |  43%
+  |                                                                                                     
+  |=========================================                                                      |  44%
+  |                                                                                                     
+  |==========================================                                                     |  44%
+  |                                                                                                     
+  |==========================================                                                     |  45%
+  |                                                                                                     
+  |===========================================                                                    |  45%
+  |                                                                                                     
+  |===========================================                                                    |  46%
+  |                                                                                                     
+  |============================================                                                   |  46%
+  |                                                                                                     
+  |============================================                                                   |  47%
+  |                                                                                                     
+  |=============================================                                                  |  47%
+  |                                                                                                     
+  |=============================================                                                  |  48%
+  |                                                                                                     
+  |==============================================                                                 |  48%
+  |                                                                                                     
+  |==============================================                                                 |  49%
+  |                                                                                                     
+  |===============================================                                                |  49%
+  |                                                                                                     
+  |===============================================                                                |  50%
+  |                                                                                                     
+  |================================================                                               |  50%
+  |                                                                                                     
+  |================================================                                               |  51%
+  |                                                                                                     
+  |=================================================                                              |  51%
+  |                                                                                                     
+  |=================================================                                              |  52%
+  |                                                                                                     
+  |==================================================                                             |  52%
+  |                                                                                                     
+  |==================================================                                             |  53%
+  |                                                                                                     
+  |===================================================                                            |  53%
+  |                                                                                                     
+  |===================================================                                            |  54%
+  |                                                                                                     
+  |====================================================                                           |  54%
+  |                                                                                                     
+  |====================================================                                           |  55%
+  |                                                                                                     
+  |=====================================================                                          |  55%
+  |                                                                                                     
+  |=====================================================                                          |  56%
+  |                                                                                                     
+  |======================================================                                         |  56%
+  |                                                                                                     
+  |======================================================                                         |  57%
+  |                                                                                                     
+  |=======================================================                                        |  57%
+  |                                                                                                     
+  |=======================================================                                        |  58%
+  |                                                                                                     
+  |========================================================                                       |  59%
+  |                                                                                                     
+  |=========================================================                                      |  60%
+  |                                                                                                     
+  |=============================================================                                  |  64%
+  |                                                                                                     
+  |=============================================================                                  |  65%
+  |                                                                                                     
+  |==============================================================                                 |  65%
+  |                                                                                                     
+  |==============================================================                                 |  66%
+  |                                                                                                     
+  |===============================================================                                |  66%
+  |                                                                                                     
+  |===============================================================                                |  67%
+  |                                                                                                     
+  |================================================================                               |  67%
+  |                                                                                                     
+  |================================================================                               |  68%
+  |                                                                                                     
+  |=================================================================                              |  68%
+  |                                                                                                     
+  |=================================================================                              |  69%
+  |                                                                                                     
+  |==================================================================                             |  69%
+  |                                                                                                     
+  |==================================================================                             |  70%
+  |                                                                                                     
+  |===================================================================                            |  70%
+  |                                                                                                     
+  |===================================================================                            |  71%
+  |                                                                                                     
+  |====================================================================                           |  71%
+  |                                                                                                     
+  |====================================================================                           |  72%
+  |                                                                                                     
+  |=====================================================================                          |  72%
+  |                                                                                                     
+  |=====================================================================                          |  73%
+  |                                                                                                     
+  |======================================================================                         |  73%
+  |                                                                                                     
+  |======================================================================                         |  74%
+  |                                                                                                     
+  |=======================================================================                        |  74%
+  |                                                                                                     
+  |=======================================================================                        |  75%
+  |                                                                                                     
+  |========================================================================                       |  75%
+  |                                                                                                     
+  |========================================================================                       |  76%
+  |                                                                                                     
+  |=========================================================================                      |  76%
+  |                                                                                                     
+  |=========================================================================                      |  77%
+  |                                                                                                     
+  |==========================================================================                     |  77%
+  |                                                                                                     
+  |==========================================================================                     |  78%
+  |                                                                                                     
+  |===========================================================================                    |  78%
+  |                                                                                                     
+  |===========================================================================                    |  79%
+  |                                                                                                     
+  |============================================================================                   |  80%
+  |                                                                                                     
+  |==============================================================================                 |  82%
+  |                                                                                                     
+  |==============================================================================                 |  83%
+  |                                                                                                     
+  |===============================================================================                |  83%
+  |                                                                                                     
+  |================================================================================               |  84%
+  |                                                                                                     
+  |================================================================================               |  85%
+  |                                                                                                     
+  |=================================================================================              |  85%
+  |                                                                                                     
+  |=================================================================================              |  86%
+  |                                                                                                     
+  |===================================================================================            |  87%
+  |                                                                                                     
+  |===================================================================================            |  88%
+  |                                                                                                     
+  |====================================================================================           |  88%
+  |                                                                                                     
+  |====================================================================================           |  89%
+  |                                                                                                     
+  |=====================================================================================          |  89%
+  |                                                                                                     
+  |=====================================================================================          |  90%
+  |                                                                                                     
+  |======================================================================================         |  90%
+  |                                                                                                     
+  |======================================================================================         |  91%
+  |                                                                                                     
+  |=======================================================================================        |  91%
+  |                                                                                                     
+  |=======================================================================================        |  92%
+  |                                                                                                     
+  |========================================================================================       |  92%
+  |                                                                                                     
+  |========================================================================================       |  93%
+  |                                                                                                     
+  |=========================================================================================      |  93%
+  |                                                                                                     
+  |=========================================================================================      |  94%
+  |                                                                                                     
+  |==========================================================================================     |  94%
+  |                                                                                                     
+  |==========================================================================================     |  95%
+  |                                                                                                     
+  |===========================================================================================    |  95%
+  |                                                                                                     
+  |===========================================================================================    |  96%
+  |                                                                                                     
+  |============================================================================================   |  96%
+  |                                                                                                     
+  |============================================================================================   |  97%
+  |                                                                                                     
+  |=============================================================================================  |  97%
+  |                                                                                                     
+  |=============================================================================================  |  98%
+  |                                                                                                     
+  |============================================================================================== |  98%
+  |                                                                                                     
+  |============================================================================================== |  99%
+  |                                                                                                     
+  |===============================================================================================|  99%
+  |                                                                                                     
+  |===============================================================================================| 100%
+# 0...10...20...30...40...50...60...70...80...90...100 - done.
+# Reading layer `multipolygons&#39; from data source 
+#   `C:\Users\FU53VP\AppData\Local\Temp\RtmpOcfjU7\bbbike_Copenhagen.gpkg&#39; using driver `GPKG&#39;
+# Simple feature collection with 380003 features and 26 fields
 # Geometry type: MULTIPOLYGON
 # Dimension:     XY
 # Bounding box:  xmin: 12.3 ymin: 55.6 xmax: 12.7 ymax: 55.8
 # Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="OSM-features.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge and convert to sf</span></span>
-<span id="cb92-2"><a href="OSM-features.html#cb92-2" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="ot">&lt;-</span> <span class="fu">merge</span>(osm_poly_list, osm_poly_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-3"><a href="OSM-features.html#cb92-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
-<span id="cb92-4"><a href="OSM-features.html#cb92-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb92-5"><a href="OSM-features.html#cb92-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
-<span id="cb92-6"><a href="OSM-features.html#cb92-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-7"><a href="OSM-features.html#cb92-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # Remove non-valid polygons (i.e. 2 polygons)</span></span>
-<span id="cb92-8"><a href="OSM-features.html#cb92-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(valid = st_is_valid(.)) %&gt;% </span></span>
-<span id="cb92-9"><a href="OSM-features.html#cb92-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(!is.na(valid)) %&gt;% </span></span>
-<span id="cb92-10"><a href="OSM-features.html#cb92-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># From Meadow get only &quot;Kalvebod Fælled&quot; </span></span>
-<span id="cb92-11"><a href="OSM-features.html#cb92-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">!=</span> <span class="st">&quot;Meadow&quot;</span> <span class="sc">|</span></span>
-<span id="cb92-12"><a href="OSM-features.html#cb92-12" aria-hidden="true" tabindex="-1"></a>         (key <span class="sc">==</span> <span class="st">&quot;landuse&quot;</span> <span class="sc">&amp;</span> value <span class="sc">==</span> <span class="st">&quot;meadow&quot;</span> <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;Kalvebod Fælled&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb92-13"><a href="OSM-features.html#cb92-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">case_when</span>(feature <span class="sc">==</span> <span class="st">&quot;Meadow&quot;</span> <span class="sc">~</span> <span class="st">&quot;Kalvebod_Fælled&quot;</span>,</span>
-<span id="cb92-14"><a href="OSM-features.html#cb92-14" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span> <span class="sc">~</span> feature)) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-15"><a href="OSM-features.html#cb92-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mass of the service (area of the polygons)</span></span>
-<span id="cb92-16"><a href="OSM-features.html#cb92-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m_service =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), m<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-17"><a href="OSM-features.html#cb92-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
-<span id="cb92-18"><a href="OSM-features.html#cb92-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-19"><a href="OSM-features.html#cb92-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
-<span id="cb92-20"><a href="OSM-features.html#cb92-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-21"><a href="OSM-features.html#cb92-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb92-22"><a href="OSM-features.html#cb92-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb92-23"><a href="OSM-features.html#cb92-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_poly =</span> data) <span class="sc">%&gt;%</span> </span>
-<span id="cb92-24"><a href="OSM-features.html#cb92-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get centroids  </span></span>
-<span id="cb92-25"><a href="OSM-features.html#cb92-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="OSM-features.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge and convert to sf</span></span>
+<span id="cb93-2"><a href="OSM-features.html#cb93-2" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="ot">&lt;-</span> <span class="fu">merge</span>(osm_poly_list, osm_poly_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-3"><a href="OSM-features.html#cb93-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
+<span id="cb93-4"><a href="OSM-features.html#cb93-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb93-5"><a href="OSM-features.html#cb93-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
+<span id="cb93-6"><a href="OSM-features.html#cb93-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-7"><a href="OSM-features.html#cb93-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># # Remove non-valid polygons (i.e. 2 polygons)</span></span>
+<span id="cb93-8"><a href="OSM-features.html#cb93-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># mutate(valid = st_is_valid(.)) %&gt;% </span></span>
+<span id="cb93-9"><a href="OSM-features.html#cb93-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># filter(!is.na(valid)) %&gt;% </span></span>
+<span id="cb93-10"><a href="OSM-features.html#cb93-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># From Meadow get only &quot;Kalvebod Fælled&quot; </span></span>
+<span id="cb93-11"><a href="OSM-features.html#cb93-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">!=</span> <span class="st">&quot;Meadow&quot;</span> <span class="sc">|</span></span>
+<span id="cb93-12"><a href="OSM-features.html#cb93-12" aria-hidden="true" tabindex="-1"></a>         (key <span class="sc">==</span> <span class="st">&quot;landuse&quot;</span> <span class="sc">&amp;</span> value <span class="sc">==</span> <span class="st">&quot;meadow&quot;</span> <span class="sc">&amp;</span> name <span class="sc">==</span> <span class="st">&quot;Kalvebod Fælled&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb93-13"><a href="OSM-features.html#cb93-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">feature =</span> <span class="fu">case_when</span>(feature <span class="sc">==</span> <span class="st">&quot;Meadow&quot;</span> <span class="sc">~</span> <span class="st">&quot;Kalvebod_Fælled&quot;</span>,</span>
+<span id="cb93-14"><a href="OSM-features.html#cb93-14" aria-hidden="true" tabindex="-1"></a>                             <span class="cn">TRUE</span> <span class="sc">~</span> feature)) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-15"><a href="OSM-features.html#cb93-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mass of the service (area of the polygons)</span></span>
+<span id="cb93-16"><a href="OSM-features.html#cb93-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m_service =</span> <span class="fu">as.numeric</span>(units<span class="sc">::</span><span class="fu">set_units</span>(<span class="fu">st_area</span>(.), m<span class="sc">^</span><span class="dv">2</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-17"><a href="OSM-features.html#cb93-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
+<span id="cb93-18"><a href="OSM-features.html#cb93-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-19"><a href="OSM-features.html#cb93-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
+<span id="cb93-20"><a href="OSM-features.html#cb93-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-21"><a href="OSM-features.html#cb93-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb93-22"><a href="OSM-features.html#cb93-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb93-23"><a href="OSM-features.html#cb93-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_poly =</span> data) <span class="sc">%&gt;%</span> </span>
+<span id="cb93-24"><a href="OSM-features.html#cb93-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get centroids  </span></span>
+<span id="cb93-25"><a href="OSM-features.html#cb93-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">data_points =</span> <span class="fu">map</span>(data_poly, st_centroid))</span></code></pre></div>
 <p>Spatial distribution (Figure <a href="OSM-features.html#fig:fig-osm-poly">6.1</a>)</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="OSM-features.html#cb93-1" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="sc">%&gt;%</span></span>
-<span id="cb93-2"><a href="OSM-features.html#cb93-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_poly)) <span class="sc">%&gt;%</span> </span>
-<span id="cb93-3"><a href="OSM-features.html#cb93-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb93-4"><a href="OSM-features.html#cb93-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb93-5"><a href="OSM-features.html#cb93-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
-<span id="cb93-6"><a href="OSM-features.html#cb93-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb93-7"><a href="OSM-features.html#cb93-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb93-8"><a href="OSM-features.html#cb93-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
-<span id="cb93-9"><a href="OSM-features.html#cb93-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb93-10"><a href="OSM-features.html#cb93-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-osm-poly"></span>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="OSM-features.html#cb94-1" aria-hidden="true" tabindex="-1"></a>osm_poly <span class="sc">%&gt;%</span></span>
+<span id="cb94-2"><a href="OSM-features.html#cb94-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_poly)) <span class="sc">%&gt;%</span> </span>
+<span id="cb94-3"><a href="OSM-features.html#cb94-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb94-4"><a href="OSM-features.html#cb94-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb94-5"><a href="OSM-features.html#cb94-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb94-6"><a href="OSM-features.html#cb94-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb94-7"><a href="OSM-features.html#cb94-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb94-8"><a href="OSM-features.html#cb94-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
+<span id="cb94-9"><a href="OSM-features.html#cb94-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb94-10"><a href="OSM-features.html#cb94-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-osm-poly"></span>
 <img src="Housing_prices_book_files/figure-html/fig-osm-poly-1.png" alt="Spatial distribution of OSM areal features" width="672" />
 <p class="caption">
 Figure 6.1: Spatial distribution of OSM areal features
@@ -1213,36 +1560,36 @@ Figure 6.1: Spatial distribution of OSM areal features
 <div id="point-features" class="section level3" number="6.1.2">
 <h3><span class="header-section-number">6.1.2</span> Point features</h3>
 <p>Point features and their expected effect on housing prices (Table <a href="OSM-features.html#tab:tbl-osm-points">6.2</a>).</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="OSM-features.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sustenance (points)</span></span>
-<span id="cb94-2"><a href="OSM-features.html#cb94-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb94-3"><a href="OSM-features.html#cb94-3" aria-hidden="true" tabindex="-1"></a>osm_points_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
-<span id="cb94-4"><a href="OSM-features.html#cb94-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
-<span id="cb94-5"><a href="OSM-features.html#cb94-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sustenance</span></span>
-<span id="cb94-6"><a href="OSM-features.html#cb94-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Sustenance&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;bar&quot;</span>, <span class="st">&quot;biergarten&quot;</span>, <span class="st">&quot;cafe&quot;</span>, <span class="st">&quot;fast_food&quot;</span>, <span class="st">&quot;food_court&quot;</span>,</span>
-<span id="cb94-7"><a href="OSM-features.html#cb94-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">&quot;ice_cream&quot;</span>, <span class="st">&quot;pub&quot;</span>, <span class="st">&quot;restaurant&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb94-8"><a href="OSM-features.html#cb94-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Shops</span></span>
-<span id="cb94-9"><a href="OSM-features.html#cb94-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Shop&quot;</span>, <span class="st">&quot;shop&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;supermarket&quot;</span>, <span class="st">&quot;mall&quot;</span>, <span class="st">&quot;general&quot;</span>, <span class="st">&quot;dairy&quot;</span>, <span class="st">&quot;department_store&quot;</span>,</span>
-<span id="cb94-10"><a href="OSM-features.html#cb94-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;butcher&quot;</span>, <span class="st">&quot;seafood&quot;</span>, <span class="st">&quot;bakery&quot;</span>, <span class="st">&quot;convenience&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb94-11"><a href="OSM-features.html#cb94-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Entertainment, Arts &amp; Culture....</span></span>
-<span id="cb94-12"><a href="OSM-features.html#cb94-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Entmt_pos&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;cinema&quot;</span>, <span class="st">&quot;social_centre&quot;</span>, <span class="st">&quot;theatre&quot;</span>,</span>
-<span id="cb94-13"><a href="OSM-features.html#cb94-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;community_centre&quot;</span>, <span class="st">&quot;arts_centre&quot;</span>, <span class="st">&quot;public_bookcase&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb94-14"><a href="OSM-features.html#cb94-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Entmt_neg&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;brothel&quot;</span>, <span class="st">&quot;casino&quot;</span>, <span class="st">&quot;gambling&quot;</span>,</span>
-<span id="cb94-15"><a href="OSM-features.html#cb94-15" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;love_hotel&quot;</span>, <span class="st">&quot;nightclub&quot;</span>, <span class="st">&quot;stripclub&quot;</span>, <span class="st">&quot;swingerclub&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb94-16"><a href="OSM-features.html#cb94-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
-<span id="cb94-17"><a href="OSM-features.html#cb94-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Social_fac&quot;</span>, <span class="st">&quot;amenity&quot;</span>,  <span class="st">&quot;social_facility&quot;</span>, <span class="st">&quot;negative&quot;</span>,</span>
-<span id="cb94-18"><a href="OSM-features.html#cb94-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Public transport</span></span>
-<span id="cb94-19"><a href="OSM-features.html#cb94-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Underground&quot;</span>, <span class="st">&quot;railway&quot;</span>, <span class="st">&quot;subway_entrance&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb94-20"><a href="OSM-features.html#cb94-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Bus_stop&quot;</span>, <span class="st">&quot;highway&quot;</span>, <span class="st">&quot;bus_stop&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
-<span id="cb94-21"><a href="OSM-features.html#cb94-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Train_stop&quot;</span>, <span class="st">&quot;railway&quot;</span>, <span class="st">&quot;stop&quot;</span>, <span class="st">&quot;positive&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb94-22"><a href="OSM-features.html#cb94-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
-<span id="cb94-23"><a href="OSM-features.html#cb94-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>()</span>
-<span id="cb94-24"><a href="OSM-features.html#cb94-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb94-25"><a href="OSM-features.html#cb94-25" aria-hidden="true" tabindex="-1"></a>osm_points_list <span class="sc">%&gt;%</span> </span>
-<span id="cb94-26"><a href="OSM-features.html#cb94-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature, key, exp_effect) <span class="sc">%&gt;%</span></span>
-<span id="cb94-27"><a href="OSM-features.html#cb94-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">paste</span>(value, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb94-28"><a href="OSM-features.html#cb94-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(value, <span class="at">.after =</span> key) <span class="sc">%&gt;%</span></span>
-<span id="cb94-29"><a href="OSM-features.html#cb94-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Expeced effect of points features on housing prices&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb94-30"><a href="OSM-features.html#cb94-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="OSM-features.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sustenance (points)</span></span>
+<span id="cb95-2"><a href="OSM-features.html#cb95-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-3"><a href="OSM-features.html#cb95-3" aria-hidden="true" tabindex="-1"></a>osm_points_list <span class="ot">&lt;-</span> <span class="fu">tribble</span>(</span>
+<span id="cb95-4"><a href="OSM-features.html#cb95-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span>feature, <span class="sc">~</span>key, <span class="sc">~</span>value, <span class="sc">~</span>exp_effect,</span>
+<span id="cb95-5"><a href="OSM-features.html#cb95-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sustenance</span></span>
+<span id="cb95-6"><a href="OSM-features.html#cb95-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Sustenance&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;bar&quot;</span>, <span class="st">&quot;biergarten&quot;</span>, <span class="st">&quot;cafe&quot;</span>, <span class="st">&quot;fast_food&quot;</span>, <span class="st">&quot;food_court&quot;</span>,</span>
+<span id="cb95-7"><a href="OSM-features.html#cb95-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">&quot;ice_cream&quot;</span>, <span class="st">&quot;pub&quot;</span>, <span class="st">&quot;restaurant&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb95-8"><a href="OSM-features.html#cb95-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Shops</span></span>
+<span id="cb95-9"><a href="OSM-features.html#cb95-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Shop&quot;</span>, <span class="st">&quot;shop&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;supermarket&quot;</span>, <span class="st">&quot;mall&quot;</span>, <span class="st">&quot;general&quot;</span>, <span class="st">&quot;dairy&quot;</span>, <span class="st">&quot;department_store&quot;</span>,</span>
+<span id="cb95-10"><a href="OSM-features.html#cb95-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;butcher&quot;</span>, <span class="st">&quot;seafood&quot;</span>, <span class="st">&quot;bakery&quot;</span>, <span class="st">&quot;convenience&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb95-11"><a href="OSM-features.html#cb95-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Entertainment, Arts &amp; Culture....</span></span>
+<span id="cb95-12"><a href="OSM-features.html#cb95-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Entmt_pos&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;cinema&quot;</span>, <span class="st">&quot;social_centre&quot;</span>, <span class="st">&quot;theatre&quot;</span>,</span>
+<span id="cb95-13"><a href="OSM-features.html#cb95-13" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;community_centre&quot;</span>, <span class="st">&quot;arts_centre&quot;</span>, <span class="st">&quot;public_bookcase&quot;</span>), <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb95-14"><a href="OSM-features.html#cb95-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Entmt_neg&quot;</span>, <span class="st">&quot;amenity&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;brothel&quot;</span>, <span class="st">&quot;casino&quot;</span>, <span class="st">&quot;gambling&quot;</span>,</span>
+<span id="cb95-15"><a href="OSM-features.html#cb95-15" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;love_hotel&quot;</span>, <span class="st">&quot;nightclub&quot;</span>, <span class="st">&quot;stripclub&quot;</span>, <span class="st">&quot;swingerclub&quot;</span>), <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb95-16"><a href="OSM-features.html#cb95-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Healthcare</span></span>
+<span id="cb95-17"><a href="OSM-features.html#cb95-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Social_fac&quot;</span>, <span class="st">&quot;amenity&quot;</span>,  <span class="st">&quot;social_facility&quot;</span>, <span class="st">&quot;negative&quot;</span>,</span>
+<span id="cb95-18"><a href="OSM-features.html#cb95-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Public transport</span></span>
+<span id="cb95-19"><a href="OSM-features.html#cb95-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Underground&quot;</span>, <span class="st">&quot;railway&quot;</span>, <span class="st">&quot;subway_entrance&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb95-20"><a href="OSM-features.html#cb95-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Bus_stop&quot;</span>, <span class="st">&quot;highway&quot;</span>, <span class="st">&quot;bus_stop&quot;</span>, <span class="st">&quot;positive&quot;</span>,</span>
+<span id="cb95-21"><a href="OSM-features.html#cb95-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Train_stop&quot;</span>, <span class="st">&quot;railway&quot;</span>, <span class="st">&quot;stop&quot;</span>, <span class="st">&quot;positive&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb95-22"><a href="OSM-features.html#cb95-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(value)) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-23"><a href="OSM-features.html#cb95-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>()</span>
+<span id="cb95-24"><a href="OSM-features.html#cb95-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-25"><a href="OSM-features.html#cb95-25" aria-hidden="true" tabindex="-1"></a>osm_points_list <span class="sc">%&gt;%</span> </span>
+<span id="cb95-26"><a href="OSM-features.html#cb95-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature, key, exp_effect) <span class="sc">%&gt;%</span></span>
+<span id="cb95-27"><a href="OSM-features.html#cb95-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">value =</span> <span class="fu">paste</span>(value, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-28"><a href="OSM-features.html#cb95-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(value, <span class="at">.after =</span> key) <span class="sc">%&gt;%</span></span>
+<span id="cb95-29"><a href="OSM-features.html#cb95-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Expeced effect of points features on housing prices&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb95-30"><a href="OSM-features.html#cb95-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>()</span></code></pre></div>
 <table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:tbl-osm-points">Table 6.2: </span>Expeced effect of points features on housing prices
@@ -1378,47 +1725,49 @@ positive
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="OSM-features.html#cb95-1" aria-hidden="true" tabindex="-1"></a>osm_points_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>,</span>
-<span id="cb95-2"><a href="OSM-features.html#cb95-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">layer =</span> <span class="st">&quot;points&quot;</span>,</span>
-<span id="cb95-3"><a href="OSM-features.html#cb95-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">extra_tags =</span> <span class="fu">c</span>(<span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;shop&quot;</span>, <span class="st">&quot;railway&quot;</span>, <span class="st">&quot;highway&quot;</span>),</span>
-<span id="cb95-4"><a href="OSM-features.html#cb95-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">provider =</span> <span class="st">&quot;bbbike&quot;</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb95-5"><a href="OSM-features.html#cb95-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
-<span id="cb95-6"><a href="OSM-features.html#cb95-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb95-7"><a href="OSM-features.html#cb95-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
-<span id="cb95-8"><a href="OSM-features.html#cb95-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;address&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
-<span id="cb95-9"><a href="OSM-features.html#cb95-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
-<span id="cb95-10"><a href="OSM-features.html#cb95-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
-<pre><code># Reading layer `points&#39; from data source `C:\OSM_data\bbbike_Copenhagen.gpkg&#39; using driver `GPKG&#39;
-# Simple feature collection with 399818 features and 13 fields
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="OSM-features.html#cb96-1" aria-hidden="true" tabindex="-1"></a>osm_points_dnld <span class="ot">&lt;-</span> <span class="fu">oe_get</span>(<span class="at">place =</span> <span class="st">&quot;Copenhagen&quot;</span>,</span>
+<span id="cb96-2"><a href="OSM-features.html#cb96-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">layer =</span> <span class="st">&quot;points&quot;</span>,</span>
+<span id="cb96-3"><a href="OSM-features.html#cb96-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">extra_tags =</span> <span class="fu">c</span>(<span class="st">&quot;amenity&quot;</span>, <span class="st">&quot;shop&quot;</span>, <span class="st">&quot;railway&quot;</span>, <span class="st">&quot;highway&quot;</span>),</span>
+<span id="cb96-4"><a href="OSM-features.html#cb96-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">provider =</span> <span class="st">&quot;bbbike&quot;</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb96-5"><a href="OSM-features.html#cb96-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to data.table</span></span>
+<span id="cb96-6"><a href="OSM-features.html#cb96-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb96-7"><a href="OSM-features.html#cb96-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Long format </span></span>
+<span id="cb96-8"><a href="OSM-features.html#cb96-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(<span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">&quot;osm_id&quot;</span>, <span class="st">&quot;name&quot;</span>, <span class="st">&quot;address&quot;</span>, <span class="st">&quot;geometry&quot;</span>),</span>
+<span id="cb96-9"><a href="OSM-features.html#cb96-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">variable.name =</span> <span class="st">&quot;key&quot;</span>,</span>
+<span id="cb96-10"><a href="OSM-features.html#cb96-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">value.name =</span> <span class="st">&quot;value&quot;</span>)</span></code></pre></div>
+<pre><code># 0...10...20...30...40...50...60...70...80...90...100 - done.
+# Reading layer `points&#39; from data source 
+#   `C:\Users\FU53VP\AppData\Local\Temp\RtmpOcfjU7\bbbike_Copenhagen.gpkg&#39; using driver `GPKG&#39;
+# Simple feature collection with 410365 features and 13 fields
 # Geometry type: POINT
 # Dimension:     XY
 # Bounding box:  xmin: 12.3 ymin: 55.6 xmax: 12.7 ymax: 55.8
 # Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="OSM-features.html#cb97-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="ot">&lt;-</span>  <span class="fu">merge</span>(osm_points_list, osm_points_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb97-2"><a href="OSM-features.html#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
-<span id="cb97-3"><a href="OSM-features.html#cb97-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb97-4"><a href="OSM-features.html#cb97-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
-<span id="cb97-5"><a href="OSM-features.html#cb97-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb97-6"><a href="OSM-features.html#cb97-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
-<span id="cb97-7"><a href="OSM-features.html#cb97-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
-<span id="cb97-8"><a href="OSM-features.html#cb97-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mass of the service (The same for all points = 1)</span></span>
-<span id="cb97-9"><a href="OSM-features.html#cb97-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m_service =</span> <span class="dv">1</span>)  <span class="sc">%&gt;%</span> </span>
-<span id="cb97-10"><a href="OSM-features.html#cb97-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
-<span id="cb97-11"><a href="OSM-features.html#cb97-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
-<span id="cb97-12"><a href="OSM-features.html#cb97-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb97-13"><a href="OSM-features.html#cb97-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_points =</span> data)  </span></code></pre></div>
-<p>Spatial distribution (Figure <a href="OSM-features.html#fig:fig-osm-points">6.2</a>)</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="OSM-features.html#cb98-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="sc">%&gt;%</span></span>
-<span id="cb98-2"><a href="OSM-features.html#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_points)) <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="OSM-features.html#cb98-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="ot">&lt;-</span>  <span class="fu">merge</span>(osm_points_list, osm_points_dnld, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;key&quot;</span>, <span class="st">&quot;value&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb98-2"><a href="OSM-features.html#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert to sf object</span></span>
 <span id="cb98-3"><a href="OSM-features.html#cb98-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb98-4"><a href="OSM-features.html#cb98-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb98-5"><a href="OSM-features.html#cb98-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
-<span id="cb98-6"><a href="OSM-features.html#cb98-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb98-7"><a href="OSM-features.html#cb98-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">colour =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb98-8"><a href="OSM-features.html#cb98-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
-<span id="cb98-9"><a href="OSM-features.html#cb98-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb98-10"><a href="OSM-features.html#cb98-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-osm-points"></span>
+<span id="cb98-4"><a href="OSM-features.html#cb98-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Transform CRS</span></span>
+<span id="cb98-5"><a href="OSM-features.html#cb98-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="st">&quot;EPSG:25832&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb98-6"><a href="OSM-features.html#cb98-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># crop to Bounding of the study area %&gt;% </span></span>
+<span id="cb98-7"><a href="OSM-features.html#cb98-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(bbox_sf) <span class="sc">%&gt;%</span> </span>
+<span id="cb98-8"><a href="OSM-features.html#cb98-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mass of the service (The same for all points = 1)</span></span>
+<span id="cb98-9"><a href="OSM-features.html#cb98-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m_service =</span> <span class="dv">1</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb98-10"><a href="OSM-features.html#cb98-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Nest by feature</span></span>
+<span id="cb98-11"><a href="OSM-features.html#cb98-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(feature) <span class="sc">%&gt;%</span> </span>
+<span id="cb98-12"><a href="OSM-features.html#cb98-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb98-13"><a href="OSM-features.html#cb98-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">data_points =</span> data)  </span></code></pre></div>
+<p>Spatial distribution (Figure <a href="OSM-features.html#fig:fig-osm-points">6.2</a>)</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="OSM-features.html#cb99-1" aria-hidden="true" tabindex="-1"></a>osm_points <span class="sc">%&gt;%</span></span>
+<span id="cb99-2"><a href="OSM-features.html#cb99-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(data_points)) <span class="sc">%&gt;%</span> </span>
+<span id="cb99-3"><a href="OSM-features.html#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb99-4"><a href="OSM-features.html#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb99-5"><a href="OSM-features.html#cb99-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> <span class="fu">st_crop</span>(dk_country, bbox_sf), <span class="at">fill =</span> <span class="st">&quot;grey95&quot;</span>) <span class="sc">+</span></span>
+<span id="cb99-6"><a href="OSM-features.html#cb99-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="st">&quot;grey85&quot;</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb99-7"><a href="OSM-features.html#cb99-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">colour =</span> <span class="st">&quot;#D55E00&quot;</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb99-8"><a href="OSM-features.html#cb99-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Open Street Map&quot;</span>) <span class="sc">+</span></span>
+<span id="cb99-9"><a href="OSM-features.html#cb99-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb99-10"><a href="OSM-features.html#cb99-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-osm-points"></span>
 <img src="Housing_prices_book_files/figure-html/fig-osm-points-1.png" alt="Spatial distribution of OSM point features" width="672" />
 <p class="caption">
 Figure 6.2: Spatial distribution of OSM point features
@@ -1429,34 +1778,34 @@ Figure 6.2: Spatial distribution of OSM point features
 <div id="potential-model" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Potential model</h2>
 <p>We have used exponential functions with impedance factors of 2 and spans of 5000m, 500m, or 300m depending on the service we modelled (Table <a href="OSM-features.html#tab:tbl-sif-pot-model">6.3</a>).</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="OSM-features.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on: https://riatelab.github.io/potential/articles/potential.html</span></span>
-<span id="cb99-2"><a href="OSM-features.html#cb99-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb99-3"><a href="OSM-features.html#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Spatial Interaction Function (fun, span, beta)</span></span>
-<span id="cb99-4"><a href="OSM-features.html#cb99-4" aria-hidden="true" tabindex="-1"></a>sif <span class="ot">&lt;-</span> <span class="fu">tribble</span>(   <span class="sc">~</span>feature, <span class="sc">~</span>fun,  <span class="sc">~</span>span, <span class="sc">~</span>beta,</span>
-<span id="cb99-5"><a href="OSM-features.html#cb99-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;Kalvebod_Fælled&quot;</span>,  <span class="st">&quot;e&quot;</span>,   <span class="dv">5000</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-6"><a href="OSM-features.html#cb99-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Recreation&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">500</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-7"><a href="OSM-features.html#cb99-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Train_stop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">500</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-8"><a href="OSM-features.html#cb99-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Underground&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">500</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-9"><a href="OSM-features.html#cb99-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Parking&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-10"><a href="OSM-features.html#cb99-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Park&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-11"><a href="OSM-features.html#cb99-11" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;School&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-12"><a href="OSM-features.html#cb99-12" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;University&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-13"><a href="OSM-features.html#cb99-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Hospital&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-14"><a href="OSM-features.html#cb99-14" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Allotment&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-15"><a href="OSM-features.html#cb99-15" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Sustenance&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-16"><a href="OSM-features.html#cb99-16" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Entmt_pos&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-17"><a href="OSM-features.html#cb99-17" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Entmt_neg&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-18"><a href="OSM-features.html#cb99-18" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Social_fac&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-19"><a href="OSM-features.html#cb99-19" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Shop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
-<span id="cb99-20"><a href="OSM-features.html#cb99-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Bus_stop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span></span>
-<span id="cb99-21"><a href="OSM-features.html#cb99-21" aria-hidden="true" tabindex="-1"></a>         )</span>
-<span id="cb99-22"><a href="OSM-features.html#cb99-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb99-23"><a href="OSM-features.html#cb99-23" aria-hidden="true" tabindex="-1"></a>sif <span class="sc">%&gt;%</span> </span>
-<span id="cb99-24"><a href="OSM-features.html#cb99-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(fun, beta, span,) <span class="sc">%&gt;%</span></span>
-<span id="cb99-25"><a href="OSM-features.html#cb99-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">feature =</span> <span class="fu">paste</span>(feature, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb99-26"><a href="OSM-features.html#cb99-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(feature, <span class="at">.after =</span> span) <span class="sc">%&gt;%</span> </span>
-<span id="cb99-27"><a href="OSM-features.html#cb99-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Spatial interaction parameters&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb99-28"><a href="OSM-features.html#cb99-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="OSM-features.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Based on: https://riatelab.github.io/potential/articles/potential.html</span></span>
+<span id="cb100-2"><a href="OSM-features.html#cb100-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-3"><a href="OSM-features.html#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Spatial Interaction Function (fun, span, beta)</span></span>
+<span id="cb100-4"><a href="OSM-features.html#cb100-4" aria-hidden="true" tabindex="-1"></a>sif <span class="ot">&lt;-</span> <span class="fu">tribble</span>(   <span class="sc">~</span>feature, <span class="sc">~</span>fun,  <span class="sc">~</span>span, <span class="sc">~</span>beta,</span>
+<span id="cb100-5"><a href="OSM-features.html#cb100-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;Kalvebod_Fælled&quot;</span>,  <span class="st">&quot;e&quot;</span>,   <span class="dv">5000</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-6"><a href="OSM-features.html#cb100-6" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Recreation&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">500</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-7"><a href="OSM-features.html#cb100-7" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Train_stop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">500</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-8"><a href="OSM-features.html#cb100-8" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;Underground&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">500</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-9"><a href="OSM-features.html#cb100-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Parking&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-10"><a href="OSM-features.html#cb100-10" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Park&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-11"><a href="OSM-features.html#cb100-11" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;School&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-12"><a href="OSM-features.html#cb100-12" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;University&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-13"><a href="OSM-features.html#cb100-13" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Hospital&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-14"><a href="OSM-features.html#cb100-14" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Allotment&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-15"><a href="OSM-features.html#cb100-15" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Sustenance&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-16"><a href="OSM-features.html#cb100-16" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Entmt_pos&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-17"><a href="OSM-features.html#cb100-17" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Entmt_neg&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-18"><a href="OSM-features.html#cb100-18" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;Social_fac&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-19"><a href="OSM-features.html#cb100-19" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Shop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span>,</span>
+<span id="cb100-20"><a href="OSM-features.html#cb100-20" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Bus_stop&quot;</span>,  <span class="st">&quot;e&quot;</span>,    <span class="dv">300</span>,     <span class="dv">2</span></span>
+<span id="cb100-21"><a href="OSM-features.html#cb100-21" aria-hidden="true" tabindex="-1"></a>         )</span>
+<span id="cb100-22"><a href="OSM-features.html#cb100-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-23"><a href="OSM-features.html#cb100-23" aria-hidden="true" tabindex="-1"></a>sif <span class="sc">%&gt;%</span> </span>
+<span id="cb100-24"><a href="OSM-features.html#cb100-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(fun, beta, span,) <span class="sc">%&gt;%</span></span>
+<span id="cb100-25"><a href="OSM-features.html#cb100-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">feature =</span> <span class="fu">paste</span>(feature, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb100-26"><a href="OSM-features.html#cb100-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(feature, <span class="at">.after =</span> span) <span class="sc">%&gt;%</span> </span>
+<span id="cb100-27"><a href="OSM-features.html#cb100-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(<span class="at">caption =</span> <span class="st">&quot;Spatial interaction parameters&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb100-28"><a href="OSM-features.html#cb100-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_paper</span>()</span></code></pre></div>
 <table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:tbl-sif-pot-model">Table 6.3: </span>Spatial interaction parameters
@@ -1523,75 +1872,75 @@ Kalvebod_Fælled
 </tbody>
 </table>
 <p>The spatial interaction functions are therefero as follow (Figure <a href="OSM-features.html#fig:spat-inter">6.3</a>).</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="OSM-features.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
-<span id="cb100-2"><a href="OSM-features.html#cb100-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb100-3"><a href="OSM-features.html#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">300</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span>
-<span id="cb100-4"><a href="OSM-features.html#cb100-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">500</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span>
-<span id="cb100-5"><a href="OSM-features.html#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">5000</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:spat-inter"></span>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="OSM-features.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb101-2"><a href="OSM-features.html#cb101-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-3"><a href="OSM-features.html#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">300</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span>
+<span id="cb101-4"><a href="OSM-features.html#cb101-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">500</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span>
+<span id="cb101-5"><a href="OSM-features.html#cb101-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_inter</span>(<span class="at">fun =</span> <span class="st">&quot;e&quot;</span>,  <span class="at">span =</span> <span class="dv">5000</span>, <span class="at">beta =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:spat-inter"></span>
 <img src="Housing_prices_book_files/figure-html/spat-inter-1.png" alt="Spatial interaction functions" width="1152" />
 <p class="caption">
 Figure 6.3: Spatial interaction functions
 </p>
 </div>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="OSM-features.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all OMS features (as points)</span></span>
-<span id="cb101-2"><a href="OSM-features.html#cb101-2" aria-hidden="true" tabindex="-1"></a>OMS <span class="ot">&lt;-</span> osm_poly <span class="sc">%&gt;%</span></span>
-<span id="cb101-3"><a href="OSM-features.html#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(feature, data_points) <span class="sc">%&gt;%</span> </span>
-<span id="cb101-4"><a href="OSM-features.html#cb101-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(osm_points) <span class="sc">%&gt;%</span> </span>
-<span id="cb101-5"><a href="OSM-features.html#cb101-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add SIF parameters</span></span>
-<span id="cb101-6"><a href="OSM-features.html#cb101-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sif, <span class="at">by =</span> <span class="st">&quot;feature&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="OSM-features.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for calculating the potential</span></span>
-<span id="cb102-2"><a href="OSM-features.html#cb102-2" aria-hidden="true" tabindex="-1"></a>f_pot <span class="ot">&lt;-</span> <span class="cf">function</span>(df, fun, span, beta) {</span>
-<span id="cb102-3"><a href="OSM-features.html#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcpotential</span>(<span class="at">x =</span> df,</span>
-<span id="cb102-4"><a href="OSM-features.html#cb102-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> grids100m<span class="sc">$</span>data_points[[<span class="dv">1</span>]],</span>
-<span id="cb102-5"><a href="OSM-features.html#cb102-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">var =</span> <span class="st">&quot;m_service&quot;</span>,</span>
-<span id="cb102-6"><a href="OSM-features.html#cb102-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fun =</span> fun,</span>
-<span id="cb102-7"><a href="OSM-features.html#cb102-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> span,</span>
-<span id="cb102-8"><a href="OSM-features.html#cb102-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">beta =</span> beta,</span>
-<span id="cb102-9"><a href="OSM-features.html#cb102-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">limit =</span> <span class="dv">5</span> <span class="sc">*</span> span)</span>
-<span id="cb102-10"><a href="OSM-features.html#cb102-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb102-11"><a href="OSM-features.html#cb102-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb102-12"><a href="OSM-features.html#cb102-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate potential (in percentage - relatively to the maximum)</span></span>
-<span id="cb102-13"><a href="OSM-features.html#cb102-13" aria-hidden="true" tabindex="-1"></a>pot_est <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb102-14"><a href="OSM-features.html#cb102-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(OMS<span class="sc">$</span>data_points)) {</span>
-<span id="cb102-15"><a href="OSM-features.html#cb102-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Values</span></span>
-<span id="cb102-16"><a href="OSM-features.html#cb102-16" aria-hidden="true" tabindex="-1"></a>  potential <span class="ot">&lt;-</span> <span class="fu">f_pot</span>(OMS<span class="sc">$</span>data_points[[i]],</span>
-<span id="cb102-17"><a href="OSM-features.html#cb102-17" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>fun[i], </span>
-<span id="cb102-18"><a href="OSM-features.html#cb102-18" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>span[i],</span>
-<span id="cb102-19"><a href="OSM-features.html#cb102-19" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>beta[i])</span>
-<span id="cb102-20"><a href="OSM-features.html#cb102-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Percentage relatively to the maximum</span></span>
-<span id="cb102-21"><a href="OSM-features.html#cb102-21" aria-hidden="true" tabindex="-1"></a>  pot_est[[i]] <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> potential <span class="sc">/</span> <span class="fu">max</span>(potential)</span>
-<span id="cb102-22"><a href="OSM-features.html#cb102-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add names</span></span>
-<span id="cb102-23"><a href="OSM-features.html#cb102-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(pot_est)[[i]] <span class="ot">&lt;-</span> OMS<span class="sc">$</span>feature[i] </span>
-<span id="cb102-24"><a href="OSM-features.html#cb102-24" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb102-25"><a href="OSM-features.html#cb102-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb102-26"><a href="OSM-features.html#cb102-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add values to the grid cells of 100 x 100 m (grids100m)</span></span>
-<span id="cb102-27"><a href="OSM-features.html#cb102-27" aria-hidden="true" tabindex="-1"></a>pot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pot_est) <span class="sc">%&gt;%</span></span>
-<span id="cb102-28"><a href="OSM-features.html#cb102-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb102-29"><a href="OSM-features.html#cb102-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">everything</span>())</span>
-<span id="cb102-30"><a href="OSM-features.html#cb102-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb102-31"><a href="OSM-features.html#cb102-31" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
-<span id="cb102-32"><a href="OSM-features.html#cb102-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(pot <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">pot =</span> <span class="fu">everything</span>()))</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="OSM-features.html#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge all OMS features (as points)</span></span>
+<span id="cb102-2"><a href="OSM-features.html#cb102-2" aria-hidden="true" tabindex="-1"></a>OMS <span class="ot">&lt;-</span> osm_poly <span class="sc">%&gt;%</span></span>
+<span id="cb102-3"><a href="OSM-features.html#cb102-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(feature, data_points) <span class="sc">%&gt;%</span> </span>
+<span id="cb102-4"><a href="OSM-features.html#cb102-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(osm_points) <span class="sc">%&gt;%</span> </span>
+<span id="cb102-5"><a href="OSM-features.html#cb102-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add SIF parameters</span></span>
+<span id="cb102-6"><a href="OSM-features.html#cb102-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(sif, <span class="at">by =</span> <span class="st">&quot;feature&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="OSM-features.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aux. function for calculating the potential</span></span>
+<span id="cb103-2"><a href="OSM-features.html#cb103-2" aria-hidden="true" tabindex="-1"></a>f_pot <span class="ot">&lt;-</span> <span class="cf">function</span>(df, fun, span, beta) {</span>
+<span id="cb103-3"><a href="OSM-features.html#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mcpotential</span>(<span class="at">x =</span> df,</span>
+<span id="cb103-4"><a href="OSM-features.html#cb103-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">y =</span> grids100m<span class="sc">$</span>data_points[[<span class="dv">1</span>]],</span>
+<span id="cb103-5"><a href="OSM-features.html#cb103-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">var =</span> <span class="st">&quot;m_service&quot;</span>,</span>
+<span id="cb103-6"><a href="OSM-features.html#cb103-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">fun =</span> fun,</span>
+<span id="cb103-7"><a href="OSM-features.html#cb103-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> span,</span>
+<span id="cb103-8"><a href="OSM-features.html#cb103-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">beta =</span> beta,</span>
+<span id="cb103-9"><a href="OSM-features.html#cb103-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">limit =</span> <span class="dv">5</span> <span class="sc">*</span> span)</span>
+<span id="cb103-10"><a href="OSM-features.html#cb103-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb103-11"><a href="OSM-features.html#cb103-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-12"><a href="OSM-features.html#cb103-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimate potential (in percentage - relatively to the maximum)</span></span>
+<span id="cb103-13"><a href="OSM-features.html#cb103-13" aria-hidden="true" tabindex="-1"></a>pot_est <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb103-14"><a href="OSM-features.html#cb103-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(OMS<span class="sc">$</span>data_points)) {</span>
+<span id="cb103-15"><a href="OSM-features.html#cb103-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Values</span></span>
+<span id="cb103-16"><a href="OSM-features.html#cb103-16" aria-hidden="true" tabindex="-1"></a>  potential <span class="ot">&lt;-</span> <span class="fu">f_pot</span>(OMS<span class="sc">$</span>data_points[[i]],</span>
+<span id="cb103-17"><a href="OSM-features.html#cb103-17" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>fun[i], </span>
+<span id="cb103-18"><a href="OSM-features.html#cb103-18" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>span[i],</span>
+<span id="cb103-19"><a href="OSM-features.html#cb103-19" aria-hidden="true" tabindex="-1"></a>                     OMS<span class="sc">$</span>beta[i])</span>
+<span id="cb103-20"><a href="OSM-features.html#cb103-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Percentage relatively to the maximum</span></span>
+<span id="cb103-21"><a href="OSM-features.html#cb103-21" aria-hidden="true" tabindex="-1"></a>  pot_est[[i]] <span class="ot">&lt;-</span> <span class="dv">100</span> <span class="sc">*</span> potential <span class="sc">/</span> <span class="fu">max</span>(potential)</span>
+<span id="cb103-22"><a href="OSM-features.html#cb103-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add names</span></span>
+<span id="cb103-23"><a href="OSM-features.html#cb103-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(pot_est)[[i]] <span class="ot">&lt;-</span> OMS<span class="sc">$</span>feature[i] </span>
+<span id="cb103-24"><a href="OSM-features.html#cb103-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb103-25"><a href="OSM-features.html#cb103-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-26"><a href="OSM-features.html#cb103-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add values to the grid cells of 100 x 100 m (grids100m)</span></span>
+<span id="cb103-27"><a href="OSM-features.html#cb103-27" aria-hidden="true" tabindex="-1"></a>pot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(pot_est) <span class="sc">%&gt;%</span></span>
+<span id="cb103-28"><a href="OSM-features.html#cb103-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb103-29"><a href="OSM-features.html#cb103-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">everything</span>())</span>
+<span id="cb103-30"><a href="OSM-features.html#cb103-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-31"><a href="OSM-features.html#cb103-31" aria-hidden="true" tabindex="-1"></a>grids100m <span class="ot">&lt;-</span> grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb103-32"><a href="OSM-features.html#cb103-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(pot <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">pot =</span> <span class="fu">everything</span>()))</span></code></pre></div>
 <p>Potential model (Figure <a href="OSM-features.html#fig:fig-pot-model">6.4</a>)</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="OSM-features.html#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots</span></span>
-<span id="cb103-2"><a href="OSM-features.html#cb103-2" aria-hidden="true" tabindex="-1"></a>grids100m <span class="sc">%&gt;%</span> </span>
-<span id="cb103-3"><a href="OSM-features.html#cb103-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(data_poly, pot) <span class="sc">%&gt;%</span> </span>
-<span id="cb103-4"><a href="OSM-features.html#cb103-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(data_poly, pot)) <span class="sc">%&gt;%</span> </span>
-<span id="cb103-5"><a href="OSM-features.html#cb103-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(grid_ID, geometry),</span>
-<span id="cb103-6"><a href="OSM-features.html#cb103-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;feature&quot;</span>,</span>
-<span id="cb103-7"><a href="OSM-features.html#cb103-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb103-8"><a href="OSM-features.html#cb103-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb103-9"><a href="OSM-features.html#cb103-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb103-10"><a href="OSM-features.html#cb103-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> value), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb103-11"><a href="OSM-features.html#cb103-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">name =</span> <span class="st">&quot;[%]&quot;</span>,</span>
-<span id="cb103-12"><a href="OSM-features.html#cb103-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">low =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb103-13"><a href="OSM-features.html#cb103-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
-<span id="cb103-14"><a href="OSM-features.html#cb103-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb103-15"><a href="OSM-features.html#cb103-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">midpoint =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
-<span id="cb103-16"><a href="OSM-features.html#cb103-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
-<span id="cb103-17"><a href="OSM-features.html#cb103-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb103-18"><a href="OSM-features.html#cb103-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pot-model"></span>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="OSM-features.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plots</span></span>
+<span id="cb104-2"><a href="OSM-features.html#cb104-2" aria-hidden="true" tabindex="-1"></a>grids100m <span class="sc">%&gt;%</span> </span>
+<span id="cb104-3"><a href="OSM-features.html#cb104-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(data_poly, pot) <span class="sc">%&gt;%</span> </span>
+<span id="cb104-4"><a href="OSM-features.html#cb104-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(data_poly, pot)) <span class="sc">%&gt;%</span> </span>
+<span id="cb104-5"><a href="OSM-features.html#cb104-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span><span class="fu">c</span>(grid_ID, geometry),</span>
+<span id="cb104-6"><a href="OSM-features.html#cb104-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;feature&quot;</span>,</span>
+<span id="cb104-7"><a href="OSM-features.html#cb104-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb104-8"><a href="OSM-features.html#cb104-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb104-9"><a href="OSM-features.html#cb104-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb104-10"><a href="OSM-features.html#cb104-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> value), <span class="at">col =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb104-11"><a href="OSM-features.html#cb104-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">name =</span> <span class="st">&quot;[%]&quot;</span>,</span>
+<span id="cb104-12"><a href="OSM-features.html#cb104-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">low =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb104-13"><a href="OSM-features.html#cb104-13" aria-hidden="true" tabindex="-1"></a>                         <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb104-14"><a href="OSM-features.html#cb104-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb104-15"><a href="OSM-features.html#cb104-15" aria-hidden="true" tabindex="-1"></a>                         <span class="at">midpoint =</span> <span class="dv">50</span>) <span class="sc">+</span></span>
+<span id="cb104-16"><a href="OSM-features.html#cb104-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> cph_parish, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;grey50&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
+<span id="cb104-17"><a href="OSM-features.html#cb104-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb104-18"><a href="OSM-features.html#cb104-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>feature)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pot-model"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pot-model-1.png" alt="Potential model" width="672" />
 <p class="caption">
 Figure 6.4: Potential model
@@ -1616,7 +1965,6 @@ Gultekin, Bahadir, and Etsuo Yamamura. 2006. <span>“<span class="nocase">Poten
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1656,6 +2004,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

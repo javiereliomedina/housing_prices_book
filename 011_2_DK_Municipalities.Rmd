@@ -205,7 +205,6 @@ The population pyramid also confirms this tendency (figure \@ref(fig:fig-pop-pyr
                        breaks = brks_y,
                        labels = lbls_y,
                        limits = lmts_y) +
-    labs(caption = "Source: Statistics Denmark") + 
     geom_segment(data = filter(pop_DK,
                                date == "2008-01-01" | date == last(pop_DK$date)),
                  aes(x = 4, xend = 4,

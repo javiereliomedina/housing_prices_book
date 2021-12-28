@@ -32,6 +32,7 @@ fig:prsh-CoDa-PCA
 fig:prsh-CoDa-cluster-boxplot
 fig:fig-cap-reg-tern-pop-price-all
 fig:fig-cap-reg-tern-pop-price-year
+fig:fig-prsh-CoDa-house-prices-lm
 fig:fig-CPH-region
 fig:fig-pop-density-cph
 fig:fig-pop-density-cph-b

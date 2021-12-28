@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Analysis at national level (municipalities) | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Analysis at national level (municipalities) | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Marina Georgati, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-07-23" />
+<meta name="date" content="2021-12-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="intro.html"/>
 <link rel="next" href="level-parish.html"/>
-<script src="libs/header-attrs-2.9/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -42,7 +43,6 @@
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
 
 
 
@@ -1072,7 +1072,7 @@ div.csl-indent {
 <span id="cb7-92"><a href="level-muni.html#cb7-92" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() </span>
 <span id="cb7-93"><a href="level-muni.html#cb7-93" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb7-94"><a href="level-muni.html#cb7-94" aria-hidden="true" tabindex="-1"></a>  p1 <span class="sc">+</span> p2 <span class="sc">+</span> p3</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-DK-pop"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-DK-pop"></span>
 <img src="Housing_prices_book_files/figure-html/fig-DK-pop-1.png" alt="Danish population from 2008-2020" width="960" />
 <p class="caption">
 Figure 2.1: Danish population from 2008-2020
@@ -1166,32 +1166,31 @@ Figure 2.1: Danish population from 2008-2020
 <span id="cb9-12"><a href="level-muni.html#cb9-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">breaks =</span> brks_y,</span>
 <span id="cb9-13"><a href="level-muni.html#cb9-13" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> lbls_y,</span>
 <span id="cb9-14"><a href="level-muni.html#cb9-14" aria-hidden="true" tabindex="-1"></a>                       <span class="at">limits =</span> lmts_y) <span class="sc">+</span></span>
-<span id="cb9-15"><a href="level-muni.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Source: Statistics Denmark&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb9-16"><a href="level-muni.html#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(pop_DK,</span>
-<span id="cb9-17"><a href="level-muni.html#cb9-17" aria-hidden="true" tabindex="-1"></a>                               date <span class="sc">==</span> <span class="st">&quot;2008-01-01&quot;</span> <span class="sc">|</span> date <span class="sc">==</span> <span class="fu">last</span>(pop_DK<span class="sc">$</span>date)),</span>
-<span id="cb9-18"><a href="level-muni.html#cb9-18" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">4</span>, <span class="at">xend =</span> <span class="dv">4</span>,</span>
-<span id="cb9-19"><a href="level-muni.html#cb9-19" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">yend =</span> <span class="dv">4</span>),</span>
-<span id="cb9-20"><a href="level-muni.html#cb9-20" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-21"><a href="level-muni.html#cb9-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(pop_DK,</span>
-<span id="cb9-22"><a href="level-muni.html#cb9-22" aria-hidden="true" tabindex="-1"></a>                               date <span class="sc">==</span> <span class="st">&quot;2008-01-01&quot;</span> <span class="sc">|</span> date <span class="sc">==</span> <span class="fu">last</span>(pop_DK<span class="sc">$</span>date)),</span>
-<span id="cb9-23"><a href="level-muni.html#cb9-23" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">13.5</span>, <span class="at">xend =</span> <span class="fl">13.5</span>,</span>
-<span id="cb9-24"><a href="level-muni.html#cb9-24" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">yend =</span> <span class="dv">4</span>),</span>
-<span id="cb9-25"><a href="level-muni.html#cb9-25" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
-<span id="cb9-26"><a href="level-muni.html#cb9-26" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">&quot;text&quot;</span>,</span>
-<span id="cb9-27"><a href="level-muni.html#cb9-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">2</span> , <span class="dv">2</span>),</span>
-<span id="cb9-28"><a href="level-muni.html#cb9-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="fl">20.5</span>,</span>
-<span id="cb9-29"><a href="level-muni.html#cb9-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">&quot;Women&quot;</span>,</span>
-<span id="cb9-30"><a href="level-muni.html#cb9-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
-<span id="cb9-31"><a href="level-muni.html#cb9-31" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb9-32"><a href="level-muni.html#cb9-32" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">:::</span><span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">&quot;text&quot;</span>,</span>
-<span id="cb9-33"><a href="level-muni.html#cb9-33" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">2</span>),</span>
-<span id="cb9-34"><a href="level-muni.html#cb9-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="fl">20.5</span>,</span>
-<span id="cb9-35"><a href="level-muni.html#cb9-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">&quot;Men&quot;</span>,</span>
-<span id="cb9-36"><a href="level-muni.html#cb9-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
-<span id="cb9-37"><a href="level-muni.html#cb9-37" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb9-38"><a href="level-muni.html#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>date) <span class="sc">+</span></span>
-<span id="cb9-39"><a href="level-muni.html#cb9-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() </span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-pyramith"></span>
+<span id="cb9-15"><a href="level-muni.html#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(pop_DK,</span>
+<span id="cb9-16"><a href="level-muni.html#cb9-16" aria-hidden="true" tabindex="-1"></a>                               date <span class="sc">==</span> <span class="st">&quot;2008-01-01&quot;</span> <span class="sc">|</span> date <span class="sc">==</span> <span class="fu">last</span>(pop_DK<span class="sc">$</span>date)),</span>
+<span id="cb9-17"><a href="level-muni.html#cb9-17" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">4</span>, <span class="at">xend =</span> <span class="dv">4</span>,</span>
+<span id="cb9-18"><a href="level-muni.html#cb9-18" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">yend =</span> <span class="dv">4</span>),</span>
+<span id="cb9-19"><a href="level-muni.html#cb9-19" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-20"><a href="level-muni.html#cb9-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_segment</span>(<span class="at">data =</span> <span class="fu">filter</span>(pop_DK,</span>
+<span id="cb9-21"><a href="level-muni.html#cb9-21" aria-hidden="true" tabindex="-1"></a>                               date <span class="sc">==</span> <span class="st">&quot;2008-01-01&quot;</span> <span class="sc">|</span> date <span class="sc">==</span> <span class="fu">last</span>(pop_DK<span class="sc">$</span>date)),</span>
+<span id="cb9-22"><a href="level-muni.html#cb9-22" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">13.5</span>, <span class="at">xend =</span> <span class="fl">13.5</span>,</span>
+<span id="cb9-23"><a href="level-muni.html#cb9-23" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y =</span> <span class="sc">-</span><span class="dv">4</span>, <span class="at">yend =</span> <span class="dv">4</span>),</span>
+<span id="cb9-24"><a href="level-muni.html#cb9-24" aria-hidden="true" tabindex="-1"></a>                 <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-25"><a href="level-muni.html#cb9-25" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">::</span><span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">&quot;text&quot;</span>,</span>
+<span id="cb9-26"><a href="level-muni.html#cb9-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">2</span> , <span class="dv">2</span>),</span>
+<span id="cb9-27"><a href="level-muni.html#cb9-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="fl">20.5</span>,</span>
+<span id="cb9-28"><a href="level-muni.html#cb9-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">&quot;Women&quot;</span>,</span>
+<span id="cb9-29"><a href="level-muni.html#cb9-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
+<span id="cb9-30"><a href="level-muni.html#cb9-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb9-31"><a href="level-muni.html#cb9-31" aria-hidden="true" tabindex="-1"></a>    ggplot2<span class="sc">:::</span><span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">&quot;text&quot;</span>,</span>
+<span id="cb9-32"><a href="level-muni.html#cb9-32" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">2</span>),</span>
+<span id="cb9-33"><a href="level-muni.html#cb9-33" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="fl">20.5</span>,</span>
+<span id="cb9-34"><a href="level-muni.html#cb9-34" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="st">&quot;Men&quot;</span>,</span>
+<span id="cb9-35"><a href="level-muni.html#cb9-35" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">&quot;bold&quot;</span>,</span>
+<span id="cb9-36"><a href="level-muni.html#cb9-36" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb9-37"><a href="level-muni.html#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>date) <span class="sc">+</span></span>
+<span id="cb9-38"><a href="level-muni.html#cb9-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-pyramith"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-pyramith-1.png" alt="Population pyramith of Denmark" width="960" />
 <p class="caption">
 Figure 2.2: Population pyramith of Denmark
@@ -1332,7 +1331,7 @@ The majority of immigrants however live in big cities (Figure 5). Are there diff
 <span id="cb13-18"><a href="level-muni.html#cb13-18" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">aes</span>(<span class="at">label =</span> muni_name),</span>
 <span id="cb13-19"><a href="level-muni.html#cb13-19" aria-hidden="true" tabindex="-1"></a>                        <span class="at">nudge_y =</span> <span class="dv">100000</span>,</span>
 <span id="cb13-20"><a href="level-muni.html#cb13-20" aria-hidden="true" tabindex="-1"></a>                        <span class="at">nudge_x =</span> <span class="dv">80000</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-growth-total"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-growth-total"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-growth-total-1.png" alt="Total population growth from 2008 to 2020" width="672" />
 <p class="caption">
 Figure 2.3: Total population growth from 2008 to 2020
@@ -1364,7 +1363,7 @@ Figure 2.3: Total population growth from 2008 to 2020
 <span id="cb14-24"><a href="level-muni.html#cb14-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
 <span id="cb14-25"><a href="level-muni.html#cb14-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
 <span id="cb14-26"><a href="level-muni.html#cb14-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> ancestry, <span class="at">ncol =</span> <span class="dv">2</span>) </span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-growth-ancestry"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-growth-ancestry"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-growth-ancestry-1.png" alt="Population growth from 2008 to 2019 by ancestry" width="672" />
 <p class="caption">
 Figure 2.4: Population growth from 2008 to 2019 by ancestry
@@ -1390,7 +1389,7 @@ Figure 2.4: Population growth from 2008 to 2019 by ancestry
 <span id="cb15-17"><a href="level-muni.html#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_date</span>(<span class="at">name =</span> <span class="st">&quot;&quot;</span>, <span class="at">date_breaks =</span> <span class="st">&quot;3 year&quot;</span>, <span class="at">date_labels =</span> <span class="st">&quot;%y&quot;</span>) <span class="sc">+</span></span>
 <span id="cb15-18"><a href="level-muni.html#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_colour_manual</span>(<span class="at">name =</span> <span class="st">&quot;Ancestry&quot;</span>,</span>
 <span id="cb15-19"><a href="level-muni.html#cb15-19" aria-hidden="true" tabindex="-1"></a>                        <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#0072B2&quot;</span>, <span class="st">&quot;#D55E00&quot;</span>, <span class="st">&quot;#000000&quot;</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-change"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-change"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-change-1.png" alt="Population change from 2008 (municipalitiess are shorted by the total population in 2020)" width="960" />
 <p class="caption">
 Figure 2.5: Population change from 2008 (municipalitiess are shorted by the total population in 2020)
@@ -1505,7 +1504,7 @@ Figure 2.5: Population change from 2008 (municipalitiess are shorted by the tota
 <span id="cb17-24"><a href="level-muni.html#cb17-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_brewer</span>(<span class="at">name =</span> <span class="st">&quot;Country of</span><span class="sc">\n</span><span class="st">origin&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;Paired&quot;</span>) </span>
 <span id="cb17-25"><a href="level-muni.html#cb17-25" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb17-26"><a href="level-muni.html#cb17-26" aria-hidden="true" tabindex="-1"></a>  p1 <span class="sc">/</span> p2 <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-migr-top"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-migr-top"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-migr-top-1.png" alt="Evolution of the immigration population from the top-10 countries of origin in 2020" width="672" />
 <p class="caption">
 Figure 2.6: Evolution of the immigration population from the top-10 countries of origin in 2020
@@ -1549,7 +1548,7 @@ Figure 2.6: Evolution of the immigration population from the top-10 countries of
 <span id="cb19-29"><a href="level-muni.html#cb19-29" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">aes</span>(<span class="at">label =</span> muni_name),</span>
 <span id="cb19-30"><a href="level-muni.html#cb19-30" aria-hidden="true" tabindex="-1"></a>                        <span class="at">nudge_y =</span> <span class="dv">100000</span>,</span>
 <span id="cb19-31"><a href="level-muni.html#cb19-31" aria-hidden="true" tabindex="-1"></a>                        <span class="at">nudge_x =</span> <span class="dv">80000</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-migr-total"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-migr-total"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-migr-total-1.png" alt="Spatial distribution of immigrants and their descendants (Date: 2020-10-01)" width="672" />
 <p class="caption">
 Figure 2.7: Spatial distribution of immigrants and their descendants (Date: 2020-10-01)
@@ -1622,7 +1621,7 @@ Figure 2.7: Spatial distribution of immigrants and their descendants (Date: 2020
 <span id="cb21-6"><a href="level-muni.html#cb21-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
 <span id="cb21-7"><a href="level-muni.html#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> origin_num, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb21-8"><a href="level-muni.html#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-migr-top10-countries"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-migr-top10-countries"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-migr-top10-countries-1.png" alt="Top countries of origin for immigrants and their descendants (Date: 2020-10-01)" width="672" />
 <p class="caption">
 Figure 2.8: Top countries of origin for immigrants and their descendants (Date: 2020-10-01)
@@ -1922,7 +1921,7 @@ One-family houses
 <span id="cb27-9"><a href="level-muni.html#cb27-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>,</span>
 <span id="cb27-10"><a href="level-muni.html#cb27-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
 <span id="cb27-11"><a href="level-muni.html#cb27-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-prices-LAUs"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-prices-LAUs"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-LAUs-1.png" alt="Adjusted 2020 housing prices variation from 2008 to 2020" width="672" />
 <p class="caption">
 Figure 2.9: Adjusted 2020 housing prices variation from 2008 to 2020
@@ -1965,7 +1964,7 @@ Figure 2.9: Adjusted 2020 housing prices variation from 2008 to 2020
 <span id="cb28-34"><a href="level-muni.html#cb28-34" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, </span>
 <span id="cb28-35"><a href="level-muni.html#cb28-35" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F,</span>
 <span id="cb28-36"><a href="level-muni.html#cb28-36" aria-hidden="true" tabindex="-1"></a>              <span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-prices-pop"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-prices-pop"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-pop-1.png" alt="Association between population density and median housing prices at municipality level" width="960" />
 <p class="caption">
 Figure 2.10: Association between population density and median housing prices at municipality level
@@ -1999,7 +1998,7 @@ Figure 2.10: Association between population density and median housing prices at
 <span id="cb29-25"><a href="level-muni.html#cb29-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">80</span>, <span class="dv">80</span>)) <span class="sc">+</span></span>
 <span id="cb29-26"><a href="level-muni.html#cb29-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">&quot;&quot;</span>,</span>
 <span id="cb29-27"><a href="level-muni.html#cb29-27" aria-hidden="true" tabindex="-1"></a>                     <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">2008</span>, <span class="dv">2019</span>, <span class="dv">3</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-price-change-muni"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-price-change-muni"></span>
 <img src="Housing_prices_book_files/figure-html/fig-price-change-muni-1.png" alt="Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2020)" width="960" />
 <p class="caption">
 Figure 2.11: Adjusted median house price (kDKK/m2) change from 2008 (municipalities shorted by population density in 2020)
@@ -2021,7 +2020,7 @@ Figure 2.11: Adjusted median house price (kDKK/m2) change from 2008 (municipalit
 <span id="cb30-14"><a href="level-muni.html#cb30-14" aria-hidden="true" tabindex="-1"></a>                             <span class="at">max.iter =</span> <span class="fl">3e3</span>) <span class="sc">+</span></span>
 <span id="cb30-15"><a href="level-muni.html#cb30-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
 <span id="cb30-16"><a href="level-muni.html#cb30-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-prices-pop-b"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-prices-pop-b"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-pop-b-1.png" alt="Association between population density and median housing prices at municipality level" width="960" />
 <p class="caption">
 Figure 2.12: Association between population density and median housing prices at municipality level
@@ -2046,7 +2045,6 @@ Valtersdorf Møller, Katrine. 2020. <span>“<span class="nocase">The influence 
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -2086,6 +2084,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

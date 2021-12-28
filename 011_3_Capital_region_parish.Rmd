@@ -494,7 +494,7 @@ f_local_moran <- function(year,
                                      zero.policy = TRUE),
                     nsim = 999) %>% 
     as_tibble() %>% 
-    dplyr::rename(p.value = `Pr(z > 0)`) %>% 
+    dplyr::rename(p.value = `Pr(z != E(Ii))`) %>% 
     # binds results to our polygon shapefile
     cbind(s) %>% 
     st_sf() %>% 
@@ -802,7 +802,7 @@ f_plot <- function(df) {
     my_theme_map() +
     labs(x = "",
          y = "",
-         caption = paste("Date", df$year, sep = ": "))
+         subtitle = paste("Date", df$year, sep = ": "))
 }
 
 # Plot each year
@@ -818,7 +818,7 @@ for(i in seq_along(years_pd)) { print(plts[[i]]) }
 
 ```
 
-```{r fig-prices-runits-parish-b,  fig.height=10, fig.width=10, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m"}
+```{r fig-prices-runits-parish-b,  fig.height=10, fig.width=10, fig.cap = "Median 2019-adjusted house prices in the ordinary free trade"}
 
 ggplot() +
   geom_sf(data = dk_country_crop, fill = "grey") +
@@ -1067,10 +1067,10 @@ Linear models with N > 5.
 # Link median prices (sum_runits_oft_prices) with population (balances - bal_sf)
 
 bal_prices <- sum_runits_oft_prices %>% 
-  # Analyse only 2020 
-  filter(year == 2020) %>% 
   # Remove parish with less that 6 data
-  filter(n_runits_oft > 5) %>% 
+  filter(n_runits_oft > 10) %>% 
+  # Remove NAs
+  drop_na() %>% 
   # Select variables of interest
   select(prsh_id,
          pop_dan,
@@ -1084,15 +1084,37 @@ bal_prices <- sum_runits_oft_prices %>%
 
 # Model prices
 m1 <- lm(log10(median_2020_kDKK_m2) ~ b1 + b2, data = bal_prices)
-summary(m1)
+```
+
+
+```{r tbl-prsh-CoDa-house-prices-lm}
+
+pander::pander(summary(m1))
 
 ```
 
-```{r prsh-CoDa-house-prices-lm-results}
+```{r tbl-prsh-CoDa-house-prices-lm-2}
+
+sjPlot::tab_model(m1)
+
+```
+
+```{r fig-prsh-CoDa-house-prices-lm, fig.cap="Linear model housing prices vs. balances (red line: x = y)"}
 
 bal_prices$pred1 <- predict(m1)
-plot(log10(median_2020_kDKK_m2) ~ pred1, bal_prices)
-abline(0, 1, col = "red")
+
+ggplot() +
+  geom_point(data = bal_prices,
+             aes(x = 10^pred1,
+                 y = median_2020_kDKK_m2)) +
+  scale_x_continuous(name = "Prediction [kDKK/m2]",
+                     trans = "log10") +
+  scale_y_continuous(name = "2020-Adj. Median [kDKK/m2]", 
+                     trans = "log10") +
+  geom_abline(intercept = 0,
+              slope = 1,
+              colour = "red") +
+  theme_bw()
 
 ```
 

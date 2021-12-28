@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 3 Capital region | Housing prices Copenhagen</title>
   <meta name="description" content="Housing prices BBR data" />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 3 Capital region | Housing prices Copenhagen" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Javier Elío, Marina Georgati, Henning S. Hansen, Frederik S. Hass, Carsten Keßler" />
 
 
-<meta name="date" content="2021-07-23" />
+<meta name="date" content="2021-12-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +33,9 @@
   
 <link rel="prev" href="level-muni.html"/>
 <link rel="next" href="level-CPH.html"/>
-<script src="libs/header-attrs-2.9/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -42,7 +43,6 @@
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
 
 
 
@@ -1045,7 +1045,7 @@ div.csl-indent {
 <span id="cb32-11"><a href="level-parish.html#cb32-11" aria-hidden="true" tabindex="-1"></a>                         <span class="at">width =</span> <span class="fu">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>),</span>
 <span id="cb32-12"><a href="level-parish.html#cb32-12" aria-hidden="true" tabindex="-1"></a>                         <span class="at">style =</span> <span class="fu">north_arrow_orienteering</span>(<span class="at">text_col =</span> <span class="st">&quot;white&quot;</span>,</span>
 <span id="cb32-13"><a href="level-parish.html#cb32-13" aria-hidden="true" tabindex="-1"></a>                                                          <span class="at">text_size =</span> <span class="dv">1</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-capital-region"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-capital-region"></span>
 <img src="Housing_prices_book_files/figure-html/fig-capital-region-1.png" alt="Parishes in the Capital region" width="672" />
 <p class="caption">
 Figure 3.1: Parishes in the Capital region
@@ -1219,21 +1219,21 @@ Figure 3.1: Parishes in the Capital region
 <span id="cb37-14"><a href="level-parish.html#cb37-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span>year, <span class="at">ncol =</span> <span class="dv">3</span>)</span>
 <span id="cb37-15"><a href="level-parish.html#cb37-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="level-parish.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ppl_pct</span>(pop_dan_pct)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-parish-dan"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-parish-dan"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-parish-dan-1.png" alt="Population distribution of Danes" width="960" />
 <p class="caption">
 Figure 3.2: Population distribution of Danes
 </p>
 </div>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="level-parish.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ppl_pct</span>(pop_frgn_nwst_pct)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-parish-nw"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-parish-nw"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-parish-nw-1.png" alt="Population distribution of non-Western residents" width="960" />
 <p class="caption">
 Figure 3.3: Population distribution of non-Western residents
 </p>
 </div>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="level-parish.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ppl_pct</span>(pop_frgn_wst_pct)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-parish-w"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-parish-w"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-parish-w-1.png" alt="Population distribution of Western residents" width="960" />
 <p class="caption">
 Figure 3.4: Population distribution of Western residents
@@ -1279,7 +1279,7 @@ Figure 3.4: Population distribution of Western residents
 <span id="cb41-38"><a href="level-parish.html#cb41-38" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
 <span id="cb41-39"><a href="level-parish.html#cb41-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-40"><a href="level-parish.html#cb41-40" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p_legend <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:bivariate-map-migr-danes-nwst"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bivariate-map-migr-danes-nwst"></span>
 <img src="Housing_prices_book_files/figure-html/bivariate-map-migr-danes-nwst-1.png" alt="Population distribution of Danes vs. Non-western residents" width="960" />
 <p class="caption">
 Figure 3.5: Population distribution of Danes vs. Non-western residents
@@ -1325,7 +1325,7 @@ Figure 3.5: Population distribution of Danes vs. Non-western residents
 <span id="cb42-38"><a href="level-parish.html#cb42-38" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
 <span id="cb42-39"><a href="level-parish.html#cb42-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-40"><a href="level-parish.html#cb42-40" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p_legend <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:bivariate-map-migr-danes-wst"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bivariate-map-migr-danes-wst"></span>
 <img src="Housing_prices_book_files/figure-html/bivariate-map-migr-danes-wst-1.png" alt="Population distribution of Danes vs. Western residents" width="960" />
 <p class="caption">
 Figure 3.6: Population distribution of Danes vs. Western residents
@@ -1371,7 +1371,7 @@ Figure 3.6: Population distribution of Danes vs. Western residents
 <span id="cb43-38"><a href="level-parish.html#cb43-38" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
 <span id="cb43-39"><a href="level-parish.html#cb43-39" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-40"><a href="level-parish.html#cb43-40" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> p_legend <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">design =</span> layout)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:bivariate-map-migr-wst-nwst"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:bivariate-map-migr-wst-nwst"></span>
 <img src="Housing_prices_book_files/figure-html/bivariate-map-migr-wst-nwst-1.png" alt="Population distribution of Non-Western vs. Western residents" width="960" />
 <p class="caption">
 Figure 3.7: Population distribution of Non-Western vs. Western residents
@@ -1398,7 +1398,7 @@ Figure 3.7: Population distribution of Non-Western vs. Western residents
 <span id="cb44-18"><a href="level-parish.html#cb44-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> capital_muni, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">color =</span> <span class="st">&quot;white&quot;</span>, <span class="at">size =</span> <span class="fl">0.05</span>) <span class="sc">+</span></span>
 <span id="cb44-19"><a href="level-parish.html#cb44-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
 <span id="cb44-20"><a href="level-parish.html#cb44-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span>year, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-pop-muni"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-pop-muni"></span>
 <img src="Housing_prices_book_files/figure-html/fig-pop-muni-1.png" alt="Population density at municipality level" width="960" />
 <p class="caption">
 Figure 3.8: Population density at municipality level
@@ -1441,7 +1441,7 @@ Figure 3.8: Population density at municipality level
 <span id="cb45-31"><a href="level-parish.html#cb45-31" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">zero.policy =</span> <span class="cn">TRUE</span>),</span>
 <span id="cb45-32"><a href="level-parish.html#cb45-32" aria-hidden="true" tabindex="-1"></a>                    <span class="at">nsim =</span> <span class="dv">999</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb45-33"><a href="level-parish.html#cb45-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb45-34"><a href="level-parish.html#cb45-34" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">p.value =</span> <span class="st">`</span><span class="at">Pr(z &gt; 0)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-34"><a href="level-parish.html#cb45-34" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">p.value =</span> <span class="st">`</span><span class="at">Pr(z != E(Ii))</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb45-35"><a href="level-parish.html#cb45-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># binds results to our polygon shapefile</span></span>
 <span id="cb45-36"><a href="level-parish.html#cb45-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cbind</span>(s) <span class="sc">%&gt;%</span> </span>
 <span id="cb45-37"><a href="level-parish.html#cb45-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">st_sf</span>() <span class="sc">%&gt;%</span> </span>
@@ -1486,7 +1486,7 @@ Figure 3.8: Population density at municipality level
 <span id="cb45-76"><a href="level-parish.html#cb45-76" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">length</span>(<span class="fu">rep</span>(<span class="dv">2008</span><span class="sc">:</span>end_year, <span class="at">times =</span> <span class="dv">1</span>, <span class="at">each =</span> <span class="dv">3</span>))<span class="sc">/</span><span class="dv">3</span>),</span>
 <span id="cb45-77"><a href="level-parish.html#cb45-77" aria-hidden="true" tabindex="-1"></a>          <span class="sc">~</span><span class="fu">f_local_moran</span>(.x, .y))</span>
 <span id="cb45-78"><a href="level-parish.html#cb45-78" aria-hidden="true" tabindex="-1"></a><span class="fu">wrap_plots</span>(p, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span> <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-MI-local"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-MI-local"></span>
 <img src="Housing_prices_book_files/figure-html/fig-MI-local-1.png" alt="Local Moran index (p-value &lt; 0.15)" width="960" />
 <p class="caption">
 Figure 3.9: Local Moran index (p-value &lt; 0.15)
@@ -1498,7 +1498,7 @@ Figure 3.9: Local Moran index (p-value &lt; 0.15)
 <p>There are some issues with <em>ggtern</em> and the new version of <em>ggplot2</em> (v. 3.3.5). Therefore, we have made the ternary plots with older versions in a separate project (<a href="https://javiereliomedina.github.io/ternary_maps_DK/">here</a>), and here we have plotted the results.</p>
 <p>Population structure by year, with all the data together in the same diagram.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="level-parish.html#cb46-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-1.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-cap-reg-tern-pop-year"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-cap-reg-tern-pop-year"></span>
 <img src="https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-1.png" alt="Ternary plot by year"  />
 <p class="caption">
 Figure 3.10: Ternary plot by year
@@ -1506,7 +1506,7 @@ Figure 3.10: Ternary plot by year
 </div>
 <p>Separate plots by year and add the parishes in the legend.</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="level-parish.html#cb47-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-cap-reg-tern-pop-year-prsh"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-cap-reg-tern-pop-year-prsh"></span>
 <img src="https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png" alt="Ternary plots by parish"  />
 <p class="caption">
 Figure 3.11: Ternary plots by parish
@@ -1515,7 +1515,7 @@ Figure 3.11: Ternary plots by parish
 <p>maps</p>
 <p>Center over the compositional mean of 2019 (i.e. Danes ~ 80.3%; non-wst ~ 12.3; and wst ~ 7.4%).</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="level-parish.html#cb48-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-map-1.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-cap-reg-tern-map"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-cap-reg-tern-map"></span>
 <img src="https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-map-1.png" alt="Population distribution"  />
 <p class="caption">
 Figure 3.12: Population distribution
@@ -1523,7 +1523,7 @@ Figure 3.12: Population distribution
 </div>
 <p>Only for 2020.</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="level-parish.html#cb49-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-map-2020-1.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-cap-reg-tern-map-2020"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-cap-reg-tern-map-2020"></span>
 <img src="https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-map-2020-1.png" alt="Population distribution in 2020"  />
 <p class="caption">
 Figure 3.13: Population distribution in 2020
@@ -2013,7 +2013,7 @@ Total
   font-size: 85%;
   font-weight: initial;
   padding-top: 0;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
@@ -2085,7 +2085,7 @@ Total
   border-bottom-color: #D3D3D3;
   vertical-align: bottom;
   padding-top: 5px;
-  padding-bottom: 6px;
+  padding-bottom: 5px;
   overflow-x: hidden;
   display: inline-block;
   width: 100%;
@@ -2403,7 +2403,7 @@ Total
 <span id="cb54-9"><a href="level-parish.html#cb54-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> type) <span class="sc">+</span> </span>
 <span id="cb54-10"><a href="level-parish.html#cb54-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb54-11"><a href="level-parish.html#cb54-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-runits-oft-type"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-runits-oft-type"></span>
 <img src="Housing_prices_book_files/figure-html/fig-runits-oft-type-1.png" alt="Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices &gt;1 kDkk/m2)" width="960" />
 <p class="caption">
 Figure 3.14: Boxplot of residential units in the open free trade by house typr (values have been truncated with house prices &gt;1 kDkk/m2)
@@ -2445,7 +2445,7 @@ Figure 3.14: Boxplot of residential units in the open free trade by house typr (
 <span id="cb56-20"><a href="level-parish.html#cb56-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">my_theme_map</span>() <span class="sc">+</span></span>
 <span id="cb56-21"><a href="level-parish.html#cb56-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
 <span id="cb56-22"><a href="level-parish.html#cb56-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb56-23"><a href="level-parish.html#cb56-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="fu">paste</span>(<span class="st">&quot;Date&quot;</span>, df<span class="sc">$</span>year, <span class="at">sep =</span> <span class="st">&quot;: &quot;</span>))</span>
+<span id="cb56-23"><a href="level-parish.html#cb56-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">subtitle =</span> <span class="fu">paste</span>(<span class="st">&quot;Date&quot;</span>, df<span class="sc">$</span>year, <span class="at">sep =</span> <span class="st">&quot;: &quot;</span>))</span>
 <span id="cb56-24"><a href="level-parish.html#cb56-24" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb56-25"><a href="level-parish.html#cb56-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb56-26"><a href="level-parish.html#cb56-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each year</span></span>
@@ -2458,7 +2458,7 @@ Figure 3.14: Boxplot of residential units in the open free trade by house typr (
 <span id="cb56-33"><a href="level-parish.html#cb56-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Animation</span></span>
 <span id="cb56-34"><a href="level-parish.html#cb56-34" aria-hidden="true" tabindex="-1"></a>years_pd <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2008</span>, end_year, <span class="dv">1</span>) </span>
 <span id="cb56-35"><a href="level-parish.html#cb56-35" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="fu">seq_along</span>(years_pd)) { <span class="fu">print</span>(plts[[i]]) }</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-prices-runits-parish-a"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-prices-runits-parish-a"></span>
 <img src="Housing_prices_book_files/figure-html/fig-prices-runits-parish-a-.gif" alt="Median 2020-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m" width="672" />
 <p class="caption">
 Figure 3.15: Median 2020-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m
@@ -2480,10 +2480,10 @@ Figure 3.15: Median 2020-adjusted house prices in the ordinary free trade by gri
 <span id="cb57-14"><a href="level-parish.html#cb57-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
 <span id="cb57-15"><a href="level-parish.html#cb57-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
 <span id="cb57-16"><a href="level-parish.html#cb57-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span>year, <span class="at">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-prices-runits-parish-b"></span>
-<img src="Housing_prices_book_files/figure-html/fig-prices-runits-parish-b-1.png" alt="Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m" width="960" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-prices-runits-parish-b"></span>
+<img src="Housing_prices_book_files/figure-html/fig-prices-runits-parish-b-1.png" alt="Median 2019-adjusted house prices in the ordinary free trade" width="960" />
 <p class="caption">
-Figure 3.16: Median 2019-adjusted house prices in the ordinary free trade by grid cells of 100m x 100m
+Figure 3.16: Median 2019-adjusted house prices in the ordinary free trade
 </p>
 </div>
 <p>remove one parish with non-western migrants up to 80% (NAME). There were not house prices in the ordinary free sale (only for one year); WHY?</p>
@@ -2535,7 +2535,7 @@ Figure 3.16: Median 2019-adjusted house prices in the ordinary free trade by gri
 <span id="cb59-23"><a href="level-parish.html#cb59-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">range =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">8</span>,<span class="dv">8</span>),</span>
 <span id="cb59-24"><a href="level-parish.html#cb59-24" aria-hidden="true" tabindex="-1"></a>               <span class="co"># type = &quot;l&quot;,</span></span>
 <span id="cb59-25"><a href="level-parish.html#cb59-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">main =</span> <span class="st">&quot;CoDa Dendrogram&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:prsh-CoDa-PCA"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prsh-CoDa-PCA"></span>
 <img src="Housing_prices_book_files/figure-html/prsh-CoDa-PCA-1.png" alt="Biplot of clr transfomation and balance dendrogram" width="864" />
 <p class="caption">
 Figure 3.17: Biplot of clr transfomation and balance dendrogram
@@ -2658,7 +2658,7 @@ Where <span class="math inline">\(x_1\)</span>, <span class="math inline">\(x_2\
 <span id="cb69-14"><a href="level-parish.html#cb69-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Percentage [%]&quot;</span>)  <span class="sc">+</span></span>
 <span id="cb69-15"><a href="level-parish.html#cb69-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>.cluster) <span class="sc">+</span></span>
 <span id="cb69-16"><a href="level-parish.html#cb69-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:prsh-CoDa-cluster-boxplot"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:prsh-CoDa-cluster-boxplot"></span>
 <img src="Housing_prices_book_files/figure-html/prsh-CoDa-cluster-boxplot-1.png" alt="Cluster characteristics" width="576" />
 <p class="caption">
 Figure 3.18: Cluster characteristics
@@ -2666,14 +2666,14 @@ Figure 3.18: Cluster characteristics
 </div>
 <p>Links with house prices (zoom the figure to the parishes with median values).</p>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="level-parish.html#cb70-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-price-all-1.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-cap-reg-tern-pop-price-all"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-cap-reg-tern-pop-price-all"></span>
 <img src="https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-price-all-1.png" alt="Median housing prices and popupation distribution by parish (all data)"  />
 <p class="caption">
 Figure 3.19: Median housing prices and popupation distribution by parish (all data)
 </p>
 </div>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="level-parish.html#cb71-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png&quot;</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:fig-cap-reg-tern-pop-price-year"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-cap-reg-tern-pop-price-year"></span>
 <img src="https://github.com/javiereliomedina/ternary_maps_DK/raw/main/_bookdown_files/ternary_maps_DK_files/figure-html/fig-cap-reg-tern-pop-year-prsh-1.png" alt="Median housing prices and popupation distribution by parish and year"  />
 <p class="caption">
 Figure 3.20: Median housing prices and popupation distribution by parish and year
@@ -2683,10 +2683,10 @@ Figure 3.20: Median housing prices and popupation distribution by parish and yea
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="level-parish.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Link median prices (sum_runits_oft_prices) with population (balances - bal_sf)</span></span>
 <span id="cb72-2"><a href="level-parish.html#cb72-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb72-3"><a href="level-parish.html#cb72-3" aria-hidden="true" tabindex="-1"></a>bal_prices <span class="ot">&lt;-</span> sum_runits_oft_prices <span class="sc">%&gt;%</span> </span>
-<span id="cb72-4"><a href="level-parish.html#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Analyse only 2020 </span></span>
-<span id="cb72-5"><a href="level-parish.html#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb72-6"><a href="level-parish.html#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove parish with less that 6 data</span></span>
-<span id="cb72-7"><a href="level-parish.html#cb72-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_runits_oft <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb72-4"><a href="level-parish.html#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove parish with less that 6 data</span></span>
+<span id="cb72-5"><a href="level-parish.html#cb72-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_runits_oft <span class="sc">&gt;</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb72-6"><a href="level-parish.html#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove NAs</span></span>
+<span id="cb72-7"><a href="level-parish.html#cb72-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb72-8"><a href="level-parish.html#cb72-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Select variables of interest</span></span>
 <span id="cb72-9"><a href="level-parish.html#cb72-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prsh_id,</span>
 <span id="cb72-10"><a href="level-parish.html#cb72-10" aria-hidden="true" tabindex="-1"></a>         pop_dan,</span>
@@ -2699,31 +2699,177 @@ Figure 3.20: Median housing prices and popupation distribution by parish and yea
 <span id="cb72-17"><a href="level-parish.html#cb72-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">b2 =</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">2</span>) <span class="sc">*</span> <span class="fu">log</span>(pop_dan <span class="sc">/</span> pop_frgn_wst))</span>
 <span id="cb72-18"><a href="level-parish.html#cb72-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb72-19"><a href="level-parish.html#cb72-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Model prices</span></span>
-<span id="cb72-20"><a href="level-parish.html#cb72-20" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log10</span>(median_2020_kDKK_m2) <span class="sc">~</span> b1 <span class="sc">+</span> b2, <span class="at">data =</span> bal_prices)</span>
-<span id="cb72-21"><a href="level-parish.html#cb72-21" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code></pre></div>
-<pre><code># 
-# Call:
-# lm(formula = log10(median_2020_kDKK_m2) ~ b1 + b2, data = bal_prices)
-# 
-# Residuals:
-#     Min      1Q  Median      3Q     Max 
-# -1.8865 -0.0442  0.0015  0.0623  1.1099 
-# 
-# Coefficients:
-#             Estimate Std. Error t value Pr(&gt;|t|)    
-# (Intercept)   1.7008     0.1197   14.21  &lt; 2e-16 ***
-# b1            0.1557     0.0423    3.68  0.00035 ***
-# b2           -0.1260     0.0663   -1.90  0.05971 .  
-# ---
-# Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-# 
-# Residual standard error: 0.251 on 122 degrees of freedom
-# Multiple R-squared:  0.134,   Adjusted R-squared:  0.12 
-# F-statistic: 9.46 on 2 and 122 DF,  p-value: 0.000152</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="level-parish.html#cb74-1" aria-hidden="true" tabindex="-1"></a>bal_prices<span class="sc">$</span>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m1)</span>
-<span id="cb74-2"><a href="level-parish.html#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log10</span>(median_2020_kDKK_m2) <span class="sc">~</span> pred1, bal_prices)</span>
-<span id="cb74-3"><a href="level-parish.html#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<p><img src="Housing_prices_book_files/figure-html/prsh-CoDa-house-prices-lm-results-1.png" width="672" style="display: block; margin: auto;" /></p>
+<span id="cb72-20"><a href="level-parish.html#cb72-20" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log10</span>(median_2020_kDKK_m2) <span class="sc">~</span> b1 <span class="sc">+</span> b2, <span class="at">data =</span> bal_prices)</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="level-parish.html#cb73-1" aria-hidden="true" tabindex="-1"></a>pander<span class="sc">::</span><span class="fu">pander</span>(<span class="fu">summary</span>(m1))</span></code></pre></div>
+<table style="width:89%;">
+<colgroup>
+<col width="25%" />
+<col width="15%" />
+<col width="18%" />
+<col width="13%" />
+<col width="16%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">Estimate</th>
+<th align="center">Std. Error</th>
+<th align="center">t value</th>
+<th align="center">Pr(&gt;|t|)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>(Intercept)</strong></td>
+<td align="center">2.024</td>
+<td align="center">0.03991</td>
+<td align="center">50.72</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>b1</strong></td>
+<td align="center">0.1004</td>
+<td align="center">0.01326</td>
+<td align="center">7.568</td>
+<td align="center">6.473e-14</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>b2</strong></td>
+<td align="center">-0.2797</td>
+<td align="center">0.01994</td>
+<td align="center">-14.03</td>
+<td align="center">3.573e-42</td>
+</tr>
+</tbody>
+</table>
+<table style="width:88%;">
+<caption>Fitting linear model: log10(median_2020_kDKK_m2) ~ b1 + b2</caption>
+<colgroup>
+<col width="20%" />
+<col width="30%" />
+<col width="12%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Observations</th>
+<th align="center">Residual Std. Error</th>
+<th align="center"><span class="math inline">\(R^2\)</span></th>
+<th align="center">Adjusted <span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1557</td>
+<td align="center">0.2936</td>
+<td align="center">0.1556</td>
+<td align="center">0.1545</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="level-parish.html#cb74-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">tab_model</span>(m1)</span></code></pre></div>
+<table style="border-collapse:collapse; border:none;">
+<tr>
+<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
+ 
+</th>
+<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
+Adjusted prices per<br>square meter(k DKK/m 2)
+</th>
+</tr>
+<tr>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
+Predictors
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+Estimates
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+CI
+</td>
+<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
+p
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+(Intercept)
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+2.02
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+1.95 – 2.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+b1
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.10
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+0.07 – 0.13
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
+b2
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.28
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+-0.32 – -0.24
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
+<strong>&lt;0.001</strong>
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
+Observations
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
+1557
+</td>
+</tr>
+<tr>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
+R<sup>2</sup> / R<sup>2</sup> adjusted
+</td>
+<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
+0.156 / 0.154
+</td>
+</tr>
+</table>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="level-parish.html#cb75-1" aria-hidden="true" tabindex="-1"></a>bal_prices<span class="sc">$</span>pred1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m1)</span>
+<span id="cb75-2"><a href="level-parish.html#cb75-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-3"><a href="level-parish.html#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb75-4"><a href="level-parish.html#cb75-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> bal_prices,</span>
+<span id="cb75-5"><a href="level-parish.html#cb75-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">10</span><span class="sc">^</span>pred1,</span>
+<span id="cb75-6"><a href="level-parish.html#cb75-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> median_2020_kDKK_m2)) <span class="sc">+</span></span>
+<span id="cb75-7"><a href="level-parish.html#cb75-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">&quot;Prediction [kDKK/m2]&quot;</span>,</span>
+<span id="cb75-8"><a href="level-parish.html#cb75-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-9"><a href="level-parish.html#cb75-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">name =</span> <span class="st">&quot;2020-Adj. Median [kDKK/m2]&quot;</span>, </span>
+<span id="cb75-10"><a href="level-parish.html#cb75-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">trans =</span> <span class="st">&quot;log10&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-11"><a href="level-parish.html#cb75-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>,</span>
+<span id="cb75-12"><a href="level-parish.html#cb75-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">slope =</span> <span class="dv">1</span>,</span>
+<span id="cb75-13"><a href="level-parish.html#cb75-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">colour =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb75-14"><a href="level-parish.html#cb75-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fig-prsh-CoDa-house-prices-lm"></span>
+<img src="Housing_prices_book_files/figure-html/fig-prsh-CoDa-house-prices-lm-1.png" alt="Linear model housing prices vs. balances (red line: x = y)" width="672" />
+<p class="caption">
+Figure 3.21: Linear model housing prices vs. balances (red line: x = y)
+</p>
+</div>
 
 </div>
 </div>
@@ -2746,7 +2892,6 @@ Lloyd, Christopher D., Vera Pawlowsky-Glahn, and Juan José Egozcue. 2012. <span
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -2786,6 +2931,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
