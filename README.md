@@ -7,7 +7,7 @@ This work is licensed under a [Creative Commons Attribution 4.0 International Li
 
 # Housing prices analysis
 
-This repository contains the source of [Housing prices analysis](https://github.com/javiereliomedina/housing_prices_book.git) book. The book is built using [bookdown](https://github.com/rstudio/bookdown).
+This repository contains the source of [Housing prices analysis](https://javiereliomedina.github.io/housing_prices_book/) book. The book is built using [bookdown](https://github.com/rstudio/bookdown).
 
 Before running the R-scripts you may need to add some variables to your **.Renviron** with `usethis::edit_r_environ()`. We will use them for loading the BBR data into R and for downloading maps via the kortforsyningen FTP (with our own R package: [dangeo](https://github.com/javiereliomedina/dangeo.git)). Therefore, you would need to:
 
